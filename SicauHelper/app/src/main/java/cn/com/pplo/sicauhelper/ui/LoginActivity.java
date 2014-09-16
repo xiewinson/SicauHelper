@@ -61,7 +61,7 @@ public class LoginActivity extends Activity {
                         super.onResponse(result);
                         try {
                             Log.d("winson", "登录" + result);
-                            Student student = StringUtil.getStudentInfo(result);
+                            Student student = StringUtil.parseStudentInfo(result);
                             if (!student.getRole().equals("学生")) {
                                 UIUtil.showShortToast(LoginActivity.this, "你又不是学生，就别凑热闹了，不送～");
                             } else {

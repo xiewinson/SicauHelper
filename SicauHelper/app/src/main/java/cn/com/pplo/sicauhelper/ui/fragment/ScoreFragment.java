@@ -20,6 +20,7 @@ import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.util.NetUtil;
+import cn.com.pplo.sicauhelper.util.StringUtil;
 
 public class ScoreFragment extends Fragment {
 
@@ -55,22 +56,32 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+
+
+        //此处需要修改
+
         Map<String, String> params = new HashMap<String, String>();
         Student student = SicauHelperApplication.getStudent();
-        params.put("user", student.getSid() + "");
-        params.put("pwd", student.getPswd());
-        NetUtil.getScoreHtmlStr(getActivity(), params, new NetUtil.NetCallbcak(getActivity()) {
-            @Override
-            public void onResponse(String result) {
-                super.onResponse(result);
-                Log.d("winson", "成绩" + result);
-            }
+        if(student != null) {
+            params.put("user", student.getSid() + "");
+            params.put("pwd", student.getPswd());
+            NetUtil.getScoreHtmlStr(getActivity(), params, new NetUtil.NetCallbcak(getActivity()) {
+                @Override
+                public void onResponse(String result) {
+                    super.onResponse(result);
+                    Log.d("winson", "成绩" + result);
+                    Log.d("winson", "最终的数据：" + StringUtil.parseScoreInfo(result));
+                }
 
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+        }
+
     }
 
     @Override

@@ -14,13 +14,18 @@ import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.Student;
 
 /**
  * Created by winson on 2014/9/14.
  */
 public class StringUtil {
-    //用正则表达式取得密匙
+    /**
+     * 用正则表达式取得密匙
+     * @param htmlStr
+     * @return
+     */
     public static String getDcode(String htmlStr) {
         String result = "";
         Pattern pattern = Pattern.compile("dcode2=[0-9]+");
@@ -33,7 +38,12 @@ public class StringUtil {
         return result;
     }
 
-    //得到加密后的字符串
+    /**
+     * 得到加密后的字符串
+     * @param dcode
+     * @param pswd
+     * @return
+     */
     public static String encodePswd(String dcode, String pswd) {
         String result = "";
         BigInteger dcodeInteger = new BigInteger(dcode);
@@ -47,10 +57,15 @@ public class StringUtil {
         return result;
     }
 
-    //从个人主页中获取学生资料
-    public static Student getStudentInfo(String htmlStr) {
+    /**
+     * 从个人主页中获取学生资料
+     * @param htmlStr
+     * @return
+     */
+    public static Student parseStudentInfo(String htmlStr) {
         Student student = new Student();
         List<String> list = new ArrayList<String>();
+
         //使用正则表达式进行解析
 //        Pattern pattern = Pattern.compile("<td width=\"99\" align=\"left\">[\u4e00-\u9fa5]+</td>");
 //        Matcher matcher = pattern.matcher(htmlStr);
@@ -86,5 +101,36 @@ public class StringUtil {
         }
         Log.d("winson", "结束：" + System.currentTimeMillis() + "      " + list);
         return student;
+    }
+
+    /**
+     * 解析成绩信息
+     * @param htmlStr
+     * @return
+     */
+    public static List<Score> parseScoreInfo(String htmlStr){
+        List<Score> scores = new ArrayList<Score>();
+        try {
+            Document document = Jsoup.parse(htmlStr);
+            Elements courseElements = document.select("td[width=20%] > font");
+            Elements elements = document.select("td[width=5%] > font");
+            for (int i = 0; i < courseElements.size() - 2; i++){
+                Score score = new Score();
+                score.setId(i + 1);
+                score.setCourse(courseElements.get(i + 2).text());
+                score.setMark(elements.get(i * 5 + 6 + 0).text());
+                score.setCredit(Float.parseFloat(elements.get(i * 5 + 6 + 1).text()));
+                score.setCategory(elements.get(i * 5 + 6 + 2).text());
+                score.setYear(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()));
+                score.setGrade(Integer.parseInt(elements.get(i * 5 + 6 + 4).text()));
+                scores.add(score);
+            }
+        }catch (Exception e){
+            Log.d("winson", "解析成绩信息出错：" + e.getMessage());
+            scores = null;
+        }
+        finally {
+            return scores;
+        }
     }
 }

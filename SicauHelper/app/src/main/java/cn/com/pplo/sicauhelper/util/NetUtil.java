@@ -28,7 +28,15 @@ public class NetUtil {
     public static String cookie = "";
     public static boolean isFirst = true;
 
-    //发送get或者post请求
+    /**
+     * 发送get或者post请求
+     * @param context
+     * @param method
+     * @param url
+     * @param headers
+     * @param params
+     * @param netCallbcak
+     */
     public static void getOrPostRequest(Context context,
                                         final int method,
                                         String url,
@@ -102,7 +110,12 @@ public class NetUtil {
     }
 
 
-    //登录模块，在params中传入user和pwd
+    /**
+     * 登录模块，在params中传入user和pwd
+     * @param context
+     * @param params
+     * @param callback
+     */
     public static void login(final Context context,
                              final Map<String, String> params,
                              final NetCallbcak callback) {
@@ -146,9 +159,21 @@ public class NetUtil {
         } catch (Exception e) {
             UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
         }
+        clearCookie();
     }
 
-    //获取成绩单
+    //每次一系列请求完成后清除cookie
+    private static void clearCookie() {
+        cookie = "";
+        isFirst = true;
+    }
+
+    /**
+     * 获取成绩单
+     * @param context
+     * @param params
+     * @param callbcak
+     */
     public static void getScoreHtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak){
         login(context, params, new NetCallbcak(context) {
             @Override
@@ -161,10 +186,11 @@ public class NetUtil {
                     headerMap.put("User-Agent","Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
                     getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_SCORE_NICE, headerMap, null, callbcak);
                 }catch (Exception e){
-                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
+                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
                 }
             }
         });
+        clearCookie();
     }
 
 
@@ -188,7 +214,12 @@ public class NetUtil {
 
         @Override
         public void onResponse(String result) {
-
+            if(result.contains("错误")){
+                UIUtil.showShortToast(context, "你连学号和密码都忘了吗～那么，拜拜～");
+            }
+            else if(result.contains("登录超时")){
+                UIUtil.showShortToast(context, "亲爱的，教务系统出问题了～");
+            }
         }
     }
 }
