@@ -63,10 +63,12 @@ public class StringUtil {
      * @return
      */
     public static Student parseStudentInfo(String htmlStr) {
-        Student student = new Student();
-        List<String> list = new ArrayList<String>();
+        Student student = null;
+        try {
+            student = new Student();
+            List<String> list = new ArrayList<String>();
 
-        //使用正则表达式进行解析
+            //使用正则表达式进行解析
 //        Pattern pattern = Pattern.compile("<td width=\"99\" align=\"left\">[\u4e00-\u9fa5]+</td>");
 //        Matcher matcher = pattern.matcher(htmlStr);
 //        String sid = "没有";
@@ -75,31 +77,34 @@ public class StringUtil {
 //
 //        }
 //        Log.d("winson", "学号：" + sid);
-        //使用jsoup进行解析
-        Log.d("winson", "开始：" + System.currentTimeMillis());
-        Document document = Jsoup.parse(htmlStr);
-        Elements elements = document.select("td");
-        for (Element e : elements) {
-            if (!e.children().hasText() && e.hasText()) {
-                String text = e.text().replaceAll("\\s", "");
-                if (text != null && !text.trim().equals("")) {
-                    list.add(text);
+            //使用jsoup进行解析
+            Log.d("winson", "开始：" + System.currentTimeMillis());
+            Document document = Jsoup.parse(htmlStr);
+            Elements elements = document.select("td");
+            for (Element e : elements) {
+                if (!e.children().hasText() && e.hasText()) {
+                    String text = e.text().replaceAll("\\s", "");
+                    if (text != null && !text.trim().equals("")) {
+                        list.add(text);
+                    }
                 }
             }
+            for (int i = 0; i < list.size(); i++) {
+                String currentText = list.get(i);
+                if(currentText.contains("姓名")){
+                    student.setName(list.get(i + 1));
+                }
+                else if(currentText.contains("身份")){
+                    student.setRole(list.get(i + 1));
+                }
+                else if(currentText.contains("所属校区")){
+                    student.setSchool(list.get(i + 1));
+                }
+            }
+            Log.d("winson", "结束：" + System.currentTimeMillis() + "      " + list);
+        }catch (Exception e){
+            student = null;
         }
-        for (int i = 0; i < list.size(); i++) {
-            String currentText = list.get(i);
-            if(currentText.contains("姓名")){
-                student.setName(list.get(i + 1));
-            }
-            else if(currentText.contains("身份")){
-                student.setRole(list.get(i + 1));
-            }
-            else if(currentText.contains("所属校区")){
-                student.setSchool(list.get(i + 1));
-            }
-        }
-        Log.d("winson", "结束：" + System.currentTimeMillis() + "      " + list);
         return student;
     }
 
@@ -121,8 +126,8 @@ public class StringUtil {
                 score.setMark(elements.get(i * 5 + 6 + 0).text());
                 score.setCredit(Float.parseFloat(elements.get(i * 5 + 6 + 1).text()));
                 score.setCategory(elements.get(i * 5 + 6 + 2).text());
-                score.setYear(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()));
-                score.setGrade(Integer.parseInt(elements.get(i * 5 + 6 + 4).text()));
+//                score.setYear(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()));
+                score.setGrade(Float.parseFloat(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()) + "." + Integer.parseInt(elements.get(i * 5 + 6 + 4).text())));
                 scores.add(score);
             }
         }catch (Exception e){
@@ -133,4 +138,5 @@ public class StringUtil {
             return scores;
         }
     }
+
 }

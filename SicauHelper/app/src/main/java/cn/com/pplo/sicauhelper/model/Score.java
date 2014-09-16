@@ -9,8 +9,7 @@ public class Score {
     private String mark;
     private float credit;
     private String category;
-    private int year;
-    private int grade;
+    private float grade;
 
     public int getId() {
         return id;
@@ -52,19 +51,11 @@ public class Score {
         this.category = category;
     }
 
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public int getGrade() {
+    public float getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(float grade) {
         this.grade = grade;
     }
 
@@ -73,9 +64,9 @@ public class Score {
         return "Score{" +
                 "id=" + id +
                 ", course='" + course + '\'' +
-                ", mark=" + mark +
+                ", mark='" + mark + '\'' +
+                ", credit=" + credit +
                 ", category='" + category + '\'' +
-                ", year=" + year +
                 ", grade=" + grade +
                 '}';
     }

@@ -3,14 +3,24 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.VolleyError;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.util.NetUtil;
+import cn.com.pplo.sicauhelper.util.StringUtil;
 
 public class CourseFragment extends Fragment {
 
@@ -18,13 +28,14 @@ public class CourseFragment extends Fragment {
         CourseFragment fragment = new CourseFragment();
         return fragment;
     }
+
     public CourseFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onAttach(Activity activity) {
-        ((MainActivity)activity).onSectionAttached("课程表");
+        ((MainActivity) activity).onSectionAttached("课程表");
         super.onAttach(activity);
     }
 
@@ -45,7 +56,25 @@ public class CourseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Map<String, String> params = new HashMap<String, String>();
+        Student student = SicauHelperApplication.getStudent();
+        if (student != null) {
+            params.put("user", student.getSid() + "");
+            params.put("pwd", student.getPswd());
+            NetUtil.getCourseHtmlStr(getActivity(), params, new NetUtil.NetCallbcak(getActivity()) {
+                @Override
+                public void onResponse(String result) {
+                    super.onResponse(result);
+                    Log.d("winson", "课程" + result.substring(result.length()/2, result.length()-1));
+//                    Log.d("winson", "最终的数据：" + StringUtil.parseScoreInfo(result));
+                }
 
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+        }
     }
 
     @Override

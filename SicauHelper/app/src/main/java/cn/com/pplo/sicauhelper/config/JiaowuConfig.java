@@ -11,4 +11,7 @@ public class JiaowuConfig {
     //成绩单
     public static final String JIAOWU_SCORE = "http://jiaowu.sicau.edu.cn/xuesheng/chengji/chengji/search_all.asp";
     public static final String JIAOWU_SCORE_NICE = "http://jiaowu.sicau.edu.cn/xuesheng/chengji/chengji/bchengjike.asp";
+    //课程表
+    public static final String JIAOWU_COURSE = "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xuankeshow.asp";
+
 }
