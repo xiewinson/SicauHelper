@@ -123,4 +123,11 @@ public class MainActivity extends Activity
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        SicauHelperApplication.setStudent(null);
+        finish();
+    }
 }

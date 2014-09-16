@@ -27,22 +27,6 @@ public class NetUtil {
 
     public static String cookie = "";
     public static boolean isFirst = true;
-    //错误监听器
-    private static class ErrorListener implements Response.ErrorListener {
-
-        private Context context;
-        private Callbcak callbcak;
-
-        public ErrorListener(Context context, Callbcak callbcak) {
-            this.context = context;
-            this.callbcak = callbcak;
-        }
-
-        @Override
-        public void onErrorResponse(VolleyError volleyError) {
-            callbcak.onFailure(volleyError.getMessage(), context);
-        }
-    }
 
     //发送get或者post请求
     public static void getOrPostRequest(Context context,
@@ -50,8 +34,7 @@ public class NetUtil {
                                         String url,
                                         final Map<String, String> headers,
                                         final Map<String, String> params,
-                                        Response.Listener<String> responseListner,
-                                        Response.ErrorListener errorListner) {
+                                        NetCallbcak netCallbcak) {
         RequestQueue requestQueue = SicauHelperApplication.getRequestQueue(context);
 
         //若为get请求则将参数加入到url之中
@@ -73,7 +56,7 @@ public class NetUtil {
             while (iterator.hasNext());
             url = sb.toString();
         }
-        StringRequest stringRequest = new StringRequest(method, url, responseListner, errorListner) {
+        StringRequest stringRequest = new StringRequest(method, url, netCallbcak, netCallbcak) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 if (headers != null) {
@@ -104,22 +87,8 @@ public class NetUtil {
                     cookie = response.headers.get("Set-Cookie");
                     isFirst = false;
                 }
-
-
                 Log.d("winson", "cookie:" + cookie );
-//                return super.parseNetworkResponse(response);
                 String result = "";
-//                try {
-//                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "GB2312"));
-//                    String line = "";
-//                    while ((line = br.readLine()) != null){
-//                        Log.d("winson", "line--->  " + line );
-//                    }
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
                 try {
                     result = new String(response.data, "GB2312");
                 } catch (UnsupportedEncodingException e) {
@@ -136,7 +105,7 @@ public class NetUtil {
     //登录模块，在params中传入user和pwd
     public static void login(final Context context,
                              final Map<String, String> params,
-                             final Callbcak callback) {
+                             final NetCallbcak callback) {
         try {
             //请求教务首页的HTML页面
             getOrPostRequest(context,
@@ -144,12 +113,18 @@ public class NetUtil {
                     JiaowuConfig.JIAOWU_INDEX,
                     null,
                     null,
-                    new Response.Listener<String>() {
+                    new NetCallbcak(context){
                         @Override
-                        public void onResponse(String s) {
+                        public void onErrorResponse(VolleyError volleyError) {
+                            super.onErrorResponse(volleyError);
+
+                        }
+                        @Override
+                        public void onResponse(String result) {
+                            super.onResponse(result);
                             //模拟教务系统的js加密密码
                             Log.d("winson", "原密码：" + params.get("pwd"));
-                            params.put("pwd", StringUtil.encodePswd(StringUtil.getDcode(s), params.get("pwd")));
+                            params.put("pwd", StringUtil.encodePswd(StringUtil.getDcode(result), params.get("pwd")));
                             Log.d("winson", "加密密码：" + params.get("pwd"));
 
                             //新的header
@@ -158,46 +133,35 @@ public class NetUtil {
                             newHeader.put("Referer", "http://jiaowu.sicau.edu.cn/web/web/web/index.asp");
                             //必须设置cookie
                             newHeader.put("Cookie", cookie);
-//                            newHeader.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36");
+                            //                            newHeader.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36");
                             //验证密码
                             getOrPostRequest(context,
                                     Request.Method.POST,
                                     JiaowuConfig.JIAOWU_CHECK,
                                     newHeader,
                                     params,
-                                    new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String s) {
-                                            //Log.d("winson", "验证密码成功结果：" + s);
-                                            callback.onSuccess(s);
-                                        }
-                                    }, new ErrorListener(context, callback));
-
+                                    callback);
                         }
-                    }, new ErrorListener(context, callback));
+                    });
         } catch (Exception e) {
-            callback.onFailure(e.getMessage(), context);
+            UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
         }
     }
 
     //获取成绩单
-    public static void getScoreHtmlStr(final Context context, final Map<String, String> params, final Callbcak callbcak){
-        login(context, params, new Callbcak() {
+    public static void getScoreHtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak){
+        login(context, params, new NetCallbcak(context) {
             @Override
-            public void onSuccess(String result) {
+            public void onResponse(String result) {
+                super.onResponse(result);
                 try {
                     Map<String, String> headerMap = new HashMap<String, String>();
                     headerMap.put("Cookie", cookie);
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
                     headerMap.put("User-Agent","Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                    getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_SCORE_NICE, headerMap, null, new Response.Listener<String>(){
-                        @Override
-                        public void onResponse(String s) {
-                            Log.d("winson", "成绩单：" + s);
-                        }
-                    }, new ErrorListener(context, callbcak));
+                    getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_SCORE_NICE, headerMap, null, callbcak);
                 }catch (Exception e){
-                    callbcak.onFailure(e.getMessage(), context);
+                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                 }
             }
         });
@@ -205,13 +169,16 @@ public class NetUtil {
 
 
     //回调接口
-    public abstract static class Callbcak {
-        public abstract void onSuccess(String result);
-
-        public void onFailure(String message, Context context) {
-            Log.d("winson", "错误结果：" + message);
-            if (message != null && !message.equals("")) {
-                if (message.contains("java.net.UnknownHostException")) {
+    public static class NetCallbcak implements Response.Listener<String>, Response.ErrorListener{
+        private Context context;
+        public NetCallbcak(Context context){
+            this.context = context;
+        }
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            Log.d("winson", "错误结果：" + volleyError.getMessage());
+            if (volleyError.getMessage() != null && !volleyError.getMessage().equals("")) {
+                if (volleyError.getMessage().contains("java.net.UnknownHostException")) {
                     UIUtil.showShortToast(context, "亲爱的，你的网络连接有问题，还用个毛啊～");
                 }
             } else {
@@ -219,6 +186,9 @@ public class NetUtil {
             }
         }
 
-        ;
+        @Override
+        public void onResponse(String result) {
+
+        }
     }
 }

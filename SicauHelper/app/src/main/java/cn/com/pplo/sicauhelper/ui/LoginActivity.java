@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.VolleyError;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,10 +55,12 @@ public class LoginActivity extends Activity {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("user", sid);
                 map.put("pwd", pswd);
-                NetUtil.login(getApplicationContext(), map, new NetUtil.Callbcak() {
+                NetUtil.login(getApplicationContext(), map, new NetUtil.NetCallbcak(LoginActivity.this) {
                     @Override
-                    public void onSuccess(String result) {
+                    public void onResponse(String result) {
+                        super.onResponse(result);
                         try {
+                            Log.d("winson", "登录" + result);
                             Student student = StringUtil.getStudentInfo(result);
                             if (!student.getRole().equals("学生")) {
                                 UIUtil.showShortToast(LoginActivity.this, "你又不是学生，就别凑热闹了，不送～");
@@ -71,8 +75,8 @@ public class LoginActivity extends Activity {
                     }
 
                     @Override
-                    public void onFailure(String message, Context context) {
-                        super.onFailure(message, context);
+                    public void onErrorResponse(VolleyError volleyError) {
+                        super.onErrorResponse(volleyError);
                     }
                 });
             }

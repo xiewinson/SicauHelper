@@ -3,11 +3,14 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.android.volley.VolleyError;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,10 +59,16 @@ public class ScoreFragment extends Fragment {
         Student student = SicauHelperApplication.getStudent();
         params.put("user", student.getSid() + "");
         params.put("pwd", student.getPswd());
-        NetUtil.getScoreHtmlStr(getActivity(), params, new NetUtil.Callbcak() {
+        NetUtil.getScoreHtmlStr(getActivity(), params, new NetUtil.NetCallbcak(getActivity()) {
             @Override
-            public void onSuccess(String result) {
+            public void onResponse(String result) {
+                super.onResponse(result);
+                Log.d("winson", "成绩" + result);
+            }
 
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
             }
         });
     }
