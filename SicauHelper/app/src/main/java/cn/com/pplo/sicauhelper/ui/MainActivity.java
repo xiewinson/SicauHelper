@@ -35,12 +35,11 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(SicauHelperApplication.getStudent() == null){
+        if (SicauHelperApplication.getStudent() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             this.finish();
-        }
-        else {
+        } else {
             initView();
         }
     }
@@ -66,7 +65,7 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         Fragment fragment = null;
-        switch (position){
+        switch (position) {
             //首页
             case 0:
                 fragment = HomeFragment.newInstance();
@@ -101,7 +100,7 @@ public class MainActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mNavigationDrawerFragment!= null && mNavigationDrawerFragment.isDrawerOpen()) {
+        if (mNavigationDrawerFragment != null && mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.

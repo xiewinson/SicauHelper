@@ -18,6 +18,7 @@ public class HomeFragment extends Fragment {
         HomeFragment fragment = new HomeFragment();
         return fragment;
     }
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -25,7 +26,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity)activity).onSectionAttached("首页");
+        ((MainActivity) activity).onSectionAttached("首页");
     }
 
     @Override

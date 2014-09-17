@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
+
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,6 +31,7 @@ public class NetUtil {
 
     /**
      * 发送get或者post请求
+     *
      * @param context
      * @param method
      * @param url
@@ -88,14 +90,15 @@ public class NetUtil {
             public String getUrl() {
                 return super.getUrl();
             }
+
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {
                 //取得cookie
-                if(isFirst == true){
+                if (isFirst == true) {
                     cookie = response.headers.get("Set-Cookie");
                     isFirst = false;
                 }
-                Log.d("winson", "cookie:" + cookie );
+                Log.d("winson", "cookie:" + cookie);
                 String result = "";
                 try {
                     result = new String(response.data, "GB2312");
@@ -112,6 +115,7 @@ public class NetUtil {
 
     /**
      * 登录模块，在params中传入user和pwd
+     *
      * @param context
      * @param params
      * @param callback
@@ -126,12 +130,13 @@ public class NetUtil {
                     JiaowuConfig.JIAOWU_INDEX,
                     null,
                     null,
-                    new NetCallbcak(context){
+                    new NetCallbcak(context) {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
                             super.onErrorResponse(volleyError);
 
                         }
+
                         @Override
                         public void onResponse(String result) {
                             super.onResponse(result);
@@ -170,11 +175,12 @@ public class NetUtil {
 
     /**
      * 获取成绩单
+     *
      * @param context
      * @param params
      * @param callbcak
      */
-    public static void getScoreHtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak){
+    public static void getScoreHtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak) {
         login(context, params, new NetCallbcak(context) {
             @Override
             public void onResponse(String result) {
@@ -183,9 +189,9 @@ public class NetUtil {
                     Map<String, String> headerMap = new HashMap<String, String>();
                     headerMap.put("Cookie", cookie);
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
-                    headerMap.put("User-Agent","Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                    headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
                     getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_SCORE_NICE, headerMap, null, callbcak);
-                }catch (Exception e){
+                } catch (Exception e) {
                     UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
                 }
             }
@@ -193,7 +199,7 @@ public class NetUtil {
         clearCookie();
     }
 
-    public static void getCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak){
+    public static void getCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak) {
         login(context, params, new NetCallbcak(context) {
             @Override
             public void onResponse(String result) {
@@ -202,9 +208,9 @@ public class NetUtil {
                     Map<String, String> headerMap = new HashMap<String, String>();
                     headerMap.put("Cookie", cookie);
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
-                    headerMap.put("User-Agent","Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                    headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
                     getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_COURSE, headerMap, null, callbcak);
-                }catch (Exception e){
+                } catch (Exception e) {
                     UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
                 }
             }
@@ -214,11 +220,13 @@ public class NetUtil {
 
 
     //回调接口
-    public static class NetCallbcak implements Response.Listener<String>, Response.ErrorListener{
+    public static class NetCallbcak implements Response.Listener<String>, Response.ErrorListener {
         private Context context;
-        public NetCallbcak(Context context){
+
+        public NetCallbcak(Context context) {
             this.context = context;
         }
+
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             Log.d("winson", "错误结果：" + volleyError.getMessage());
@@ -233,11 +241,12 @@ public class NetUtil {
 
         @Override
         public void onResponse(String result) {
-            if(result.contains("错误")){
+            if (result.contains("错误")) {
                 UIUtil.showShortToast(context, "你连学号和密码都忘了吗～那么，拜拜～");
-            }
-            else if(result.contains("登录超时")){
+                return;
+            } else if (result.contains("登录超时")) {
                 UIUtil.showShortToast(context, "亲爱的，教务系统出问题了～");
+                return;
             }
         }
     }

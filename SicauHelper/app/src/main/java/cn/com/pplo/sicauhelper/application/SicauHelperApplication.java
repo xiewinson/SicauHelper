@@ -14,16 +14,17 @@ import cn.com.pplo.sicauhelper.model.Student;
 public class SicauHelperApplication extends Application {
     private static RequestQueue requestQueue;
     private static Student student;
+
     @Override
     public void onCreate() {
         super.onCreate();
     }
 
     //双重锁定单例模式获取请求队列
-    public static RequestQueue getRequestQueue(Context context){
-        if(requestQueue == null){
-            synchronized (SicauHelperApplication.class){
-                if(requestQueue == null){
+    public static RequestQueue getRequestQueue(Context context) {
+        if (requestQueue == null) {
+            synchronized (SicauHelperApplication.class) {
+                if (requestQueue == null) {
                     requestQueue = Volley.newRequestQueue(context);
                 }
             }

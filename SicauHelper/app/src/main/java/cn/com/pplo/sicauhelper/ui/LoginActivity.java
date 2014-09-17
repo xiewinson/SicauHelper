@@ -29,6 +29,7 @@ public class LoginActivity extends Activity {
     private EditText sidEt;
     private EditText pswdEt;
     private Button loginBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +89,7 @@ public class LoginActivity extends Activity {
     private void saveStudent(Student student, String sid, String pswd) {
         student.setSid(Long.parseLong(sid));
         student.setPswd(pswd);
-        student.setHeadImg("http://jiaowu.sicau.edu.cn/photo/" + sid +".jpg");
+        student.setHeadImg("http://jiaowu.sicau.edu.cn/photo/" + sid + ".jpg");
         SicauHelperApplication.setStudent(student);
     }
 

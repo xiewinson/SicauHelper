@@ -1,5 +1,6 @@
 package cn.com.pplo.sicauhelper.util;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.jsoup.Jsoup;
@@ -23,6 +24,7 @@ import cn.com.pplo.sicauhelper.model.Student;
 public class StringUtil {
     /**
      * 用正则表达式取得密匙
+     *
      * @param htmlStr
      * @return
      */
@@ -40,6 +42,7 @@ public class StringUtil {
 
     /**
      * 得到加密后的字符串
+     *
      * @param dcode
      * @param pswd
      * @return
@@ -59,6 +62,7 @@ public class StringUtil {
 
     /**
      * 从个人主页中获取学生资料
+     *
      * @param htmlStr
      * @return
      */
@@ -91,18 +95,16 @@ public class StringUtil {
             }
             for (int i = 0; i < list.size(); i++) {
                 String currentText = list.get(i);
-                if(currentText.contains("姓名")){
+                if (currentText.contains("姓名")) {
                     student.setName(list.get(i + 1));
-                }
-                else if(currentText.contains("身份")){
+                } else if (currentText.contains("身份")) {
                     student.setRole(list.get(i + 1));
-                }
-                else if(currentText.contains("所属校区")){
+                } else if (currentText.contains("所属校区")) {
                     student.setSchool(list.get(i + 1));
                 }
             }
             Log.d("winson", "结束：" + System.currentTimeMillis() + "      " + list);
-        }catch (Exception e){
+        } catch (Exception e) {
             student = null;
         }
         return student;
@@ -110,33 +112,52 @@ public class StringUtil {
 
     /**
      * 解析成绩信息
+     *
      * @param htmlStr
      * @return
      */
-    public static List<Score> parseScoreInfo(String htmlStr){
-        List<Score> scores = new ArrayList<Score>();
-        try {
-            Document document = Jsoup.parse(htmlStr);
-            Elements courseElements = document.select("td[width=20%] > font");
-            Elements elements = document.select("td[width=5%] > font");
-            for (int i = 0; i < courseElements.size() - 2; i++){
-                Score score = new Score();
-                score.setId(i + 1);
-                score.setCourse(courseElements.get(i + 2).text());
-                score.setMark(elements.get(i * 5 + 6 + 0).text());
-                score.setCredit(Float.parseFloat(elements.get(i * 5 + 6 + 1).text()));
-                score.setCategory(elements.get(i * 5 + 6 + 2).text());
+    public static void parseScoreInfo(String htmlStr, final Callback callback) {
+        new AsyncTask<String, Integer, List<Score>>(){
+
+            @Override
+            protected List<Score> doInBackground(String... params) {
+                List<Score> scores = new ArrayList<Score>();
+                try {
+                    Document document = Jsoup.parse(params[0]);
+                    Elements courseElements = document.select("td[width=20%] > font");
+                    for (Element e : courseElements){
+                        Log.d("winson", e.text());
+                    }
+                    Elements elements = document.select("td[width=5%] > font");
+                    for (int i = 0; i < courseElements.size(); i++) {
+                        Score score = new Score();
+                        score.setId(i + 1);
+                        score.setCourse(courseElements.get(i).text());
+                        score.setMark(elements.get(i * 5 + 6 + 0).text());
+                        score.setCredit(Float.parseFloat(elements.get(i * 5 + 6 + 1).text()));
+                        score.setCategory(elements.get(i * 5 + 6 + 2).text());
 //                score.setYear(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()));
-                score.setGrade(Float.parseFloat(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()) + "." + Integer.parseInt(elements.get(i * 5 + 6 + 4).text())));
-                scores.add(score);
+                        score.setGrade(Float.parseFloat(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()) + "." + Integer.parseInt(elements.get(i * 5 + 6 + 4).text())));
+                        scores.add(score);
+                    }
+                } catch (Exception e) {
+                    Log.d("winson", "解析成绩信息出错：" + e.getMessage());
+                    scores = null;
+                } finally {
+                    return scores;
+                }
             }
-        }catch (Exception e){
-            Log.d("winson", "解析成绩信息出错：" + e.getMessage());
-            scores = null;
-        }
-        finally {
-            return scores;
-        }
+
+            @Override
+            protected void onPostExecute(List<Score> tempList) {
+                super.onPostExecute(tempList);
+                callback.handleParseResult(tempList);
+            }
+        }.execute(htmlStr);
+    }
+
+    public interface Callback {
+        public void handleParseResult(List<Score> scores);
     }
 
 }

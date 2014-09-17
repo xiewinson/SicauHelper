@@ -10,7 +10,7 @@ import cn.com.pplo.sicauhelper.util.NetUtil;
  * Created by winson on 2014/9/13.
  */
 public class LoginActivityTest extends ActivityTestCase {
-    public void testLogin(){
+    public void testLogin() {
         Activity activity = new LoginActivity();
         NetUtil.login(activity, "20118622", "winson");
     }

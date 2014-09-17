@@ -65,7 +65,7 @@ public class CourseFragment extends Fragment {
                 @Override
                 public void onResponse(String result) {
                     super.onResponse(result);
-                    Log.d("winson", "课程" + result.substring(result.length()/2, result.length()-1));
+                    Log.d("winson", "课程" + result.substring(result.length() / 2, result.length() - 1));
 //                    Log.d("winson", "最终的数据：" + StringUtil.parseScoreInfo(result));
                 }
 
