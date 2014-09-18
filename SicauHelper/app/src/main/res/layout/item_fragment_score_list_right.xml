@@ -8,11 +8,7 @@
     android:orientation="horizontal">
 
 
-
     <LinearLayout
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
@@ -22,6 +18,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:layout_marginLeft="16dp"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -39,13 +36,6 @@
                 android:layout_toRightOf="@+id/score_tv"
                 android:layout_toEndOf="@+id/score_tv" />
 
-            <TextView
-                android:id="@+id/grade_tv"
-                android:text="2011年-上学年"
-                android:gravity="center|left"
-                android:textColor="#aaaaaa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -66,25 +56,42 @@
 
                 <TextView
                     android:id="@+id/credit_tv"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3.5学分" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/grade_tv"
+                android:text="2011年-上学年"
+                android:gravity="center|left"
+                android:textColor="#aaaaaa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
 
         <TextView
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_marginRight="8dp"
             android:id="@+id/category_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="#必 修" />
     </LinearLayout>
-    <Button
+
+    <TextView
         android:id="@+id/score_tv"
+        android:clickable="true"
         android:text="合格"
         android:textStyle="bold"
         android:textSize="22sp"
+        android:gravity="center"
         android:layout_gravity="bottom"
-        android:layout_marginLeft="16dp"
-        android:layout_width="72dp"
-        android:layout_height="72dp" />
+        android:layout_marginRight="16dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
+
 </LinearLayout>

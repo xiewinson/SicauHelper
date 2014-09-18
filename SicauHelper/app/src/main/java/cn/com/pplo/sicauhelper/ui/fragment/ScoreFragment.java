@@ -3,13 +3,18 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -59,7 +64,7 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        CardView cardView;
     }
 
     @Override
@@ -77,7 +82,6 @@ public class ScoreFragment extends Fragment {
     }
 
     private void setUp(View view) {
-
         listView = (ListView) view.findViewById(R.id.score_listView);
         scoreListAdapter = new ScoreListAdapter(getActivity());
         scoreListAdapter.setData(scores);
@@ -165,16 +169,53 @@ public class ScoreFragment extends Fragment {
             }
             TextView categoryTv = (TextView) convertView.findViewById(R.id.category_tv);
             TextView gradeTv = (TextView) convertView.findViewById(R.id.grade_tv);
-            Button scoreView = (Button) convertView.findViewById(R.id.score_tv);
+            final TextView scoreView = (TextView) convertView.findViewById(R.id.score_tv);
             TextView courseTv = (TextView) convertView.findViewById(R.id.course_tv);
             RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.rating_bar);
             TextView creditTv = (TextView) convertView.findViewById(R.id.credit_tv);
 
+            String category = getItem(position).getCategory();
+            int circleShape = 0;
+            int color = 0;
+            if(category.equals("必修")){
+                circleShape = R.drawable.circle_blue;
+                color = getResources().getColor(android.R.color.holo_blue_light);
+            }
+            else if(category.equals("公选")){
+                circleShape = R.drawable.circle_red;
+                color = getResources().getColor(android.R.color.holo_red_light);
+            }
+            else if(category.equals("任选")){
+                circleShape = R.drawable.circle_green;
+                color = getResources().getColor(android.R.color.holo_green_light);
+            }
+            else if(category.equals("推选")){
+                circleShape = R.drawable.circle_orange;
+                color = getResources().getColor(android.R.color.holo_orange_light);
+            }
+            else if(category.equals("实践")){
+                circleShape = R.drawable.circle_purple;
+                color = getResources().getColor(android.R.color.holo_purple);
+            }
+            scoreView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RotateAnimation animation = new RotateAnimation(0, 360);
+                    animation.setDuration(500);
+
+                    Log.d("winson", "点击了...");
+                    scoreView.startAnimation(animation);
+                }
+            });
+
+            categoryTv.setTextColor(color);
+            scoreView.setBackgroundResource(circleShape);
+            scoreView.setTextColor(Color.WHITE);
             gradeTv.setText(getItem(position).getGrade() + "");
             scoreView.setText(getItem(position).getMark() + "");
             courseTv.setText(getItem(position).getCourse() + "");
             creditTv.setText(getItem(position).getCredit() + "学分");
-            categoryTv.setText(getItem(position).getCategory() + "");
+            categoryTv.setText("#" + getItem(position).getCategory() + "");
             return convertView;
         }
     }
