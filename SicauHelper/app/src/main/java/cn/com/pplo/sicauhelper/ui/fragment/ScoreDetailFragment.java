@@ -2,9 +2,14 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,10 +21,11 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import java.util.ArrayList;
+
 import java.util.List;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Score;
+import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 
 
 public class ScoreDetailFragment extends Fragment {
@@ -72,6 +78,28 @@ public class ScoreDetailFragment extends Fragment {
         scoreListAdapter.setData(scores);
         listView.setAdapter(scoreListAdapter);
 
+        getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null, null, null, null);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+                if(data != null) {
+                    Log.d("winson", "这次加载了" + data.getCount() + "条数据");
+                }
+                else {
+                    Log.d("winson", "没有取到数据");
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+
+            }
+
+        });
         //此处需要修改
 
 //        Map<String, String> params = new HashMap<String, String>();

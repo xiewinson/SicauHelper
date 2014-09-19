@@ -1,13 +1,15 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +28,9 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.Student;
+import cn.com.pplo.sicauhelper.provider.DatabaseOpenHelpre;
+import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
@@ -72,7 +77,9 @@ public class ScoreFragment extends Fragment {
     }
 
     private void setUp(final View view) {
-
+        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+        viewPager.setAdapter(viewPagerAdapter);
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
         Student student = SicauHelperApplication.getStudent();
@@ -88,12 +95,27 @@ public class ScoreFragment extends Fragment {
                         @Override
                         public void handleParseResult(List<Score> tempList) {
                             if(tempList != null){
-                                Log.d("winson", "不空");
                                 scores.addAll(tempList);
-                                viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-                                viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-                                viewPager.setAdapter(viewPagerAdapter);
-                                FragmentManager childFragmentManager = getChildFragmentManager();
+
+                                ContentResolver contentResolver = getActivity().getContentResolver();
+                                ContentValues[] contentValueses = new ContentValues[tempList.size()];
+                                for (int i = 0; i < contentValueses.length; i++) {
+                                    contentValueses[i] = new ContentValues();
+                                    contentValueses[i].put(TableContract.TableScore._CATEGORY, scores.get(i).getCategory());
+                                    contentValueses[i].put(TableContract.TableScore._COURSE, scores.get(i).getCourse());
+                                    contentValueses[i].put(TableContract.TableScore._CREDIT, scores.get(i).getCredit());
+                                    contentValueses[i].put(TableContract.TableScore._GRADE, scores.get(i).getGrade());
+                                    contentValueses[i].put(TableContract.TableScore._MARK, scores.get(i).getMark());
+                                }
+                                int i = contentResolver.bulkInsert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), contentValueses);
+                                Log.d("winson",  "插入了" + i + "条" );
+//                                Cursor cursor = contentResolver.query(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null, null, null, null, null);
+//                                if(cursor == null){
+//                                    Log.d("winson", "没有");
+//                                }
+//                                else {
+//                                    Log.d("winson", "有" + cursor.getCount());
+//                                }
                             }
                         }
                     });
