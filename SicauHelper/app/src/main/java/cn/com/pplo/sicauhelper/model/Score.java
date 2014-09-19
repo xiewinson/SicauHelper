@@ -1,9 +1,11 @@
 package cn.com.pplo.sicauhelper.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2014/9/16.
  */
-public class Score {
+public class Score implements Serializable {
     private int id;
     private String course;
     private String mark;
