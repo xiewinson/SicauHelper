@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
@@ -98,6 +99,7 @@ public class MainActivity extends FragmentActivity
 
     //在每次重新创建菜单时重新调用一次，并在此时更新
     public void restoreActionBar() {
+        Log.d("winson", "重新设置名字：" + mTitle);
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
@@ -107,14 +109,13 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mNavigationDrawerFragment != null && mNavigationDrawerFragment.isDrawerOpen()) {
+//        if (mNavigationDrawerFragment != null && mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.home, menu);
             restoreActionBar();
-            return true;
-        }
+//        }
         return super.onCreateOptionsMenu(menu);
     }
 

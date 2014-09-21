@@ -17,16 +17,17 @@ public class BaseFragment extends Fragment {
         //文字大小
         pagerSlidingTabStrip.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics()));
         //文字颜色
-        pagerSlidingTabStrip.setTextColor(Color.parseColor("#888888"));
+        pagerSlidingTabStrip.setTextColor(Color.parseColor("#aaaaaa"));
         //指示条颜色
         pagerSlidingTabStrip.setIndicatorColor(Color.WHITE);
         //指示条高度
 //        pagerSlidingTabStrip.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
         //背景色
-        pagerSlidingTabStrip.setBackgroundColor(backgroundColor);
+
+        pagerSlidingTabStrip.setBackgroundColor(getResources().getColor(backgroundColor));
         //字体样式
 //        pagerSlidingTabStrip.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
         //分隔条颜色
-        pagerSlidingTabStrip.setDividerColor(backgroundColor);
+        pagerSlidingTabStrip.setDividerColor(getResources().getColor(backgroundColor));
     }
 }
