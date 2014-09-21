@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.provider;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -21,7 +22,7 @@ public class SicauHelperProvider extends ContentProvider {
 
     private static final String SCORE_ALL = "score";
     private static final int CODE_SCORE_ALL = 20;
-    public static final String URI_SCORE_ALL = "content://" + AUTHORITY + "/" +SCORE_ALL + "";
+    public static final String URI_SCORE_ALL = "content://" + AUTHORITY + "/" + SCORE_ALL + "";
 
 
     static {
@@ -52,11 +53,11 @@ public class SicauHelperProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         // TODO: Implement this to handle requests to insert a new row.
         SQLiteDatabase sqliteDatabase = sqliteOpenHelper.getWritableDatabase();
-        Log.d("winson","匹配insert：" + uriMatcher.match(uri));
         switch (uriMatcher.match(uri)){
 
-            case CODE_SCORE_SINGLE:
+            case CODE_SCORE_ALL:
                 long id = sqliteDatabase.insert(TableContract.TableScore.TABLE_NAME, null, values);
+//                getContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null);
                 return Uri.withAppendedPath(uri, id + "");
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
@@ -66,7 +67,6 @@ public class SicauHelperProvider extends ContentProvider {
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
         SQLiteDatabase sqliteDatabase = sqliteOpenHelper.getWritableDatabase();
-        Log.d("winson","匹配全部insert：" + uriMatcher.match(uri));
         int count = 0;
         try {
             int matched = uriMatcher.match(uri);
@@ -81,9 +81,10 @@ public class SicauHelperProvider extends ContentProvider {
                     count++;
                 }
             }
-        sqliteDatabase.endTransaction();
+
         }catch (Exception e){
         }finally {
+            sqliteDatabase.endTransaction();
             return count;
         }
     }
@@ -96,8 +97,9 @@ public class SicauHelperProvider extends ContentProvider {
         Log.d("winson", "match:" + uriMatcher.match(uri));
         switch (uriMatcher.match(uri)){
             case CODE_SCORE_ALL:
-                Log.d("winson", "正取进入");
-                return sqliteDatabase.query(TableContract.TableScore.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                Cursor cursor =sqliteDatabase.query(TableContract.TableScore.TABLE_NAME, null,selection,selectionArgs,null, null, null);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                return cursor;
             case CODE_SCORE_SINGLE:
                 return null;
             default:

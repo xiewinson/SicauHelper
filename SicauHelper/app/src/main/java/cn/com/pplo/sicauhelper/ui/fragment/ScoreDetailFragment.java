@@ -1,7 +1,10 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -22,15 +25,26 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Score;
+import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
+import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.service.ScoreService;
+import cn.com.pplo.sicauhelper.util.NetUtil;
+import cn.com.pplo.sicauhelper.util.StringUtil;
 
 
-public class ScoreDetailFragment extends Fragment {
+public class ScoreDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
-    private List<Score> scores;
     private ScoreListAdapter scoreListAdapter;
 
     public static ScoreDetailFragment newInstance(List<Score> scoreList) {
@@ -49,7 +63,6 @@ public class ScoreDetailFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 //        ((MainActivity) activity).onSectionAttached("成绩");
-        scores = (List<Score>) getArguments().get("list");
         super.onAttach(activity);
     }
 
@@ -75,61 +88,10 @@ public class ScoreDetailFragment extends Fragment {
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.score_listView);
         scoreListAdapter = new ScoreListAdapter(getActivity());
-        scoreListAdapter.setData(scores);
+        scoreListAdapter.setData(null);
         listView.setAdapter(scoreListAdapter);
 
-        getLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
-            @Override
-            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-                return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null, null, null, null);
-            }
-
-            @Override
-            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-                if(data != null) {
-                    Log.d("winson", "这次加载了" + data.getCount() + "条数据");
-                }
-                else {
-                    Log.d("winson", "没有取到数据");
-                }
-            }
-
-            @Override
-            public void onLoaderReset(Loader<Cursor> loader) {
-
-            }
-
-        });
-        //此处需要修改
-
-//        Map<String, String> params = new HashMap<String, String>();
-//        Student student = SicauHelperApplication.getStudent();
-//        if (student != null) {
-//            params.put("user", student.getSid() + "");
-//            params.put("pwd", student.getPswd());
-//            NetUtil.getScoreHtmlStr(getActivity(), params, new NetUtil.NetCallbcak(getActivity()) {
-//                @Override
-//                public void onResponse(String result) {
-//                    super.onResponse(result);
-//                    Log.d("winson", "成绩" + result);
-//                    StringUtil.parseScoreInfo(result, new StringUtil.Callback() {
-//                        @Override
-//                        public void handleParseResult(List<Score> tempList) {
-//                            if(tempList != null){
-//                                scores.clear();
-//                                scores.addAll(tempList);
-//                                scoreListAdapter.notifyDataSetChanged();
-//                            }
-//                        }
-//                    });
-//                }
-//
-//                @Override
-//                public void onErrorResponse(VolleyError volleyError) {
-//                    super.onErrorResponse(volleyError);
-//                }
-//            });
-//        }
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -143,17 +105,63 @@ public class ScoreDetailFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d("winson", ScoreDetailFragment.class.getSimpleName() + "Loader创建");
+        return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null, null, null, null){
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//        data.setNotificationUri(getActivity().getContentResolver(), Uri.parse(SicauHelperProvider.URI_SCORE_ALL));
+        Log.d("winson", ScoreDetailFragment.class.getSimpleName() + "Loader加载完成");
+        if(data != null) {
+            if(data.getCount() > 0){
+                Log.d("winson",ScoreDetailFragment.class.getSimpleName() +  "这次加载了" + data.getCount() + "条数据");
+                scoreListAdapter.setData(data);
+                scoreListAdapter.notifyDataSetChanged();
+            }
+            else {
+                Intent scoreIntent = new Intent(getActivity(), ScoreService.class);
+                getActivity().startService(scoreIntent);
+            }
+
+        }
+        else {
+            Log.d("winson", ScoreDetailFragment.class.getSimpleName() + "没有取到数据");
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        Log.d("winson", ScoreDetailFragment.class.getSimpleName() + "Loader重置");
+    }
+
     private class ScoreListAdapter extends BaseAdapter {
 
         private Context context;
-        private List<Score> data;
+        private List<Score> data = new ArrayList<Score>();
 
         public ScoreListAdapter(Context context) {
             this.context = context;
         }
 
-        public void setData(List<Score> data) {
-            this.data = data;
+        public void setData(Cursor cursor) {
+//            this.data = data;
+            if(cursor != null){
+                data.clear();
+                while(cursor.moveToNext()){
+                    Score score = new Score();
+                    score.setCategory(cursor.getString(cursor.getColumnIndex(TableContract.TableScore._CATEGORY)));
+                    score.setCourse(cursor.getString(cursor.getColumnIndex(TableContract.TableScore._COURSE)));
+                    score.setCredit(cursor.getFloat(cursor.getColumnIndex(TableContract.TableScore._CREDIT)));
+                    score.setGrade(cursor.getFloat(cursor.getColumnIndex(TableContract.TableScore._GRADE)));
+                    score.setId(cursor.getInt(cursor.getColumnIndex(TableContract.TableScore._ID)));
+                    score.setMark(cursor.getString(cursor.getColumnIndex(TableContract.TableScore._MARK)));
+                    data.add(score);
+                }
+            };
         }
 
         @Override

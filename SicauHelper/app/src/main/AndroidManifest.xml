@@ -3,6 +3,7 @@
     package="cn.com.pplo.sicauhelper" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".application.SicauHelperApplication"
@@ -29,6 +30,12 @@
             android:enabled="true"
             android:exported="true" >
         </provider>
+
+        <service
+            android:name=".service.ScoreService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
