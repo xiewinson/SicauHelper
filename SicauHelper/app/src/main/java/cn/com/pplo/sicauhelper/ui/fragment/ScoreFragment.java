@@ -69,7 +69,7 @@ public class ScoreFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true);
-        getActivity().getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.purple_500));
+        getActivity().getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.blue_500));
         return inflater.inflate(R.layout.fragment_score, container, false);
     }
 
@@ -84,7 +84,7 @@ public class ScoreFragment extends BaseFragment {
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.purple_500);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.blue_500);
         pagerSlidingTabStrip.setViewPager(viewPager);
 //        //此处需要修改
 //        Map<String, String> params = new HashMap<String, String>();

@@ -29,13 +29,19 @@
                 android:id="@+id/course_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:text="西方经济学"
 
                 android:layout_alignTop="@+id/score_tv"
                 android:layout_toRightOf="@+id/score_tv"
                 android:layout_toEndOf="@+id/score_tv" />
-
+            <TextView
+                android:id="@+id/grade_tv"
+                android:text="2011年-上学年"
+                android:gravity="center|left"
+                android:textColor="#aaaaaa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -43,12 +49,11 @@
                 android:orientation="horizontal">
 
                 <RatingBar
-                    style="@android:style/Widget.Holo.Light.RatingBar.Small"
+                    style="@android:style/Widget.Holo.RatingBar.Small"
                     android:id="@+id/rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    android:numStars="5"
                     android:text="西方经济学"
                     android:layout_alignTop="@+id/score_tv"
                     android:layout_toRightOf="@+id/score_tv"
@@ -62,13 +67,7 @@
                     android:text="3.5学分" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/grade_tv"
-                android:text="2011年-上学年"
-                android:gravity="center|left"
-                android:textColor="#aaaaaa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+
 
         </LinearLayout>
 
@@ -91,7 +90,7 @@
         android:gravity="center"
         android:layout_gravity="bottom"
         android:layout_marginRight="16dp"
-        android:layout_width="48dp"
-        android:layout_height="48dp" />
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
 
 </LinearLayout>

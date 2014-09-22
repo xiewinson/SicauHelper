@@ -15,9 +15,9 @@ public class BaseFragment extends Fragment {
         //tab会横向填充满屏幕
         pagerSlidingTabStrip.setShouldExpand(true);
         //文字大小
-        pagerSlidingTabStrip.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics()));
+        pagerSlidingTabStrip.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics()));
         //文字颜色
-        pagerSlidingTabStrip.setTextColor(Color.parseColor("#aaaaaa"));
+        pagerSlidingTabStrip.setTextColor(Color.parseColor("#88ffffff"));
         //指示条颜色
         pagerSlidingTabStrip.setIndicatorColor(Color.WHITE);
         //指示条高度

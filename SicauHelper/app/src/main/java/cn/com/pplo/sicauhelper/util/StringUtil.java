@@ -49,15 +49,23 @@ public class StringUtil {
      */
     public static String encodePswd(String dcode, String pswd) {
         String result = "";
-        BigInteger dcodeInteger = new BigInteger(dcode);
-        dcodeInteger = dcodeInteger.multiply(new BigInteger("137"));
-        String dcodeString = dcodeInteger.toString();
-        String tmpstr = "";
-        for (int i = 1; i <= pswd.length(); i++) {
-            tmpstr = pswd.substring(i - 1, i);
-            result += (char) ((int) tmpstr.charAt(0) - i - Integer.parseInt(dcodeString.substring(i - 1, i)));
+        try {
+
+            BigInteger dcodeInteger = new BigInteger(dcode);
+            dcodeInteger = dcodeInteger.multiply(new BigInteger("137"));
+            String dcodeString = dcodeInteger.toString();
+            String tmpstr = "";
+            for (int i = 1; i <= pswd.length(); i++) {
+                tmpstr = pswd.substring(i - 1, i);
+                result += (char) ((int) tmpstr.charAt(0) - i - Integer.parseInt(dcodeString.substring(i - 1, i)));
+            }
+        } catch (Exception e){
+            Log.d("winson", "encodePswd error..................");
         }
-        return result;
+        finally {
+            return result;
+        }
+
     }
 
     /**
