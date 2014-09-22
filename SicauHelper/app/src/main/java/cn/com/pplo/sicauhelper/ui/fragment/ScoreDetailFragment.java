@@ -41,6 +41,7 @@ import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.ScoreService;
+import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 
@@ -49,11 +50,8 @@ public class ScoreDetailFragment extends Fragment implements LoaderManager.Loade
     private ListView listView;
     private ScoreListAdapter scoreListAdapter;
 
-    public static ScoreDetailFragment newInstance(List<Score> scoreList) {
+    public static ScoreDetailFragment newInstance() {
         ScoreDetailFragment fragment = new ScoreDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("list", (java.io.Serializable) scoreList);
-        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -153,16 +151,7 @@ public class ScoreDetailFragment extends Fragment implements LoaderManager.Loade
 //            this.data = data;
             if(cursor != null){
                 data.clear();
-                while(cursor.moveToNext()){
-                    Score score = new Score();
-                    score.setCategory(cursor.getString(cursor.getColumnIndex(TableContract.TableScore._CATEGORY)));
-                    score.setCourse(cursor.getString(cursor.getColumnIndex(TableContract.TableScore._COURSE)));
-                    score.setCredit(cursor.getFloat(cursor.getColumnIndex(TableContract.TableScore._CREDIT)));
-                    score.setGrade(cursor.getFloat(cursor.getColumnIndex(TableContract.TableScore._GRADE)));
-                    score.setId(cursor.getInt(cursor.getColumnIndex(TableContract.TableScore._ID)));
-                    score.setMark(cursor.getString(cursor.getColumnIndex(TableContract.TableScore._MARK)));
-                    data.add(score);
-                }
+                data.addAll(CursorUtil.parseScoreList(cursor));
             };
         }
 

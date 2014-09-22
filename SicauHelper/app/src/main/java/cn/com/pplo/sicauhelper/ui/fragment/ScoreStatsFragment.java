@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 
@@ -33,7 +35,7 @@ import cn.com.pplo.sicauhelper.util.StringUtil;
 
 public class ScoreStatsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private List<Score> scores = new ArrayList<Score>();
+    private ListView listView;
 
     public static ScoreStatsFragment newInstance() {
         ScoreStatsFragment fragment = new ScoreStatsFragment();
@@ -71,6 +73,7 @@ public class ScoreStatsFragment extends Fragment implements LoaderManager.Loader
     }
 
     private void setUp(View view) {
+        listView = (ListView) view.findViewById(R.id.stats_listView);
         getLoaderManager().initLoader(1, null, this);
     }
 
@@ -101,6 +104,29 @@ public class ScoreStatsFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private class StatsAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return 0;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return null;
+        }
     }
 
 }
