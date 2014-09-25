@@ -22,7 +22,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 
 
-public class MainActivity extends FragmentActivity
+public class MainActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**

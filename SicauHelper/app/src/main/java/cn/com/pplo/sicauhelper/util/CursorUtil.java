@@ -29,6 +29,10 @@ public class CursorUtil {
             list.clear();
         }
         finally {
+//            List<Score> aaa = new ArrayList<Score>();
+//            for(int i = 0; i < 4; i++){
+//                aaa.add(list.get(i));
+//            }
             return list;
         }
     }

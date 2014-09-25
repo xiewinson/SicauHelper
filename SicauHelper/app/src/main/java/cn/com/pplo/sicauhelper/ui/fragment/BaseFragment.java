@@ -2,8 +2,12 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 
@@ -11,6 +15,15 @@ import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
  * Created by winson on 2014/9/21.
  */
 public class BaseFragment extends Fragment {
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(!getActivity().getActionBar().isShowing()){
+            getActivity().getActionBar().show();
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
     protected  void setPagerSlidingTabStyle(PagerSlidingTabStrip pagerSlidingTabStrip, int backgroundColor){
         //tab会横向填充满屏幕
         pagerSlidingTabStrip.setShouldExpand(true);

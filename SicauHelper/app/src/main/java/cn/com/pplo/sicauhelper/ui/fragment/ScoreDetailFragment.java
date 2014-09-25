@@ -19,9 +19,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -36,6 +38,7 @@ import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.listener.OnScrollListener;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
@@ -49,6 +52,10 @@ import cn.com.pplo.sicauhelper.util.StringUtil;
 public class ScoreDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
     private ScoreListAdapter scoreListAdapter;
+
+    private boolean isScrolling = false;
+    private int startX;
+    private int startY;
 
     public static ScoreDetailFragment newInstance() {
         ScoreDetailFragment fragment = new ScoreDetailFragment();
@@ -90,6 +97,8 @@ public class ScoreDetailFragment extends Fragment implements LoaderManager.Loade
         scoreListAdapter = new ScoreListAdapter(getActivity());
         scoreListAdapter.setData(null);
         listView.setAdapter(scoreListAdapter);
+        //滑动监听
+        listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
 
         getLoaderManager().initLoader(0, null, this);
     }
@@ -238,7 +247,7 @@ public class ScoreDetailFragment extends Fragment implements LoaderManager.Loade
             scoreView.setText(getItem(position).getMark() + "");
             courseTv.setText(getItem(position).getCourse() + "");
             creditTv.setText(getItem(position).getCredit() + "学分");
-            categoryTv.setText("#" + getItem(position).getCategory() + "");
+            categoryTv.setText("#" + getItem(position).getCategory() + "#");
 
             //设置星星个数
             if((getItem(position).getCredit() > 5)){

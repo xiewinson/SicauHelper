@@ -22,7 +22,7 @@ import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 
-public class CourseFragment extends Fragment {
+public class CourseFragment extends BaseFragment {
 
     public static CourseFragment newInstance() {
         CourseFragment fragment = new CourseFragment();
@@ -49,6 +49,7 @@ public class CourseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_course, container, false);
     }

@@ -10,12 +10,17 @@ import org.jsoup.select.Elements;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.com.pplo.sicauhelper.model.Score;
+import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.model.Student;
 
 /**
@@ -162,6 +167,80 @@ public class StringUtil {
                 callback.handleParseResult(tempList);
             }
         }.execute(htmlStr);
+    }
+
+    public static List<ScoreStats> parseScoreStatsList(List<Score> scoreList){
+
+        List<Integer> years = new ArrayList<Integer>();
+        if(scoreList != null && scoreList.size() > 0){
+            for (int i = 0; i < scoreList.size(); i++){
+                Score currentScore = scoreList.get(i);
+                String currentGrade = ((currentScore.getGrade() + "").split("\\."))[0];
+                if(!currentScore.getCourse().contains("军训")){
+                    if(i == 0){
+                        years.add(Integer.parseInt(currentGrade));
+                    }
+                    else {
+                        String lastGrade = ((scoreList.get(i - 1).getGrade() + "").split("\\."))[0];
+                        if(lastGrade.equals(currentGrade)){
+                            years.add(Integer.parseInt(currentGrade));
+                        }
+                    }
+                }
+            }
+        }
+        Log.d("winson", "结果：" +  years);
+        Set set = new HashSet<Integer>();
+        set.addAll(years);
+        years.clear();
+        years.addAll(set);
+        Collections.sort(years);
+
+
+        List<ScoreStats> list = new ArrayList<ScoreStats>();
+        for(int i = 0; i < years.size(); i++){
+            int mustNumCount = 0;
+            int choiceNumCount = 0;
+            float mustScoreCount = 0;
+            float choiceScoreCount = 0;
+            float mustCreditCount = 0;
+            float choiceCreditCount = 0;
+            ScoreStats scoreStats = new ScoreStats();
+            for (int j = 0; j < scoreList.size(); j++) {
+                Score currentScore = scoreList.get(j);
+                if(!currentScore.getCourse().contains("军训")&&(currentScore.getGrade() + "").contains(years.get(i) + "")){
+                    if(currentScore.getCategory().equals("必修") || currentScore.getCategory().equals("实践")){
+                        mustNumCount ++;
+                        mustCreditCount += currentScore.getCredit();
+                        mustScoreCount += (Float.parseFloat(currentScore.getMark()) * currentScore.getCredit());
+                    }
+                    else if (currentScore.getCategory().equals("公选") || currentScore.getCategory().equals("推选") || currentScore.getCategory().equals("任选")){
+                        choiceNumCount ++;
+                        choiceCreditCount += currentScore.getCredit();
+                        choiceScoreCount += (Float.parseFloat(currentScore.getMark()) * currentScore.getCredit()); // * currentScore.getCredit()
+                    }
+                };
+            }
+            scoreStats.setYear(String.valueOf(years.get(i)));
+            scoreStats.setMustNum(mustNumCount);
+            scoreStats.setChoiceNum(choiceNumCount);
+
+            if(mustCreditCount == 0 ){
+                mustCreditCount = 1;
+            }
+            scoreStats.setMustAvgScore(mustScoreCount/mustCreditCount);
+
+            if(choiceCreditCount == 0 ){
+                choiceCreditCount = 1;
+                choiceNumCount = 1;
+            }
+            scoreStats.setChoiceAvgScore(choiceScoreCount/choiceCreditCount);
+
+            scoreStats.setMustCredit(mustCreditCount);
+            scoreStats.setChoiceCredit(choiceCreditCount);
+            list.add(scoreStats);
+        }
+        return list;
     }
 
     public interface Callback {

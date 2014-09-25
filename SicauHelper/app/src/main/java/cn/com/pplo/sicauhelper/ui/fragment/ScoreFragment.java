@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import com.android.volley.VolleyError;
@@ -38,10 +39,12 @@ import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 
 public class ScoreFragment extends BaseFragment {
 
-    private List<Score> scores = new ArrayList<Score>();
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
+
+    private int startX;
+    private int startY;
 
     public static ScoreFragment newInstance() {
         ScoreFragment fragment = new ScoreFragment();
@@ -69,7 +72,7 @@ public class ScoreFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true);
-        getActivity().getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.blue_500));
+        getActivity().getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.indigo_500));
         return inflater.inflate(R.layout.fragment_score, container, false);
     }
 
@@ -84,8 +87,9 @@ public class ScoreFragment extends BaseFragment {
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.blue_500);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.indigo_500);
         pagerSlidingTabStrip.setViewPager(viewPager);
+
 //        //此处需要修改
 //        Map<String, String> params = new HashMap<String, String>();
 //        Student student = SicauHelperApplication.getStudent();
@@ -161,7 +165,7 @@ public class ScoreFragment extends BaseFragment {
         public Fragment getItem(int position) {
             Fragment pageFragment = null;
             if(position == 0){
-                pageFragment = ScoreDetailFragment.newInstance(scores);
+                pageFragment = ScoreDetailFragment.newInstance();
             }
             else {
                 pageFragment = ScoreStatsFragment.newInstance();

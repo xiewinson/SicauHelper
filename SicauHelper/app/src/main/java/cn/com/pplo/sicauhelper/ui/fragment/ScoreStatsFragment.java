@@ -30,6 +30,7 @@ import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 
@@ -98,7 +99,8 @@ public class ScoreStatsFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d("winson", "---------------------loader2加载了" + data.getCount() + "条-----------------------------------------");
+        Log.d("winson", "---------------------loader2加载了" + data.getCount() + "条-----------------------------------------" + StringUtil.parseScoreStatsList(CursorUtil.parseScoreList(data)));
+        StringUtil.parseScoreStatsList(CursorUtil.parseScoreList(data));
     }
 
     @Override
