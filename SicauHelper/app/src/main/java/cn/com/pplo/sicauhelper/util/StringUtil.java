@@ -169,6 +169,11 @@ public class StringUtil {
         }.execute(htmlStr);
     }
 
+    /**
+     * 从成绩信息中算出成绩统计
+     * @param scoreList
+     * @return
+     */
     public static List<ScoreStats> parseScoreStatsList(List<Score> scoreList){
 
         List<Integer> years = new ArrayList<Integer>();

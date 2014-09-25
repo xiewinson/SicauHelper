@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 
@@ -26,7 +27,9 @@ import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.listener.OnScrollListener;
 import cn.com.pplo.sicauhelper.model.Score;
+import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
@@ -37,6 +40,7 @@ import cn.com.pplo.sicauhelper.util.StringUtil;
 public class ScoreStatsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
+    private StatsAdapter statsAdapter;
 
     public static ScoreStatsFragment newInstance() {
         ScoreStatsFragment fragment = new ScoreStatsFragment();
@@ -75,6 +79,9 @@ public class ScoreStatsFragment extends Fragment implements LoaderManager.Loader
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.stats_listView);
+        statsAdapter = new StatsAdapter();
+        listView.setAdapter(statsAdapter);
+        listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
         getLoaderManager().initLoader(1, null, this);
     }
 
@@ -99,8 +106,8 @@ public class ScoreStatsFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d("winson", "---------------------loader2加载了" + data.getCount() + "条-----------------------------------------" + StringUtil.parseScoreStatsList(CursorUtil.parseScoreList(data)));
-        StringUtil.parseScoreStatsList(CursorUtil.parseScoreList(data));
+        statsAdapter.setData(data);
+        statsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -110,25 +117,71 @@ public class ScoreStatsFragment extends Fragment implements LoaderManager.Loader
 
     private class StatsAdapter extends BaseAdapter {
 
-        @Override
-        public int getCount() {
-            return 0;
+        private List<ScoreStats> data = new ArrayList<ScoreStats>();
+
+        public void setData(Cursor cursor){
+
+            if(cursor != null){
+                data.clear();
+                data.addAll(StringUtil.parseScoreStatsList(CursorUtil.parseScoreList(cursor)));
+                Log.d("winson", "data长度：" + data.size());
+            }
         }
 
         @Override
-        public Object getItem(int position) {
-            return null;
+        public int getCount() {
+            return data.size();
+        }
+
+        @Override
+        public ScoreStats getItem(int position) {
+            return data.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            return null;
+            ViewHolder holder = null;
+            if(convertView == null){
+                holder = new ViewHolder();
+                convertView = View.inflate(getActivity(), R.layout.item_fragment_score_stats_list, null);
+                holder.gradeTv = (TextView) convertView.findViewById(R.id.grade);
+                holder.numMustTv = (TextView) convertView.findViewById(R.id.num_must);
+                holder.numChoiceTv = (TextView) convertView.findViewById(R.id.num_choice);
+                holder.creditMustTv = (TextView) convertView.findViewById(R.id.credit_must);
+                holder.creditChoiceTv = (TextView) convertView.findViewById(R.id.credit_choice);
+                holder.scoreMustTv = (TextView) convertView.findViewById(R.id.score_must);
+                holder.scoreChoiceTv = (TextView) convertView.findViewById(R.id.score_choice);
+                convertView.setTag(holder);
+            }
+            else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            ScoreStats scoreStats = getItem(position);
+            holder.gradeTv.setText(scoreStats.getYear());
+            holder.numMustTv.setText(scoreStats.getMustNum() + "");
+            holder.numChoiceTv.setText(scoreStats.getChoiceNum() + "");
+            holder.creditMustTv.setText(scoreStats.getMustCredit() + "");
+            holder.creditChoiceTv.setText(scoreStats.getChoiceCredit() + "");
+            holder.scoreMustTv.setText(scoreStats.getMustAvgScore() + "");
+            holder.scoreChoiceTv.setText(scoreStats.getChoiceAvgScore() + "");
+            return convertView;
         }
+    }
+
+    private class ViewHolder {
+        TextView gradeTv;
+        TextView numMustTv;
+        TextView numChoiceTv;
+        TextView creditMustTv;
+        TextView creditChoiceTv;
+        TextView scoreMustTv;
+        TextView scoreChoiceTv;
+
     }
 
 }
