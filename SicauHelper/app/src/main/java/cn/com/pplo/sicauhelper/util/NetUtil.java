@@ -199,6 +199,12 @@ public class NetUtil {
         clearCookie();
     }
 
+    /**
+     * 获取课程表
+     * @param context
+     * @param params
+     * @param callbcak
+     */
     public static void getCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak) {
         login(context, params, new NetCallbcak(context) {
             @Override
@@ -210,6 +216,51 @@ public class NetUtil {
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
                     headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
                     getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_COURSE, headerMap, null, callbcak);
+                } catch (Exception e) {
+                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
+                }
+            }
+        });
+        clearCookie();
+    }
+
+    /**
+     * 获取课程表
+     * @param context
+     * @param params
+     * @param callbcak
+     */
+    public static void getCourse2HtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak) {
+        login(context, params, new NetCallbcak(context) {
+            @Override
+            public void onResponse(String result) {
+                super.onResponse(result);
+                try {
+                    Map<String, String> headerMap = new HashMap<String, String>();
+                    headerMap.put("Cookie", cookie);
+                    headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
+                    headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                    getOrPostRequest(context, Request.Method.POST, "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xszhinan.asp?xueqi=2013-2014-1", headerMap, null, new NetCallbcak(context){
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            super.onErrorResponse(volleyError);
+                            Log.d("winson", "result:" + volleyError.getMessage());
+                        }
+
+                        @Override
+                        public void onResponse(String result) {
+                            super.onResponse(result);
+                            try {
+                                Map<String, String> headerMap = new HashMap<String, String>();
+                                headerMap.put("Cookie", cookie);
+                                headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xszhinan.asp?xueqi=2013-2014-1");
+                                headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                                getOrPostRequest(context, Request.Method.GET, JiaowuConfig.JIAOWU_COURSE_TEMP, headerMap, null, callbcak);
+                            } catch (Exception e) {
+                                UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
+                            }
+                        }
+                    });
                 } catch (Exception e) {
                     UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
                 }

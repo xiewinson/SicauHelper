@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.model.Student;
@@ -64,10 +65,9 @@ public class StringUtil {
                 tmpstr = pswd.substring(i - 1, i);
                 result += (char) ((int) tmpstr.charAt(0) - i - Integer.parseInt(dcodeString.substring(i - 1, i)));
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.d("winson", "encodePswd error..................");
-        }
-        finally {
+        } finally {
             return result;
         }
 
@@ -130,7 +130,7 @@ public class StringUtil {
      * @return
      */
     public static void parseScoreInfo(String htmlStr, final Callback callback) {
-        new AsyncTask<String, Integer, List<Score>>(){
+        new AsyncTask<String, Integer, List<Score>>() {
 
             @Override
             protected List<Score> doInBackground(String... params) {
@@ -138,7 +138,7 @@ public class StringUtil {
                 try {
                     Document document = Jsoup.parse(params[0]);
                     Elements courseElements = document.select("td[width=20%] > font");
-                    for (Element e : courseElements){
+                    for (Element e : courseElements) {
                         Log.d("winson", e.text());
                     }
                     Elements elements = document.select("td[width=5%] > font");
@@ -171,30 +171,30 @@ public class StringUtil {
 
     /**
      * 从成绩信息中算出成绩统计
+     *
      * @param scoreList
      * @return
      */
-    public static List<ScoreStats> parseScoreStatsList(List<Score> scoreList){
+    public static List<ScoreStats> parseScoreStatsList(List<Score> scoreList) {
 
         List<Integer> years = new ArrayList<Integer>();
-        if(scoreList != null && scoreList.size() > 0){
-            for (int i = 0; i < scoreList.size(); i++){
+        if (scoreList != null && scoreList.size() > 0) {
+            for (int i = 0; i < scoreList.size(); i++) {
                 Score currentScore = scoreList.get(i);
                 String currentGrade = ((currentScore.getGrade() + "").split("\\."))[0];
-                if(!currentScore.getCourse().contains("军训")){
-                    if(i == 0){
+                if (!currentScore.getCourse().contains("军训")) {
+                    if (i == 0) {
                         years.add(Integer.parseInt(currentGrade));
-                    }
-                    else {
+                    } else {
                         String lastGrade = ((scoreList.get(i - 1).getGrade() + "").split("\\."))[0];
-                        if(lastGrade.equals(currentGrade)){
+                        if (lastGrade.equals(currentGrade)) {
                             years.add(Integer.parseInt(currentGrade));
                         }
                     }
                 }
             }
         }
-        Log.d("winson", "结果：" +  years);
+        Log.d("winson", "结果：" + years);
         Set set = new HashSet<Integer>();
         set.addAll(years);
         years.clear();
@@ -203,7 +203,7 @@ public class StringUtil {
 
 
         List<ScoreStats> list = new ArrayList<ScoreStats>();
-        for(int i = 0; i < years.size(); i++){
+        for (int i = 0; i < years.size(); i++) {
             int mustNumCount = 0;
             int choiceNumCount = 0;
             float mustScoreCount = 0;
@@ -213,39 +213,122 @@ public class StringUtil {
             ScoreStats scoreStats = new ScoreStats();
             for (int j = 0; j < scoreList.size(); j++) {
                 Score currentScore = scoreList.get(j);
-                if(!currentScore.getCourse().contains("军训")&&(currentScore.getGrade() + "").contains(years.get(i) + "")){
-                    if(currentScore.getCategory().equals("必修") || currentScore.getCategory().equals("实践")){
-                        mustNumCount ++;
+                if (!currentScore.getCourse().contains("军训") && (currentScore.getGrade() + "").contains(years.get(i) + "")) {
+                    if (currentScore.getCategory().equals("必修") || currentScore.getCategory().equals("实践")) {
+                        mustNumCount++;
                         mustCreditCount += currentScore.getCredit();
                         mustScoreCount += (Float.parseFloat(currentScore.getMark()) * currentScore.getCredit());
-                    }
-                    else if (currentScore.getCategory().equals("公选") || currentScore.getCategory().equals("推选") || currentScore.getCategory().equals("任选")){
-                        choiceNumCount ++;
+                    } else if (currentScore.getCategory().equals("公选") || currentScore.getCategory().equals("推选") || currentScore.getCategory().equals("任选")) {
+                        choiceNumCount++;
                         choiceCreditCount += currentScore.getCredit();
                         choiceScoreCount += (Float.parseFloat(currentScore.getMark()) * currentScore.getCredit()); // * currentScore.getCredit()
                     }
-                };
+                }
+                ;
             }
             scoreStats.setYear(String.valueOf(years.get(i)));
             scoreStats.setMustNum(mustNumCount);
             scoreStats.setChoiceNum(choiceNumCount);
 
-            if(mustCreditCount == 0 ){
+            if (mustCreditCount == 0) {
                 mustCreditCount = 1;
             }
-            scoreStats.setMustAvgScore(mustScoreCount/mustCreditCount);
+            ;
+            scoreStats.setMustAvgScore((float) (Math.round(mustScoreCount * 100 / mustCreditCount) / 100.0));
 
-            if(choiceCreditCount == 0 ){
+            if (choiceCreditCount == 0) {
                 choiceCreditCount = 1;
                 choiceNumCount = 1;
             }
-            scoreStats.setChoiceAvgScore(choiceScoreCount/choiceCreditCount);
+            scoreStats.setChoiceAvgScore((float) (Math.round(choiceScoreCount * 100 / choiceCreditCount) / 100.0));
 
             scoreStats.setMustCredit(mustCreditCount);
             scoreStats.setChoiceCredit(choiceCreditCount);
             list.add(scoreStats);
         }
         return list;
+    }
+
+    /**
+     * 解析课程表信息
+     *
+     * @param htmlStr
+     */
+    public static List<Course> parseCourseInfo(String htmlStr) {
+        List<Course> list = new ArrayList<Course>();
+        try {
+            Document document = Jsoup.parse(htmlStr);
+            Elements courseElements = document.select("td[width=200]");
+//            for (int i = 0; i < courseElements.size(); i++) {
+//                Log.d("winson", "课程编号：" + i + "_____课程名：" + courseElements.get(i).text().trim());
+//            }
+            ;
+
+            Elements someElements = document.select("td[width=100]");
+//            for (int i = 0; i < someElements.size(); i++) {
+//                Log.d("winson", "编号：" + i + "_____杂乱：" + someElements.get(i).text().trim());
+//            }
+
+            Elements creditElements = document.select("td[width=40]");
+//            for (int i = 0; i < creditElements.size(); i++) {
+//                Log.d("winson", "编号：" + i + "_____学分：" + creditElements.get(i).text().trim());
+//            }
+
+            Elements weekElements = document.select("td[width=60]");
+//            for (int i = 0; i < weekElements.size(); i++) {
+//                Log.d("winson", "编号：" + i + "_____周期：" + weekElements.get(i).text().trim());
+//            }
+
+            Elements teacherElements = document.select("td[width=80]");
+//            for (int i = 0; i < teacherElements.size(); i++) {
+//                Log.d("winson", "编号：" + i + "_____教师：" + teacherElements.get(i).text().trim());
+//            }
+
+            Elements numElements = document.select("td[width=50]");
+//            for (int i = 0; i < numElements.size(); i++) {
+//                Log.d("winson", "编号：" + i + "_____人数：" + numElements.get(i).text().trim());
+//            }
+
+            Log.d("winson", "-------------------------------------------------------------------");
+            //去掉课程名的第一个无用的
+            courseElements.remove(0);
+            for (int i = 0; i < courseElements.size(); i++) {
+                Course course = new Course();
+                //添加课程名
+                course.setName(courseElements.get(i).text().toString().replaceAll("\\s", ""));
+
+                //添加课程性质
+                course.setCategory(someElements.get(i * 3 + 7).text().toString().replaceAll("\\s", ""));
+                //添加课程时间
+                course.setTime(someElements.get(i * 3 + 7 + 1).text().toString());
+                //添加教室
+                course.setClassroom(someElements.get(i * 3 + 7 + 2).text().toString());
+
+                //添加学分
+                course.setCredit(Float.parseFloat(creditElements.get(i * 4 + 4 + 1).text().toString().replaceAll("\\s", "")));
+
+                //添加周期
+                course.setWeek(weekElements.get(i * 2 + 1 + 1).text().toString().replaceAll("\\s", ""));
+
+                //添加教师
+                course.setTeacher(teacherElements.get(i * 2 + 1).text().toString().replaceAll("\\s", ""));
+
+                //添加计划人数
+                course.setScheduleNum(Integer.parseInt(numElements.get(i * 4 + 4 + 2).text().toString().replaceAll("\\s", "")));
+                //添加实际人数
+                course.setScheduleNum(Integer.parseInt(numElements.get(i * 4 + 4 + 3).text().toString().replaceAll("\\s", "")));
+
+                list.add(course);
+            }
+            ;
+        }catch (Exception e){
+            Log.d("winson", "解析课程表失败");
+            list = null;
+        }
+        finally {
+            Log.d("winson", list + "");
+            return list;
+        }
     }
 
     public interface Callback {

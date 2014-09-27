@@ -47,6 +47,7 @@ import cn.com.pplo.sicauhelper.service.ScoreService;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
 public class ScoreDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -94,6 +95,8 @@ public class ScoreDetailFragment extends Fragment implements LoaderManager.Loade
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.score_listView);
+        listView.setEmptyView(view.findViewById(R.id.empty_view));
+
         scoreListAdapter = new ScoreListAdapter(getActivity());
         scoreListAdapter.setData(null);
         listView.setAdapter(scoreListAdapter);

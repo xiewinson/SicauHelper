@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +37,8 @@ import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
+import cn.com.pplo.sicauhelper.util.UIUtil;
+import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 
 public class ScoreStatsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -79,6 +82,13 @@ public class ScoreStatsFragment extends Fragment implements LoaderManager.Loader
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.stats_listView);
+        listView.setEmptyView(view.findViewById(R.id.empty_view));
+
+        //listView上下，补点间距
+        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
+        listView.addHeaderView(paddingTv);
+        listView.addFooterView(paddingTv);
+
         statsAdapter = new StatsAdapter();
         listView.setAdapter(statsAdapter);
         listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
