@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,7 +41,7 @@ import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 
-public class ScoreStatsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ScoreStatsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
     private StatsAdapter statsAdapter;
@@ -84,14 +85,30 @@ public class ScoreStatsFragment extends Fragment implements LoaderManager.Loader
         listView = (ListView) view.findViewById(R.id.stats_listView);
         listView.setEmptyView(view.findViewById(R.id.empty_view));
 
-        //listView上下，补点间距
+        //listView上下补点间距
         TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
         listView.addHeaderView(paddingTv);
         listView.addFooterView(paddingTv);
 
         statsAdapter = new StatsAdapter();
         listView.setAdapter(statsAdapter);
-        listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
+
+        //滑动监听
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                Log.d("winson", "可见" + visibleItemCount + "   总共" + totalItemCount);
+                if(visibleItemCount != 0 && ((totalItemCount - 3) > visibleItemCount)){
+                    listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
+                    listView.setOnScrollListener(null);
+                }
+            }
+        });
         getLoaderManager().initLoader(1, null, this);
     }
 

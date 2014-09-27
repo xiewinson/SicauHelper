@@ -50,7 +50,7 @@ import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
-public class ScoreDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ScoreDetailFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
     private ScoreListAdapter scoreListAdapter;
 
@@ -101,7 +101,22 @@ public class ScoreDetailFragment extends Fragment implements LoaderManager.Loade
         scoreListAdapter.setData(null);
         listView.setAdapter(scoreListAdapter);
         //滑动监听
-        listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
+        //滑动监听
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if(visibleItemCount != 0 && ((totalItemCount - 3) > visibleItemCount)){
+                    listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
+                    listView.setOnScrollListener(null);
+                }
+            }
+        });
 
         getLoaderManager().initLoader(0, null, this);
     }
