@@ -51,9 +51,7 @@ public class ScoreService extends Service {
                     StringUtil.parseScoreInfo(result, new StringUtil.Callback() {
                         @Override
                         public void handleParseResult(final List<Score> tempList) {
-                            if (tempList != null) {
-
-
+                            if (tempList != null && tempList.size() > 0) {
                                 new Thread(){
                                     @Override
                                     public void run() {
@@ -72,6 +70,7 @@ public class ScoreService extends Service {
                                     }
                                 }.start();
                             }
+
                         }
                     });
                 }

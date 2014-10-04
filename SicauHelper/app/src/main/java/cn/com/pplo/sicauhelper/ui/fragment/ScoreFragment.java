@@ -1,40 +1,20 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
+import android.app.ActionBar;
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import com.android.volley.VolleyError;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
-import cn.com.pplo.sicauhelper.model.Score;
-import cn.com.pplo.sicauhelper.model.Student;
-import cn.com.pplo.sicauhelper.provider.DatabaseOpenHelpre;
-import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
-import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
-import cn.com.pplo.sicauhelper.util.NetUtil;
-import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 
 public class ScoreFragment extends BaseFragment {
@@ -42,9 +22,6 @@ public class ScoreFragment extends BaseFragment {
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
-
-    private int startX;
-    private int startY;
 
     public static ScoreFragment newInstance() {
         ScoreFragment fragment = new ScoreFragment();
@@ -89,6 +66,25 @@ public class ScoreFragment extends BaseFragment {
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
         setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.indigo_500);
         pagerSlidingTabStrip.setViewPager(viewPager);
+        pagerSlidingTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                ActionBar actionBar = getActivity().getActionBar();
+                if(actionBar.isShowing() == false){
+                    actionBar.show();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
 //        //此处需要修改
 //        Map<String, String> params = new HashMap<String, String>();

@@ -8,7 +8,10 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ListView;
 
+import cn.com.pplo.sicauhelper.listener.OnScrollListener;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 
 /**
@@ -36,11 +39,31 @@ public class BaseFragment extends Fragment {
         //指示条高度
 //        pagerSlidingTabStrip.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
         //背景色
-
-        pagerSlidingTabStrip.setBackgroundColor(getResources().getColor(backgroundColor));
+        pagerSlidingTabStrip.setBackgroundResource(backgroundColor);
+        //指示条
+        pagerSlidingTabStrip.setUnderlineHeight(0);
+        pagerSlidingTabStrip.setUnderlineColorResource(backgroundColor);
         //字体样式
 //        pagerSlidingTabStrip.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
         //分隔条颜色
         pagerSlidingTabStrip.setDividerColor(getResources().getColor(backgroundColor));
+    }
+
+    protected void setScrollHideOrShowActionBar(final ListView listView){
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if(visibleItemCount != 0 && ((totalItemCount - 2) > visibleItemCount)){
+                    listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
+                    listView.setOnScrollListener(null);
+                }
+            }
+        });
     }
 }

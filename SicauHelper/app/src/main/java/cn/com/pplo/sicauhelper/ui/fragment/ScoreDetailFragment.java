@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,6 +53,7 @@ import cn.com.pplo.sicauhelper.util.UIUtil;
 
 public class ScoreDetailFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
+    private SwipeRefreshLayout swipeContainer;
     private ScoreListAdapter scoreListAdapter;
 
     private boolean isScrolling = false;
@@ -95,30 +97,41 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.score_listView);
-        listView.setEmptyView(view.findViewById(R.id.empty_view));
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         scoreListAdapter = new ScoreListAdapter(getActivity());
         scoreListAdapter.setData(null);
         listView.setAdapter(scoreListAdapter);
         //滑动监听
-        //滑动监听
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        setScrollHideOrShowActionBar(listView);
+
+        //下拉监听
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                if(visibleItemCount != 0 && ((totalItemCount - 3) > visibleItemCount)){
-                    listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
-                    listView.setOnScrollListener(null);
-                }
+            public void onRefresh() {
+                Log.d("winson", "进行下拉刷新");
+                swipeContainer.setRefreshing(true);
+                swipeContainer.setEnabled(false);
             }
         });
+        swipeContainer.setRefreshing(true);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getLoaderManager().destroyLoader(0);
     }
 
     @Override
@@ -148,6 +161,8 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
                 Log.d("winson",ScoreDetailFragment.class.getSimpleName() +  "这次加载了" + data.getCount() + "条数据");
                 scoreListAdapter.setData(data);
                 scoreListAdapter.notifyDataSetChanged();
+                swipeContainer.setRefreshing(false);
+                swipeContainer.setEnabled(true);
             }
             else {
                 Intent scoreIntent = new Intent(getActivity(), ScoreService.class);

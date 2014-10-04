@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by winson on 2014/9/27.
  */
-public class Course implements Serializable {
+public class Course implements Serializable, Comparable {
     private int id;
     private String name;
     private String category;
@@ -111,5 +111,12 @@ public class Course implements Serializable {
                 ", scheduleNum=" + scheduleNum +
                 ", selectedNum=" + selectedNum +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Object another) {
+        String anotherTime = ((Course)another).getTime();
+        String currentTime = getTime();
+        return currentTime.compareTo(anotherTime);
     }
 }

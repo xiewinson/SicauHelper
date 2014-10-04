@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
 
     private ListView listView;
     private StatsAdapter statsAdapter;
+    private SwipeRefreshLayout swipeContainer;
 
     public static ScoreStatsFragment newInstance() {
         ScoreStatsFragment fragment = new ScoreStatsFragment();
@@ -83,7 +85,11 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.stats_listView);
-        listView.setEmptyView(view.findViewById(R.id.empty_view));
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
         //listView上下补点间距
         TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
@@ -94,22 +100,30 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
         listView.setAdapter(statsAdapter);
 
         //滑动监听
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+        setScrollHideOrShowActionBar(listView);
 
-            }
-
+        //下拉监听
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                Log.d("winson", "可见" + visibleItemCount + "   总共" + totalItemCount);
-                if(visibleItemCount != 0 && ((totalItemCount - 3) > visibleItemCount)){
-                    listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
-                    listView.setOnScrollListener(null);
-                }
+            public void onRefresh() {
+                Log.d("winson", "进行下拉刷新");
+                swipeContainer.setRefreshing(true);
+                swipeContainer.setEnabled(false);
             }
         });
+        swipeContainer.setRefreshing(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getLoaderManager().initLoader(1, null, this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getLoaderManager().destroyLoader(1);
     }
 
     @Override
@@ -135,6 +149,8 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         statsAdapter.setData(data);
         statsAdapter.notifyDataSetChanged();
+        swipeContainer.setRefreshing(false);
+        swipeContainer.setEnabled(true);
     }
 
     @Override
@@ -151,7 +167,6 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
             if(cursor != null){
                 data.clear();
                 data.addAll(StringUtil.parseScoreStatsList(CursorUtil.parseScoreList(cursor)));
-                Log.d("winson", "data长度：" + data.size());
             }
         }
 

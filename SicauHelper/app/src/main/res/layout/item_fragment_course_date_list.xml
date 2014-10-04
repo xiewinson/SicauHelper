@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_gravity="top"
+                android:clickable="true"
+                android:background="@null"
+                android:id="@+id/time_tv"
+                android:text="9-10"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:gravity="center"
+                android:layout_width="56dp"
+                android:layout_height="56dp" />
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="西方经济学"
+
+                android:layout_alignTop="@+id/score_tv"
+                android:layout_toRightOf="@+id/score_tv"
+                android:layout_toEndOf="@+id/score_tv" />
+
+
+            <TextView
+                android:id="@+id/classroom_tv"
+                android:text="5508(1-10周)"
+                android:gravity="center|left"
+                android:textColor="#aaaaaa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RatingBar
+                    style="@android:style/Widget.Holo.RatingBar.Small"
+                    android:id="@+id/credit_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_alignTop="@+id/score_tv"
+                    android:layout_toRightOf="@+id/score_tv"
+                    android:layout_toEndOf="@+id/score_tv" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:padding="8dp"
+            android:id="@+id/category_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#必 修" />
+    </LinearLayout>
+
+</LinearLayout>

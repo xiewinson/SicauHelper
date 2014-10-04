@@ -16,4 +16,20 @@ public class TableContract {
         String _CATEGORY = "_category";
         String _GRADE = "_grade";
     }
+
+    public interface TableCourse extends BaseColumns{
+
+        String TABLE_NAME = "t_course";
+
+        String _NAME = "name";
+        String _CATEGORY = "category";
+        String _CREDIT = "credit";
+        String _TIME = "time";
+        String _CLASSROOM = "classroom";
+        String _WEEK = "week";
+        String _TEACHER = "teacher";
+        String _SCHEDULENUM = "scheduleNum";
+        String _SELECTNUM = "selectedNum";
+    }
+
 }

@@ -9,10 +9,9 @@
     <ListView
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:id="@+id/stats_listView"
+        android:id="@+id/course_listView"
         android:dividerHeight="8dp"
         android:divider="@null"
-        android:listSelector="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
 

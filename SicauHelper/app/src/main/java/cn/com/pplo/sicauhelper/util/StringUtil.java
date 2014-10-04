@@ -290,15 +290,33 @@ public class StringUtil {
 //            }
 
             Log.d("winson", "-------------------------------------------------------------------");
+
             //去掉课程名的第一个无用的
             courseElements.remove(0);
             for (int i = 0; i < courseElements.size(); i++) {
                 Course course = new Course();
                 //添加课程名
-                course.setName(courseElements.get(i).text().toString().replaceAll("\\s", ""));
+                course.setName(courseElements.get(i).text().toString().replaceAll("\\s", "").replaceAll("[0-9]{3,10}", ""));
 
                 //添加课程性质
-                course.setCategory(someElements.get(i * 3 + 7).text().toString().replaceAll("\\s", ""));
+                String category = someElements.get(i * 3 + 7).text().toString().replaceAll("\\s", "");
+                if(category.equals("公共选修课")){
+                    category = "公选";
+                }
+                else if(category.equals("推荐选修课")){
+                    category = "推选";
+                }
+                else if(category.equals("其他选修课")){
+                    category = "任选";
+                }
+                else if(category.equals("专业段任意选修课")){
+                    category = "任选";
+                }
+                else if(category.equals("实践教学")){
+                    category = "实践";
+                }
+                course.setCategory(category);
+
                 //添加课程时间
                 course.setTime(someElements.get(i * 3 + 7 + 1).text().toString());
                 //添加教室
@@ -311,7 +329,7 @@ public class StringUtil {
                 course.setWeek(weekElements.get(i * 2 + 1 + 1).text().toString().replaceAll("\\s", ""));
 
                 //添加教师
-                course.setTeacher(teacherElements.get(i * 2 + 1).text().toString().replaceAll("\\s", ""));
+                course.setTeacher(teacherElements.get(i * 2 + 2).text().toString().replaceAll("\\s", ""));
 
                 //添加计划人数
                 course.setScheduleNum(Integer.parseInt(numElements.get(i * 4 + 4 + 2).text().toString().replaceAll("\\s", "")));
