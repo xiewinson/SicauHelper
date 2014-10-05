@@ -349,6 +349,20 @@ public class StringUtil {
         }
     }
 
+    public static String parseNewsListInfo(String htmlStr){
+        Document document = Jsoup.parse(htmlStr);
+        Elements aElements = document.select("a.body");
+        for (Element e : aElements ){
+            Log.d("winson", "文字----   " + e.text());
+            Log.d("winson", "url----   " + e.attr("href"));
+        }
+        Elements cElements = document.select("font[color=gray]");
+        for (Element e : cElements ){
+            Log.d("winson", "分类----   " + e.text());
+        }
+        return "";
+    }
+
     public interface Callback {
         public void handleParseResult(List<Score> scores);
     }

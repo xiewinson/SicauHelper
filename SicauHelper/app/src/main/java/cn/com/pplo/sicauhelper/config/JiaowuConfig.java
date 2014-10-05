@@ -15,4 +15,7 @@ public class JiaowuConfig {
     public static final String JIAOWU_COURSE = "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xuankeshow.asp";
     public static final String JIAOWU_COURSE_TEMP = "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xuankeshow.asp?xkbh=2058069";
 
+    //新闻
+    public static final String JIAOWU_NEWS_LIST = "http://jiaowu.sicau.edu.cn/web/web/web/gwmore.asp";
+    public static final String JIAOWU_NEWS_CONTENT = "http://jiaowu.sicau.edu.cn/web/web/web/gwshenshow1.asp?bianhao=";
 }

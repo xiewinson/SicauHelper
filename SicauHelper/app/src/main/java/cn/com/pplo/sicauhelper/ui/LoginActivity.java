@@ -56,7 +56,7 @@ public class LoginActivity extends Activity {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("user", sid);
                 map.put("pwd", pswd);
-                NetUtil.login(getApplicationContext(), map, new NetUtil.NetCallbcak(LoginActivity.this) {
+                NetUtil.login(getApplicationContext(), map, new NetUtil.NetCallback(LoginActivity.this) {
                     @Override
                     public void onResponse(String result) {
                         super.onResponse(result);

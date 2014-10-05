@@ -44,7 +44,7 @@ public class NetUtil {
                                         String url,
                                         final Map<String, String> headers,
                                         final Map<String, String> params,
-                                        NetCallbcak netCallbcak) {
+                                        NetCallback netCallbcak) {
         RequestQueue requestQueue = SicauHelperApplication.getRequestQueue(context);
 
         //若为get请求则将参数加入到url之中
@@ -122,7 +122,7 @@ public class NetUtil {
      */
     public static void login(final Context context,
                              final Map<String, String> params,
-                             final NetCallbcak callback) {
+                             final NetCallback callback) {
         try {
             //请求教务首页的HTML页面
             getOrPostRequest(context,
@@ -130,7 +130,7 @@ public class NetUtil {
                     JiaowuConfig.JIAOWU_INDEX,
                     null,
                     null,
-                    new NetCallbcak(context) {
+                    new NetCallback(context) {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
                             super.onErrorResponse(volleyError);
@@ -180,8 +180,8 @@ public class NetUtil {
      * @param params
      * @param callbcak
      */
-    public static void getScoreHtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak) {
-        login(context, params, new NetCallbcak(context) {
+    public static void getScoreHtmlStr(final Context context, final Map<String, String> params, final NetCallback callbcak) {
+        login(context, params, new NetCallback(context) {
             @Override
             public void onResponse(String result) {
                 super.onResponse(result);
@@ -205,8 +205,8 @@ public class NetUtil {
      * @param params
      * @param callbcak
      */
-    public static void getCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak) {
-        login(context, params, new NetCallbcak(context) {
+    public static void getCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallback callbcak) {
+        login(context, params, new NetCallback(context) {
             @Override
             public void onResponse(String result) {
                 super.onResponse(result);
@@ -230,8 +230,8 @@ public class NetUtil {
      * @param params
      * @param callbcak
      */
-    public static void getCourse2HtmlStr(final Context context, final Map<String, String> params, final NetCallbcak callbcak) {
-        login(context, params, new NetCallbcak(context) {
+    public static void getCourse2HtmlStr(final Context context, final Map<String, String> params, final NetCallback callbcak) {
+        login(context, params, new NetCallback(context) {
             @Override
             public void onResponse(String result) {
                 super.onResponse(result);
@@ -240,7 +240,7 @@ public class NetUtil {
                     headerMap.put("Cookie", cookie);
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
                     headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                    getOrPostRequest(context, Request.Method.POST, "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xszhinan.asp?xueqi=2013-2014-1", headerMap, null, new NetCallbcak(context){
+                    getOrPostRequest(context, Request.Method.POST, "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xszhinan.asp?xueqi=2013-2014-1", headerMap, null, new NetCallback(context){
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
                             super.onErrorResponse(volleyError);
@@ -269,12 +269,59 @@ public class NetUtil {
         clearCookie();
     }
 
+    /**
+     * 获取新闻列表
+     * @param context
+     * @param params
+     * @param callback
+     */
+    public static void getNewsListHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback){
+        try {
+            //请求教务首页的HTML页面
+            getOrPostRequest(context,
+                    Request.Method.GET,
+                    JiaowuConfig.JIAOWU_INDEX,
+                    null,
+                    null,
+                    new NetCallback(context) {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            super.onErrorResponse(volleyError);
+
+                        }
+
+                        @Override
+                        public void onResponse(String result) {
+                            super.onResponse(result);
+
+                            //新的header
+                            Map<String, String> newHeader = new HashMap<String, String>();
+                            //设置referer
+                            newHeader.put("Referer", "http://jiaowu.sicau.edu.cn/web/web/web/index.asp");
+                            //必须设置cookie
+                            newHeader.put("Cookie", cookie);
+                            //                            newHeader.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36");
+                            //验证密码
+                            getOrPostRequest(context,
+                                    Request.Method.POST,
+                                    JiaowuConfig.JIAOWU_NEWS_LIST,
+                                    newHeader,
+                                    null,
+                                    callback);
+                        }
+                    });
+        } catch (Exception e) {
+            UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
+        }
+        clearCookie();
+    }
+
 
     //回调接口
-    public static class NetCallbcak implements Response.Listener<String>, Response.ErrorListener {
+    public static class NetCallback implements Response.Listener<String>, Response.ErrorListener {
         private Context context;
 
-        public NetCallbcak(Context context) {
+        public NetCallback(Context context) {
             this.context = context;
         }
 

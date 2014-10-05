@@ -50,7 +50,7 @@ public class CourseService extends Service {
             if (student != null) {
                 params.put("user", student.getSid() + "");
                 params.put("pwd", student.getPswd());
-                NetUtil.getCourse2HtmlStr(getApplicationContext(), params, new NetUtil.NetCallbcak(getApplicationContext()) {
+                NetUtil.getCourse2HtmlStr(getApplicationContext(), params, new NetUtil.NetCallback(getApplicationContext()) {
                     @Override
                     public void onResponse(String result) {
                         super.onResponse(result);

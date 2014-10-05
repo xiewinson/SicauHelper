@@ -44,7 +44,7 @@ public class ScoreService extends Service {
             params.put("user", student.getSid() + "");
             params.put("pwd", student.getPswd());
             
-            NetUtil.getScoreHtmlStr(getApplicationContext(), params, new NetUtil.NetCallbcak(getApplicationContext()) {
+            NetUtil.getScoreHtmlStr(getApplicationContext(), params, new NetUtil.NetCallback(getApplicationContext()) {
                 @Override
                 public void onResponse(String result) {
                     super.onResponse(result);

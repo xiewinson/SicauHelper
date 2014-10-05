@@ -19,6 +19,7 @@ import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.HomeFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.NavigationDrawerFragment;
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.ui.fragment.NewsFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 
 
@@ -86,7 +87,9 @@ public class MainActivity extends BaseActivity
             case 2:
                 fragment = ScoreFragment.newInstance();
                 break;
+            //新闻
             case 3:
+                fragment = NewsFragment.newInstance();
                 break;
             case 4:
                 break;
