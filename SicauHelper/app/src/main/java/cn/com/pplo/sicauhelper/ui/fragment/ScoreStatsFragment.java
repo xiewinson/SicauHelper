@@ -108,7 +108,6 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
             public void onRefresh() {
                 Log.d("winson", "进行下拉刷新");
                 swipeContainer.setRefreshing(true);
-                swipeContainer.setEnabled(false);
             }
         });
         swipeContainer.setRefreshing(true);
@@ -150,7 +149,6 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
         statsAdapter.setData(data);
         statsAdapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
-        swipeContainer.setEnabled(true);
     }
 
     @Override

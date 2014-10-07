@@ -78,10 +78,10 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        //listView上下补点间距
-        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
-        listView.addHeaderView(paddingTv);
-        listView.addFooterView(paddingTv);
+//        //listView上下补点间距
+//        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
+//        listView.addHeaderView(paddingTv);
+//        listView.addFooterView(paddingTv);
 
         courseAdapter = new CourseAdapter(getActivity());
         courseAdapter.setData(null);
@@ -96,7 +96,6 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
             public void onRefresh() {
                 Log.d("winson", "进行下拉刷新");
                 swipeContainer.setRefreshing(true);
-                swipeContainer.setEnabled(false);
             }
         });
         swipeContainer.setRefreshing(true);
@@ -130,7 +129,6 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
                 courseAdapter.setData(data);
                 courseAdapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
-                swipeContainer.setEnabled(true);
             }
             else {
                 Intent intent = new Intent(getActivity(), CourseService.class);

@@ -115,7 +115,6 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
             public void onRefresh() {
                 Log.d("winson", "进行下拉刷新");
                 swipeContainer.setRefreshing(true);
-                swipeContainer.setEnabled(false);
             }
         });
         swipeContainer.setRefreshing(true);
@@ -162,7 +161,6 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
                 scoreListAdapter.setData(data);
                 scoreListAdapter.notifyDataSetChanged();
                 swipeContainer.setRefreshing(false);
-                swipeContainer.setEnabled(true);
             }
             else {
                 Intent scoreIntent = new Intent(getActivity(), ScoreService.class);
