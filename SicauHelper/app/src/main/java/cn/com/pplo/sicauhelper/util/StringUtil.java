@@ -20,6 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.com.pplo.sicauhelper.model.Course;
+import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.model.Student;
@@ -300,19 +301,15 @@ public class StringUtil {
 
                 //添加课程性质
                 String category = someElements.get(i * 3 + 7).text().toString().replaceAll("\\s", "");
-                if(category.equals("公共选修课")){
+                if (category.equals("公共选修课")) {
                     category = "公选";
-                }
-                else if(category.equals("推荐选修课")){
+                } else if (category.equals("推荐选修课")) {
                     category = "推选";
-                }
-                else if(category.equals("其他选修课")){
+                } else if (category.equals("其他选修课")) {
                     category = "任选";
-                }
-                else if(category.equals("专业段任意选修课")){
+                } else if (category.equals("专业段任意选修课")) {
                     category = "任选";
-                }
-                else if(category.equals("实践教学")){
+                } else if (category.equals("实践教学")) {
                     category = "实践";
                 }
                 course.setCategory(category);
@@ -339,28 +336,43 @@ public class StringUtil {
                 list.add(course);
             }
             ;
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.d("winson", "解析课程表失败");
             list = null;
-        }
-        finally {
+        } finally {
             Log.d("winson", list + "");
             return list;
         }
     }
 
-    public static String parseNewsListInfo(String htmlStr){
-        Document document = Jsoup.parse(htmlStr);
-        Elements aElements = document.select("a.body");
-        for (Element e : aElements ){
-            Log.d("winson", "文字----   " + e.text());
-            Log.d("winson", "url----   " + e.attr("href"));
+    public static List<News> parseNewsListInfo(String htmlStr) {
+        List<News> list = new ArrayList<News>();
+        try {
+            Document document = Jsoup.parse(htmlStr);
+            Elements aElements = document.select("a.body");
+            for (Element e : aElements) {
+                Log.d("winson", "文字----   " + e.text());
+                Log.d("winson", "url----   " + e.attr("href"));
+            }
+            Elements cElements = document.select("font[color=gray]");
+
+            for (int i = 0; i < aElements.size(); i++) {
+                News news = new News();
+                String categoryStr = cElements.get(i).text();
+                news.setCategory((categoryStr.split("-"))[0].replace("[",""));
+                news.setTitle(aElements.get(i).text());
+                String urlStr = aElements.attr("href");
+                news.setUrl("http://jiaowu.sicau.edu.cn/web/web/web/" + urlStr);
+                news.setContent("");
+                news.setSrc("");
+                news.setId(Integer.parseInt((urlStr.split("="))[1]));
+                list.add(news);
+            }
+        } catch (Exception e) {
+            list = null;
         }
-        Elements cElements = document.select("font[color=gray]");
-        for (Element e : cElements ){
-            Log.d("winson", "分类----   " + e.text());
-        }
-        return "";
+        Log.d("winson", "news----   " + list);
+        return list;
     }
 
     public interface Callback {

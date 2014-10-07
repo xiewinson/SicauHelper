@@ -67,6 +67,7 @@ public class ScoreService extends Service {
                                             getApplicationContext().getContentResolver().insert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), values);
                                         }
                                         getApplicationContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null);
+                                        ScoreService.this.stopSelf();
                                     }
                                 }.start();
                             }

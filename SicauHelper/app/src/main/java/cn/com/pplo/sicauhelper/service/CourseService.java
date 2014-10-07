@@ -73,6 +73,7 @@ public class CourseService extends Service {
                                         getApplicationContext().getContentResolver().insert(Uri.parse(SicauHelperProvider.URI_COURSE_ALL), values);
                                     }
                                     getApplicationContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_COURSE_ALL), null);
+                                    CourseService.this.stopSelf();
                                 }
                             }.start();
                         }

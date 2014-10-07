@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.service.NewsService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
@@ -57,19 +59,8 @@ public class NewsFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         webView = (TextView) view.findViewById(R.id.webView);
-        NetUtil.getNewsListHtmlStr(getActivity(), null, new NetUtil.NetCallback(getActivity()){
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-
-            @Override
-            public void onResponse(String result) {
-                super.onResponse(result);
-                StringUtil.parseNewsListInfo(result);
-                webView.setText(Html.fromHtml(result));
-            }
-        });
+        Intent intent = new Intent(getActivity(), NewsService.class);
+        getActivity().startService(intent);
     }
 
     @Override

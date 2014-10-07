@@ -40,7 +40,6 @@ import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 public class CourseDateFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
-    private SwipeRefreshLayout swipeContainer;
 
     //从上一层传来的星期几
     private int datePosition = 0;
@@ -72,13 +71,7 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
         listView = (ListView) view.findViewById(R.id.course_listView);
 
         //下拉控件
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-//        //listView上下补点间距
+        //listView上下补点间距
 //        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
 //        listView.addHeaderView(paddingTv);
 //        listView.addFooterView(paddingTv);
@@ -91,15 +84,6 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
 //        setScrollHideOrShowActionBar(listView);
 
         //下拉监听
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.d("winson", "进行下拉刷新");
-                swipeContainer.setRefreshing(true);
-            }
-        });
-        swipeContainer.setRefreshing(true);
-
 
     }
 
@@ -128,7 +112,6 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
             if(data.getCount() > 0){
                 courseAdapter.setData(data);
                 courseAdapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
             }
             else {
                 Intent intent = new Intent(getActivity(), CourseService.class);
