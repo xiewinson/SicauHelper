@@ -6,6 +6,9 @@ import android.provider.BaseColumns;
  * Created by winson on 2014/9/15.
  */
 public class TableContract {
+    /**
+     * 成绩表
+     */
     public interface TableScore extends BaseColumns{
 
         String TABLE_NAME = "t_score";
@@ -17,19 +20,33 @@ public class TableContract {
         String _GRADE = "_grade";
     }
 
+    /**
+     * 课程表
+     */
     public interface TableCourse extends BaseColumns{
 
         String TABLE_NAME = "t_course";
 
-        String _NAME = "name";
-        String _CATEGORY = "category";
-        String _CREDIT = "credit";
-        String _TIME = "time";
-        String _CLASSROOM = "classroom";
-        String _WEEK = "week";
-        String _TEACHER = "teacher";
-        String _SCHEDULENUM = "scheduleNum";
-        String _SELECTNUM = "selectedNum";
+        String _NAME = "_name";
+        String _CATEGORY = "_category";
+        String _CREDIT = "_credit";
+        String _TIME = "_time";
+        String _CLASSROOM = "_classroom";
+        String _WEEK = "_week";
+        String _TEACHER = "_teacher";
+        String _SCHEDULENUM = "_scheduleNum";
+        String _SELECTNUM = "_selectedNum";
+    }
+
+    public interface TableNews extends BaseColumns {
+
+        String TABLE_NAME = "t_news";
+
+        String _TITLE = "_title";
+        String _URL = "_url";
+        String _CATEGORY = "_category";
+        String _CONTENT = "_content";
+        String _SRC = "_src";
     }
 
 }

@@ -70,6 +70,8 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.course_listView);
 
+        //设置空时view
+        listView.setEmptyView(view.findViewById(R.id.empty_view));
         //下拉控件
         //listView上下补点间距
 //        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
@@ -112,6 +114,8 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
             if(data.getCount() > 0){
                 courseAdapter.setData(data);
                 courseAdapter.notifyDataSetChanged();
+                //设置为无课
+                listView.setEmptyView(null);
             }
             else {
                 Intent intent = new Intent(getActivity(), CourseService.class);

@@ -361,7 +361,7 @@ public class StringUtil {
                 String categoryStr = cElements.get(i).text();
                 news.setCategory((categoryStr.split("-"))[0].replace("[",""));
                 news.setTitle(aElements.get(i).text());
-                String urlStr = aElements.attr("href");
+                String urlStr = aElements.get(i).attr("href");
                 news.setUrl("http://jiaowu.sicau.edu.cn/web/web/web/" + urlStr);
                 news.setContent("");
                 news.setSrc("");

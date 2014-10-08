@@ -30,6 +30,15 @@ public class SicauHelperProvider extends ContentProvider {
     private static final int CODE_COURSE_ALL = 40;
     public static final String URI_COURSE_ALL = "content://" + AUTHORITY + "/" + COURSE_ALL + "";
 
+    //News
+    private static final String NEWS_SINGLE = "news/#";
+    private static final int CODE_NEWS_SINGLE = 50;
+    public static final String URI_NEWS_SINGLE = "content://" + AUTHORITY + "/" + NEWS_SINGLE;
+
+    private static final String NEWS_ALL = "news";
+    private static final int CODE_NEWS_ALL = 60;
+    public static final String URI_NEWS_ALL = "content://" + AUTHORITY + "/" + NEWS_ALL + "";
+
 
     static {
         uriMatcher.addURI(AUTHORITY, SCORE_ALL, CODE_SCORE_ALL);
@@ -37,6 +46,9 @@ public class SicauHelperProvider extends ContentProvider {
 
         uriMatcher.addURI(AUTHORITY, COURSE_ALL, CODE_COURSE_ALL);
         uriMatcher.addURI(AUTHORITY, COURSE_SINGLE, CODE_COURSE_SINGLE);
+
+        uriMatcher.addURI(AUTHORITY, NEWS_ALL, CODE_NEWS_ALL);
+        uriMatcher.addURI(AUTHORITY, NEWS_SINGLE, CODE_NEWS_SINGLE);
     }
 
     private SQLiteOpenHelper sqliteOpenHelper;
@@ -73,6 +85,11 @@ public class SicauHelperProvider extends ContentProvider {
                 long courseAllId = sqliteDatabase.insert(TableContract.TableCourse.TABLE_NAME, null, values);
 //                getContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null);
                 return Uri.withAppendedPath(uri, courseAllId + "");
+
+            case CODE_NEWS_ALL:
+                long newsAllId = sqliteDatabase.insert(TableContract.TableNews.TABLE_NAME, null, values);
+//                getContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null);
+                return Uri.withAppendedPath(uri, newsAllId + "");
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -99,6 +116,15 @@ public class SicauHelperProvider extends ContentProvider {
                 return courseAllCursor;
             case CODE_COURSE_SINGLE:
                 return null;
+
+            case CODE_NEWS_ALL:
+                return null;
+            case CODE_NEWS_SINGLE:
+                Cursor  newsAllCursor = sqliteDatabase.query(TableContract.TableNews.TABLE_NAME, null,selection,selectionArgs,null, null, null);
+//                newsAllCursor.setNotificationUri(getContext().getContentResolver(), uri);
+                return newsAllCursor;
+
+
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
