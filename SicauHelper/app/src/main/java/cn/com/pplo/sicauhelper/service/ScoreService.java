@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.IBinder;
 
 import com.android.volley.VolleyError;
@@ -21,13 +22,21 @@ import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 
 public class ScoreService extends Service {
+    private IBinder mBinder = new ScoreServiceBinder();
+
     public ScoreService() {
+    }
+
+    public class ScoreServiceBinder extends Binder {
+       public ScoreService getScoreService(){
+            return ScoreService.this;
+        }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return mBinder;
     }
 
     @Override
@@ -35,15 +44,19 @@ public class ScoreService extends Service {
         super.onCreate();
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public interface OnRequestFinishListener {
+        void onRequestFinish(boolean isSuccess);
+    }
+
+    public void requestScoreInfo(final OnRequestFinishListener listener) {
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
         Student student = SicauHelperApplication.getStudent();
         if (student != null) {
             params.put("user", student.getSid() + "");
             params.put("pwd", student.getPswd());
-            
+            params.put("lb", "S");
+
             NetUtil.getScoreHtmlStr(getApplicationContext(), params, new NetUtil.NetCallback(getApplicationContext()) {
                 @Override
                 public void onResponse(String result) {
@@ -67,7 +80,7 @@ public class ScoreService extends Service {
                                             getApplicationContext().getContentResolver().insert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), values);
                                         }
                                         getApplicationContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null);
-                                        ScoreService.this.stopSelf();
+                                        listener.onRequestFinish(true);
                                     }
                                 }.start();
                             }
@@ -79,9 +92,9 @@ public class ScoreService extends Service {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     super.onErrorResponse(volleyError);
+                    listener.onRequestFinish(false);
                 }
             });
         }
-        return super.onStartCommand(intent, flags, startId);
     }
 }

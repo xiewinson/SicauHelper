@@ -1,14 +1,18 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -32,6 +36,7 @@ import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.CourseService;
 import cn.com.pplo.sicauhelper.service.ScoreService;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 
 /**
@@ -40,6 +45,7 @@ import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 public class CourseDateFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
+    private ProgressDialog progressDialog;
 
     //从上一层传来的星期几
     private int datePosition = 0;
@@ -69,7 +75,7 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.course_listView);
-
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表～");
         //设置空时view
         listView.setEmptyView(view.findViewById(R.id.empty_view));
         //下拉控件
@@ -110,23 +116,38 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor data) {
 
-        if(data != null) {
-            if(data.getCount() > 0){
-                courseAdapter.setData(data);
-                courseAdapter.notifyDataSetChanged();
-                //设置为无课
-                listView.setEmptyView(null);
-            }
-            else {
-                Intent intent = new Intent(getActivity(), CourseService.class);
-                getActivity().startService(intent);
-            }
-
+        listView.setEmptyView(null);
+        if (data != null && data.getCount() > 0) {
+            courseAdapter.setData(data);
+            courseAdapter.notifyDataSetChanged();
+            //设置为无课
+        } else {
+            Intent intent = new Intent(getActivity(), CourseService.class);
+            getActivity().bindService(intent, serviceConn, Context.BIND_AUTO_CREATE);
         }
-        else {
 
-        }
     }
+
+    private ServiceConnection serviceConn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            CourseService.CourseServiceBinder courseServiceBinder = (CourseService.CourseServiceBinder) service;
+            CourseService courseService = courseServiceBinder.getCourseService();
+            progressDialog.show();
+            courseService.requestCourseInfo(new CourseService.OnRequestFinishListener() {
+                @Override
+                public void onRequestFinish(boolean isSuccess) {
+                    getActivity().unbindService(serviceConn);
+                    UIUtil.dismissProgressDialog(progressDialog);
+                }
+            });
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
@@ -143,7 +164,7 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
 
         public void setData(Cursor cursor) {
 //            this.data = data;
-            if(cursor != null){
+            if (cursor != null) {
                 data.clear();
                 data.addAll(CursorUtil.parseCourseList(cursor, datePosition));
                 Log.d("winson", "data长：" + data.size() + "     " + data);
@@ -168,7 +189,7 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
-            if(convertView == null){
+            if (convertView == null) {
                 holder = new ViewHolder();
                 convertView = View.inflate(context, R.layout.item_fragment_course_date_list, null);
                 holder.timeTv = (TextView) convertView.findViewById(R.id.time_tv);
@@ -177,8 +198,7 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
                 holder.classroomTv = (TextView) convertView.findViewById(R.id.classroom_tv);
                 holder.creditTv = (RatingBar) convertView.findViewById(R.id.credit_tv);
                 convertView.setTag(holder);
-            }
-            else {
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
 
@@ -186,23 +206,19 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
             String time = course.getTime();
             int circleShape = 0;
             int color = 0;
-            if(time.equals("1-2")){
+            if (time.equals("1-2")) {
                 circleShape = R.drawable.circle_blue;
                 color = getResources().getColor(R.color.blue_500);
-            }
-            else if(time.equals("3-4")){
+            } else if (time.equals("3-4")) {
                 circleShape = R.drawable.circle_red;
                 color = getResources().getColor(R.color.red_500);
-            }
-            else if(time.equals("5-6")){
+            } else if (time.equals("5-6")) {
                 circleShape = R.drawable.circle_green;
                 color = getResources().getColor(R.color.green_500);
-            }
-            else if(time.equals("7-8")){
+            } else if (time.equals("7-8")) {
                 circleShape = R.drawable.circle_orange;
                 color = getResources().getColor(R.color.orange_500);
-            }
-            else if(time.equals("9-10")){
+            } else if (time.equals("9-10")) {
                 circleShape = R.drawable.circle_purple;
                 color = getResources().getColor(R.color.purple_500);
             }
@@ -219,10 +235,9 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
             holder.classroomTv.setText(course.getClassroom() + "(" + course.getWeek() + "周)");
 
             //设置星星个
-            if((getItem(position).getCredit() > 5)){
+            if ((getItem(position).getCredit() > 5)) {
                 holder.creditTv.setNumStars(10);
-            }
-            else {
+            } else {
                 holder.creditTv.setNumStars(5);
             }
             //设置星星颜色

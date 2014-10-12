@@ -1,5 +1,6 @@
 package cn.com.pplo.sicauhelper.util;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,5 +19,25 @@ public class UIUtil {
      */
     public static void showShortToast(Context context, String title) {
         Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 
+     * @param context
+     * @param text
+     * @return
+     */
+    public static ProgressDialog getProgressDialog(Context context, String text){
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage(text);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        return progressDialog;
+    }
+
+    public static void dismissProgressDialog(ProgressDialog progressDialog){
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+        }
     }
 }

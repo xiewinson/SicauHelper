@@ -9,8 +9,14 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.util.NetUtil;
 
 public class HomeFragment extends BaseFragment {
 

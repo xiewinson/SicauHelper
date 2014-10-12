@@ -46,7 +46,6 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
 
     private ListView listView;
     private StatsAdapter statsAdapter;
-    private SwipeRefreshLayout swipeContainer;
 
     public static ScoreStatsFragment newInstance() {
         ScoreStatsFragment fragment = new ScoreStatsFragment();
@@ -85,12 +84,8 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.stats_listView);
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
+        //设置空时view
+        listView.setEmptyView(view.findViewById(R.id.empty_view));
         //listView上下补点间距
         TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
         listView.addHeaderView(paddingTv);
@@ -102,15 +97,6 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
         //滑动监听
         setScrollHideOrShowActionBar(listView);
 
-        //下拉监听
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.d("winson", "进行下拉刷新");
-                swipeContainer.setRefreshing(true);
-            }
-        });
-        swipeContainer.setRefreshing(true);
     }
 
     @Override
@@ -138,17 +124,15 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d("winson", "---------------------loader2创建了" );
-
         return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null, null, null, null) {
         };
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        listView.setEmptyView(null);
         statsAdapter.setData(data);
         statsAdapter.notifyDataSetChanged();
-        swipeContainer.setRefreshing(false);
     }
 
     @Override

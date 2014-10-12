@@ -1,16 +1,20 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -53,7 +57,8 @@ import cn.com.pplo.sicauhelper.util.UIUtil;
 
 public class ScoreDetailFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
-    private SwipeRefreshLayout swipeContainer;
+    private ProgressDialog progressDialog;
+
     private ScoreListAdapter scoreListAdapter;
 
     private boolean isScrolling = false;
@@ -97,28 +102,14 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.score_listView);
-        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
+        //设置空时view
+        listView.setEmptyView(view.findViewById(R.id.empty_view));
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "找找找～正在教务系统上找你的成绩表");
         scoreListAdapter = new ScoreListAdapter(getActivity());
         scoreListAdapter.setData(null);
         listView.setAdapter(scoreListAdapter);
         //滑动监听
         setScrollHideOrShowActionBar(listView);
-
-        //下拉监听
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.d("winson", "进行下拉刷新");
-                swipeContainer.setRefreshing(true);
-            }
-        });
-        swipeContainer.setRefreshing(true);
-
     }
 
     @Override
@@ -146,32 +137,42 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d("winson", ScoreDetailFragment.class.getSimpleName() + "Loader创建");
-        return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null, null, null, null){
+        return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null, null, null, null) {
         };
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//        data.setNotificationUri(getActivity().getContentResolver(), Uri.parse(SicauHelperProvider.URI_SCORE_ALL));
-        Log.d("winson", ScoreDetailFragment.class.getSimpleName() + "Loader加载完成");
-        if(data != null) {
-            if(data.getCount() > 0){
-                Log.d("winson",ScoreDetailFragment.class.getSimpleName() +  "这次加载了" + data.getCount() + "条数据");
-                scoreListAdapter.setData(data);
-                scoreListAdapter.notifyDataSetChanged();
-                swipeContainer.setRefreshing(false);
-            }
-            else {
-                Intent scoreIntent = new Intent(getActivity(), ScoreService.class);
-                getActivity().startService(scoreIntent);
-            }
-
-        }
-        else {
-            Log.d("winson", ScoreDetailFragment.class.getSimpleName() + "没有取到数据");
+        listView.setEmptyView(null);
+        if (data != null && data.getCount() > 0) {
+            scoreListAdapter.setData(data);
+            scoreListAdapter.notifyDataSetChanged();
+        } else {
+            Intent scoreIntent = new Intent(getActivity(), ScoreService.class);
+            getActivity().bindService(scoreIntent, serviceConn, Context.BIND_AUTO_CREATE);
         }
     }
+
+    private ServiceConnection serviceConn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            progressDialog.show();
+            ScoreService.ScoreServiceBinder scoreServiceBinder = (ScoreService.ScoreServiceBinder) service;
+            ScoreService scoreService = scoreServiceBinder.getScoreService();
+            scoreService.requestScoreInfo(new ScoreService.OnRequestFinishListener() {
+                @Override
+                public void onRequestFinish(boolean isSuccess) {
+                    getActivity().unbindService(serviceConn);
+                    UIUtil.dismissProgressDialog(progressDialog);
+                }
+            });
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -189,10 +190,11 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
 
         public void setData(Cursor cursor) {
 //            this.data = data;
-            if(cursor != null){
+            if (cursor != null) {
                 data.clear();
                 data.addAll(CursorUtil.parseScoreList(cursor));
-            };
+            }
+            ;
         }
 
         @Override
@@ -213,10 +215,9 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             //若是上半学期则在左边，反之则在右边
-            if(String.valueOf(getItem(position).getGrade()).contains(".1")){
-                    convertView = View.inflate(context, R.layout.item_fragment_score_list, null);
-            }
-            else {
+            if (String.valueOf(getItem(position).getGrade()).contains(".1")) {
+                convertView = View.inflate(context, R.layout.item_fragment_score_list, null);
+            } else {
                 convertView = View.inflate(context, R.layout.item_fragment_score_list_right, null);
             }
             TextView categoryTv = (TextView) convertView.findViewById(R.id.category_tv);
@@ -229,23 +230,19 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
             String category = getItem(position).getCategory();
             int circleShape = 0;
             int color = 0;
-            if(category.equals("必修")){
+            if (category.equals("必修")) {
                 circleShape = R.drawable.circle_blue;
                 color = getResources().getColor(R.color.blue_500);
-            }
-            else if(category.equals("公选")){
+            } else if (category.equals("公选")) {
                 circleShape = R.drawable.circle_red;
                 color = getResources().getColor(R.color.red_500);
-            }
-            else if(category.equals("任选")){
+            } else if (category.equals("任选")) {
                 circleShape = R.drawable.circle_green;
                 color = getResources().getColor(R.color.green_500);
-            }
-            else if(category.equals("推选")){
+            } else if (category.equals("推选")) {
                 circleShape = R.drawable.circle_orange;
                 color = getResources().getColor(R.color.orange_500);
-            }
-            else if(category.equals("实践")){
+            } else if (category.equals("实践")) {
                 circleShape = R.drawable.circle_purple;
                 color = getResources().getColor(R.color.purple_500);
             }
@@ -268,10 +265,9 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
             //显示学年
             String[] gradeArray = (getItem(position).getGrade() + "").split("\\.");
             String upOrDown = "";
-            if(gradeArray[1].equals("1")){
+            if (gradeArray[1].equals("1")) {
                 upOrDown = "上学年";
-            }
-            else {
+            } else {
                 upOrDown = "下学年";
             }
             gradeTv.setText(gradeArray[0] + upOrDown);
@@ -281,10 +277,9 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
             categoryTv.setText("#" + getItem(position).getCategory() + "#");
 
             //设置星星个数
-            if((getItem(position).getCredit() > 5)){
+            if ((getItem(position).getCredit() > 5)) {
                 ratingBar.setNumStars(10);
-            }
-            else {
+            } else {
 //                ratingBar.setMax(5);
                 ratingBar.setNumStars(5);
             }
