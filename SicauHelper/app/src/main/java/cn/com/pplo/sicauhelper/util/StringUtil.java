@@ -345,6 +345,11 @@ public class StringUtil {
         }
     }
 
+    /**
+     * 解析新闻列表
+     * @param htmlStr
+     * @return
+     */
     public static List<News> parseNewsListInfo(String htmlStr) {
         List<News> list = new ArrayList<News>();
         try {
@@ -355,7 +360,10 @@ public class StringUtil {
                 Log.d("winson", "url----   " + e.attr("href"));
             }
             Elements cElements = document.select("font[color=gray]");
-
+            Elements dElements = document.select("&nbsp");
+            for (Element e : dElements) {
+                Log.d("winson", "时间---   " + e.text());
+            }
             for (int i = 0; i < aElements.size(); i++) {
                 News news = new News();
                 String categoryStr = cElements.get(i).text();

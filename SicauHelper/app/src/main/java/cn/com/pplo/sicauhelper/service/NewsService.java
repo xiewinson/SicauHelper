@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.IBinder;
 import android.text.Html;
 import android.util.Log;
@@ -20,13 +21,20 @@ import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 
 public class NewsService extends Service {
+    private IBinder mBinder = new NewsServiceBinder();
     public NewsService() {
+    }
+
+    public class NewsServiceBinder extends Binder {
+        public NewsService getNewsService() {
+            return NewsService.this;
+        }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return mBinder;
     }
 
     @Override
@@ -34,18 +42,19 @@ public class NewsService extends Service {
         super.onCreate();
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void requestNewsList(final NewsCallback callback) {
         NetUtil.getNewsListHtmlStr(getApplicationContext(), null, new NetUtil.NetCallback(getApplicationContext()) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
+                callback.onFailure();
             }
 
             @Override
             public void onResponse(String result) {
                 super.onResponse(result);
                 final List<News> tempList =  StringUtil.parseNewsListInfo(result);
+                callback.onSuccess(tempList);
                 if(tempList != null && tempList.size() > 0) {
                     new Thread() {
                         @Override
@@ -61,13 +70,18 @@ public class NewsService extends Service {
                                 values.put(TableContract.TableNews._CATEGORY, tempList.get(i).getCategory());
                                 getApplicationContext().getContentResolver().insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
                             }
+                            callback.onSaveFinish(true);
 //                            getApplicationContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), null);
-                            NewsService.this.stopSelf();
                         }
                     }.start();
                 }
             }
         });
-        return super.onStartCommand(intent, flags, startId);
+    }
+
+    public interface NewsCallback {
+        public void onSuccess(List<News> data);
+        public void onFailure();
+        public void onSaveFinish(boolean isSaveSuccess);
     }
 }

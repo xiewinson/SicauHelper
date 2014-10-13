@@ -48,6 +48,7 @@ import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.service.OnRequestFinishListener;
 import cn.com.pplo.sicauhelper.service.ScoreService;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
@@ -159,7 +160,7 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
             progressDialog.show();
             ScoreService.ScoreServiceBinder scoreServiceBinder = (ScoreService.ScoreServiceBinder) service;
             ScoreService scoreService = scoreServiceBinder.getScoreService();
-            scoreService.requestScoreInfo(new ScoreService.OnRequestFinishListener() {
+            scoreService.requestScoreInfo(new OnRequestFinishListener() {
                 @Override
                 public void onRequestFinish(boolean isSuccess) {
                     getActivity().unbindService(serviceConn);
@@ -194,7 +195,6 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
                 data.clear();
                 data.addAll(CursorUtil.parseScoreList(cursor));
             }
-            ;
         }
 
         @Override

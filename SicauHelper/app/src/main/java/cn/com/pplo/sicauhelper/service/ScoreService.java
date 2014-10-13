@@ -44,10 +44,6 @@ public class ScoreService extends Service {
         super.onCreate();
     }
 
-    public interface OnRequestFinishListener {
-        void onRequestFinish(boolean isSuccess);
-    }
-
     public void requestScoreInfo(final OnRequestFinishListener listener) {
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();

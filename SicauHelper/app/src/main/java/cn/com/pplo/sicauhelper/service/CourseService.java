@@ -47,10 +47,6 @@ public class CourseService extends Service {
         super.onCreate();
     }
 
-    public interface OnRequestFinishListener {
-        void onRequestFinish(boolean isSuccess);
-    }
-
     public void requestCourseInfo(final OnRequestFinishListener onRequestFinishListener) {
             Log.d("winson", "请求课程表-------------------------------------------------");
             //此处需要修改

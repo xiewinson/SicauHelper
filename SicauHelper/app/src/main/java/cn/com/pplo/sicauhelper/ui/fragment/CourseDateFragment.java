@@ -34,6 +34,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.CourseService;
+import cn.com.pplo.sicauhelper.service.OnRequestFinishListener;
 import cn.com.pplo.sicauhelper.service.ScoreService;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -134,7 +135,7 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
             CourseService.CourseServiceBinder courseServiceBinder = (CourseService.CourseServiceBinder) service;
             CourseService courseService = courseServiceBinder.getCourseService();
             progressDialog.show();
-            courseService.requestCourseInfo(new CourseService.OnRequestFinishListener() {
+            courseService.requestCourseInfo(new OnRequestFinishListener() {
                 @Override
                 public void onRequestFinish(boolean isSuccess) {
                     getActivity().unbindService(serviceConn);
