@@ -40,6 +40,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String createNewsSql = "create table " + TableContract.TableNews.TABLE_NAME + "("
             + TableContract.TableNews._ID + " integer primary key, "
             + TableContract.TableNews._TITLE + " text, "
+            + TableContract.TableNews._DATE + " text, "
             + TableContract.TableNews._CATEGORY + " text, "
             + TableContract.TableNews._URL + " text, "
             + TableContract.TableNews._CONTENT + " text, "
@@ -58,7 +59,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(createCourseSql);
         db.execSQL(createNewsSql);
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 

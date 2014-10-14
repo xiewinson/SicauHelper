@@ -10,6 +10,7 @@ public class News {
     private String category;
     private String content;
     private String src;
+    private String date;
 
     public int getId() {
         return id;
@@ -59,6 +60,14 @@ public class News {
         this.src = src;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "News{" +
@@ -68,6 +77,7 @@ public class News {
                 ", category='" + category + '\'' +
                 ", content='" + content + '\'' +
                 ", src='" + src + '\'' +
+                ", date='" + date + '\'' +
                 '}';
     }
 }

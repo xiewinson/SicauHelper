@@ -360,10 +360,15 @@ public class StringUtil {
                 Log.d("winson", "url----   " + e.attr("href"));
             }
             Elements cElements = document.select("font[color=gray]");
-            Elements dElements = document.select("&nbsp");
-            for (Element e : dElements) {
-                Log.d("winson", "时间---   " + e.text());
+
+            List<String> dateList = new ArrayList<String>();
+            Pattern pattern = Pattern.compile("nbsp[\\S]{1}[\\S]{1,2}[\\S]{1}[0-9]{1,2}[\\S]{1}");
+            Matcher matcher = pattern.matcher(htmlStr);
+            while (matcher.find()){
+              dateList.add(matcher.group().replace("nbsp(",""));
             }
+
+
             for (int i = 0; i < aElements.size(); i++) {
                 News news = new News();
                 String categoryStr = cElements.get(i).text();
@@ -373,11 +378,13 @@ public class StringUtil {
                 news.setUrl("http://jiaowu.sicau.edu.cn/web/web/web/" + urlStr);
                 news.setContent("");
                 news.setSrc("");
+                news.setDate(dateList.get(i));
                 news.setId(Integer.parseInt((urlStr.split("="))[1]));
                 list.add(news);
             }
         } catch (Exception e) {
             list = null;
+            Log.d("winson", "解析错误： " + e);
         }
         Log.d("winson", "news----   " + list);
         return list;

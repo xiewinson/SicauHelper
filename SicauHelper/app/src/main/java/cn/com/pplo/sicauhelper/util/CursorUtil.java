@@ -1,13 +1,13 @@
 package cn.com.pplo.sicauhelper.util;
 
 import android.database.Cursor;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.model.Course;
+import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 
@@ -91,4 +91,25 @@ public class CursorUtil {
         }
     }
 
+    public static List<News> parseNewsList(Cursor cursor){
+        List<News> list = new ArrayList<News>();
+        try {
+            while(cursor.moveToNext()){
+                News news = new News();
+                news.setCategory(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._CATEGORY)));
+                news.setTitle(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._TITLE)));
+                news.setUrl(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._URL)));
+                news.setDate(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._DATE)));
+                news.setId(cursor.getInt(cursor.getColumnIndex(TableContract.TableNews._ID)));
+                news.setContent(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._CONTENT)));
+                news.setSrc(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._SRC)));
+                list.add(news);
+            }
+        }catch (Exception e){
+            list.clear();
+        }
+        finally {
+            return list;
+        }
+    }
 }

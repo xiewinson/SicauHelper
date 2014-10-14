@@ -41,8 +41,8 @@ public class BaseFragment extends Fragment {
         //背景色
         pagerSlidingTabStrip.setBackgroundResource(backgroundColor);
         //指示条
-        pagerSlidingTabStrip.setUnderlineHeight(0);
-        pagerSlidingTabStrip.setUnderlineColorResource(backgroundColor);
+//        pagerSlidingTabStrip.setUnderlineHeight(0);
+//        pagerSlidingTabStrip.setUnderlineColorResource(backgroundColor);
         //字体样式
 //        pagerSlidingTabStrip.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
         //分隔条颜色

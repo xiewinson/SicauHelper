@@ -64,6 +64,7 @@ public class NewsService extends Service {
                                 Log.d("winson", "_id: ----------------------" + tempList.get(i).getId());
                                 values.put(TableContract.TableNews._ID, tempList.get(i).getId());
                                 values.put(TableContract.TableNews._TITLE, tempList.get(i).getTitle());
+                                values.put(TableContract.TableNews._DATE, tempList.get(i).getDate());
                                 values.put(TableContract.TableNews._URL, tempList.get(i).getUrl());
                                 values.put(TableContract.TableNews._CONTENT, tempList.get(i).getContent());
                                 values.put(TableContract.TableNews._SRC, tempList.get(i).getSrc());

@@ -29,12 +29,15 @@ import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.NewsService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.util.CursorUtil;
+import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 
 
 public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
     private List<News> newsList = new ArrayList<News>();
+    private NewsAdapter newsAdapter;
 
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
@@ -68,11 +71,21 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.deep_purple_500));
         setUp(view);
     }
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.news_listView);
+
+        //listView上下补点间距
+        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
+        listView.addHeaderView(paddingTv);
+        listView.addFooterView(paddingTv);
+
+        newsAdapter = new NewsAdapter(getActivity());
+        //滚动隐藏
+        setScrollHideOrShowActionBar(listView);
     }
 
     @Override
@@ -107,7 +120,8 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         if(cursor != null && cursor.getCount() > 0){
-
+            newsAdapter.setData(CursorUtil.parseNewsList(cursor));
+            listView.setAdapter(newsAdapter);
         }
         else {
             Log.d("winson", "去开始服务");
@@ -199,8 +213,27 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             }
             News news = getItem(position);
             holder.titleTv.setText(news.getTitle());
-//            holder.titleTv.setText(news.get);
-            holder.titleTv.setText(news.getTitle());
+            holder.dateTv.setText(news.getDate());
+            String category = news.getCategory();
+            int shapeRes = 0;
+            if(category.equals("雅安")){
+                category = "雅";
+                shapeRes = R.drawable.square_blue;
+            }
+            else if(category.equals("成都")){
+                category = "成";
+                shapeRes = R.drawable.square_orange;
+            }
+            else if(category.equals("都江堰")){
+                category = "堰";
+                shapeRes = R.drawable.square_green;
+            }
+            else {
+                category = "全";
+                shapeRes = R.drawable.square_purple;
+            }
+            holder.categoryTv.setText(category);
+            holder.categoryTv.setBackgroundResource(shapeRes);
             return convertView;
         }
     }

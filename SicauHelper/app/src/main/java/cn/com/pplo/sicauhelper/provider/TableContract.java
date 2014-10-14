@@ -47,6 +47,7 @@ public class TableContract {
         String _CATEGORY = "_category";
         String _CONTENT = "_content";
         String _SRC = "_src";
+        String _DATE = "_date";
     }
 
 }

@@ -118,7 +118,10 @@ public class SicauHelperProvider extends ContentProvider {
                 return null;
 
             case CODE_NEWS_ALL:
-                Cursor  newsAllCursor = sqliteDatabase.query(TableContract.TableNews.TABLE_NAME, null,selection,selectionArgs,null, null, null);
+
+
+
+                Cursor  newsAllCursor = sqliteDatabase.query(TableContract.TableNews.TABLE_NAME, null,selection,selectionArgs,null, null, "_id desc");
 //                newsAllCursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return newsAllCursor;
             case CODE_NEWS_SINGLE:
