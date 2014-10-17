@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 public class ScoreStatsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
+    private List<ScoreStats> scoreStatsList = new ArrayList<ScoreStats>();
     private StatsAdapter statsAdapter;
 
     public static ScoreStatsFragment newInstance() {
@@ -91,24 +93,13 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
         listView.addHeaderView(paddingTv);
         listView.addFooterView(paddingTv);
 
-        statsAdapter = new StatsAdapter();
+        statsAdapter = new StatsAdapter(getActivity(), scoreStatsList);
         listView.setAdapter(statsAdapter);
 
         //滑动监听
         setScrollHideOrShowActionBar(listView);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().initLoader(1, null, this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getLoaderManager().destroyLoader(1);
+        //启动Loader
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -131,8 +122,21 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         listView.setEmptyView(null);
-        statsAdapter.setData(data);
-        statsAdapter.notifyDataSetChanged();
+        if(data != null){
+            notifyDataSetChanged(StringUtil.parseScoreStatsList(CursorUtil.parseScoreList(data)));
+        }
+    }
+
+    /**
+     * 通知ListView数据改变
+     * @param list
+     */
+    private void notifyDataSetChanged(List<ScoreStats> list){
+        if(list != null && list.size() > 0){
+            scoreStatsList.clear();
+            scoreStatsList.addAll(list);
+            statsAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -141,15 +145,12 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
     }
 
     private class StatsAdapter extends BaseAdapter {
+        private Context context;
+        private List<ScoreStats> data;
 
-        private List<ScoreStats> data = new ArrayList<ScoreStats>();
-
-        public void setData(Cursor cursor){
-
-            if(cursor != null){
-                data.clear();
-                data.addAll(StringUtil.parseScoreStatsList(CursorUtil.parseScoreList(cursor)));
-            }
+        private StatsAdapter(Context context, List<ScoreStats> data) {
+            this.context = context;
+            this.data = data;
         }
 
         @Override
@@ -172,7 +173,7 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
             ViewHolder holder = null;
             if(convertView == null){
                 holder = new ViewHolder();
-                convertView = View.inflate(getActivity(), R.layout.item_fragment_score_stats_list, null);
+                convertView = View.inflate(context, R.layout.item_fragment_score_stats_list, null);
                 holder.gradeTv = (TextView) convertView.findViewById(R.id.grade);
                 holder.numMustTv = (TextView) convertView.findViewById(R.id.num_must);
                 holder.numChoiceTv = (TextView) convertView.findViewById(R.id.num_choice);

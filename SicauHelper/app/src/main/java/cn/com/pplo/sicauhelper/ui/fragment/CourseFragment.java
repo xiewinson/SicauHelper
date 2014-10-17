@@ -17,12 +17,15 @@ import android.view.ViewGroup;
 
 import com.android.volley.VolleyError;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.service.CourseService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;

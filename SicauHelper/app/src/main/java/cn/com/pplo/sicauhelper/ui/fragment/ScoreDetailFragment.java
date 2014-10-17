@@ -44,6 +44,7 @@ import java.util.Map;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.listener.OnScrollListener;
+import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
@@ -61,7 +62,7 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
     private ProgressDialog progressDialog;
 
     private ScoreListAdapter scoreListAdapter;
-
+    private List<Score> scoreList = new ArrayList<Score>();
     private boolean isScrolling = false;
     private int startX;
     private int startY;
@@ -106,23 +107,12 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
         //设置空时view
         listView.setEmptyView(view.findViewById(R.id.empty_view));
         progressDialog = UIUtil.getProgressDialog(getActivity(), "找找找～正在教务系统上找你的成绩表");
-        scoreListAdapter = new ScoreListAdapter(getActivity());
-        scoreListAdapter.setData(null);
+        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList);
         listView.setAdapter(scoreListAdapter);
         //滑动监听
         setScrollHideOrShowActionBar(listView);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+        //启动Loader
         getLoaderManager().initLoader(0, null, this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getLoaderManager().destroyLoader(0);
     }
 
     @Override
@@ -146,11 +136,22 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         listView.setEmptyView(null);
         if (data != null && data.getCount() > 0) {
-            scoreListAdapter.setData(data);
-            scoreListAdapter.notifyDataSetChanged();
+            notifyDataSetChanged(CursorUtil.parseScoreList(data));
         } else {
             Intent scoreIntent = new Intent(getActivity(), ScoreService.class);
             getActivity().bindService(scoreIntent, serviceConn, Context.BIND_AUTO_CREATE);
+        }
+    }
+
+    /**
+     * 通知ListView数据改变
+     * @param list
+     */
+    private void notifyDataSetChanged(List<Score> list){
+        if(list != null && list.size() > 0){
+            scoreList.clear();
+            scoreList.addAll(list);
+            scoreListAdapter.notifyDataSetChanged();
         }
     }
 
@@ -183,18 +184,11 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
     private class ScoreListAdapter extends BaseAdapter {
 
         private Context context;
-        private List<Score> data = new ArrayList<Score>();
+        private List<Score> data;
 
-        public ScoreListAdapter(Context context) {
+        public ScoreListAdapter(Context context, List<Score> list) {
             this.context = context;
-        }
-
-        public void setData(Cursor cursor) {
-//            this.data = data;
-            if (cursor != null) {
-                data.clear();
-                data.addAll(CursorUtil.parseScoreList(cursor));
-            }
+            this.data = list;
         }
 
         @Override

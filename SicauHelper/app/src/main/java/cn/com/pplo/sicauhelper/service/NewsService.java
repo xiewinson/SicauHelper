@@ -47,6 +47,7 @@ public class NewsService extends Service {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
+                Log.d("winson", "发生了错误");
                 callback.onFailure();
             }
 
@@ -61,7 +62,6 @@ public class NewsService extends Service {
                         public void run() {
                             for (int i = 0; i < tempList.size(); i++) {
                                 ContentValues values = new ContentValues();
-                                Log.d("winson", "_id: ----------------------" + tempList.get(i).getId());
                                 values.put(TableContract.TableNews._ID, tempList.get(i).getId());
                                 values.put(TableContract.TableNews._TITLE, tempList.get(i).getTitle());
                                 values.put(TableContract.TableNews._DATE, tempList.get(i).getDate());

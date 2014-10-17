@@ -32,6 +32,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Course;
+import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.CourseService;
 import cn.com.pplo.sicauhelper.service.OnRequestFinishListener;
@@ -47,6 +48,8 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
 
     private ListView listView;
     private ProgressDialog progressDialog;
+
+    private List<Course> courseList = new ArrayList<Course>();
 
     //从上一层传来的星期几
     private int datePosition = 0;
@@ -85,8 +88,7 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
 //        listView.addHeaderView(paddingTv);
 //        listView.addFooterView(paddingTv);
 
-        courseAdapter = new CourseAdapter(getActivity());
-        courseAdapter.setData(null);
+        courseAdapter = new CourseAdapter(getActivity(), courseList);
         listView.setAdapter(courseAdapter);
 
         //滑动监听
@@ -94,18 +96,8 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
 
         //下拉监听
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+        //启动Loader
         getLoaderManager().initLoader(0, null, this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getLoaderManager().destroyLoader(0);
     }
 
     @Override
@@ -118,15 +110,25 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor data) {
 
         listView.setEmptyView(null);
-        if (data != null && data.getCount() > 0) {
-            courseAdapter.setData(data);
-            courseAdapter.notifyDataSetChanged();
-            //设置为无课
+        if (data != null  && data.getCount() > 0) {
+            notifyDataSetChanged(CursorUtil.parseCourseList(data, datePosition));
         } else {
             Intent intent = new Intent(getActivity(), CourseService.class);
             getActivity().bindService(intent, serviceConn, Context.BIND_AUTO_CREATE);
         }
 
+    }
+
+    /**
+     * 通知ListView数据改变
+     * @param list
+     */
+    private void notifyDataSetChanged(List<Course> list){
+        if(list != null && list.size() > 0){
+            courseList.clear();
+            courseList.addAll(list);
+            courseAdapter.notifyDataSetChanged();
+        }
     }
 
     private ServiceConnection serviceConn = new ServiceConnection() {
@@ -157,19 +159,11 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
 
     private class CourseAdapter extends BaseAdapter {
         private Context context;
-        private List<Course> data = new ArrayList<Course>();
+        private List<Course> data;
 
-        public CourseAdapter(Context context) {
+        private CourseAdapter(Context context, List<Course> data) {
             this.context = context;
-        }
-
-        public void setData(Cursor cursor) {
-//            this.data = data;
-            if (cursor != null) {
-                data.clear();
-                data.addAll(CursorUtil.parseCourseList(cursor, datePosition));
-                Log.d("winson", "data长：" + data.size() + "     " + data);
-            }
+            this.data = data;
         }
 
         @Override

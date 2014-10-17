@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -30,12 +31,14 @@ import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.NewsService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 
 
 public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
+    private ProgressDialog progressDialog;
     private List<News> newsList = new ArrayList<News>();
     private NewsAdapter newsAdapter;
 
@@ -77,15 +80,18 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.news_listView);
-
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的～");
         //listView上下补点间距
-        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
-        listView.addHeaderView(paddingTv);
-        listView.addFooterView(paddingTv);
+//        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
+//        listView.addHeaderView(paddingTv);
+//        listView.addFooterView(paddingTv);
 
-        newsAdapter = new NewsAdapter(getActivity());
+        newsAdapter = new NewsAdapter(getActivity(), newsList);
+        listView.setAdapter(newsAdapter);
         //滚动隐藏
         setScrollHideOrShowActionBar(listView);
+        //启动Loader
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -99,19 +105,6 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         super.onCreateOptionsMenu(menu, inflater);
 
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getLoaderManager().destroyLoader(0);
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_NEWS_ALL), null, null, null, null);
@@ -120,31 +113,44 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         if(cursor != null && cursor.getCount() > 0){
-            newsAdapter.setData(CursorUtil.parseNewsList(cursor));
-            listView.setAdapter(newsAdapter);
+            notifyDataSetChanged(CursorUtil.parseNewsList(cursor));
         }
         else {
-            Log.d("winson", "去开始服务");
             Intent intent = new Intent(getActivity(), NewsService.class);
             getActivity().bindService(intent, serviceConn, Context.BIND_AUTO_CREATE);
+        }
+    }
+
+    /**
+     * 通知ListView数据改变
+     * @param list
+     */
+    private void notifyDataSetChanged(List<News> list){
+        if(list != null && list.size() > 0){
+            newsList.clear();
+            newsList.addAll(list);
+            newsAdapter.notifyDataSetChanged();
         }
     }
 
     private ServiceConnection serviceConn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            progressDialog.show();
             NewsService.NewsServiceBinder mBinder = (NewsService.NewsServiceBinder) service;
             NewsService newsService = mBinder.getNewsService();
-            Log.d("winson", "去开始轻轻");
-
             newsService.requestNewsList(new NewsService.NewsCallback() {
                 @Override
                 public void onSuccess(List<News> data) {
+                    notifyDataSetChanged(data);
+                    UIUtil.dismissProgressDialog(progressDialog);
+
                 }
 
                 @Override
                 public void onFailure() {
-
+                    Log.d("winson", "关闭对话框");
+                    UIUtil.dismissProgressDialog(progressDialog);
                 }
 
                 @Override
@@ -168,18 +174,11 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     private class NewsAdapter extends BaseAdapter {
 
         private Context context;
+        private List<News> data;
 
-        public NewsAdapter(Context context){
+        public NewsAdapter(Context context, List<News> list){
             this.context = context;
-        }
-
-        private List<News> data = new ArrayList<News>();
-
-        public void setData(List<News> list){
-            if(list != null && list.size() > 0){
-                data.clear();
-                data.addAll(list);
-            }
+            this.data = list;
         }
 
         @Override
@@ -230,7 +229,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             }
             else {
                 category = "全";
-                shapeRes = R.drawable.square_purple;
+                shapeRes = R.drawable.square_red;
             }
             holder.categoryTv.setText(category);
             holder.categoryTv.setBackgroundResource(shapeRes);

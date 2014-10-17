@@ -21,7 +21,6 @@
         android:layout_width="56dp"
         android:layout_height="56dp" />
 
-
     <LinearLayout
         android:layout_marginRight="16dp"
         android:paddingLeft="16dp"
