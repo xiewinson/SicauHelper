@@ -138,8 +138,7 @@ public class NetUtil {
                         }
 
                         @Override
-                        public void onResponse(String result) {
-                            super.onResponse(result);
+                        public void onSuccess(String result) {
                             //模拟教务系统的js加密密码
                             Log.d("winson", "原密码：" + params.get("pwd"));
                             params.put("pwd", StringUtil.encodePswd(StringUtil.getDcode(result), params.get("pwd")));
@@ -183,8 +182,7 @@ public class NetUtil {
     public static void getScoreHtmlStr(final Context context, final Map<String, String> params, final NetCallback callbcak) {
         login(context, params, new NetCallback(context) {
             @Override
-            public void onResponse(String result) {
-                super.onResponse(result);
+            public void onSuccess(String result) {
                 try {
                     Map<String, String> headerMap = new HashMap<String, String>();
                     headerMap.put("Cookie", cookie);
@@ -208,8 +206,7 @@ public class NetUtil {
     public static void getCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallback callbcak) {
         login(context, params, new NetCallback(context) {
             @Override
-            public void onResponse(String result) {
-                super.onResponse(result);
+            public void onSuccess(String result) {
                 try {
                     Map<String, String> headerMap = new HashMap<String, String>();
                     headerMap.put("Cookie", cookie);
@@ -233,8 +230,7 @@ public class NetUtil {
     public static void getCourse2HtmlStr(final Context context, final Map<String, String> params, final NetCallback callbcak) {
         login(context, params, new NetCallback(context) {
             @Override
-            public void onResponse(String result) {
-                super.onResponse(result);
+            public void onSuccess(String result) {
                 try {
                     Map<String, String> headerMap = new HashMap<String, String>();
                     headerMap.put("Cookie", cookie);
@@ -248,8 +244,7 @@ public class NetUtil {
                         }
 
                         @Override
-                        public void onResponse(String result) {
-                            super.onResponse(result);
+                        public void onSuccess(String result) {
                             try {
                                 Map<String, String> headerMap = new HashMap<String, String>();
                                 headerMap.put("Cookie", cookie);
@@ -291,8 +286,7 @@ public class NetUtil {
                         }
 
                         @Override
-                        public void onResponse(String result) {
-                            super.onResponse(result);
+                        public void onSuccess(String result) {
 
                             //新的header
                             Map<String, String> newHeader = new HashMap<String, String>();
@@ -318,7 +312,7 @@ public class NetUtil {
 
 
     //回调接口
-    public static class NetCallback implements Response.Listener<String>, Response.ErrorListener {
+    public static abstract class NetCallback implements Response.Listener<String>, Response.ErrorListener {
         private Context context;
 
         public NetCallback(Context context) {
@@ -343,6 +337,7 @@ public class NetUtil {
 
         @Override
         public void onResponse(String result) {
+            Log.d("winson","result:" + result);
             if (result.contains("密码不对")) {
                 UIUtil.showShortToast(context, "你连学号和密码都忘了吗～那么，拜拜～");
                 return;
@@ -354,8 +349,14 @@ public class NetUtil {
                 UIUtil.showShortToast(context, "您的电脑上所安装的个人防火墙软件拦截了你的验证信息");
             }
             else {
-
+                onSuccess(result);
             }
         }
+
+        /**
+         * 覆写此方法处理正确结果
+         * @param result
+         */
+        protected abstract void onSuccess(String result);
     }
 }

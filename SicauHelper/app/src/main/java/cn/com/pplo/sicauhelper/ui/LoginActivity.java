@@ -58,8 +58,7 @@ public class LoginActivity extends Activity {
                 map.put("pwd", pswd);
                 NetUtil.login(getApplicationContext(), map, new NetUtil.NetCallback(LoginActivity.this) {
                     @Override
-                    public void onResponse(String result) {
-                        super.onResponse(result);
+                    public void onSuccess(String result) {
                         try {
                             Log.d("winson", "登录" + result);
                             Student student = StringUtil.parseStudentInfo(result);

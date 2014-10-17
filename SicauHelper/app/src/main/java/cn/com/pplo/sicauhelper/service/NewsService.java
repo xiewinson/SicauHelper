@@ -52,8 +52,7 @@ public class NewsService extends Service {
             }
 
             @Override
-            public void onResponse(String result) {
-                super.onResponse(result);
+            public void onSuccess(String result) {
                 final List<News> tempList =  StringUtil.parseNewsListInfo(result);
                 callback.onSuccess(tempList);
                 if(tempList != null && tempList.size() > 0) {

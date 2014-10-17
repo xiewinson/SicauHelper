@@ -55,8 +55,7 @@ public class ScoreService extends Service {
 
             NetUtil.getScoreHtmlStr(getApplicationContext(), params, new NetUtil.NetCallback(getApplicationContext()) {
                 @Override
-                public void onResponse(String result) {
-                    super.onResponse(result);
+                public void onSuccess(String result) {
                     StringUtil.parseScoreInfo(result, new StringUtil.Callback() {
                         @Override
                         public void handleParseResult(final List<Score> tempList) {

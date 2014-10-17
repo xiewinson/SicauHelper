@@ -58,8 +58,7 @@ public class CourseService extends Service {
                 params.put("lb", "S");
                 NetUtil.getCourse2HtmlStr(getApplicationContext(), params, new NetUtil.NetCallback(getApplicationContext()) {
                     @Override
-                    public void onResponse(String result) {
-                        super.onResponse(result);
+                    public void onSuccess(String result) {
                         final List<Course> tempList = StringUtil.parseCourseInfo(result);
                         if(tempList != null && tempList.size() > 0){
                             new Thread(){
