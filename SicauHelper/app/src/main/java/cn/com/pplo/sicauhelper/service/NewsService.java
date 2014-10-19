@@ -21,20 +21,14 @@ import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 
 public class NewsService extends Service {
-    private IBinder mBinder = new NewsServiceBinder();
-    public NewsService() {
-    }
 
-    public class NewsServiceBinder extends Binder {
-        public NewsService getNewsService() {
-            return NewsService.this;
-        }
+    public NewsService() {
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
-        return mBinder;
+        return null;
     }
 
     @Override
@@ -42,46 +36,27 @@ public class NewsService extends Service {
         super.onCreate();
     }
 
-    public void requestNewsList(final NewsCallback callback) {
-        NetUtil.getNewsListHtmlStr(getApplicationContext(), null, new NetUtil.NetCallback(getApplicationContext()) {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-                Log.d("winson", "发生了错误");
-                callback.onFailure();
-            }
-
-            @Override
-            public void onSuccess(String result) {
-                final List<News> tempList =  StringUtil.parseNewsListInfo(result);
-                callback.onSuccess(tempList);
-                if(tempList != null && tempList.size() > 0) {
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < tempList.size(); i++) {
-                                ContentValues values = new ContentValues();
-                                values.put(TableContract.TableNews._ID, tempList.get(i).getId());
-                                values.put(TableContract.TableNews._TITLE, tempList.get(i).getTitle());
-                                values.put(TableContract.TableNews._DATE, tempList.get(i).getDate());
-                                values.put(TableContract.TableNews._URL, tempList.get(i).getUrl());
-                                values.put(TableContract.TableNews._CONTENT, tempList.get(i).getContent());
-                                values.put(TableContract.TableNews._SRC, tempList.get(i).getSrc());
-                                values.put(TableContract.TableNews._CATEGORY, tempList.get(i).getCategory());
-                                getApplicationContext().getContentResolver().insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
-                            }
-                            callback.onSaveFinish(true);
-//                            getApplicationContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), null);
-                        }
-                    }.start();
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        final List<News> tempList = intent.getParcelableArrayListExtra("data");
+        if (tempList != null && tempList.size() > 0) {
+            new Thread() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < tempList.size(); i++) {
+                        ContentValues values = new ContentValues();
+                        values.put(TableContract.TableNews._ID, tempList.get(i).getId());
+                        values.put(TableContract.TableNews._TITLE, tempList.get(i).getTitle());
+                        values.put(TableContract.TableNews._DATE, tempList.get(i).getDate());
+                        values.put(TableContract.TableNews._URL, tempList.get(i).getUrl());
+                        values.put(TableContract.TableNews._CONTENT, tempList.get(i).getContent());
+                        values.put(TableContract.TableNews._SRC, tempList.get(i).getSrc());
+                        values.put(TableContract.TableNews._CATEGORY, tempList.get(i).getCategory());
+                        getApplicationContext().getContentResolver().insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
+                    }
                 }
-            }
-        });
-    }
-
-    public interface NewsCallback {
-        public void onSuccess(List<News> data);
-        public void onFailure();
-        public void onSaveFinish(boolean isSaveSuccess);
+            }.start();
+        }
+        return super.onStartCommand(intent, flags, startId);
     }
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 
 public class ScoreFragment extends BaseFragment {
@@ -49,7 +50,7 @@ public class ScoreFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true);
-        getActivity().getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.indigo_500));
+        UIUtil.getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.indigo_500));
         return inflater.inflate(R.layout.fragment_score, container, false);
     }
 
@@ -75,7 +76,7 @@ public class ScoreFragment extends BaseFragment {
             @Override
             public void onPageSelected(int i) {
                 ActionBar actionBar = getActivity().getActionBar();
-                if(actionBar.isShowing() == false){
+                if(UIUtil.getSupportActionBar(getActivity()).isShowing() == false){
                     actionBar.show();
                 }
             }

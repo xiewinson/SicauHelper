@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -23,14 +24,20 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.NewsService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
+import cn.com.pplo.sicauhelper.util.NetUtil;
+import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 
@@ -74,7 +81,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.deep_purple_500));
+        UIUtil.getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.deep_purple_500));
         setUp(view);
     }
 
@@ -116,9 +123,37 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             notifyDataSetChanged(CursorUtil.parseNewsList(cursor));
         }
         else {
-            Intent intent = new Intent(getActivity(), NewsService.class);
-            getActivity().bindService(intent, serviceConn, Context.BIND_AUTO_CREATE);
+//            Intent intent = new Intent(getActivity(), NewsService.class);
+//            getActivity().bindService(intent, serviceConn, Context.BIND_AUTO_CREATE);
+            requestNewsList(getActivity());
         }
+    }
+
+    /**
+     * 从网络请求数据
+     * @param context
+     */
+    public void requestNewsList(final Context context) {
+        progressDialog.show();
+        NetUtil.getNewsListHtmlStr(context, null, new NetUtil.NetCallback(context) {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Log.d("winson", "发生了错误");
+                    UIUtil.dismissProgressDialog(progressDialog);
+
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                final List<News> tempList = StringUtil.parseNewsListInfo(result);
+                notifyDataSetChanged(tempList);
+                UIUtil.dismissProgressDialog(progressDialog);
+                Intent intent = new Intent(context, NewsService.class);
+                intent.putParcelableArrayListExtra("data", (ArrayList<? extends android.os.Parcelable>) tempList);
+                getActivity().startService(intent);
+            }
+        });
     }
 
     /**
@@ -133,38 +168,6 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         }
     }
 
-    private ServiceConnection serviceConn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            progressDialog.show();
-            NewsService.NewsServiceBinder mBinder = (NewsService.NewsServiceBinder) service;
-            NewsService newsService = mBinder.getNewsService();
-            newsService.requestNewsList(new NewsService.NewsCallback() {
-                @Override
-                public void onSuccess(List<News> data) {
-                    notifyDataSetChanged(data);
-                    UIUtil.dismissProgressDialog(progressDialog);
-
-                }
-
-                @Override
-                public void onFailure() {
-                    Log.d("winson", "关闭对话框");
-                    UIUtil.dismissProgressDialog(progressDialog);
-                }
-
-                @Override
-                public void onSaveFinish(boolean isSaveSuccess) {
-                    getActivity().unbindService(serviceConn);
-                }
-            });
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {

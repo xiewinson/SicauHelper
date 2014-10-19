@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 import cn.com.pplo.sicauhelper.listener.OnScrollListener;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 
 /**
@@ -21,8 +23,8 @@ public class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(!getActivity().getActionBar().isShowing()){
-            getActivity().getActionBar().show();
+        if(!UIUtil.getSupportActionBar(getActivity()).isShowing()){
+            UIUtil.getSupportActionBar(getActivity()).show();
         }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -60,7 +62,8 @@ public class BaseFragment extends Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
                 if(visibleItemCount != 0 && ((totalItemCount - 2) > visibleItemCount)){
-                    listView.setOnTouchListener(new OnScrollListener(getActivity().getActionBar()));
+                    ;
+                    listView.setOnTouchListener(new OnScrollListener(UIUtil.getSupportActionBar(getActivity())));
                     listView.setOnScrollListener(null);
                 }
             }

@@ -1,6 +1,5 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +31,7 @@ import cn.com.pplo.sicauhelper.service.CourseService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 
 public class CourseFragment extends BaseFragment {
@@ -66,7 +67,7 @@ public class CourseFragment extends BaseFragment {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().getActionBar().setBackgroundDrawable(getResources().getDrawable(R.color.green_500));
+        UIUtil.getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.green_500));
         return inflater.inflate(R.layout.fragment_course, container, false);
     }
 
@@ -92,7 +93,7 @@ public class CourseFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
-                ActionBar actionBar = getActivity().getActionBar();
+                ActionBar actionBar = UIUtil.getSupportActionBar(getActivity());
                 if(actionBar.isShowing() == false){
                     actionBar.show();
                 }

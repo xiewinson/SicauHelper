@@ -1,7 +1,10 @@
 package cn.com.pplo.sicauhelper.util;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -39,5 +42,9 @@ public class UIUtil {
         if(progressDialog != null && progressDialog.isShowing()){
             progressDialog.dismiss();
         }
+    }
+
+    public static ActionBar getSupportActionBar(Activity activity) {
+        return ((ActionBarActivity)activity).getSupportActionBar();
     }
 }

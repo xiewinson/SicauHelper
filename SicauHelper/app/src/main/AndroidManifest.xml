@@ -2,10 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.com.pplo.sicauhelper" >
 
-    <uses-sdk
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:node="replace" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -49,6 +45,10 @@
             android:name=".service.NewsService"
             android:enabled="true"
             android:exported="true" >
+        </service>
+        <service
+            android:name=".service.SaveIntentService"
+            android:exported="false" >
         </service>
     </application>
 
