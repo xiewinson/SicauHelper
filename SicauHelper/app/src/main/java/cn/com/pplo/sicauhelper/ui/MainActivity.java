@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.view.View;
 
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Student;
@@ -22,6 +25,7 @@ import cn.com.pplo.sicauhelper.ui.fragment.NavigationDrawerFragment;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.ui.fragment.NewsFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
 public class MainActivity extends BaseActivity
@@ -31,6 +35,7 @@ public class MainActivity extends BaseActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private DrawerLayout mDrawerLayout;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -58,12 +63,62 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = new NavigationDrawerFragment();
         mTitle = getTitle();
-
         // Set up the drawer.
         getSupportFragmentManager().beginTransaction().add(R.id.navigation_drawer, mNavigationDrawerFragment).commit();
-//        mNavigationDrawerFragment.setUp(
-//                R.id.navigation_drawer,
-//                (DrawerLayout) findViewById(R.id.drawer_layout));
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        setUp(mDrawerLayout, this);
+    }
+
+    /**
+     * Users of this fragment must call this method to set up the navigation drawer interactions.
+     *
+     */
+    public void setUp(DrawerLayout mDrawerLayout, final Activity activity) {
+//        mFragmentContainerView = getActivity().findViewById(fragmentId);
+
+        // set a custom shadow that overlays the main content when the drawer opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // set up the drawer's list view with items and click listener
+
+        ActionBar actionBar = UIUtil.getSupportActionBar(activity);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the navigation drawer and the action bar app icon.
+        final ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
+                activity,                    /* host Activity */
+                mDrawerLayout,                    /* DrawerLayout object */
+                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
+                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                UIUtil.getSupportActionBar(MainActivity.this).setTitle(mTitle);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                UIUtil.getSupportActionBar(MainActivity.this).setTitle("川农生活助手");
+            }
+        };
+
+        // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
+        // per the navigation drawer design guidelines.
+//        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+//            mDrawerLayout.openDrawer(mFragmentContainerView);
+//        }
+
+        // Defer code dependent on restoration of previous instance state.
+        mDrawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerToggle.syncState();
+            }
+        });
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     public void onSectionAttached(String title) {
@@ -99,6 +154,9 @@ public class MainActivity extends BaseActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
+        if(mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
     }
 
     //在每次重新创建菜单时重新调用一次，并在此时更新
@@ -106,9 +164,6 @@ public class MainActivity extends BaseActivity
         Log.d("winson", "重新设置名字：" + mTitle);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_drawer_white);
         actionBar.setTitle(mTitle);
     }
 
@@ -133,6 +188,15 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }
+        //点击导航键开启/关闭抽屉
+        else if(id == android.R.id.home){
+            if(!mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+            else {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
