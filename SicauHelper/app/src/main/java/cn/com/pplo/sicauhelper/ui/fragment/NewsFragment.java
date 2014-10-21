@@ -32,15 +32,12 @@ import java.util.List;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
-import cn.com.pplo.sicauhelper.provider.TableContract;
-import cn.com.pplo.sicauhelper.service.NewsService;
+import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
-import cn.com.pplo.sicauhelper.widget.ListViewPadding;
-
 
 public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -149,9 +146,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
                 final List<News> tempList = StringUtil.parseNewsListInfo(result);
                 notifyDataSetChanged(tempList);
                 UIUtil.dismissProgressDialog(progressDialog);
-                Intent intent = new Intent(context, NewsService.class);
-                intent.putParcelableArrayListExtra("data", (ArrayList<? extends android.os.Parcelable>) tempList);
-                getActivity().startService(intent);
+                SaveIntentService.startActionNewsAll(context, tempList);
             }
         });
     }

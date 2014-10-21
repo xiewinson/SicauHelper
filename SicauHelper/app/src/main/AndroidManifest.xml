@@ -42,11 +42,6 @@
             android:exported="true" >
         </service>
         <service
-            android:name=".service.NewsService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-        <service
             android:name=".service.SaveIntentService"
             android:exported="false" >
         </service>
