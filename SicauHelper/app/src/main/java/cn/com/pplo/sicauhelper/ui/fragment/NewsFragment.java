@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -103,12 +104,22 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         super.onDetach();
     }
 
+    //创建菜单
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
+        inflater.inflate(R.menu.news_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
-
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //刷新
+        if(item.getItemId() == R.id.action_refresh){
+            requestNewsList(getActivity());
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_NEWS_ALL), null, null, null, null);
@@ -162,6 +173,8 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             newsAdapter.notifyDataSetChanged();
         }
     }
+
+
 
 
     @Override

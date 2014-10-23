@@ -75,10 +75,7 @@ public class ScoreFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int i) {
-                ActionBar actionBar = getActivity().getActionBar();
-                if(UIUtil.getSupportActionBar(getActivity()).isShowing() == false){
-                    actionBar.show();
-                }
+
             }
 
             @Override

@@ -110,7 +110,7 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
         scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList);
         listView.setAdapter(scoreListAdapter);
         //滑动监听
-        setScrollHideOrShowActionBar(listView);
+//        setScrollHideOrShowActionBar(listView);
         //启动Loader
         getLoaderManager().initLoader(0, null, this);
     }

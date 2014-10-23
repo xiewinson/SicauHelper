@@ -1,11 +1,13 @@
 package cn.com.pplo.sicauhelper.service;
 
 import android.app.IntentService;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +69,12 @@ public class SaveIntentService extends IntentService {
                 values.put(TableContract.TableNews._CONTENT, newsList.get(i).getContent());
                 values.put(TableContract.TableNews._SRC, newsList.get(i).getSrc());
                 values.put(TableContract.TableNews._CATEGORY, newsList.get(i).getCategory());
-                getApplicationContext().getContentResolver().insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
+                ContentResolver contentResolver = getApplicationContext().getContentResolver();
+                //若数据库不存在该条数据便插入
+                if(contentResolver.query(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), null, TableContract.TableNews._ID + " = ?", new String[]{values.getAsString(TableContract.TableNews._ID)}, null).getCount() == 0){
+                    Log.d("winson", "不存在-->"  + i);
+                    contentResolver.insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
+                }
             }
         }
     }
