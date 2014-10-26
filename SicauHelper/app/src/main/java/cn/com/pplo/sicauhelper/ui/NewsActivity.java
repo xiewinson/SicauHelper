@@ -158,7 +158,7 @@ public class NewsActivity extends BaseActivity {
                                 values.put(TableContract.TableNews._CONTENT, data.getContent());
                                 values.put(TableContract.TableNews._URL, data.getUrl());
                                 values.put(TableContract.TableNews._SRC, data.getSrc());
-                                getContentResolver().update(Uri.parse("content://cn.com.pplo.sicauhelper.provider/news/" + data.getId()),
+                                getContentResolver().update(Uri.parse(SicauHelperProvider.URI_NEWS_ALL + "/" + data.getId()),
                                         values,
                                         TableContract.TableNews._ID + " = ?",
                                         new String[]{values.getAsString(TableContract.TableNews._ID)});
