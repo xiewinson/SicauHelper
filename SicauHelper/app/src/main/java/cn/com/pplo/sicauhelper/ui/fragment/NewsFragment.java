@@ -72,7 +72,6 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_news, container, false);
     }
@@ -108,7 +107,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     //创建菜单
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.news_list, menu);
+        inflater.inflate(R.menu.news_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

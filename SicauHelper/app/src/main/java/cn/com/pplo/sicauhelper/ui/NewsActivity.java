@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,6 +63,28 @@ public class NewsActivity extends BaseActivity {
         //获得news数据
         data = getIntent().getParcelableExtra(EXTRA_NEWS);
         if(data != null){
+
+            //设置actionBar的标题
+            ActionBar actionBar = getSupportActionBar();
+
+            String category = data.getCategory();
+            int colorRes = 0;
+            if(category.equals("雅安")){
+                colorRes = R.drawable.square_blue;
+            }
+            else if(category.equals("成都")){
+                colorRes = R.drawable.square_orange;
+            }
+            else if(category.equals("都江堰")){
+                colorRes = R.drawable.square_green;
+            }
+            else {
+                colorRes = R.drawable.square_red;
+            }
+            actionBar.setTitle(category + "新闻");
+            actionBar.setSubtitle(data.getDate());
+            actionBar.setBackgroundDrawable(getResources().getDrawable(colorRes));
+
 
             //从数据库中取得新闻
             new AsyncTask<Integer, Integer, News>(){

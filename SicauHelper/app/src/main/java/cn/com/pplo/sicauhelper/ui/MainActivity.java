@@ -171,8 +171,8 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
         restoreActionBar();
-        getMenuInflater().inflate(R.menu.global, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -192,7 +192,7 @@ public class MainActivity extends ActionBarActivity
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
