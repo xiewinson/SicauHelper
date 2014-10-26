@@ -45,6 +45,11 @@
             android:name=".service.SaveIntentService"
             android:exported="false" >
         </service>
+
+        <activity
+            android:name=".ui.NewsActivity"
+            android:label="@string/title_activity_news" >
+        </activity>
     </application>
 
 </manifest>

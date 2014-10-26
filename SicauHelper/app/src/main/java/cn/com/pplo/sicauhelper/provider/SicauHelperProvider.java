@@ -150,11 +150,21 @@ public class SicauHelperProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection,
             String[] selectionArgs) {
         // TODO: Implement this to handle requests to update one or more rows.
+        SQLiteDatabase sqliteDatabase = sqliteOpenHelper.getWritableDatabase();
+        Log.d("winson", uri + "哪类型：" + uriMatcher.match(uri));
         switch (uriMatcher.match(uri)){
             case CODE_SCORE_ALL:
                 return 0;
             case CODE_SCORE_SINGLE:
                 return 0;
+
+            //更新新闻
+            case CODE_NEWS_SINGLE:
+                return sqliteDatabase.update(TableContract.TableNews.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }

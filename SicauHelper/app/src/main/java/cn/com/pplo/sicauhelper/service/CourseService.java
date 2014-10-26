@@ -88,8 +88,9 @@ public class CourseService extends Service {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        super.onErrorResponse(volleyError);
                         onRequestFinishListener.onRequestFinish(false);
+                        super.onErrorResponse(volleyError);
+
                     }
                 });
             }

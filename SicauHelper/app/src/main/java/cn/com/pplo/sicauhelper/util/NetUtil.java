@@ -267,10 +267,9 @@ public class NetUtil {
     /**
      * 获取新闻列表
      * @param context
-     * @param params
      * @param callback
      */
-    public static void getNewsListHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback){
+    public static void getNewsListHtmlStr(final Context context, final NetCallback callback){
         try {
             //请求教务首页的HTML页面
             getOrPostRequest(context,
@@ -295,12 +294,51 @@ public class NetUtil {
                             //必须设置cookie
                             newHeader.put("Cookie", cookie);
                             //                            newHeader.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36");
-                            //验证密码
                             getOrPostRequest(context,
                                     Request.Method.POST,
                                     JiaowuConfig.JIAOWU_NEWS_LIST,
                                     newHeader,
                                     null,
+                                    callback);
+                        }
+                    });
+        } catch (Exception e) {
+            UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
+        }
+        clearCookie();
+    }
+
+
+    /**
+     * 获取具体新闻内容
+     * @param context
+     * @param params
+     * @param callback
+     */
+    public static void getNewsHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback){
+        try {
+            //请求教务首页的HTML页面
+            getOrPostRequest(context,
+                    Request.Method.GET,
+                    JiaowuConfig.JIAOWU_INDEX,
+                    null,
+                    null,
+                    new NetCallback(context) {
+
+                        @Override
+                        public void onSuccess(String result) {
+
+                            //新的header
+                            Map<String, String> newHeader = new HashMap<String, String>();
+                            //设置referer
+                            newHeader.put("Referer", "http://jiaowu.sicau.edu.cn/web/web/web/index.asp");
+                            //必须设置cookie
+                            newHeader.put("Cookie", cookie);
+                            getOrPostRequest(context,
+                                    Request.Method.POST,
+                                    JiaowuConfig.JIAOWU_NEWS_CONTENT,
+                                    newHeader,
+                                    params,
                                     callback);
                         }
                     });
@@ -337,13 +375,10 @@ public class NetUtil {
 
         @Override
         public void onResponse(String result) {
-            Log.d("winson","result:" + result);
             if (result.contains("密码不对")) {
                 UIUtil.showShortToast(context, "你连学号和密码都忘了吗～那么，拜拜～");
-                return;
             } else if (result.contains("登录超时")) {
                 UIUtil.showShortToast(context, "亲爱的，教务系统出问题了～");
-                return;
             }
             else if(result.contains("您的电脑上所安装的个人防火墙软件拦截了你的验证信息")){
                 UIUtil.showShortToast(context, "您的电脑上所安装的个人防火墙软件拦截了你的验证信息");

@@ -17,5 +17,5 @@ public class JiaowuConfig {
 
     //新闻
     public static final String JIAOWU_NEWS_LIST = "http://jiaowu.sicau.edu.cn/web/web/web/gwmore.asp";
-    public static final String JIAOWU_NEWS_CONTENT = "http://jiaowu.sicau.edu.cn/web/web/web/gwshenshow1.asp?bianhao=";
+    public static final String JIAOWU_NEWS_CONTENT = "http://jiaowu.sicau.edu.cn/web/web/web/gwshenshow1.asp";
 }

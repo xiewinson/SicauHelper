@@ -390,8 +390,68 @@ public class StringUtil {
         return list;
     }
 
+    /**
+     * 解析新闻内容
+     * @param htmlStr
+     * @return
+     */
+    public static String parseNewsInfo(String htmlStr) {
+        String result = "";
+        try {
+            Document document = Jsoup.parse(htmlStr);
+            Elements pElements = document.select("p");
+            StringBuilder sb = new StringBuilder();
+            for (Element e : pElements){
+                String str = e.text();
+                sb.append(str + "\n");
+            }
+            result = sb.toString();
+        } catch (Exception e) {
+            result = "";
+            Log.d("winson", "解析错误： " + e);
+        }
+        return result;
+    }
+
+    /**
+     * 处理新闻内容
+     * @param htmlStr
+     * @return
+     */
+    public static void handleNewsHtmlStr(String htmlStr, final Callback callback) {
+        new AsyncTask<String, Integer, String>(){
+
+            @Override
+            protected String doInBackground(String... params) {
+                String result = "";
+                try {
+                    Document document = Jsoup.parse(params[0]);
+                    Elements pElements = document.select("table[width=800]");
+                    StringBuilder sb = new StringBuilder();
+                    for (Element e : pElements){
+                        String str = e.html();
+                        sb.append(str + "\n");
+                    }
+                    result = sb.toString();
+
+                } catch (Exception e) {
+                    result = "";
+                    Log.d("winson", "解析错误： " + e);
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                callback.handleParseResult(s);
+            }
+        }.execute(htmlStr);
+
+    }
+
     public interface Callback {
-        public void handleParseResult(List<Score> scores);
+        public void handleParseResult(Object obj);
     }
 
 }

@@ -28,7 +28,7 @@ import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
-public class MainActivity extends BaseActivity
+public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -45,6 +45,8 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //不使用up
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         Student s = new Student();
         s.setName("谢豪");
         s.setSid(20118622);
@@ -167,16 +169,10 @@ public class MainActivity extends BaseActivity
         actionBar.setTitle(mTitle);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        if (mNavigationDrawerFragment != null && mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.home, menu);
-            restoreActionBar();
-//        }
+        restoreActionBar();
+        getMenuInflater().inflate(R.menu.global, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -186,11 +182,9 @@ public class MainActivity extends BaseActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
         //点击导航键开启/关闭抽屉
-        else if(id == android.R.id.home){
+        if(id == android.R.id.home){
             if(!mDrawerLayout.isDrawerOpen(GravityCompat.START)){
                 mDrawerLayout.openDrawer(GravityCompat.START);
             }
@@ -198,7 +192,7 @@ public class MainActivity extends BaseActivity
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             }
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

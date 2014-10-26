@@ -35,6 +35,7 @@ import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.ui.NewsActivity;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
@@ -107,12 +108,13 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     //创建菜单
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.news_list, menu);
+//        inflater.inflate(R.menu.news_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("winson", "点击了" + item.getItemId());
         //刷新
         if(item.getItemId() == R.id.action_refresh){
             requestNewsList(getActivity());
@@ -143,13 +145,12 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
      */
     public void requestNewsList(final Context context) {
         progressDialog.show();
-        NetUtil.getNewsListHtmlStr(context, null, new NetUtil.NetCallback(context) {
+        NetUtil.getNewsListHtmlStr(context, new NetUtil.NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
                 Log.d("winson", "发生了错误");
-                    UIUtil.dismissProgressDialog(progressDialog);
-
+                UIUtil.dismissProgressDialog(progressDialog);
+                super.onErrorResponse(volleyError);
             }
 
             @Override
@@ -208,7 +209,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
             if(convertView == null){
                 holder = new ViewHolder();
@@ -244,6 +245,13 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             }
             holder.categoryTv.setText(category);
             holder.categoryTv.setBackgroundResource(shapeRes);
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NewsActivity.startNewsActivity(context, getItem(position));
+                }
+            });
             return convertView;
         }
     }

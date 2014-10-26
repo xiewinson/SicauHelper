@@ -58,7 +58,8 @@ public class ScoreService extends Service {
                 public void onSuccess(String result) {
                     StringUtil.parseScoreInfo(result, new StringUtil.Callback() {
                         @Override
-                        public void handleParseResult(final List<Score> tempList) {
+                        public void handleParseResult(Object obj) {
+                            final List<Score> tempList = (List<Score>) obj;
                             if (tempList != null && tempList.size() > 0) {
                                 new Thread(){
                                     @Override
@@ -86,8 +87,8 @@ public class ScoreService extends Service {
 
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    super.onErrorResponse(volleyError);
                     listener.onRequestFinish(false);
+                    super.onErrorResponse(volleyError);
                 }
             });
         }

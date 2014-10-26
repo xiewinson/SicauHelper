@@ -1,0 +1,27 @@
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="#ffffff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:padding="16dp"
+                android:id="@+id/news_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/hello_world" />
+            <WebView
+                android:visibility="gone"
+                android:id="@+id/news_webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/hello_world" />
+
+        </LinearLayout>
+    </ScrollView>
+
