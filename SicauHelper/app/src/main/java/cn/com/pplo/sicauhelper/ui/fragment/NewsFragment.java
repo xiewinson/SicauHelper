@@ -2,18 +2,16 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.text.TextUtilsCompat;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +29,8 @@ import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Filter;
+
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
@@ -46,6 +47,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     private ListView listView;
     private ProgressDialog progressDialog;
     private List<News> newsList = new ArrayList<News>();
+    private SearchView searchView;
     private NewsAdapter newsAdapter;
 
     public static NewsFragment newInstance() {
@@ -85,6 +87,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.news_listView);
+//        listView.setTextFilterEnabled(true);
         progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的～");
         //listView上下补点间距
 //        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
@@ -108,7 +111,25 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.news_list, menu);
+        initSearchView(menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    //初始化searchView
+    private void initSearchView(Menu menu) {
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setQueryHint("搜索");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -182,7 +203,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     }
 
-    private class NewsAdapter extends BaseAdapter {
+    private class NewsAdapter extends BaseAdapter implements Filterable {
 
         private Context context;
         private List<News> data;
@@ -252,6 +273,21 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
                 }
             });
             return convertView;
+        }
+
+        @Override
+        public android.widget.Filter getFilter() {
+            return new android.widget.Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    return null;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                }
+            };
         }
     }
 

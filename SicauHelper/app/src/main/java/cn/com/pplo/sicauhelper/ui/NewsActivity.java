@@ -190,7 +190,7 @@ public class NewsActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.news, menu);
+        getMenuInflater().inflate(R.menu.news, menu);
         if(newsTv.getVisibility() == View.VISIBLE){
             menu.add(1, 1, 1, "网页视图");
         }
