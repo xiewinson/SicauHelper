@@ -50,7 +50,8 @@ public class ScoreFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true);
-        UIUtil.getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.indigo_500));
+        super.onCreateView(inflater,container, savedInstanceState);
+        getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.indigo_500));
         return inflater.inflate(R.layout.fragment_score, container, false);
     }
 

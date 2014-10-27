@@ -1,19 +1,17 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ListView;
 
-import cn.com.pplo.sicauhelper.listener.OnScrollListener;
-import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 
 /**
@@ -23,8 +21,8 @@ public class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(!UIUtil.getSupportActionBar(getActivity()).isShowing()){
-            UIUtil.getSupportActionBar(getActivity()).show();
+        if(!getSupportActionBar(getActivity()).isShowing()){
+            getSupportActionBar(getActivity()).show();
         }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -51,22 +49,12 @@ public class BaseFragment extends Fragment {
         pagerSlidingTabStrip.setDividerColor(getResources().getColor(backgroundColor));
     }
 
-    protected void setScrollHideOrShowActionBar(final ListView listView){
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                if(visibleItemCount != 0 && ((totalItemCount - 2) > visibleItemCount)){
-                    ;
-                    listView.setOnTouchListener(new OnScrollListener(UIUtil.getSupportActionBar(getActivity())));
-                    listView.setOnScrollListener(null);
-                }
-            }
-        });
+    /**
+     * 取得v7包的actionBar
+     * @param context
+     * @return
+     */
+    public ActionBar getSupportActionBar(Context context) {
+        return ((ActionBarActivity)context).getSupportActionBar();
     }
 }

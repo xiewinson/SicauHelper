@@ -30,7 +30,7 @@ import cn.com.pplo.sicauhelper.util.UIUtil;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends BaseFragment {
 
     /**
      * Remember the position of the selected item.
@@ -244,13 +244,13 @@ public class NavigationDrawerFragment extends Fragment {
      * 'context', rather than just what's in the current screen.
      */
     private void showGlobalContextActionBar() {
-        ActionBar actionBar = UIUtil.getSupportActionBar(getActivity());
+        ActionBar actionBar = getSupportActionBar(getActivity());
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(R.string.app_name);
     }
 
     private ActionBar getActionBar() {
-        return UIUtil.getSupportActionBar(getActivity());
+        return getSupportActionBar(getActivity());
     }
 
     /**

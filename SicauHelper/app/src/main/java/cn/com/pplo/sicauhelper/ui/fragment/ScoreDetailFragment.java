@@ -28,32 +28,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
-import cn.com.pplo.sicauhelper.listener.OnScrollListener;
-import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
-import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
-import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.OnRequestFinishListener;
 import cn.com.pplo.sicauhelper.service.ScoreService;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
-import cn.com.pplo.sicauhelper.util.NetUtil;
-import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
@@ -92,6 +81,7 @@ public class ScoreDetailFragment extends BaseFragment implements LoaderManager.L
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        super.onCreateView(inflater,container, savedInstanceState);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_score_detail, container, false);
     }

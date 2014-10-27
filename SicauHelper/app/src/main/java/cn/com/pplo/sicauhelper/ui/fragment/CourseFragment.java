@@ -67,7 +67,7 @@ public class CourseFragment extends BaseFragment {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        UIUtil.getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.green_500));
+        getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.green_500));
         return inflater.inflate(R.layout.fragment_course, container, false);
     }
 
@@ -93,7 +93,7 @@ public class CourseFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
-                ActionBar actionBar = UIUtil.getSupportActionBar(getActivity());
+                ActionBar actionBar = getSupportActionBar(getActivity());
                 if(actionBar.isShowing() == false){
                     actionBar.show();
                 }

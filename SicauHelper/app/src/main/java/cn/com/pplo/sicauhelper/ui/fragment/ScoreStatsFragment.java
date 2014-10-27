@@ -31,7 +31,6 @@ import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
-import cn.com.pplo.sicauhelper.listener.OnScrollListener;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.model.Student;
@@ -41,7 +40,7 @@ import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
-import cn.com.pplo.sicauhelper.widget.ListViewPadding;
+import cn.com.pplo.sicauhelper.widget.ViewPadding;
 
 public class ScoreStatsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -74,6 +73,7 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        super.onCreateView(inflater,container, savedInstanceState);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_score_stats, container, false);
     }
@@ -89,7 +89,7 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
         //设置空时view
         listView.setEmptyView(view.findViewById(R.id.empty_view));
         //listView上下补点间距
-        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
+        TextView paddingTv = ViewPadding.getListViewPadding(getActivity());
         listView.addHeaderView(paddingTv);
         listView.addFooterView(paddingTv);
 
@@ -97,7 +97,8 @@ public class ScoreStatsFragment extends BaseFragment implements LoaderManager.Lo
         listView.setAdapter(statsAdapter);
 
         //滑动监听
-        setScrollHideOrShowActionBar(listView);
+
+
         //启动Loader
         getLoaderManager().initLoader(0, null, this);
     }

@@ -82,7 +82,7 @@ public class MainActivity extends ActionBarActivity
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
-        ActionBar actionBar = UIUtil.getSupportActionBar(activity);
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
@@ -97,13 +97,13 @@ public class MainActivity extends ActionBarActivity
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                UIUtil.getSupportActionBar(MainActivity.this).setTitle(mTitle);
+                getSupportActionBar().setTitle(mTitle);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                UIUtil.getSupportActionBar(MainActivity.this).setTitle("川农生活助手");
+                getSupportActionBar().setTitle("川农生活助手");
             }
         };
 

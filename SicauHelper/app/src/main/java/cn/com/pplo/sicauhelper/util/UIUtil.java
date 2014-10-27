@@ -44,7 +44,5 @@ public class UIUtil {
         }
     }
 
-    public static ActionBar getSupportActionBar(Activity activity) {
-        return ((ActionBarActivity)activity).getSupportActionBar();
-    }
+
 }

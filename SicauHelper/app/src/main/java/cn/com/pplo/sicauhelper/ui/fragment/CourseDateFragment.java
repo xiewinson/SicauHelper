@@ -38,7 +38,6 @@ import cn.com.pplo.sicauhelper.service.OnRequestFinishListener;
 import cn.com.pplo.sicauhelper.service.ScoreService;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
-import cn.com.pplo.sicauhelper.widget.ListViewPadding;
 
 /**
  * Created by winson on 2014/10/4.
@@ -67,6 +66,7 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater,container, savedInstanceState);
         return inflater.inflate(R.layout.fragment_course_date, container, false);
     }
 

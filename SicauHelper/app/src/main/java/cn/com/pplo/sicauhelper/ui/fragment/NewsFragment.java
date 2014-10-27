@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.logging.Filter;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
@@ -41,12 +42,14 @@ import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
+import cn.com.pplo.sicauhelper.widget.ViewPadding;
 
 public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
     private ProgressDialog progressDialog;
     private List<News> newsList = new ArrayList<News>();
+    private List<News> originalData = null;
     private SearchView searchView;
     private NewsAdapter newsAdapter;
 
@@ -74,6 +77,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        super.onCreateView(inflater,container, savedInstanceState);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_news, container, false);
     }
@@ -81,13 +85,16 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        UIUtil.getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.deep_purple_500));
+        getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.deep_purple_500));
         setUp(view);
     }
 
     private void setUp(View view) {
         listView = (ListView) view.findViewById(R.id.news_listView);
 //        listView.setTextFilterEnabled(true);
+        //设置actionbar的间距
+        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity()));
+
         progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的～");
         //listView上下补点间距
 //        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
@@ -97,7 +104,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         newsAdapter = new NewsAdapter(getActivity(), newsList);
         listView.setAdapter(newsAdapter);
         //滚动隐藏
-        setScrollHideOrShowActionBar(listView);
+        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
         //启动Loader
         getLoaderManager().initLoader(0, null, this);
     }
@@ -118,7 +125,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     //初始化searchView
     private void initSearchView(Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setQueryHint("搜索");
+        searchView.setQueryHint("请输入关键字");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -127,6 +134,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
             @Override
             public boolean onQueryTextChange(String s) {
+                newsAdapter.getFilter().filter(s);
                 return false;
             }
         });
@@ -150,7 +158,10 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         if(cursor != null && cursor.getCount() > 0){
-            notifyDataSetChanged(CursorUtil.parseNewsList(cursor));
+            List<News> tempList = CursorUtil.parseNewsList(cursor);
+            //保存原始数据
+            originalData = tempList;
+            notifyDataSetChanged(tempList);
         }
         else {
 //            Intent intent = new Intent(getActivity(), NewsService.class);
@@ -176,6 +187,8 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             @Override
             public void onSuccess(String result) {
                 final List<News> tempList = StringUtil.parseNewsListInfo(result);
+                //保存原始数据
+                originalData = tempList;
                 notifyDataSetChanged(tempList);
                 UIUtil.dismissProgressDialog(progressDialog);
                 SaveIntentService.startActionNewsAll(context, tempList);
@@ -188,15 +201,12 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
      * @param list
      */
     private void notifyDataSetChanged(List<News> list){
-        if(list != null && list.size() > 0){
+        if(list != null){
             newsList.clear();
             newsList.addAll(list);
             newsAdapter.notifyDataSetChanged();
         }
     }
-
-
-
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
@@ -205,6 +215,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     private class NewsAdapter extends BaseAdapter implements Filterable {
 
+        private NewsListFilter newsListFilter;
         private Context context;
         private List<News> data;
 
@@ -277,19 +288,54 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
         @Override
         public android.widget.Filter getFilter() {
-            return new android.widget.Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    return null;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-
-                }
-            };
+            if(newsListFilter == null){
+                newsListFilter = new NewsListFilter();
+            }
+            return newsListFilter;
         }
     }
+
+    /**
+     * 数据过滤
+     */
+    private class NewsListFilter extends android.widget.Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results = new FilterResults();
+            Log.d("winson", "匹配：" + constraint.toString());
+            //将数据赋给临时list
+//            List<News> tmpList = newsList;
+            //匹配结果values
+            List<News> values = new ArrayList<News>();
+            String query = constraint.toString().trim();
+            if(TextUtils.isEmpty(query)){
+                values.addAll(originalData);
+            }
+            else {
+                for(News news : originalData){
+                    String title = news.getTitle();
+                    String date = news.getDate();
+                    String category = news.getCategory();
+                    if(title.contains(query)|| date.contains(query) || category.contains(query)){
+                        values.add(news);
+                    }
+                }
+                Log.d("winson", "匹配数量：" + values.size());
+            }
+            results.values = values;
+            results.count = values.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            //更新数据
+            notifyDataSetChanged((List<News>) results.values);
+            //恢复到第一个
+            listView.setSelection(0);
+        }
+    };
 
     private static class ViewHolder {
         TextView titleTv;
