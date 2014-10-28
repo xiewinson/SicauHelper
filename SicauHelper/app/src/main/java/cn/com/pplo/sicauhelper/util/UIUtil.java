@@ -44,5 +44,7 @@ public class UIUtil {
         }
     }
 
-
+    public static void setActionBarColor(Context context, ActionBar actionBarColor, int resId){
+        actionBarColor.setBackgroundDrawable(context.getResources().getDrawable(resId));
+    }
 }

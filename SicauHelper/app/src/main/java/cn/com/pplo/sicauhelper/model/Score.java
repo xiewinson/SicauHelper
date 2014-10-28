@@ -1,17 +1,31 @@
 package cn.com.pplo.sicauhelper.model;
 
-import java.io.Serializable;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Administrator on 2014/9/16.
  */
-public class Score implements Serializable {
+public class Score implements Parcelable {
     private int id;
     private String course;
     private String mark;
     private float credit;
     private String category;
     private float grade;
+
+    public Score(Parcel in) {
+        id = in.readInt();
+        course = in.readString();
+        mark = in.readString();
+        credit = in.readFloat();
+        category = in.readString();
+        grade = in.readFloat();
+    }
+
+    public Score() {
+    }
 
     public int getId() {
         return id;
@@ -71,5 +85,32 @@ public class Score implements Serializable {
                 ", category='" + category + '\'' +
                 ", grade=" + grade +
                 '}';
+    }
+
+    public static final Creator<Score> CREATOR = new Creator<Score>() {
+        @Override
+        public Score createFromParcel(Parcel source) {
+            return new Score(source);
+        }
+
+        @Override
+        public Score[] newArray(int size) {
+            return new Score[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(course);
+        dest.writeString(mark);
+        dest.writeFloat(credit);
+        dest.writeString(category);
+        dest.writeFloat(grade);
     }
 }

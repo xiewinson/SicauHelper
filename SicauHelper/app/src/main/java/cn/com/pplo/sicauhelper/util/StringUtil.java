@@ -399,7 +399,11 @@ public class StringUtil {
         String result = "";
         try {
             Document document = Jsoup.parse(htmlStr);
-            Elements pElements = document.select("p");
+            Elements pElements = null;
+            pElements = document.select("p");
+            if(pElements.size() < 1){
+                pElements = document.select("td[vAlign=top]");
+            }
             StringBuilder sb = new StringBuilder();
             for (Element e : pElements){
                 String str = e.text();

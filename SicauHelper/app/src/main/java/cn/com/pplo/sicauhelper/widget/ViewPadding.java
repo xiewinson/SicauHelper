@@ -12,10 +12,9 @@ import cn.com.pplo.sicauhelper.R;
  * Created by winson on 2014/9/27.
  */
 public class ViewPadding {
-    public static TextView getListViewPadding(Context context){
-        TextView tv = new TextView(context);
-        tv.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 1));
-        return tv;
+    public static View getListViewPadding(Context context){
+        View view = View.inflate(context, R.layout.view_header_footer_padding, null);
+        return view;
     }
 
     public static View getActionBarPadding(Context context){

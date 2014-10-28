@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
@@ -25,7 +24,6 @@ import cn.com.pplo.sicauhelper.ui.fragment.NavigationDrawerFragment;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.ui.fragment.NewsFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
-import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
 public class MainActivity extends ActionBarActivity
@@ -103,6 +101,9 @@ public class MainActivity extends ActionBarActivity
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                if(!getSupportActionBar().isShowing()){
+                    getSupportActionBar().show();
+                }
                 getSupportActionBar().setTitle("川农生活助手");
             }
         };

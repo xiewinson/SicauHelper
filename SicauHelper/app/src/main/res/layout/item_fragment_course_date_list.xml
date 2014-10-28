@@ -7,11 +7,11 @@
     android:padding="8dp">
 
     <TextView
-        android:layout_marginRight="8dp"
         android:id="@+id/time_tv"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="top"
+        android:layout_marginRight="8dp"
         android:background="@null"
         android:clickable="true"
         android:gravity="center"

@@ -11,8 +11,11 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
+import cn.com.pplo.sicauhelper.widget.ViewPadding;
 
 /**
  * Created by winson on 2014/9/21.
@@ -56,5 +59,15 @@ public class BaseFragment extends Fragment {
      */
     public ActionBar getSupportActionBar(Context context) {
         return ((ActionBarActivity)context).getSupportActionBar();
+    }
+
+    /**
+     * listView上下补点间距
+     * @param listView
+     */
+    public void setListViewTopBottomPadding(ListView listView){
+        View paddingTv = ViewPadding.getListViewPadding(getActivity());
+        listView.addHeaderView(paddingTv);
+        listView.addFooterView(paddingTv);
     }
 }

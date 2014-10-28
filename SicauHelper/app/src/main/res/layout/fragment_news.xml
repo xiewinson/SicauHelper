@@ -7,8 +7,6 @@
     android:layout_height="match_parent">
     <ListView
         android:id="@+id/news_listView"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         android:dividerHeight="1dp"
         android:divider="#dddddd"
         android:layout_width="match_parent"

@@ -59,27 +59,7 @@ public class ScoreService extends Service {
                     StringUtil.parseScoreInfo(result, new StringUtil.Callback() {
                         @Override
                         public void handleParseResult(Object obj) {
-                            final List<Score> tempList = (List<Score>) obj;
-                            if (tempList != null && tempList.size() > 0) {
-                                new Thread(){
-                                    @Override
-                                    public void run() {
-                                        super.run();
-                                        //此处仍将修改
-                                        for(int i = 0; i < tempList.size(); i++){
-                                            ContentValues values = new ContentValues();
-                                            values.put(TableContract.TableScore._CATEGORY, tempList.get(i).getCategory());
-                                            values.put(TableContract.TableScore._COURSE, tempList.get(i).getCourse());
-                                            values.put(TableContract.TableScore._CREDIT, tempList.get(i).getCredit());
-                                            values.put(TableContract.TableScore._GRADE, tempList.get(i).getGrade());
-                                            values.put(TableContract.TableScore._MARK, tempList.get(i).getMark());
-                                            getApplicationContext().getContentResolver().insert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), values);
-                                        }
-                                        getApplicationContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null);
-                                        listener.onRequestFinish(true);
-                                    }
-                                }.start();
-                            }
+
 
                         }
                     });

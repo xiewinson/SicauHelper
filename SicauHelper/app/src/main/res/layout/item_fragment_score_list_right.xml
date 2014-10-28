@@ -9,7 +9,6 @@
 
 
     <LinearLayout
-        android:layout_marginLeft="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:background="@drawable/msg_bubble_right"
@@ -89,7 +88,6 @@
         android:textSize="22sp"
         android:gravity="center"
         android:layout_gravity="bottom"
-        android:layout_marginRight="16dp"
         android:layout_width="56dp"
         android:layout_height="56dp" />
 
