@@ -20,6 +20,7 @@ import android.widget.ListView;
 
 
 import com.android.volley.VolleyError;
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,19 +113,21 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         //滑动监听
 //        setScrollHideOrShowActionBar(listView);
         //启动Loader
+
+
         getLoaderManager().initLoader(0, null, this);
     }
 
     //详情列表
     private void initScoreDetailAdapter() {
         scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList);
-        listView.setAdapter(scoreListAdapter);
+        UIUtil.setListViewInitAnimation("left", listView, scoreListAdapter);
     }
 
     //统计列表
     private void initScoreStatsAdapter() {
         statsAdapter = new ScoreStatsAdapter(getActivity(), scoreStatsList);
-        listView.setAdapter(statsAdapter);
+        UIUtil.setListViewInitAnimation("right", listView, statsAdapter);
     }
 
     @Override

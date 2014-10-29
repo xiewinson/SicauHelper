@@ -88,7 +88,7 @@ public class CourseDateFragment extends BaseFragment implements LoaderManager.Lo
 //        listView.addFooterView(paddingTv);
 
         courseAdapter = new CourseAdapter(getActivity(), courseList);
-        listView.setAdapter(courseAdapter);
+        UIUtil.setListViewInitAnimation("left", listView, courseAdapter);
 
         //滑动监听
 //        setScrollHideOrShowActionBar(listView);

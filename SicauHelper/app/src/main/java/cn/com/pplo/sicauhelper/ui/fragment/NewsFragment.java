@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 
 
 import java.util.ArrayList;
@@ -102,7 +103,9 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 //        listView.addFooterView(paddingTv);
 
         newsAdapter = new NewsAdapter(getActivity(), newsList);
-        listView.setAdapter(newsAdapter);
+        UIUtil.setListViewInitAnimation("bottom", listView, newsAdapter);
+
+
         //滚动隐藏
         listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
         //启动Loader

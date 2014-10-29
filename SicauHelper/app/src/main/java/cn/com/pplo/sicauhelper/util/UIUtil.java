@@ -7,7 +7,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
+import com.nhaarman.listviewanimations.appearance.simple.SwingLeftInAnimationAdapter;
+import com.nhaarman.listviewanimations.appearance.simple.SwingRightInAnimationAdapter;
 
 import cn.com.pplo.sicauhelper.R;
 
@@ -44,7 +51,29 @@ public class UIUtil {
         }
     }
 
+    /**
+     * 设置actionbar颜色
+     * @param context
+     * @param actionBarColor
+     * @param resId
+     */
     public static void setActionBarColor(Context context, ActionBar actionBarColor, int resId){
         actionBarColor.setBackgroundDrawable(context.getResources().getDrawable(resId));
+    }
+
+    public static void setListViewInitAnimation(String type, ListView listView, BaseAdapter baseAdapter) {
+        AnimationAdapter animationAdapter = null;
+        if(type == "bottom") {
+            animationAdapter = new SwingBottomInAnimationAdapter(baseAdapter);
+        }
+        else if(type == "left") {
+            animationAdapter = new SwingLeftInAnimationAdapter(baseAdapter);
+        }
+        else if(type == "right") {
+            animationAdapter = new SwingRightInAnimationAdapter(baseAdapter);
+        }
+
+        animationAdapter.setAbsListView(listView);
+        listView.setAdapter(animationAdapter);
     }
 }
