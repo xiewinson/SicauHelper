@@ -134,11 +134,14 @@ public class SicauHelperProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         // Implement this to handle requests to delete one or more rows.
+        SQLiteDatabase sqliteDatabase = sqliteOpenHelper.getWritableDatabase();
         switch (uriMatcher.match(uri)){
             case CODE_SCORE_ALL:
-                return 0;
+                return sqliteDatabase.delete(TableContract.TableScore.TABLE_NAME, selection, selectionArgs);
             case CODE_SCORE_SINGLE:
                 return 0;
+            case CODE_COURSE_ALL:
+                return sqliteDatabase.delete(TableContract.TableCourse.TABLE_NAME, selection, selectionArgs);
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }

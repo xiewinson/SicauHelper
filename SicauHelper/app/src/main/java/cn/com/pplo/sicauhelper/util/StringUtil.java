@@ -24,6 +24,7 @@ import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.model.Student;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 
 /**
  * Created by winson on 2014/9/14.
@@ -345,6 +346,97 @@ public class StringUtil {
         }
     }
 
+
+    /**
+     * 解析得出每日的课程列表
+     * @param list
+     * @return
+     */
+    public static List<List<Course>> parseCourseDateInfo(List<Course> list) {
+        List<List<Course>> data = new ArrayList<List<Course>>();
+        List<Course> list0 = new ArrayList<Course>();
+        List<Course> list1 = new ArrayList<Course>();
+        List<Course> list2 = new ArrayList<Course>();
+        List<Course> list3 = new ArrayList<Course>();
+        List<Course> list4 = new ArrayList<Course>();
+        List<Course> list5 = new ArrayList<Course>();
+        List<Course> list6 = new ArrayList<Course>();
+        try {
+            for(Course item : list){
+                Course course = new Course();
+                course.setCategory(item.getCategory());
+                course.setName(item.getName());
+                course.setCredit(item.getCredit());
+                course.setTime(item.getTime());
+                course.setTeacher(item.getTeacher());
+                course.setClassroom(item.getClassroom());
+                course.setId(item.getId());
+                course.setScheduleNum(item.getScheduleNum());
+                course.setSelectedNum(item.getSelectedNum());
+                course.setWeek(item.getWeek());
+
+                for(int position = 0; position < 7; position++) {
+                    String posStr = (position + 1) + "";
+                    if(item.getTime().contains(posStr + "-")){
+                        String time = item.getTime();
+                        String classroom = item.getClassroom();
+                        String[] timeArray = time.split("\\s+");
+                        String[] classroomArray = classroom.split("\\s+");
+                        for(int i = 0; i < timeArray.length; i++){
+                            if(timeArray[i].contains(posStr + "-")){
+                                course.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-"));
+                                course.setClassroom(classroomArray[i]);
+                            }
+                        }
+                        switch (position) {
+                            case 0:
+                                list0.add(course);
+                                break;
+                            case 1:
+                                list1.add(course);
+                                break;
+                            case 2:
+                                list2.add(course);
+                                break;
+                            case 3:
+                                list3.add(course);
+                                break;
+                            case 4:
+                                list4.add(course);
+                                break;
+                            case 5:
+                                list5.add(course);
+                                break;
+                            case 6:
+                                list6.add(course);
+                                break;
+                        }
+                    }
+                }
+                Collections.sort(list0);
+                Collections.sort(list1);
+                Collections.sort(list2);
+                Collections.sort(list3);
+                Collections.sort(list4);
+                Collections.sort(list5);
+                Collections.sort(list6);
+                data.add(list0);
+                data.add(list1);
+                data.add(list2);
+                data.add(list3);
+                data.add(list4);
+                data.add(list5);
+                data.add(list6);
+            }
+        }catch (Exception e){
+            data.clear();
+            Log.d("winson", "解析出错：" + e);
+        }
+        finally {
+
+            return data;
+        }
+    }
     /**
      * 解析新闻列表
      * @param htmlStr

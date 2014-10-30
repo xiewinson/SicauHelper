@@ -1,19 +1,34 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 
@@ -27,18 +42,22 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.model.Student;
-import cn.com.pplo.sicauhelper.service.CourseService;
+import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
+import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.ui.adapter.CourseAdapter;
+import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 
-public class CourseFragment extends BaseFragment {
+public class CourseFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
+    private ProgressDialog progressDialog;
 
     public static CourseFragment newInstance() {
         CourseFragment fragment = new CourseFragment();
@@ -74,16 +93,20 @@ public class CourseFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setUp(view);
     }
 
     private void setUp(View view) {
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表～");
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
-        viewPager.setAdapter(viewPagerAdapter);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
         setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.green_500);
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    private void initViewPager(Context context, List<List<Course>> data) {
+        viewPagerAdapter = new ViewPagerAdapter(context, data);
+        viewPager.setAdapter(viewPagerAdapter);
         pagerSlidingTabStrip.setViewPager(viewPager);
         pagerSlidingTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -155,7 +178,8 @@ public class CourseFragment extends BaseFragment {
             case Calendar.SUNDAY:
                 date = 6;
                 break;
-        };
+        }
+        ;
         viewPager.setCurrentItem(date);
     }
 
@@ -170,19 +194,23 @@ public class CourseFragment extends BaseFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
-
-        public ViewPagerAdapter(FragmentManager fm) {
-            super(fm);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_refresh) {
+            requestCourseList(getActivity());
         }
+        return super.onOptionsItemSelected(item);
+    }
 
-        @Override
-        public Fragment getItem(int position) {
-            Fragment pageFragment = CourseDateFragment.newInstance();
-            Bundle bundle = new Bundle();
-            bundle.putInt("position", position);
-            pageFragment.setArguments(bundle);
-            return pageFragment;
+    private class ViewPagerAdapter extends PagerAdapter {
+
+        private Context context;
+        private List<List<Course>> data;
+
+        private ViewPagerAdapter(Context context, List<List<Course>> data) {
+            this.context = context;
+            this.data = data;
         }
 
         @Override
@@ -191,29 +219,106 @@ public class CourseFragment extends BaseFragment {
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
+        public boolean isViewFromObject(View view, Object o) {
+            return view == o;
+        }
 
+        @Override
+        public CharSequence getPageTitle(int position) {
             if(position == 0){
-                return "星期一";
+                return "周一";
+            } else if (position == 1) {
+                return "周二";
             }
-            else if(position == 1){
-                return "星期二";
+            if (position == 2) {
+                return "周三";
+            } else if (position == 3) {
+                return "周四";
             }
-            if(position == 2){
-                return "星期三";
-            }
-            else if(position == 3){
-                return "星期四";
-            }
-            if(position == 4){
-                return "星期五";
-            }
-            else if(position == 5){
-                return "星期六";
-            }
-            else {
-                return "星期天";
+            if (position == 4) {
+                return "周五";
+            } else if (position == 5) {
+                return "周六";
+            } else {
+                return "周日";
             }
         }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            View view = getDateListView(context, data.get(position));
+
+            container.addView(view);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
+        }
+    }
+
+    /**
+     * 取得每日课程表列表
+     * @param context
+     * @param list
+     * @return
+     */
+    private ListView getDateListView(Context context, List<Course> list) {
+        ListView listView  = new ListView(context);
+//                (ListView) View.inflate(context, R.layout.fragment_course_date, null);
+        Log.d("winson", "结果：" + list);
+        listView.setAdapter(new CourseAdapter(context, list));
+        return listView;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_COURSE_ALL), null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+
+        if (cursor != null  && cursor.getCount() > 0) {
+            List<List<Course>> data = CursorUtil.parseCourseList(cursor);
+            initViewPager(getActivity(), data);
+        } else {
+            requestCourseList(getActivity());
+        }
+
+    }
+
+    private void requestCourseList(final Context context){
+        progressDialog.show();
+        Log.d("winson", "请求课程表-------------------------------------------------");
+        //此处需要修改
+        Map<String, String> params = new HashMap<String, String>();
+        Student student = SicauHelperApplication.getStudent();
+        if (student != null) {
+            params.put("user", student.getSid() + "");
+            params.put("pwd", student.getPswd());
+            params.put("lb", "S");
+            NetUtil.getCourse2HtmlStr(context, params, new NetUtil.NetCallback(context) {
+                @Override
+                public void onSuccess(String result) {
+                    final List<Course> tempList = StringUtil.parseCourseInfo(result);
+                    initViewPager(context, StringUtil.parseCourseDateInfo(tempList));
+                    UIUtil.dismissProgressDialog(progressDialog);
+                    SaveIntentService.startActionCourseAll(context, tempList);
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    UIUtil.dismissProgressDialog(progressDialog);
+                    super.onErrorResponse(volleyError);
+                }
+            });
+        }
+    }
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+
     }
 }

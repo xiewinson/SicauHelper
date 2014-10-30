@@ -1,11 +1,14 @@
 package cn.com.pplo.sicauhelper.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by winson on 2014/9/27.
  */
-public class Course implements Serializable, Comparable {
+public class Course implements Parcelable, Comparable {
     private int id;
     private String name;
     private String category;
@@ -16,6 +19,23 @@ public class Course implements Serializable, Comparable {
     private String teacher;
     private int scheduleNum;
     private int selectedNum;
+
+    public Course(Parcel source) {
+        id = source.readInt();
+        name = source.readString();
+        category = source.readString();
+        credit = source.readFloat();
+        time = source.readString();
+        classroom = source.readString();
+        week = source.readString();
+        teacher = source.readString();
+        scheduleNum = source.readInt();
+        selectedNum = source.readInt();
+    }
+
+    public Course(){
+
+    }
 
     public int getId() {
         return id;
@@ -119,4 +139,35 @@ public class Course implements Serializable, Comparable {
         String currentTime = getTime();
         return currentTime.compareTo(anotherTime);
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(category);
+        dest.writeFloat(credit);
+        dest.writeString(time);
+        dest.writeString(classroom);
+        dest.writeString(week);
+        dest.writeString(teacher);
+        dest.writeInt(scheduleNum);
+        dest.writeInt(selectedNum);
+    }
+
+    public static final Creator<Course> CREATOR = new Creator<Course>() {
+        @Override
+        public Course createFromParcel(Parcel source) {
+            return new Course(source);
+        }
+
+        @Override
+        public Course[] newArray(int size) {
+            return new Course[size];
+        }
+    };
 }

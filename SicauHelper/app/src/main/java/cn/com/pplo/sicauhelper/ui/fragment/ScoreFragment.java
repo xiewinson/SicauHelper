@@ -110,11 +110,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         else {
             initScoreStatsAdapter();
         }
-        //滑动监听
-//        setScrollHideOrShowActionBar(listView);
-        //启动Loader
-
-
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -170,6 +165,9 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
             getActivity().invalidateOptionsMenu();
             initScoreDetailAdapter();
             getLoaderManager().restartLoader(0, null, this);
+        }
+        else if(id == R.id.action_refresh) {
+            requestScoreList(getActivity());
         }
         return super.onOptionsItemSelected(item);
     }

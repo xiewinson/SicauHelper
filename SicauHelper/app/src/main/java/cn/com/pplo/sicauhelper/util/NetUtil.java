@@ -243,8 +243,8 @@ public class NetUtil {
         login(context, params, new NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
                 callback.onErrorResponse(volleyError);
+                super.onErrorResponse(volleyError);
             }
 
             @Override
@@ -257,8 +257,9 @@ public class NetUtil {
                     getOrPostRequest(context, Request.Method.POST, "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xszhinan.asp?xueqi=2013-2014-1", headerMap, null, new NetCallback(context){
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-                            super.onErrorResponse(volleyError);
                             callback.onErrorResponse(volleyError);
+                            super.onErrorResponse(volleyError);
+
                         }
 
                         @Override
@@ -374,7 +375,6 @@ public class NetUtil {
     //回调接口
     public static abstract class NetCallback implements Response.Listener<String>, Response.ErrorListener {
         private Context context;
-
         public NetCallback(Context context) {
             this.context = context;
         }
@@ -393,6 +393,7 @@ public class NetUtil {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
 
         @Override

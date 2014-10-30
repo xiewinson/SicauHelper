@@ -12,6 +12,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
@@ -27,9 +28,11 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 public class SaveIntentService extends IntentService {
     private static final String ACTION_NEWS_ALL = "cn.com.pplo.sicauhelper.service.action.news_all";
     private static final String ACTION_SCORE_ALL = "cn.com.pplo.sicauhelper.service.action.score_all";
+    private static final String ACTION_COURSE_ALL = "cn.com.pplo.sicauhelper.service.action.course_all";
 
     private static final String EXTRA_NEWS_LIST = "cn.com.pplo.sicauhelper.service.extra.newses";
     private static final String EXTRA_SCORE_LIST = "cn.com.pplo.sicauhelper.service.extra.scores";
+    private static final String EXTRA_COURSE_LIST = "cn.com.pplo.sicauhelper.service.extra.courses";
     /**
      * Starts this service to perform action Foo with the given parameters. If
      * the service is already performing a task this action will be queued.
@@ -51,10 +54,29 @@ public class SaveIntentService extends IntentService {
         context.startService(intent);
     }
 
+    /**
+     * 存储成绩表
+     *
+     * @param context
+     * @param scoreList
+     */
     public static void startActionScoreAll(Context context, List<Score> scoreList) {
         Intent intent = new Intent(context, SaveIntentService.class);
         intent.setAction(ACTION_SCORE_ALL);
         intent.putParcelableArrayListExtra(EXTRA_SCORE_LIST, (java.util.ArrayList<? extends android.os.Parcelable>) scoreList);
+        context.startService(intent);
+    }
+
+    /**
+     * 存储课程表
+     *
+     * @param context
+     * @param courseList
+     */
+    public static void startActionCourseAll(Context context, List<Course> courseList) {
+        Intent intent = new Intent(context, SaveIntentService.class);
+        intent.setAction(ACTION_COURSE_ALL);
+        intent.putParcelableArrayListExtra(EXTRA_COURSE_LIST, (java.util.ArrayList<? extends android.os.Parcelable>) courseList);
         context.startService(intent);
     }
 
@@ -73,9 +95,37 @@ public class SaveIntentService extends IntentService {
             } else if (ACTION_SCORE_ALL.equals(action)) {
                 ArrayList<Score> scoreList = intent.getParcelableArrayListExtra(EXTRA_SCORE_LIST);
                 handleActionScoreList(scoreList);
+            } else if (ACTION_COURSE_ALL.equals(action)) {
+                ArrayList<Course> courseList = intent.getParcelableArrayListExtra(EXTRA_COURSE_LIST);
+                handleActionCourseList(courseList);
             }
         }
     }
+
+    /**
+     * 存储课程列表
+     *
+     */
+    private void handleActionCourseList(ArrayList<Course> tempList) {
+        ContentResolver contentResolver = getApplicationContext().getContentResolver();
+        contentResolver.delete(Uri.parse(SicauHelperProvider.URI_COURSE_ALL), "", null);
+        if (tempList != null && tempList.size() > 0) {
+            for (int i = 0; i < tempList.size(); i++) {
+                ContentValues values = new ContentValues();
+                values.put(TableContract.TableCourse._NAME, tempList.get(i).getName());
+                values.put(TableContract.TableCourse._CATEGORY, tempList.get(i).getCategory());
+                values.put(TableContract.TableCourse._CREDIT, tempList.get(i).getCredit());
+                values.put(TableContract.TableCourse._TIME, tempList.get(i).getTime());
+                values.put(TableContract.TableCourse._CLASSROOM, tempList.get(i).getClassroom());
+                values.put(TableContract.TableCourse._WEEK, tempList.get(i).getWeek());
+                values.put(TableContract.TableCourse._TEACHER, tempList.get(i).getTeacher());
+                values.put(TableContract.TableCourse._SCHEDULENUM, tempList.get(i).getScheduleNum());
+                values.put(TableContract.TableCourse._SELECTNUM, tempList.get(i).getSelectedNum());
+                contentResolver.insert(Uri.parse(SicauHelperProvider.URI_COURSE_ALL), values);
+            }
+        }
+    }
+
 
     /**
      * 存储新闻列表
@@ -110,6 +160,8 @@ public class SaveIntentService extends IntentService {
      */
     private void handleActionScoreList(ArrayList<Score> tempList) {
         if (tempList != null) {
+            ContentResolver contentResolver = getApplicationContext().getContentResolver();
+            contentResolver.delete(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), "", null);
             for (int i = 0; i < tempList.size(); i++) {
                 ContentValues values = new ContentValues();
                 values.put(TableContract.TableScore._CATEGORY, tempList.get(i).getCategory());
@@ -117,7 +169,7 @@ public class SaveIntentService extends IntentService {
                 values.put(TableContract.TableScore._CREDIT, tempList.get(i).getCredit());
                 values.put(TableContract.TableScore._GRADE, tempList.get(i).getGrade());
                 values.put(TableContract.TableScore._MARK, tempList.get(i).getMark());
-                getApplicationContext().getContentResolver().insert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), values);
+                contentResolver.insert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), values);
             }
         }
     }
