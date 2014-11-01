@@ -50,7 +50,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     private ListView listView;
     private ProgressDialog progressDialog;
     private List<News> newsList = new ArrayList<News>();
-    private List<News> originalData = null;
+    private List<News> originalData = new ArrayList<News>();
     private SearchView searchView;
     private NewsAdapter newsAdapter;
 
@@ -129,18 +129,27 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     private void initSearchView(Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setQueryHint("请输入关键字");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String s) {
+                            return false;
+                        }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                newsAdapter.getFilter().filter(s);
-                return false;
+                        @Override
+                        public boolean onQueryTextChange(String s) {
+                            newsAdapter.getFilter().filter(s);
+                            return false;
+                        }
+                    });
+                    searchView.setOnQueryTextFocusChangeListener(null);
+                }
             }
         });
+
     }
 
     @Override
@@ -163,7 +172,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         if(cursor != null && cursor.getCount() > 0){
             List<News> tempList = CursorUtil.parseNewsList(cursor);
             //保存原始数据
-            originalData = tempList;
+            originalData.addAll(tempList);
             notifyDataSetChanged(tempList);
         }
         else {
@@ -191,7 +200,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             public void onSuccess(String result) {
                 final List<News> tempList = StringUtil.parseNewsListInfo(result);
                 //保存原始数据
-                originalData = tempList;
+                originalData.addAll(tempList);
                 notifyDataSetChanged(tempList);
                 UIUtil.dismissProgressDialog(progressDialog);
                 SaveIntentService.startActionNewsAll(context, tempList);
@@ -306,7 +315,6 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-            Log.d("winson", "匹配：" + constraint.toString());
             //将数据赋给临时list
 //            List<News> tmpList = newsList;
             //匹配结果values

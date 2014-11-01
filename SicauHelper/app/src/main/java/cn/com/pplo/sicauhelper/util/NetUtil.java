@@ -134,7 +134,7 @@ public class NetUtil {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
                             super.onErrorResponse(volleyError);
-
+                            callback.onErrorResponse(volleyError);
                         }
 
                         @Override
@@ -183,8 +183,8 @@ public class NetUtil {
         login(context, params, new NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
                 callback.onErrorResponse(volleyError);
+                super.onErrorResponse(volleyError);
             }
 
             @Override

@@ -363,19 +363,22 @@ public class StringUtil {
         List<Course> list6 = new ArrayList<Course>();
         try {
             for(Course item : list){
-                Course course = new Course();
-                course.setCategory(item.getCategory());
-                course.setName(item.getName());
-                course.setCredit(item.getCredit());
-                course.setTime(item.getTime());
-                course.setTeacher(item.getTeacher());
-                course.setClassroom(item.getClassroom());
-                course.setId(item.getId());
-                course.setScheduleNum(item.getScheduleNum());
-                course.setSelectedNum(item.getSelectedNum());
-                course.setWeek(item.getWeek());
+
 
                 for(int position = 0; position < 7; position++) {
+
+                    Course course = new Course();
+                    course.setCategory(item.getCategory());
+                    course.setName(item.getName());
+                    course.setCredit(item.getCredit());
+                    course.setTime(item.getTime());
+                    course.setTeacher(item.getTeacher());
+                    course.setClassroom(item.getClassroom());
+                    course.setId(item.getId());
+                    course.setScheduleNum(item.getScheduleNum());
+                    course.setSelectedNum(item.getSelectedNum());
+                    course.setWeek(item.getWeek());
+
                     String posStr = (position + 1) + "";
                     if(item.getTime().contains(posStr + "-")){
                         String time = item.getTime();

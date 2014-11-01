@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.ActionMenuView;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ListView;
 
 
@@ -48,9 +52,11 @@ import cn.com.pplo.sicauhelper.widget.ViewPadding;
 public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
     private ProgressDialog progressDialog;
+    private SearchView searchView;
 
     private ScoreListAdapter scoreListAdapter;
     private List<Score> scoreList = new ArrayList<Score>();
+    private List<Score> originalList = new ArrayList<Score>();
 
     private ScoreStatsAdapter statsAdapter;
     private List<ScoreStats> scoreStatsList = new ArrayList<ScoreStats>();
@@ -58,6 +64,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     private boolean isShowStats = false;
     private static final int MENU_ITEM_ID_STATS = 111;
     private static final int MENU_ITEM_ID_DETAIL = 222;
+    private static final int MENU_ITEM_ID_SEARCH = 333;
 
 
     public static ScoreFragment newInstance() {
@@ -115,7 +122,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 
     //详情列表
     private void initScoreDetailAdapter() {
-        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList);
+        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList, new ScoreFilter());
         UIUtil.setListViewInitAnimation("left", listView, scoreListAdapter);
     }
 
@@ -130,10 +137,40 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         super.onDetach();
     }
 
+    private void initSearchView(Menu menu) {
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setQueryHint("搜索课程名称/性质/分数");
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Log.d("winson", "焦点：" + hasFocus);
+                if(hasFocus) {
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String s) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String s) {
+                            Log.d("winson", "开始匹配");
+                            scoreListAdapter.getFilter().filter(s);
+                            return false;
+                        }
+                    });
+                    searchView.setOnQueryTextFocusChangeListener(null);
+                }
+            }
+        });
+
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if(isShowStats == false) {
-            menu.add(1, MENU_ITEM_ID_STATS, 1, "统计")
+            inflater.inflate(R.menu.score, menu);
+            initSearchView(menu);
+            menu.add(4, MENU_ITEM_ID_STATS, 4, "统计")
                     .setIcon(R.drawable.ic_trending_up_white_24dp)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
@@ -149,7 +186,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         //点击统计
-        Log.d("winson", "点击了：" + id);
         if(id == MENU_ITEM_ID_STATS) {
             isShowStats = true;
             UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.teal_500);
@@ -182,7 +218,9 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.getCount() > 0) {
             List<Score> tempList = CursorUtil.parseScoreList(data);
+            originalList.addAll(tempList);
             if(isShowStats == false) {
+
                 notifyDataSetChanged(tempList);
             }
             else {
@@ -200,7 +238,8 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
      * @param list
      */
     private void notifyDataSetChanged(List<Score> list) {
-        if (list != null && list.size() > 0) {
+        if (list != null) {
+            Log.d("winson", "初始化正常list:" + list);
             scoreList.clear();
             scoreList.addAll(list);
             scoreListAdapter.notifyDataSetChanged();
@@ -213,6 +252,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
      */
     private void notifyStatsDataSetChanged(List<ScoreStats> list){
         if(list != null && list.size() > 0){
+            Log.d("winson", "初始化不正常list:" + list);
             scoreStatsList.clear();
             scoreStatsList.addAll(list);
             statsAdapter.notifyDataSetChanged();
@@ -241,6 +281,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
                         @Override
                         public void handleParseResult(Object obj) {
                             List<Score> tempList = (List<Score>) obj;
+                            originalList.addAll(tempList);
                             if(isShowStats == false) {
                                 notifyDataSetChanged(tempList);
                             }
@@ -266,8 +307,40 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        Log.d("winson", ScoreFragment.class.getSimpleName() + "Loader重置");
     }
 
+    public class ScoreFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            String query = constraint.toString();
+            List<Score> values = new ArrayList<Score>();
+            FilterResults results = new FilterResults();
+            if(TextUtils.isEmpty(query)) {
+                values.addAll(originalList);
+            }
+            else {
+
+                for(Score score : originalList) {
+                    if(score.getCategory().contains(query)
+                            || score.getCourse().contains(query)
+                            || score.getMark().contains(query)){
+                        values.add(score);
+                    }
+                }
+            }
+            results.values = values;
+            results.count = values.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            //更新数据
+            notifyDataSetChanged((List<Score>) results.values);
+            //恢复到第一个
+            listView.setSelection(0);
+        }
+    }
 
 }

@@ -135,20 +135,27 @@ public class SaveIntentService extends IntentService {
     private void handleActionNewsList(ArrayList<News> newsList) {
         if (newsList != null) {
             for (int i = 0; i < newsList.size(); i++) {
-                ContentValues values = new ContentValues();
-                values.put(TableContract.TableNews._ID, newsList.get(i).getId());
-                values.put(TableContract.TableNews._TITLE, newsList.get(i).getTitle());
-                values.put(TableContract.TableNews._DATE, newsList.get(i).getDate());
-                values.put(TableContract.TableNews._URL, newsList.get(i).getUrl());
-                values.put(TableContract.TableNews._CONTENT, newsList.get(i).getContent());
-                values.put(TableContract.TableNews._SRC, newsList.get(i).getSrc());
-                values.put(TableContract.TableNews._CATEGORY, newsList.get(i).getCategory());
                 ContentResolver contentResolver = getApplicationContext().getContentResolver();
-                //若数据库不存在该条数据便插入
-                if (contentResolver.query(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), null, TableContract.TableNews._ID + " = ?", new String[]{values.getAsString(TableContract.TableNews._ID)}, null).getCount() == 0) {
+                if (contentResolver.query(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE),
+                        new String[]{TableContract.TableNews._ID}, TableContract.TableNews._ID + " = ?",
+                        new String[]{newsList.get(i).getId() + ""}
+                        , null)
+                        .getCount() == 0) {
                     Log.d("winson", "不存在-->" + i);
+                    ContentValues values = new ContentValues();
+                    values.put(TableContract.TableNews._ID, newsList.get(i).getId());
+                    values.put(TableContract.TableNews._TITLE, newsList.get(i).getTitle());
+                    values.put(TableContract.TableNews._DATE, newsList.get(i).getDate());
+                    values.put(TableContract.TableNews._URL, newsList.get(i).getUrl());
+                    values.put(TableContract.TableNews._CONTENT, newsList.get(i).getContent());
+                    values.put(TableContract.TableNews._SRC, newsList.get(i).getSrc());
+                    values.put(TableContract.TableNews._CATEGORY, newsList.get(i).getCategory());
+
+                    //若数据库不存在该条数据便插入
                     contentResolver.insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
                 }
+
+
             }
         }
     }

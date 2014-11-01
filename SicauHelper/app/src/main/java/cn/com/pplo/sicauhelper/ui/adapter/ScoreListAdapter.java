@@ -4,29 +4,37 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
+import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 
 /**
  * Created by winson on 2014/10/28.
  */
-public class ScoreListAdapter extends BaseAdapter {
+public class ScoreListAdapter extends BaseAdapter implements Filterable {
 
+    private ScoreFragment.ScoreFilter scoreFilter;
     private Context context;
     private List<Score> data;
 
-    public ScoreListAdapter(Context context, List<Score> list) {
+    public ScoreListAdapter(Context context, List<Score> list, ScoreFragment.ScoreFilter filter) {
         this.context = context;
+        this.scoreFilter = filter;
         this.data = list;
     }
 
@@ -125,5 +133,13 @@ public class ScoreListAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    @Override
+    public Filter getFilter() {
+
+        return scoreFilter;
+    }
+
+
 }
 

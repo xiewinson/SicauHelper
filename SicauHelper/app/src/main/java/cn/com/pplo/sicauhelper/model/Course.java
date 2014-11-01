@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by winson on 2014/9/27.
  */
-public class Course implements Parcelable, Comparable {
+public class Course implements Parcelable, Comparable, Cloneable {
     private int id;
     private String name;
     private String category;
@@ -170,4 +170,9 @@ public class Course implements Parcelable, Comparable {
             return new Course[size];
         }
     };
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
