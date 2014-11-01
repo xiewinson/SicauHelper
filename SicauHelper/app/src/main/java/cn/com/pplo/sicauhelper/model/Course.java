@@ -172,7 +172,13 @@ public class Course implements Parcelable, Comparable, Cloneable {
     };
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Course clone() throws CloneNotSupportedException {
+        Course course = null;
+        try {
+            course = (Course) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return course;
     }
 }

@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.util;
 
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.jsoup.Jsoup;
@@ -19,6 +20,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.com.pplo.sicauhelper.model.Classroom;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
@@ -349,6 +351,7 @@ public class StringUtil {
 
     /**
      * 解析得出每日的课程列表
+     *
      * @param list
      * @return
      */
@@ -362,31 +365,20 @@ public class StringUtil {
         List<Course> list5 = new ArrayList<Course>();
         List<Course> list6 = new ArrayList<Course>();
         try {
-            for(Course item : list){
+            for (Course item : list) {
 
 
-                for(int position = 0; position < 7; position++) {
+                for (int position = 0; position < 7; position++) {
 
-                    Course course = new Course();
-                    course.setCategory(item.getCategory());
-                    course.setName(item.getName());
-                    course.setCredit(item.getCredit());
-                    course.setTime(item.getTime());
-                    course.setTeacher(item.getTeacher());
-                    course.setClassroom(item.getClassroom());
-                    course.setId(item.getId());
-                    course.setScheduleNum(item.getScheduleNum());
-                    course.setSelectedNum(item.getSelectedNum());
-                    course.setWeek(item.getWeek());
-
+                    Course course = item.clone();
                     String posStr = (position + 1) + "";
-                    if(item.getTime().contains(posStr + "-")){
+                    if (item.getTime().contains(posStr + "-")) {
                         String time = item.getTime();
                         String classroom = item.getClassroom();
                         String[] timeArray = time.split("\\s+");
                         String[] classroomArray = classroom.split("\\s+");
-                        for(int i = 0; i < timeArray.length; i++){
-                            if(timeArray[i].contains(posStr + "-")){
+                        for (int i = 0; i < timeArray.length; i++) {
+                            if (timeArray[i].contains(posStr + "-")) {
                                 course.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-"));
                                 course.setClassroom(classroomArray[i]);
                             }
@@ -431,17 +423,18 @@ public class StringUtil {
                 data.add(list5);
                 data.add(list6);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             data.clear();
             Log.d("winson", "解析出错：" + e);
-        }
-        finally {
+        } finally {
 
             return data;
         }
     }
+
     /**
      * 解析新闻列表
+     *
      * @param htmlStr
      * @return
      */
@@ -459,15 +452,15 @@ public class StringUtil {
             List<String> dateList = new ArrayList<String>();
             Pattern pattern = Pattern.compile("nbsp[\\S]{1}[\\S]{1,2}[\\S]{1}[0-9]{1,2}[\\S]{1}");
             Matcher matcher = pattern.matcher(htmlStr);
-            while (matcher.find()){
-              dateList.add(matcher.group().replace("nbsp(",""));
+            while (matcher.find()) {
+                dateList.add(matcher.group().replace("nbsp(", ""));
             }
 
 
             for (int i = 0; i < aElements.size(); i++) {
                 News news = new News();
                 String categoryStr = cElements.get(i).text();
-                news.setCategory((categoryStr.split("-"))[0].replace("[",""));
+                news.setCategory((categoryStr.split("-"))[0].replace("[", ""));
                 news.setTitle(aElements.get(i).text());
                 String urlStr = aElements.get(i).attr("href");
                 news.setUrl("http://jiaowu.sicau.edu.cn/web/web/web/" + urlStr);
@@ -487,6 +480,7 @@ public class StringUtil {
 
     /**
      * 解析新闻内容
+     *
      * @param htmlStr
      * @return
      */
@@ -496,11 +490,11 @@ public class StringUtil {
             Document document = Jsoup.parse(htmlStr);
             Elements pElements = null;
             pElements = document.select("p");
-            if(pElements.size() < 1){
+            if (pElements.size() < 1) {
                 pElements = document.select("td[vAlign=top]");
             }
             StringBuilder sb = new StringBuilder();
-            for (Element e : pElements){
+            for (Element e : pElements) {
                 String str = e.text();
                 sb.append(str + "\n");
             }
@@ -514,11 +508,12 @@ public class StringUtil {
 
     /**
      * 处理新闻内容
+     *
      * @param htmlStr
      * @return
      */
     public static void handleNewsHtmlStr(String htmlStr, final Callback callback) {
-        new AsyncTask<String, Integer, String>(){
+        new AsyncTask<String, Integer, String>() {
 
             @Override
             protected String doInBackground(String... params) {
@@ -527,7 +522,7 @@ public class StringUtil {
                     Document document = Jsoup.parse(params[0]);
                     Elements pElements = document.select("table[width=800]");
                     StringBuilder sb = new StringBuilder();
-                    for (Element e : pElements){
+                    for (Element e : pElements) {
                         String str = e.html();
                         sb.append(str + "\n");
                     }
@@ -546,8 +541,144 @@ public class StringUtil {
                 callback.handleParseResult(s);
             }
         }.execute(htmlStr);
-
     }
+
+    public static void parseClassroomListHtmlStr(String htmlStr, final Callback callback) {
+        new AsyncTask<String, Void, List<Classroom>>() {
+
+            @Override
+            protected List<Classroom> doInBackground(String... params) {
+                List<Classroom> list = new ArrayList<Classroom>();
+
+                Document document = Jsoup.parse(params[0]);
+                Elements pElements = document.select("p");
+                int count = 0;
+                for (Element p : pElements) {
+                    String[] array = p.html().split("<br />");
+                    for (int i = 0; i < array.length; i++) {
+                        String[] strs = array[i].split("&nbsp;&nbsp;");
+
+                        for (int j = 0; j < strs.length; j++) {
+                            String str = strs[j].trim();
+                            if (!TextUtils.isEmpty(str) && !str.contains("font") && !str.contains("空教室")){
+                                Classroom classroom = new Classroom();
+                                if (count == 0) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("雅安");
+                                    classroom.setDate("今日");
+                                    classroom.setTime("上午");
+                                } else if (count == 1) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("雅安");
+                                    classroom.setDate("今日");
+                                    classroom.setTime("下午");
+                                } else if (count == 2) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("雅安");
+                                    classroom.setDate("今日");
+                                    classroom.setTime("晚上");
+                                } else if (count == 3) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("雅安");
+                                    classroom.setDate("明日");
+                                    classroom.setTime("上午");
+                                } else if (count == 4) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("雅安");
+                                    classroom.setDate("明日");
+                                    classroom.setTime("下午");
+                                } else if (count == 5) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("雅安");
+                                    classroom.setDate("明日");
+                                    classroom.setTime("晚上");
+                                } else if (count == 6) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("成都");
+                                    classroom.setDate("今日");
+                                    classroom.setTime("上午");
+                                } else if (count == 7) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("成都");
+                                    classroom.setDate("今日");
+                                    classroom.setTime("下午");
+                                } else if (count == 8) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("成都");
+                                    classroom.setDate("今日");
+                                    classroom.setTime("晚上");
+                                } else if (count == 9) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("成都");
+                                    classroom.setDate("明日");
+                                    classroom.setTime("上午");
+                                } else if (count == 10) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("成都");
+                                    classroom.setDate("明日");
+                                    classroom.setTime("下午");
+                                } else if (count == 11)
+
+                                {
+                                    classroom.setName(str);
+                                    classroom.setSchool("成都");
+                                    classroom.setDate("明日");
+                                    classroom.setTime("晚上");
+                                } else if (count == 12)
+
+                                {
+                                    classroom.setName(str);
+                                    classroom.setSchool("都江堰");
+                                    classroom.setDate("今日");
+                                    classroom.setTime("上午");
+                                } else if (count == 13)
+
+                                {
+                                    classroom.setName(str);
+                                    classroom.setSchool("都江堰");
+                                    classroom.setDate("今日");
+                                    classroom.setTime("下午");
+                                } else if (count == 14)
+
+                                {
+                                    classroom.setName(str);
+                                    classroom.setSchool("都江堰");
+                                    classroom.setDate("今日");
+                                    classroom.setTime("晚上");
+                                } else if (count == 15) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("都江堰");
+                                    classroom.setDate("明日");
+                                    classroom.setTime("上午");
+                                } else if (count == 16) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("都江堰");
+                                    classroom.setDate("明日");
+                                    classroom.setTime("下午");
+                                } else if (count == 17) {
+                                    classroom.setName(str);
+                                    classroom.setSchool("都江堰");
+                                    classroom.setDate("明日");
+                                    classroom.setTime("晚上");
+                                }
+                                list.add(classroom);
+                            }
+
+                            }
+                    }
+                    count++;
+                }
+                return list;
+            }
+
+            @Override
+            protected void onPostExecute(List<Classroom> classrooms) {
+                super.onPostExecute(classrooms);
+                callback.handleParseResult(classrooms);
+            }
+        }.execute(htmlStr);
+    }
+
 
     public interface Callback {
         public void handleParseResult(Object obj);

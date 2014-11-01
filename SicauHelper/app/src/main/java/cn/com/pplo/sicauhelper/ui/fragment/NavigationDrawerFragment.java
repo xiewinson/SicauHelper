@@ -106,6 +106,7 @@ public class NavigationDrawerFragment extends BaseFragment {
                         getString(R.string.title_cource),
                         getString(R.string.title_score),
                         getString(R.string.title_news),
+                        getString(R.string.title_classroom),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;

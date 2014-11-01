@@ -63,29 +63,30 @@ public class CursorUtil {
         try {
             while(cursor.moveToNext()){
                 Course course = new Course();
-                Course course1 = new Course();
+//                Course course1 = new Course();
                 course.setCategory(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._CATEGORY)));
-                course1.setCategory(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._CATEGORY)));
+//                course1.setCategory(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._CATEGORY)));
                 course.setName(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._NAME)));
-                course1.setName(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._NAME)));
+//                course1.setName(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._NAME)));
                 course.setCredit(cursor.getFloat(cursor.getColumnIndex(TableContract.TableCourse._CREDIT)));
-                course1.setCredit(cursor.getFloat(cursor.getColumnIndex(TableContract.TableCourse._CREDIT)));
+//                course1.setCredit(cursor.getFloat(cursor.getColumnIndex(TableContract.TableCourse._CREDIT)));
                 course.setTime(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._TIME)));
-                course1.setTime(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._TIME)));
+//                course1.setTime(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._TIME)));
                 course.setTeacher(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._TEACHER)));
-                course1.setTeacher(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._TEACHER)));
+//                course1.setTeacher(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._TEACHER)));
                 course.setClassroom(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._CLASSROOM)));
-                course1.setClassroom(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._CLASSROOM)));
+//                course1.setClassroom(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._CLASSROOM)));
                 course.setId(cursor.getInt(cursor.getColumnIndex(TableContract.TableCourse._ID)));
-                course1.setId(cursor.getInt(cursor.getColumnIndex(TableContract.TableCourse._ID)));
+//                course1.setId(cursor.getInt(cursor.getColumnIndex(TableContract.TableCourse._ID)));
                 course.setScheduleNum(cursor.getInt(cursor.getColumnIndex(TableContract.TableCourse._SCHEDULENUM)));
-                course1.setScheduleNum(cursor.getInt(cursor.getColumnIndex(TableContract.TableCourse._SCHEDULENUM)));
+//                course1.setScheduleNum(cursor.getInt(cursor.getColumnIndex(TableContract.TableCourse._SCHEDULENUM)));
                 course.setSelectedNum(cursor.getInt(cursor.getColumnIndex(TableContract.TableCourse._SELECTNUM)));
-                course1.setSelectedNum(cursor.getInt(cursor.getColumnIndex(TableContract.TableCourse._SELECTNUM)));
+//                course1.setSelectedNum(cursor.getInt(cursor.getColumnIndex(TableContract.TableCourse._SELECTNUM)));
                 course.setWeek(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._WEEK)));
-                course1.setWeek(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._WEEK)));
+//                course1.setWeek(cursor.getString(cursor.getColumnIndex(TableContract.TableCourse._WEEK)));
 
                 for(int position = 0; position < 7; position++) {
+                    Course course1 = course.clone();
                     String posStr = (position + 1) + "";
                     if(course.getTime().contains(posStr + "-")){
                         String time = course.getTime();

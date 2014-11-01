@@ -18,6 +18,7 @@ import android.view.View;
 
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Student;
+import cn.com.pplo.sicauhelper.ui.fragment.ClassroomFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.HomeFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.NavigationDrawerFragment;
@@ -151,6 +152,7 @@ public class MainActivity extends ActionBarActivity
                 fragment = NewsFragment.newInstance();
                 break;
             case 4:
+                fragment = ClassroomFragment.newInstance();
                 break;
         }
         FragmentManager fragmentManager = getSupportFragmentManager();

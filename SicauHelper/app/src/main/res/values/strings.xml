@@ -6,6 +6,7 @@
     <string name="title_cource">课程表</string>
     <string name="title_score">成绩</string>
     <string name="title_news">新闻</string>
+    <string name="title_classroom">空教室</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

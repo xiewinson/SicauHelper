@@ -4,10 +4,12 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
@@ -108,6 +110,11 @@ public class NetUtil {
                 return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
             }
         };
+        //设置20秒的超时
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(stringRequest);
         requestQueue.start();
     }
@@ -371,6 +378,49 @@ public class NetUtil {
         clearCookie();
     }
 
+    /**
+     * 获取空教室列表
+     * @param context
+     * @param callback
+     */
+    public static void getClassroomListHtmlStr(final Context context, final NetCallback callback){
+        try {
+            //请求教务首页的HTML页面
+            getOrPostRequest(context,
+                    Request.Method.GET,
+                    JiaowuConfig.JIAOWU_INDEX,
+                    null,
+                    null,
+                    new NetCallback(context) {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            super.onErrorResponse(volleyError);
+                            callback.onErrorResponse(volleyError);
+                        }
+
+                        @Override
+                        public void onSuccess(String result) {
+
+                            //新的header
+                            Map<String, String> newHeader = new HashMap<String, String>();
+                            //设置referer
+                            newHeader.put("Referer", "http://jiaowu.sicau.edu.cn/web/web/web/index.asp");
+                            //必须设置cookie
+                            newHeader.put("Cookie", cookie);
+                            getOrPostRequest(context,
+                                    Request.Method.GET,
+                                    JiaowuConfig.JIAOWU_CLASSROOM_LIST,
+                                    newHeader,
+                                    null,
+                                    callback);
+                        }
+                    });
+        } catch (Exception e) {
+            UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
+        }
+        clearCookie();
+    }
+
 
     //回调接口
     public static abstract class NetCallback implements Response.Listener<String>, Response.ErrorListener {
@@ -381,7 +431,6 @@ public class NetUtil {
 
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            Log.d("winson", "错误结果：" + volleyError.getMessage() + "===");
             try {
                 if (volleyError != null && volleyError.getMessage() != null && !volleyError.getMessage().equals("")) {
                     if (volleyError.getMessage().contains("java.net.UnknownHostException")) {
