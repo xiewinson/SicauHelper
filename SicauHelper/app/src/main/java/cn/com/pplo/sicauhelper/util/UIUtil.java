@@ -48,7 +48,8 @@ public class UIUtil {
 
     public static void dismissProgressDialog(ProgressDialog progressDialog){
         if(progressDialog != null && progressDialog.isShowing()){
-            progressDialog.dismiss();
+            progressDialog.cancel();
+            progressDialog = null;
         }
     }
 

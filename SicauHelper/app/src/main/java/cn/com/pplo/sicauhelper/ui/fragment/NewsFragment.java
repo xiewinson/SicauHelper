@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Filterable;
 import android.widget.ListView;
@@ -78,7 +79,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        super.onCreateView(inflater,container, savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_news, container, false);
     }
@@ -87,10 +88,10 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.deep_purple_500));
-        setUp(view);
+        setUp(getActivity(), view);
     }
 
-    private void setUp(View view) {
+    private void setUp(final Context context, View view) {
         listView = (ListView) view.findViewById(R.id.news_listView);
 //        listView.setTextFilterEnabled(true);
         //设置actionbar的间距
@@ -103,11 +104,19 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 //        listView.addFooterView(paddingTv);
 
         newsAdapter = new NewsAdapter(getActivity(), newsList);
-        UIUtil.setListViewInitAnimation("bottom", listView, newsAdapter);
-
+//        UIUtil.setListViewInitAnimation("bottom", listView, newsAdapter);
+        listView.setAdapter(newsAdapter);
 
         //滚动隐藏
         listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
+        //listView点击事件
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                NewsActivity.startNewsActivity(context, newsList.get((int) id));
+            }
+        });
         //启动Loader
         getLoaderManager().initLoader(0, null, this);
     }
@@ -132,7 +141,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) {
+                if (hasFocus) {
                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                         @Override
                         public boolean onQueryTextSubmit(String s) {
@@ -156,7 +165,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("winson", "点击了" + item.getItemId());
         //刷新
-        if(item.getItemId() == R.id.action_refresh){
+        if (item.getItemId() == R.id.action_refresh) {
             requestNewsList(getActivity());
         }
         return super.onOptionsItemSelected(item);
@@ -169,13 +178,12 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        if(cursor != null && cursor.getCount() > 0){
+        if (cursor != null && cursor.getCount() > 0) {
             List<News> tempList = CursorUtil.parseNewsList(cursor);
             //保存原始数据
             keepOriginalData(tempList);
             notifyDataSetChanged(tempList);
-        }
-        else {
+        } else {
 //            Intent intent = new Intent(getActivity(), NewsService.class);
 //            getActivity().bindService(intent, serviceConn, Context.BIND_AUTO_CREATE);
             requestNewsList(getActivity());
@@ -189,6 +197,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     /**
      * 从网络请求数据
+     *
      * @param context
      */
     public void requestNewsList(final Context context) {
@@ -215,10 +224,11 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     /**
      * 通知ListView数据改变
+     *
      * @param list
      */
-    private void notifyDataSetChanged(List<News> list){
-        if(list != null){
+    private void notifyDataSetChanged(List<News> list) {
+        if (list != null) {
             newsList.clear();
             newsList.addAll(list);
             newsAdapter.notifyDataSetChanged();
@@ -238,7 +248,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         private Context context;
         private List<News> data;
 
-        public NewsAdapter(Context context, List<News> list){
+        public NewsAdapter(Context context, List<News> list) {
             this.context = context;
             this.data = list;
         }
@@ -261,15 +271,14 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder = null;
-            if(convertView == null){
+            if (convertView == null) {
                 holder = new ViewHolder();
                 convertView = View.inflate(context, R.layout.item_fragment_news_list, null);
                 holder.titleTv = (TextView) convertView.findViewById(R.id.title_tv);
                 holder.dateTv = (TextView) convertView.findViewById(R.id.date_tv);
                 holder.categoryTv = (TextView) convertView.findViewById(R.id.category_tv);
                 convertView.setTag(holder);
-            }
-            else {
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             News news = getItem(position);
@@ -277,37 +286,27 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             holder.dateTv.setText(news.getDate());
             String category = news.getCategory();
             int shapeRes = 0;
-            if(category.equals("雅安")){
+            if (category.equals("雅安")) {
                 category = "雅";
                 shapeRes = R.drawable.square_blue;
-            }
-            else if(category.equals("成都")){
+            } else if (category.equals("成都")) {
                 category = "成";
                 shapeRes = R.drawable.square_orange;
-            }
-            else if(category.equals("都江堰")){
+            } else if (category.equals("都江堰")) {
                 category = "堰";
                 shapeRes = R.drawable.square_green;
-            }
-            else {
+            } else {
                 category = "全";
                 shapeRes = R.drawable.square_red;
             }
             holder.categoryTv.setText(category);
             holder.categoryTv.setBackgroundResource(shapeRes);
-
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    NewsActivity.startNewsActivity(context, getItem(position));
-                }
-            });
             return convertView;
         }
 
         @Override
         public android.widget.Filter getFilter() {
-            if(newsListFilter == null){
+            if (newsListFilter == null) {
                 newsListFilter = new NewsListFilter();
             }
             return newsListFilter;
@@ -327,15 +326,14 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             //匹配结果values
             List<News> values = new ArrayList<News>();
             String query = constraint.toString().trim();
-            if(TextUtils.isEmpty(query)){
+            if (TextUtils.isEmpty(query)) {
                 values.addAll(originalData);
-            }
-            else {
-                for(News news : originalData){
+            } else {
+                for (News news : originalData) {
                     String title = news.getTitle();
                     String date = news.getDate();
                     String category = news.getCategory();
-                    if(title.contains(query)|| date.contains(query) || category.contains(query)){
+                    if (title.contains(query) || date.contains(query) || category.contains(query)) {
                         values.add(news);
                     }
                 }
@@ -352,7 +350,9 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             notifyDataSetChanged((List<News>) results.values);
 
         }
-    };
+    }
+
+    ;
 
     private static class ViewHolder {
         TextView titleTv;
