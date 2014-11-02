@@ -214,6 +214,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
         //刷新
         int itemId = item.getItemId();
         if(itemId == R.id.action_refresh){
+            getActivity().invalidateOptionsMenu();
             requestClassroomList(getActivity());
         }
         else if(itemId == R.id.action_only_this_school){
