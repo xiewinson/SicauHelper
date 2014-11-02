@@ -543,6 +543,11 @@ public class StringUtil {
         }.execute(htmlStr);
     }
 
+    /**
+     * 最恶心的一个，解析空闲教室那网页
+     * @param htmlStr
+     * @param callback
+     */
     public static void parseClassroomListHtmlStr(String htmlStr, final Callback callback) {
         new AsyncTask<String, Void, List<Classroom>>() {
 
@@ -565,100 +570,100 @@ public class StringUtil {
                                 if (count == 0) {
                                     classroom.setName(str);
                                     classroom.setSchool("雅安");
-                                    classroom.setDate("今日");
+                                    classroom.setDate("今天");
                                     classroom.setTime("上午");
                                 } else if (count == 1) {
                                     classroom.setName(str);
                                     classroom.setSchool("雅安");
-                                    classroom.setDate("今日");
+                                    classroom.setDate("今天");
                                     classroom.setTime("下午");
                                 } else if (count == 2) {
                                     classroom.setName(str);
                                     classroom.setSchool("雅安");
-                                    classroom.setDate("今日");
+                                    classroom.setDate("今天");
                                     classroom.setTime("晚上");
                                 } else if (count == 3) {
                                     classroom.setName(str);
                                     classroom.setSchool("雅安");
-                                    classroom.setDate("明日");
+                                    classroom.setDate("明天");
                                     classroom.setTime("上午");
                                 } else if (count == 4) {
                                     classroom.setName(str);
                                     classroom.setSchool("雅安");
-                                    classroom.setDate("明日");
+                                    classroom.setDate("明天");
                                     classroom.setTime("下午");
                                 } else if (count == 5) {
                                     classroom.setName(str);
                                     classroom.setSchool("雅安");
-                                    classroom.setDate("明日");
+                                    classroom.setDate("明天");
                                     classroom.setTime("晚上");
                                 } else if (count == 6) {
                                     classroom.setName(str);
                                     classroom.setSchool("成都");
-                                    classroom.setDate("今日");
+                                    classroom.setDate("今天");
                                     classroom.setTime("上午");
                                 } else if (count == 7) {
                                     classroom.setName(str);
                                     classroom.setSchool("成都");
-                                    classroom.setDate("今日");
+                                    classroom.setDate("今天");
                                     classroom.setTime("下午");
                                 } else if (count == 8) {
                                     classroom.setName(str);
                                     classroom.setSchool("成都");
-                                    classroom.setDate("今日");
+                                    classroom.setDate("今天");
                                     classroom.setTime("晚上");
                                 } else if (count == 9) {
                                     classroom.setName(str);
                                     classroom.setSchool("成都");
-                                    classroom.setDate("明日");
+                                    classroom.setDate("明天");
                                     classroom.setTime("上午");
                                 } else if (count == 10) {
                                     classroom.setName(str);
                                     classroom.setSchool("成都");
-                                    classroom.setDate("明日");
+                                    classroom.setDate("明天");
                                     classroom.setTime("下午");
                                 } else if (count == 11)
 
                                 {
                                     classroom.setName(str);
                                     classroom.setSchool("成都");
-                                    classroom.setDate("明日");
+                                    classroom.setDate("明天");
                                     classroom.setTime("晚上");
                                 } else if (count == 12)
 
                                 {
                                     classroom.setName(str);
                                     classroom.setSchool("都江堰");
-                                    classroom.setDate("今日");
+                                    classroom.setDate("今天");
                                     classroom.setTime("上午");
                                 } else if (count == 13)
 
                                 {
                                     classroom.setName(str);
                                     classroom.setSchool("都江堰");
-                                    classroom.setDate("今日");
+                                    classroom.setDate("今天");
                                     classroom.setTime("下午");
                                 } else if (count == 14)
 
                                 {
                                     classroom.setName(str);
                                     classroom.setSchool("都江堰");
-                                    classroom.setDate("今日");
+                                    classroom.setDate("今天");
                                     classroom.setTime("晚上");
                                 } else if (count == 15) {
                                     classroom.setName(str);
                                     classroom.setSchool("都江堰");
-                                    classroom.setDate("明日");
+                                    classroom.setDate("明天");
                                     classroom.setTime("上午");
                                 } else if (count == 16) {
                                     classroom.setName(str);
                                     classroom.setSchool("都江堰");
-                                    classroom.setDate("明日");
+                                    classroom.setDate("明天");
                                     classroom.setTime("下午");
                                 } else if (count == 17) {
                                     classroom.setName(str);
                                     classroom.setSchool("都江堰");
-                                    classroom.setDate("明日");
+                                    classroom.setDate("明天");
                                     classroom.setTime("晚上");
                                 }
                                 list.add(classroom);

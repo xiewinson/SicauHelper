@@ -32,9 +32,8 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable {
     private Context context;
     private List<Score> data;
 
-    public ScoreListAdapter(Context context, List<Score> list, ScoreFragment.ScoreFilter filter) {
+    public ScoreListAdapter(Context context, List<Score> list) {
         this.context = context;
-        this.scoreFilter = filter;
         this.data = list;
     }
 
@@ -138,6 +137,10 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable {
     public Filter getFilter() {
 
         return scoreFilter;
+    }
+
+    public void setFilter(ScoreFragment.ScoreFilter scoreFilter) {
+        this.scoreFilter = scoreFilter;
     }
 
 

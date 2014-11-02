@@ -122,7 +122,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 
     //详情列表
     private void initScoreDetailAdapter() {
-        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList, new ScoreFilter());
+        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList);
         UIUtil.setListViewInitAnimation("left", listView, scoreListAdapter);
     }
 
@@ -154,6 +154,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
                         @Override
                         public boolean onQueryTextChange(String s) {
                             Log.d("winson", "开始匹配");
+                            scoreListAdapter.setFilter(new ScoreFilter());
                             scoreListAdapter.getFilter().filter(s);
                             return false;
                         }
