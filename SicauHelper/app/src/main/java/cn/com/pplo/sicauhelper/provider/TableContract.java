@@ -38,6 +38,9 @@ public class TableContract {
         String _SELECTNUM = "_selectedNum";
     }
 
+    /**
+     * 新闻表
+      */
     public interface TableNews extends BaseColumns {
 
         String TABLE_NAME = "t_news";
@@ -48,6 +51,18 @@ public class TableContract {
         String _CONTENT = "_content";
         String _SRC = "_src";
         String _DATE = "_date";
+    }
+
+    /**
+     * 空闲教室表
+     */
+    public interface TableClassroom extends BaseColumns {
+
+        String TABLE_NAME = "t_classroom";
+
+        String _NAME = "_name";
+        String _TIME = "_time";
+        String _SCHOOL = "_school";
     }
 
 }

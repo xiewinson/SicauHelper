@@ -47,6 +47,14 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + TableContract.TableNews._SRC + " text "
             + ")";
 
+    //创建空闲教室表
+    public static final String createClassroomSql = "create table " + TableContract.TableClassroom.TABLE_NAME + "("
+            + TableContract.TableClassroom._ID + " integer primary key autoincrement, "
+            + TableContract.TableClassroom._TIME + " text, "
+            + TableContract.TableClassroom._NAME + " text, "
+            + TableContract.TableClassroom._SCHOOL + " text"
+            + ")";
+
 
     public DatabaseOpenHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -55,9 +63,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(createScoreSql);
-        Log.d("winson", "====== 创建数据表2" + createCourseSql);
         db.execSQL(createCourseSql);
         db.execSQL(createNewsSql);
+        db.execSQL(createClassroomSql);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

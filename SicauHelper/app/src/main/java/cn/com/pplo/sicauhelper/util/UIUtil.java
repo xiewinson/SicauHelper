@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -61,7 +62,7 @@ public class UIUtil {
         actionBarColor.setBackgroundDrawable(context.getResources().getDrawable(resId));
     }
 
-    public static void setListViewInitAnimation(String type, ListView listView, BaseAdapter baseAdapter) {
+    public static void setListViewInitAnimation(String type, AbsListView absListView, BaseAdapter baseAdapter) {
         AnimationAdapter animationAdapter = null;
         if(type == "bottom") {
             animationAdapter = new SwingBottomInAnimationAdapter(baseAdapter);
@@ -73,7 +74,7 @@ public class UIUtil {
             animationAdapter = new SwingRightInAnimationAdapter(baseAdapter);
         }
 
-        animationAdapter.setAbsListView(listView);
-        listView.setAdapter(animationAdapter);
+        animationAdapter.setAbsListView(absListView);
+        absListView.setAdapter(animationAdapter);
     }
 }

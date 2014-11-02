@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cn.com.pplo.sicauhelper.model.Classroom;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
@@ -144,11 +145,18 @@ public class CursorUtil {
             Log.d("winson", "解析出错：" + e);
         }
         finally {
-
+            if(cursor != null) {
+                cursor.close();
+            }
             return data;
         }
     }
 
+    /**
+     * 解析新闻cursor
+     * @param cursor
+     * @return
+     */
     public static List<News> parseNewsList(Cursor cursor){
         List<News> list = new ArrayList<News>();
         try {
@@ -162,6 +170,34 @@ public class CursorUtil {
                 news.setContent(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._CONTENT)));
                 news.setSrc(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._SRC)));
                 list.add(news);
+            }
+        }catch (Exception e){
+            list.clear();
+        }
+        finally {
+            if(cursor != null) {
+                cursor.close();
+            }
+            return list;
+        }
+    }
+
+    /**
+     * 解析空闲教室cursor
+     * @param cursor
+     * @return
+     */
+    public static List<Classroom> parseClassroomList(Cursor cursor){
+        List<Classroom> list = new ArrayList<Classroom>();
+        try {
+            while(cursor.moveToNext()){
+                Classroom classroom = new Classroom();
+                classroom.setId(cursor.getInt(cursor.getColumnIndex(TableContract.TableClassroom._ID)));
+                classroom.setTime(cursor.getString(cursor.getColumnIndex(TableContract.TableClassroom._TIME)));
+                classroom.setSchool(cursor.getString(cursor.getColumnIndex(TableContract.TableClassroom._SCHOOL)));
+                classroom.setName(cursor.getString(cursor.getColumnIndex(TableContract.TableClassroom._NAME)));
+                Log.d("winson", "取出时：" + classroom);
+                list.add(classroom);
             }
         }catch (Exception e){
             list.clear();

@@ -219,7 +219,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.getCount() > 0) {
             List<Score> tempList = CursorUtil.parseScoreList(data);
-            originalList.addAll(tempList);
+            keepOriginalData(tempList);
             if(isShowStats == false) {
 
                 notifyDataSetChanged(tempList);
@@ -244,6 +244,8 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
             scoreList.clear();
             scoreList.addAll(list);
             scoreListAdapter.notifyDataSetChanged();
+            //恢复到第一个
+            listView.setSelection(0);
         }
     }
 
@@ -269,7 +271,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         progressDialog.show();
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
-        Student student = SicauHelperApplication.getStudent();
+        Student student = SicauHelperApplication.getInstance().getStudent();
         if (student != null) {
             params.put("user", student.getSid() + "");
             params.put("pwd", student.getPswd());
@@ -282,7 +284,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
                         @Override
                         public void handleParseResult(Object obj) {
                             List<Score> tempList = (List<Score>) obj;
-                            originalList.addAll(tempList);
+                            keepOriginalData(tempList);
                             if(isShowStats == false) {
                                 notifyDataSetChanged(tempList);
                             }
@@ -305,11 +307,21 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         }
     }
 
+    /**
+     * 保持最新的原始数据
+     * @param tempList
+     */
+    private void keepOriginalData(List<Score> tempList) {
+        originalList.clear();
+        originalList.addAll(tempList);
+    }
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
 
+    //分数过滤
     public class ScoreFilter extends Filter {
 
         @Override
@@ -339,8 +351,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //更新数据
             notifyDataSetChanged((List<Score>) results.values);
-            //恢复到第一个
-            listView.setSelection(0);
+
         }
     }
 

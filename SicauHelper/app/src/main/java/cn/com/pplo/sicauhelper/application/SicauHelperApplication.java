@@ -14,16 +14,38 @@ import cn.com.pplo.sicauhelper.model.Student;
 public class SicauHelperApplication extends Application {
     private static RequestQueue requestQueue;
     private static Student student;
+    private static SicauHelperApplication sicauHelperApplication;
+    private static Object lockObj = new Object();
 
     @Override
     public void onCreate() {
         super.onCreate();
+        sicauHelperApplication = getInstance();
+    }
+
+    public SicauHelperApplication() {
+
+    }
+
+    /**
+     * 单例模式取得实例
+     * @return
+     */
+    public static SicauHelperApplication getInstance(){
+        if (sicauHelperApplication == null) {
+            synchronized (lockObj) {
+                if (sicauHelperApplication == null) {
+                    sicauHelperApplication = new SicauHelperApplication();
+                }
+            }
+        }
+        return sicauHelperApplication;
     }
 
     //双重锁定单例模式获取请求队列
-    public static RequestQueue getRequestQueue(Context context) {
+    public RequestQueue getRequestQueue(Context context) {
         if (requestQueue == null) {
-            synchronized (SicauHelperApplication.class) {
+            synchronized (lockObj) {
                 if (requestQueue == null) {
                     requestQueue = Volley.newRequestQueue(context);
                 }

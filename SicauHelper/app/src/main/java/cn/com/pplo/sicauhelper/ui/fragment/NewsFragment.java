@@ -172,7 +172,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         if(cursor != null && cursor.getCount() > 0){
             List<News> tempList = CursorUtil.parseNewsList(cursor);
             //保存原始数据
-            originalData.addAll(tempList);
+            keepOriginalData(tempList);
             notifyDataSetChanged(tempList);
         }
         else {
@@ -180,6 +180,11 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 //            getActivity().bindService(intent, serviceConn, Context.BIND_AUTO_CREATE);
             requestNewsList(getActivity());
         }
+    }
+
+    private void keepOriginalData(List<News> tempList) {
+        originalData.clear();
+        originalData.addAll(tempList);
     }
 
     /**
@@ -200,7 +205,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             public void onSuccess(String result) {
                 final List<News> tempList = StringUtil.parseNewsListInfo(result);
                 //保存原始数据
-                originalData.addAll(tempList);
+                keepOriginalData(tempList);
                 notifyDataSetChanged(tempList);
                 UIUtil.dismissProgressDialog(progressDialog);
                 SaveIntentService.startActionNewsAll(context, tempList);
@@ -217,6 +222,8 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             newsList.clear();
             newsList.addAll(list);
             newsAdapter.notifyDataSetChanged();
+            //恢复到第一个
+            listView.setSelection(0);
         }
     }
 
@@ -343,8 +350,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //更新数据
             notifyDataSetChanged((List<News>) results.values);
-            //恢复到第一个
-            listView.setSelection(0);
+
         }
     };
 

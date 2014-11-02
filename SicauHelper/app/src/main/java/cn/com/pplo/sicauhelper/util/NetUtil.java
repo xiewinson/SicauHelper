@@ -47,7 +47,7 @@ public class NetUtil {
                                         final Map<String, String> headers,
                                         final Map<String, String> params,
                                         NetCallback netCallbcak) {
-        RequestQueue requestQueue = SicauHelperApplication.getRequestQueue(context);
+        RequestQueue requestQueue = SicauHelperApplication.getInstance().getRequestQueue(context);
 
         //若为get请求则将参数加入到url之中
         if (method == Request.Method.GET && params != null) {

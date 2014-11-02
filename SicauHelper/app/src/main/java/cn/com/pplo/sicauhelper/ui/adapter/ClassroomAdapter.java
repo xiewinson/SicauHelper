@@ -14,6 +14,8 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Classroom;
+import cn.com.pplo.sicauhelper.ui.fragment.ClassroomFragment;
+import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 
 /**
  * Created by winson on 2014/11/2.
@@ -22,6 +24,7 @@ public class ClassroomAdapter extends BaseAdapter implements Filterable {
 
     private Context context;
     private List<Classroom> data;
+    private ClassroomFragment.ClassroomFilter classroomFilter;
 
     public ClassroomAdapter(Context context, List<Classroom> data) {
         this.context = context;
@@ -63,11 +66,11 @@ public class ClassroomAdapter extends BaseAdapter implements Filterable {
         String time = classroom.getTime();
         int color = 0;
         int imgSrc = 0;
-        if(time.equals("上午")) {
+        if(time.contains("上午")) {
             color = R.color.cyan_500;
             imgSrc = R.drawable.ic_brightness_1_white_48dp;
         }
-        else if(time.equals("下午")) {
+        else if(time.contains("下午")) {
             color = R.color.amber_500;
             imgSrc = R.drawable.ic_wb_sunny_white_48dp;
         }
@@ -77,15 +80,22 @@ public class ClassroomAdapter extends BaseAdapter implements Filterable {
         }
         holder.timeIv.setImageResource(imgSrc);
         holder.backgroundLayout.setBackgroundResource(color);
-        holder.timeTv.setText(classroom.getDate() + "\n" + time);
+
+        holder.timeTv.setText( time.substring(0, 2) + "\n" + time.substring(2));
         holder.schoolTv.setText(classroom.getSchool());
         holder.roomTv.setText(classroom.getName());
         return convertView;
     }
 
+
     @Override
     public Filter getFilter() {
-        return null;
+
+        return classroomFilter;
+    }
+
+    public void setFilter(ClassroomFragment.ClassroomFilter classroomFilter) {
+        this.classroomFilter = classroomFilter;
     }
 
     private static class ViewHolder {

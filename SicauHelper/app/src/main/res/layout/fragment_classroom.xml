@@ -10,6 +10,7 @@
     <GridView
         android:id="@+id/classroom_gridView"
         android:numColumns="3"
+        android:listSelector="@android:color/transparent"
         android:scrollbarStyle="outsideOverlay"
         android:columnWidth="8dp"
         android:layout_width="match_parent"

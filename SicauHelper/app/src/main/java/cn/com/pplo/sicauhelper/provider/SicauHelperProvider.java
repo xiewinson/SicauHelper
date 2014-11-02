@@ -39,6 +39,15 @@ public class SicauHelperProvider extends ContentProvider {
     private static final int CODE_NEWS_ALL = 60;
     public static final String URI_NEWS_ALL = "content://" + AUTHORITY + "/" + NEWS_ALL + "";
 
+    //Classroom
+    private static final String CLASSROOM_SINGLE = "classroom/#";
+    private static final int CODE_CLASSROOM_SINGLE = 70;
+    public static final String URI_CLASSROOM_SINGLE = "content://" + AUTHORITY + "/" + CLASSROOM_SINGLE;
+
+    private static final String CLASSROOM_ALL = "classroom";
+    private static final int CODE_CLASSROOM_ALL = 80;
+    public static final String URI_CLASSROOM_ALL = "content://" + AUTHORITY + "/" + CLASSROOM_ALL + "";
+
 
     static {
         uriMatcher.addURI(AUTHORITY, SCORE_ALL, CODE_SCORE_ALL);
@@ -49,6 +58,9 @@ public class SicauHelperProvider extends ContentProvider {
 
         uriMatcher.addURI(AUTHORITY, NEWS_ALL, CODE_NEWS_ALL);
         uriMatcher.addURI(AUTHORITY, NEWS_SINGLE, CODE_NEWS_SINGLE);
+
+        uriMatcher.addURI(AUTHORITY, CLASSROOM_ALL, CODE_CLASSROOM_ALL);
+        uriMatcher.addURI(AUTHORITY, CLASSROOM_SINGLE, CODE_CLASSROOM_SINGLE);
     }
 
     private SQLiteOpenHelper sqliteOpenHelper;
@@ -78,18 +90,19 @@ public class SicauHelperProvider extends ContentProvider {
 
             case CODE_SCORE_ALL:
                 long scoreAllId = sqliteDatabase.insert(TableContract.TableScore.TABLE_NAME, null, values);
-//                getContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null);
                 return Uri.withAppendedPath(uri, scoreAllId + "");
 
             case CODE_COURSE_ALL:
                 long courseAllId = sqliteDatabase.insert(TableContract.TableCourse.TABLE_NAME, null, values);
-//                getContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null);
                 return Uri.withAppendedPath(uri, courseAllId + "");
 
             case CODE_NEWS_ALL:
                 long newsAllId = sqliteDatabase.insert(TableContract.TableNews.TABLE_NAME, null, values);
-//                getContext().getContentResolver().notifyChange(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), null);
                 return Uri.withAppendedPath(uri, newsAllId + "");
+
+            case CODE_CLASSROOM_ALL:
+                long classroomAllId = sqliteDatabase.insert(TableContract.TableClassroom.TABLE_NAME, null, values);
+                return Uri.withAppendedPath(uri, classroomAllId + "");
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -104,26 +117,29 @@ public class SicauHelperProvider extends ContentProvider {
         switch (uriMatcher.match(uri)){
 
             case CODE_SCORE_ALL:
-                Cursor scoureAllCursor = sqliteDatabase.query(TableContract.TableScore.TABLE_NAME, null,selection,selectionArgs,null, null, null);
-                scoureAllCursor.setNotificationUri(getContext().getContentResolver(), uri);
+                Cursor scoureAllCursor = sqliteDatabase.query(TableContract.TableScore.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
                 return  scoureAllCursor;
             case CODE_SCORE_SINGLE:
                 return null;
 
             case CODE_COURSE_ALL:
-                Cursor  courseAllCursor = sqliteDatabase.query(TableContract.TableCourse.TABLE_NAME, null,selection,selectionArgs,null, null, null);
-                courseAllCursor.setNotificationUri(getContext().getContentResolver(), uri);
+                Cursor  courseAllCursor = sqliteDatabase.query(TableContract.TableCourse.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
                 return courseAllCursor;
             case CODE_COURSE_SINGLE:
                 return null;
 
             case CODE_NEWS_ALL:
-                Cursor  newsAllCursor = sqliteDatabase.query(TableContract.TableNews.TABLE_NAME, null,selection,selectionArgs,null, null, "_id desc");
-//                newsAllCursor.setNotificationUri(getContext().getContentResolver(), uri);
+                Cursor  newsAllCursor = sqliteDatabase.query(TableContract.TableNews.TABLE_NAME, projection, selection, selectionArgs, null, null, "_id desc");
                 return newsAllCursor;
             case CODE_NEWS_SINGLE:
-                Cursor  newsCursor = sqliteDatabase.query(TableContract.TableNews.TABLE_NAME, null,selection,selectionArgs,null, null, "_id desc");
+                Cursor  newsCursor = sqliteDatabase.query(TableContract.TableNews.TABLE_NAME, projection, selection, selectionArgs, null, null, "_id desc");
                 return newsCursor;
+
+            case CODE_CLASSROOM_ALL:
+                Cursor  classroomAllCursor = sqliteDatabase.query(TableContract.TableClassroom.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+                return classroomAllCursor;
+            case CODE_CLASSROOM_SINGLE:
+                return null;
 
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
@@ -142,6 +158,8 @@ public class SicauHelperProvider extends ContentProvider {
                 return 0;
             case CODE_COURSE_ALL:
                 return sqliteDatabase.delete(TableContract.TableCourse.TABLE_NAME, selection, selectionArgs);
+            case CODE_CLASSROOM_ALL:
+                return sqliteDatabase.delete(TableContract.TableClassroom.TABLE_NAME, selection, selectionArgs);
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }

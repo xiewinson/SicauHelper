@@ -56,6 +56,7 @@ public class LoginActivity extends Activity {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("user", sid);
                 map.put("pwd", pswd);
+                map.put("lb", "S");
                 NetUtil.login(getApplicationContext(), map, new NetUtil.NetCallback(LoginActivity.this) {
                     @Override
                     public void onSuccess(String result) {
@@ -89,7 +90,7 @@ public class LoginActivity extends Activity {
         student.setSid(Long.parseLong(sid));
         student.setPswd(pswd);
         student.setHeadImg("http://jiaowu.sicau.edu.cn/photo/" + sid + ".jpg");
-        SicauHelperApplication.setStudent(student);
+        SicauHelperApplication.getInstance().setStudent(student);
     }
 
     //跳转到MainActivity

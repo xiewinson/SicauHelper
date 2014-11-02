@@ -295,7 +295,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         Log.d("winson", "请求课程表-------------------------------------------------");
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
-        Student student = SicauHelperApplication.getStudent();
+        Student student = SicauHelperApplication.getInstance().getStudent();
         if (student != null) {
             params.put("user", student.getSid() + "");
             params.put("pwd", student.getPswd());

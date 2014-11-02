@@ -12,6 +12,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.com.pplo.sicauhelper.model.Classroom;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
@@ -29,10 +30,12 @@ public class SaveIntentService extends IntentService {
     private static final String ACTION_NEWS_ALL = "cn.com.pplo.sicauhelper.service.action.news_all";
     private static final String ACTION_SCORE_ALL = "cn.com.pplo.sicauhelper.service.action.score_all";
     private static final String ACTION_COURSE_ALL = "cn.com.pplo.sicauhelper.service.action.course_all";
+    private static final String ACTION_CLASSROOM_ALL = "cn.com.pplo.sicauhelper.service.action.classroom_all";
 
     private static final String EXTRA_NEWS_LIST = "cn.com.pplo.sicauhelper.service.extra.newses";
     private static final String EXTRA_SCORE_LIST = "cn.com.pplo.sicauhelper.service.extra.scores";
     private static final String EXTRA_COURSE_LIST = "cn.com.pplo.sicauhelper.service.extra.courses";
+    private static final String EXTRA_CLASSROOM_LIST = "cn.com.pplo.sicauhelper.service.extra.classroomes";
     /**
      * Starts this service to perform action Foo with the given parameters. If
      * the service is already performing a task this action will be queued.
@@ -80,6 +83,19 @@ public class SaveIntentService extends IntentService {
         context.startService(intent);
     }
 
+    /**
+     * 存储空闲教室
+     *
+     * @param context
+     * @param classroomList
+     */
+    public static void startActionClassroomAll(Context context, List<Classroom> classroomList) {
+        Intent intent = new Intent(context, SaveIntentService.class);
+        intent.setAction(ACTION_CLASSROOM_ALL);
+        intent.putParcelableArrayListExtra(EXTRA_CLASSROOM_LIST, (java.util.ArrayList<? extends android.os.Parcelable>) classroomList);
+        context.startService(intent);
+    }
+
 
     public SaveIntentService() {
         super("SaveIntentService");
@@ -98,9 +114,13 @@ public class SaveIntentService extends IntentService {
             } else if (ACTION_COURSE_ALL.equals(action)) {
                 ArrayList<Course> courseList = intent.getParcelableArrayListExtra(EXTRA_COURSE_LIST);
                 handleActionCourseList(courseList);
+            } else if (ACTION_CLASSROOM_ALL.equals(action)) {
+                ArrayList<Classroom> classroomList = intent.getParcelableArrayListExtra(EXTRA_CLASSROOM_LIST);
+                handleActionClassroomList(classroomList);
             }
         }
     }
+
 
     /**
      * 存储课程列表
@@ -111,16 +131,17 @@ public class SaveIntentService extends IntentService {
         contentResolver.delete(Uri.parse(SicauHelperProvider.URI_COURSE_ALL), "", null);
         if (tempList != null && tempList.size() > 0) {
             for (int i = 0; i < tempList.size(); i++) {
+                Course course = tempList.get(i);
                 ContentValues values = new ContentValues();
-                values.put(TableContract.TableCourse._NAME, tempList.get(i).getName());
-                values.put(TableContract.TableCourse._CATEGORY, tempList.get(i).getCategory());
-                values.put(TableContract.TableCourse._CREDIT, tempList.get(i).getCredit());
-                values.put(TableContract.TableCourse._TIME, tempList.get(i).getTime());
-                values.put(TableContract.TableCourse._CLASSROOM, tempList.get(i).getClassroom());
-                values.put(TableContract.TableCourse._WEEK, tempList.get(i).getWeek());
-                values.put(TableContract.TableCourse._TEACHER, tempList.get(i).getTeacher());
-                values.put(TableContract.TableCourse._SCHEDULENUM, tempList.get(i).getScheduleNum());
-                values.put(TableContract.TableCourse._SELECTNUM, tempList.get(i).getSelectedNum());
+                values.put(TableContract.TableCourse._NAME, course.getName());
+                values.put(TableContract.TableCourse._CATEGORY, course.getCategory());
+                values.put(TableContract.TableCourse._CREDIT, course.getCredit());
+                values.put(TableContract.TableCourse._TIME, course.getTime());
+                values.put(TableContract.TableCourse._CLASSROOM, course.getClassroom());
+                values.put(TableContract.TableCourse._WEEK, course.getWeek());
+                values.put(TableContract.TableCourse._TEACHER, course.getTeacher());
+                values.put(TableContract.TableCourse._SCHEDULENUM, course.getScheduleNum());
+                values.put(TableContract.TableCourse._SELECTNUM, course.getSelectedNum());
                 contentResolver.insert(Uri.parse(SicauHelperProvider.URI_COURSE_ALL), values);
             }
         }
@@ -142,14 +163,15 @@ public class SaveIntentService extends IntentService {
                         , null)
                         .getCount() == 0) {
                     Log.d("winson", "不存在-->" + i);
+                    News news = newsList.get(i);
                     ContentValues values = new ContentValues();
-                    values.put(TableContract.TableNews._ID, newsList.get(i).getId());
-                    values.put(TableContract.TableNews._TITLE, newsList.get(i).getTitle());
-                    values.put(TableContract.TableNews._DATE, newsList.get(i).getDate());
-                    values.put(TableContract.TableNews._URL, newsList.get(i).getUrl());
-                    values.put(TableContract.TableNews._CONTENT, newsList.get(i).getContent());
-                    values.put(TableContract.TableNews._SRC, newsList.get(i).getSrc());
-                    values.put(TableContract.TableNews._CATEGORY, newsList.get(i).getCategory());
+                    values.put(TableContract.TableNews._ID, news.getId());
+                    values.put(TableContract.TableNews._TITLE, news.getTitle());
+                    values.put(TableContract.TableNews._DATE, news.getDate());
+                    values.put(TableContract.TableNews._URL, news.getUrl());
+                    values.put(TableContract.TableNews._CONTENT, news.getContent());
+                    values.put(TableContract.TableNews._SRC, news.getSrc());
+                    values.put(TableContract.TableNews._CATEGORY, news.getCategory());
 
                     //若数据库不存在该条数据便插入
                     contentResolver.insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
@@ -170,14 +192,37 @@ public class SaveIntentService extends IntentService {
             ContentResolver contentResolver = getApplicationContext().getContentResolver();
             contentResolver.delete(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), "", null);
             for (int i = 0; i < tempList.size(); i++) {
+                Score score = tempList.get(i);
                 ContentValues values = new ContentValues();
-                values.put(TableContract.TableScore._CATEGORY, tempList.get(i).getCategory());
-                values.put(TableContract.TableScore._COURSE, tempList.get(i).getCourse());
-                values.put(TableContract.TableScore._CREDIT, tempList.get(i).getCredit());
-                values.put(TableContract.TableScore._GRADE, tempList.get(i).getGrade());
-                values.put(TableContract.TableScore._MARK, tempList.get(i).getMark());
+                values.put(TableContract.TableScore._CATEGORY, score.getCategory());
+                values.put(TableContract.TableScore._COURSE, score.getCourse());
+                values.put(TableContract.TableScore._CREDIT, score.getCredit());
+                values.put(TableContract.TableScore._GRADE, score.getGrade());
+                values.put(TableContract.TableScore._MARK, score.getMark());
                 contentResolver.insert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), values);
             }
         }
     }
+
+    /**
+     * 存储空闲教室列表
+     *
+     * @param tempList
+     */
+    private void handleActionClassroomList(ArrayList<Classroom> tempList) {
+        if (tempList != null) {
+            ContentResolver contentResolver = getApplicationContext().getContentResolver();
+            contentResolver.delete(Uri.parse(SicauHelperProvider.URI_CLASSROOM_ALL), "", null);
+            for (int i = 0; i < tempList.size(); i++) {
+                ContentValues values = new ContentValues();
+                Classroom classroom = tempList.get(i);
+                Log.d("winson", "存储时：" + classroom);
+                values.put(TableContract.TableClassroom._TIME, classroom.getTime());
+                values.put(TableContract.TableClassroom._NAME, classroom.getName());
+                values.put(TableContract.TableClassroom._SCHOOL, classroom.getSchool());
+                contentResolver.insert(Uri.parse(SicauHelperProvider.URI_CLASSROOM_ALL), values);
+            }
+        }
+    }
+
 }
