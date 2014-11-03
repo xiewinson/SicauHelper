@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="?actionBarSize"
-    tools:context="cn.com.pplo.sicauhelper.ui.fragment.HomeFragment">
+    tools:context="cn.com.pplo.sicauhelper.ui.fragment.MarketFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

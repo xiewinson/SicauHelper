@@ -116,36 +116,36 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
             @Override
             public void onPageSelected(int position) {
-                ActionBar actionBar = getSupportActionBar(getActivity());
-                if(actionBar.isShowing() == false){
-                    actionBar.show();
-                }
-                int color = 0;
-                switch (position){
-                    case 0:
-                        color = R.color.green_500;
-                        break;
-                    case 1:
-                        color = R.color.deep_purple_500;
-                        break;
-                    case 2:
-                        color = R.color.red_500;
-                        break;
-                    case 3:
-                        color = R.color.blue_500;
-                        break;
-                    case 4:
-                        color = R.color.teal_500;
-                        break;
-                    case 5:
-                        color = R.color.deep_orange_500;
-                        break;
-                    case 6:
-                        color = R.color.brown_500;
-                        break;
-                }
-                actionBar.setBackgroundDrawable(getResources().getDrawable(color));
-                setPagerSlidingTabStyle(pagerSlidingTabStrip, color);
+//                ActionBar actionBar = getSupportActionBar(getActivity());
+//                if(actionBar.isShowing() == false){
+//                    actionBar.show();
+//                }
+//                int color = 0;
+//                switch (position){
+//                    case 0:
+//                        color = R.color.green_500;
+//                        break;
+//                    case 1:
+//                        color = R.color.deep_purple_500;
+//                        break;
+//                    case 2:
+//                        color = R.color.red_500;
+//                        break;
+//                    case 3:
+//                        color = R.color.blue_500;
+//                        break;
+//                    case 4:
+//                        color = R.color.teal_500;
+//                        break;
+//                    case 5:
+//                        color = R.color.deep_orange_500;
+//                        break;
+//                    case 6:
+//                        color = R.color.brown_500;
+//                        break;
+//                }
+//                actionBar.setBackgroundDrawable(getResources().getDrawable(color));
+//                setPagerSlidingTabStyle(pagerSlidingTabStrip, color);
             }
             @Override
             public void onPageScrollStateChanged(int i) {

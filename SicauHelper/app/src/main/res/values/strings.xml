@@ -3,10 +3,11 @@
 
     <string name="app_name">SicauHelper</string>
     <string name="title_home">首页</string>
-    <string name="title_cource">课程表</string>
-    <string name="title_score">成绩</string>
-    <string name="title_news">新闻</string>
-    <string name="title_classroom">空教室</string>
+    <string name="title_market">川农市场</string>
+    <string name="title_cource">理论课表</string>
+    <string name="title_score">我的成绩</string>
+    <string name="title_news">教务新闻</string>
+    <string name="title_classroom">空闲教室</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

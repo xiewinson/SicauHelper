@@ -20,7 +20,7 @@ import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.ui.fragment.ClassroomFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
-import cn.com.pplo.sicauhelper.ui.fragment.HomeFragment;
+import cn.com.pplo.sicauhelper.ui.fragment.MarketFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.NavigationDrawerFragment;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.ui.fragment.NewsFragment;
@@ -136,24 +136,26 @@ public class MainActivity extends ActionBarActivity
         // update the main content by replacing fragments
         Fragment fragment = null;
         switch (position) {
-            //首页
-            case 0:
-                fragment = HomeFragment.newInstance();
-                break;
+
             //课程
-            case 1:
+            case 0:
                 fragment = CourseFragment.newInstance();
                 break;
             //成绩
-            case 2:
+            case 1:
                 fragment = ScoreFragment.newInstance();
                 break;
             //新闻
-            case 3:
+            case 2:
                 fragment = NewsFragment.newInstance();
                 break;
-            case 4:
+            //空教室
+            case 3:
                 fragment = ClassroomFragment.newInstance();
+                break;
+                //首页
+            case 4:
+                fragment = MarketFragment.newInstance();
                 break;
         }
         FragmentManager fragmentManager = getSupportFragmentManager();

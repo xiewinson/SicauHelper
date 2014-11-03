@@ -102,11 +102,11 @@ public class NavigationDrawerFragment extends BaseFragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 new String[]{
-                        getString(R.string.title_home),
                         getString(R.string.title_cource),
                         getString(R.string.title_score),
                         getString(R.string.title_news),
                         getString(R.string.title_classroom),
+                        getString(R.string.title_market)
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;

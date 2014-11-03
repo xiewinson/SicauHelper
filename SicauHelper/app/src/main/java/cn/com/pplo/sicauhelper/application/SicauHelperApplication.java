@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.avos.avoscloud.AVOSCloud;
 
 import cn.com.pplo.sicauhelper.model.Student;
 
@@ -20,6 +21,7 @@ public class SicauHelperApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        AVOSCloud.initialize(getApplicationContext(), "gu8z4el96hz1rkljtsiytkatoxtjesia6fl2aoliahdfczku", "1vbe06cd1u430vjzz0t8s6wfyk6t3kimesc85mtplln69p5z");
         sicauHelperApplication = getInstance();
     }
 
