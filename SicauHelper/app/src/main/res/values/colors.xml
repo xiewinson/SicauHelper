@@ -19,4 +19,9 @@
     <color name="brown_500">#795548</color>
     <color name="grey_500">#9e9e9e</color>
     <color name="blue_grey_500">#607d8b</color>
+
+
+
+    <color name="eeeeee">#eeeeee</color>
+    <color name="ffffff">#ffffff</color>
 </resources>

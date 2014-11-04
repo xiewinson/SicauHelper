@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:orientation="vertical"
+    android:background="@color/indigo_500"
+    android:layout_width="match_parent"
+    android:layout_height="160dp">
+    <ImageView
+        android:id="@+id/navigation_head_iv"
+        android:clickable="true"
+        android:src="@drawable/ic_wb_sunny_white_48dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_margin="16dp"
+        />
+    <TextView
+        android:layout_marginLeft="16dp"
+        android:id="@+id/navigation_name_tv"
+        android:textColor="#ffffff"
+        android:text="谢文森"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginLeft="16dp"
+        android:id="@+id/navigation_sid_tv"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        android:textColor="#ffffff"
+        android:text="20118622"
+        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"/>
+</LinearLayout>

@@ -21,7 +21,8 @@
          android:layout_gravity="left" instead. -->
     <!-- The drawer is given a fixed width in dp and extends the full height of
          the container. -->
-    <LinearLayout
+    <FrameLayout
+        android:background="#ffffff"
         android:paddingTop="?actionBarSize"
         android:id="@+id/navigation_drawer"
         android:layout_width="@dimen/navigation_drawer_width"

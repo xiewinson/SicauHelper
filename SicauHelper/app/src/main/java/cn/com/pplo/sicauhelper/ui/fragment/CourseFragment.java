@@ -27,6 +27,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -226,28 +227,27 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         @Override
         public CharSequence getPageTitle(int position) {
             if(position == 0){
-                return "周一";
+                return "星期一";
             } else if (position == 1) {
-                return "周二";
+                return "星期二";
             }
             if (position == 2) {
-                return "周三";
+                return "星期三";
             } else if (position == 3) {
-                return "周四";
+                return "星期四";
             }
             if (position == 4) {
-                return "周五";
+                return "星期五";
             } else if (position == 5) {
-                return "周六";
+                return "星期六";
             } else {
-                return "周日";
+                return "星期天";
             }
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View view = getDateListView(context, data.get(position));
-
             container.addView(view);
             return view;
         }
@@ -292,7 +292,6 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
     private void requestCourseList(final Context context){
         progressDialog.show();
-        Log.d("winson", "请求课程表-------------------------------------------------");
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
         Student student = SicauHelperApplication.getInstance().getStudent();

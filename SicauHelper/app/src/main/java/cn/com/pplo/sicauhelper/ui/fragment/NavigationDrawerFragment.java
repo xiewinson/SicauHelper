@@ -2,6 +2,7 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,8 +20,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -89,28 +99,77 @@ public class NavigationDrawerFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
+        initListView(inflater, container);
+        return mDrawerListView;
+    }
+
+    /**
+     * 初始化listView
+     * @param inflater
+     * @param container
+     */
+    private void initListView(LayoutInflater inflater, ViewGroup container) {
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                selectItem((int) id);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_cource),
-                        getString(R.string.title_score),
-                        getString(R.string.title_news),
-                        getString(R.string.title_classroom),
-                        getString(R.string.title_market)
-                }));
+        final int[] icons = {
+                R.drawable.ic_event_grey600_24dp,
+                R.drawable.ic_school_grey600_24dp,
+                R.drawable.ic_whatshot_grey600_24dp,
+                R.drawable.ic_location_city_grey600_24dp,
+                R.drawable.ic_shopping_cart_grey600_24dp
+        };
+        final String[] titles = {
+        getString(R.string.title_cource),
+                getString(R.string.title_score),
+                getString(R.string.title_news),
+                getString(R.string.title_classroom),
+                getString(R.string.title_market)
+        };
+
+        //增加header
+        View headerView = getActivity().getLayoutInflater().inflate(R.layout.header_navigation, null, false);
+        mDrawerListView.addHeaderView(headerView, null, false);
+        mDrawerListView.setAdapter(new BaseAdapter() {
+            @Override
+            public int getCount() {
+                return 5;
+            }
+
+            @Override
+            public Object getItem(int position) {
+                return position;
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                convertView = View.inflate(getActivity(), R.layout.item_navigation, null);
+                TextView tv = (TextView) convertView.findViewById(R.id.navigation_item_tv);
+                ImageView iv = (ImageView) convertView.findViewById(R.id.navigation_item_iv);
+                tv.setText(titles[position]);
+                iv.setImageResource(icons[position]);
+                if(position == mCurrentSelectedPosition) {
+                    convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
+                }
+                else {
+                    convertView.setBackgroundResource(R.drawable.btn_navigation_item);
+                }
+                return convertView;
+            }
+        });
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
     }
+
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
