@@ -96,7 +96,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         listView = (ListView) view.findViewById(R.id.news_listView);
 //        listView.setTextFilterEnabled(true);
         //设置actionbar的间距
-        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity()));
+        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
 
         progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的～");
         //listView上下补点间距
@@ -110,8 +110,6 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
         //滚动隐藏
 //        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
-        listView.setOnTouchListener(new OnScrollHideOrShowActionBarListener2(getSupportActionBar(getActivity())));
-
 
         //listView点击事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -238,7 +236,9 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             newsAdapter.notifyDataSetChanged();
             //恢复到第一个
             listView.setSelection(0);
+            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
         }
+
     }
 
     @Override

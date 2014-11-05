@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
@@ -18,6 +19,7 @@ import com.nhaarman.listviewanimations.appearance.simple.SwingLeftInAnimationAda
 import com.nhaarman.listviewanimations.appearance.simple.SwingRightInAnimationAdapter;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener2;
 
 /**
  * Created by winson on 2014/9/14.
@@ -77,5 +79,34 @@ public class UIUtil {
 
         animationAdapter.setAbsListView(absListView);
         absListView.setAdapter(animationAdapter);
+    }
+
+    /**
+     * 设置滑动监听隐藏/显示actionBar
+     */
+    public static void setListViewScrollHideOrShowActionBar(Context context, ListView listView, ActionBar actionBar) {
+        if(listView.getMaxScrollAmount() > 0) {
+            listView.setOnTouchListener(new OnScrollHideOrShowActionBarListener2(context, actionBar));
+        }
+    }
+
+    /**
+     * dp转换px
+     * @param context
+     * @param dp
+     * @return
+     */
+    public static float parseDpToPx(Context context, int dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
+
+    /**
+     * sp转换px
+     * @param context
+     * @param sp
+     * @return
+     */
+    public static float parseSpToPx(Context context, int sp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
     }
 }

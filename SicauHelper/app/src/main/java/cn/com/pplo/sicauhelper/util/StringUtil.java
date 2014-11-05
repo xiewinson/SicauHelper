@@ -40,10 +40,9 @@ public class StringUtil {
      */
     public static String getDcode(String htmlStr) {
         String result = "";
-        if(htmlStr.contains("dcode2")) {
+        if (htmlStr.contains("dcode2")) {
             Log.d("winson", "包含");
-        }
-        else {
+        } else {
             Log.d("winson", "不包含");
         }
 
@@ -121,10 +120,8 @@ public class StringUtil {
                 String currentText = list.get(i);
                 if (currentText.contains("姓名")) {
                     student.setName(list.get(i + 1));
-                } else if (currentText.contains("身份")) {
-                    student.setRole(list.get(i + 1));
                 } else if (currentText.contains("所属校区")) {
-                    student.setSchool(list.get(i + 1));
+                    student.setSchool(schoolToSchoolCode(list.get(i + 1)));
                 }
             }
             Log.d("winson", "结束：" + System.currentTimeMillis() + "      " + list);
@@ -552,6 +549,7 @@ public class StringUtil {
 
     /**
      * 最恶心的一个，解析空闲教室那网页
+     *
      * @param htmlStr
      * @param callback
      */
@@ -572,7 +570,7 @@ public class StringUtil {
 
                         for (int j = 0; j < strs.length; j++) {
                             String str = strs[j].trim();
-                            if (!TextUtils.isEmpty(str) && !str.contains("font") && !str.contains("空教室")){
+                            if (!TextUtils.isEmpty(str) && !str.contains("font") && !str.contains("空教室")) {
                                 Classroom classroom = new Classroom();
                                 if (count == 0) {
                                     classroom.setName(str);
@@ -658,7 +656,7 @@ public class StringUtil {
                                 list.add(classroom);
                             }
 
-                            }
+                        }
                     }
                     count++;
                 }
@@ -673,6 +671,37 @@ public class StringUtil {
         }.execute(htmlStr);
     }
 
+    /**
+     * 转换校区代码为字符串
+     *
+     * @param schoolCode
+     * @return
+     */
+    public static String schoolCodeToSchool(int schoolCode) {
+        if (schoolCode == 0) {
+            return "雅安";
+        } else if (schoolCode == 1) {
+            return "成都";
+        } else {
+            return "都江堰";
+        }
+    }
+
+    /**
+     * 转换校区字符串为代码
+     *
+     * @param school
+     * @return
+     */
+    public static int schoolToSchoolCode(String school) {
+        if (school.contains("雅安")) {
+            return 0;
+        } else if (school.contains("成都")) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
 
     public interface Callback {
         public void handleParseResult(Object obj);

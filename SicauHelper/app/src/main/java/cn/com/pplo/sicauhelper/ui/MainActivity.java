@@ -46,12 +46,12 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         //不使用up
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        Student s = new Student();
-        s.setName("谢豪");
-        s.setSid(20118622);
-        s.setPswd("winson");
-        s.setSchool("都江堰");
-        SicauHelperApplication.setStudent(s);
+//        Student s = new Student();
+//        s.setName("谢豪");
+//        s.setSid(20118622);
+//        s.setPswd("winson");
+//        s.setSchool(2);
+//        SicauHelperApplication.setStudent(s);
         if (SicauHelperApplication.getStudent() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);

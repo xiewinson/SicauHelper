@@ -5,12 +5,14 @@ package cn.com.pplo.sicauhelper.model;
  */
 public class Student {
     private long id;
-    private long sid;
-    private String pswd;
+    private String sid;
     private String name;
-    private String school;
-    private String role;
-    private String headImg;
+    private String nickName;
+    private String pswd;
+    private int school;
+    private int role;
+    private String profileUrl;
+    private String background;
 
     public long getId() {
         return id;
@@ -20,20 +22,12 @@ public class Student {
         this.id = id;
     }
 
-    public long getSid() {
+    public String getSid() {
         return sid;
     }
 
-    public void setSid(long sid) {
+    public void setSid(String sid) {
         this.sid = sid;
-    }
-
-    public String getPswd() {
-        return pswd;
-    }
-
-    public void setPswd(String pswd) {
-        this.pswd = pswd;
     }
 
     public String getName() {
@@ -44,28 +38,52 @@ public class Student {
         this.name = name;
     }
 
-    public String getSchool() {
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getPswd() {
+        return pswd;
+    }
+
+    public void setPswd(String pswd) {
+        this.pswd = pswd;
+    }
+
+    public int getSchool() {
         return school;
     }
 
-    public void setSchool(String school) {
+    public void setSchool(int school) {
         this.school = school;
     }
 
-    public String getRole() {
+    public int getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(int role) {
         this.role = role;
     }
 
-    public String getHeadImg() {
-        return headImg;
+    public String getProfileUrl() {
+        return profileUrl;
     }
 
-    public void setHeadImg(String headImg) {
-        this.headImg = headImg;
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
     }
 
     @Override
@@ -73,11 +91,13 @@ public class Student {
         return "Student{" +
                 "id=" + id +
                 ", sid=" + sid +
-                ", pswd='" + pswd + '\'' +
                 ", name='" + name + '\'' +
-                ", school='" + school + '\'' +
-                ", role='" + role + '\'' +
-                ", headImg='" + headImg + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", pswd='" + pswd + '\'' +
+                ", school=" + school +
+                ", role=" + role +
+                ", profileUrl='" + profileUrl + '\'' +
+                ", background='" + background + '\'' +
                 '}';
     }
 }

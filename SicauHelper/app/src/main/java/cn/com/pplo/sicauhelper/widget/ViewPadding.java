@@ -17,7 +17,9 @@ public class ViewPadding {
         return view;
     }
 
-    public static View getActionBarPadding(Context context){
-        return View.inflate(context, R.layout.actionbar_padding_header, null);
+    public static View getActionBarPadding(Context context, int res){
+        View view = View.inflate(context, R.layout.actionbar_padding_header, null);
+        view.setBackgroundResource(res);
+        return view;
     }
 }

@@ -135,8 +135,10 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
     private void selectOnlyThisSchoolData(boolean isOnlyShowThisSchool) {
         if(isOnlyShowThisSchool) {
             data.clear();
+            String school = StringUtil.schoolCodeToSchool(SicauHelperApplication.getStudent().getSchool());
+
             for(Classroom classroom : originalData) {
-                if(classroom.getSchool().contains(SicauHelperApplication.getStudent().getSchool())){
+                if(classroom.getSchool().contains(school)){
                     data.add(classroom);
                 }
             }

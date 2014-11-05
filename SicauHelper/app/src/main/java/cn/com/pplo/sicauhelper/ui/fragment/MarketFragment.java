@@ -51,18 +51,22 @@ public class MarketFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         AVObject user = new AVObject("Student");
-        user.put("NAME", "谢豪");
-        user.put("PSWD", "winson");
-        user.put("SID", "20118622");
-        user.put("SCHOOL", "都江堰");
+        user.put("sid", "20118622");
+        user.put("name", "谢豪");
+        user.put("nickName", "谢文森");
+        user.put("pswd", "winson");
+        user.put("school", "都江堰");
+        user.put("profileUrl", "www.winsontse.com");
+        user.put("background", "winsontse.jpg");
         user.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
-                if(e == null){
-                    Log.d("winson", "保存成功");
+                if(e != null) {
+
+                    Log.d("winson", e.getMessage());
                 }
                 else {
-                    Log.d("winson", "保存失败" + e.getMessage());
+                    Log.d("winson", "保存成功");
                 }
             }
         });

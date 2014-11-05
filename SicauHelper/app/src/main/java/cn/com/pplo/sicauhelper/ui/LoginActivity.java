@@ -12,12 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.VolleyError;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.leancloud.AVStudent;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
@@ -63,16 +69,11 @@ public class LoginActivity extends Activity {
                         try {
                             Log.d("winson", "登录" + result);
                             Student student = StringUtil.parseStudentInfo(result);
-                            if (!student.getRole().equals("学生")) {
-                                UIUtil.showShortToast(LoginActivity.this, "你又不是学生，就别凑热闹了，不送～");
-                            } else {
-                                saveStudent(student, sid, pswd);
-                                goToMainActivity();
-                            }
+                            saveStudent(student, sid, pswd);
+                            goToMainActivity();
                         } catch (Exception e) {
                             UIUtil.showShortToast(LoginActivity.this, "你连学号和密码都忘了吗～那么，拜拜～");
                         }
-
                     }
 
                     @Override
@@ -86,11 +87,16 @@ public class LoginActivity extends Activity {
     }
 
     //存储学生信息到数据库和Application
-    private void saveStudent(Student student, String sid, String pswd) {
-        student.setSid(Long.parseLong(sid));
+    private void saveStudent(Student student, final String sid, final String pswd) {
+        student.setSid(sid);
         student.setPswd(pswd);
-        student.setHeadImg("http://jiaowu.sicau.edu.cn/photo/" + sid + ".jpg");
+        student.setProfileUrl("http://jiaowu.sicau.edu.cn/photo/" + sid + ".jpg");
+        student.setRole(1);
+        student.setBackground("http://jiaowu.sicau.edu.cn/photo/" + sid + ".jpg");
+
+        //TODO 存储到本地数据库
         SicauHelperApplication.getInstance().setStudent(student);
+        Log.d("winson", student + "");
     }
 
     //跳转到MainActivity
