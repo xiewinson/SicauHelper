@@ -8,4 +8,11 @@
         alpha:actionViewClass="android.support.v7.widget.SearchView"
         android:orderInCategory="2"
         alpha:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_score_static"
+        android:title="统计"
+        android:icon="@drawable/ic_trending_up_white_24dp"
+        android:orderInCategory="2"
+        alpha:showAsAction="always" />
 </menu>

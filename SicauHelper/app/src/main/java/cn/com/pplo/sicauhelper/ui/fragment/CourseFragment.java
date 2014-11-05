@@ -270,6 +270,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 //                (ListView) View.inflate(context, R.layout.fragment_course_date, null);
         Log.d("winson", "结果：" + list);
         listView.setAdapter(new CourseAdapter(context, list));
+        Log.d("winson", "最大滑动数：------" + listView.getMaxScrollAmount());
         return listView;
     }
 

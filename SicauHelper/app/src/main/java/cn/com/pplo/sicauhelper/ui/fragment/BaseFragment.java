@@ -40,12 +40,12 @@ public class BaseFragment extends Fragment {
         //指示条颜色
         pagerSlidingTabStrip.setIndicatorColor(Color.WHITE);
         //指示条高度
-//        pagerSlidingTabStrip.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
+        pagerSlidingTabStrip.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
         //背景色
         pagerSlidingTabStrip.setBackgroundResource(backgroundColor);
-        //指示条
-//        pagerSlidingTabStrip.setUnderlineHeight(0);
-//        pagerSlidingTabStrip.setUnderlineColorResource(backgroundColor);
+        //最下面的分隔条
+        pagerSlidingTabStrip.setUnderlineHeight(0);
+        pagerSlidingTabStrip.setUnderlineColorResource(backgroundColor);
         //字体样式
 //        pagerSlidingTabStrip.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
         //分隔条颜色

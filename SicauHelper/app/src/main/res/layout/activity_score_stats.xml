@@ -1,0 +1,18 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/score_static_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:divider="@null"
+        android:scrollbarStyle="outsideOverlay"
+        android:dividerHeight="8dp"
+        android:listSelector="@android:color/transparent"></ListView>
+
+</LinearLayout>

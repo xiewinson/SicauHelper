@@ -35,6 +35,7 @@ import java.util.logging.Filter;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
+import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener2;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
@@ -108,7 +109,10 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         listView.setAdapter(newsAdapter);
 
         //滚动隐藏
-        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
+//        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
+        listView.setOnTouchListener(new OnScrollHideOrShowActionBarListener2(getSupportActionBar(getActivity())));
+
+
         //listView点击事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -12,7 +12,8 @@
         android:numColumns="3"
         android:listSelector="@android:color/transparent"
         android:scrollbarStyle="outsideOverlay"
-        android:columnWidth="8dp"
+        android:horizontalSpacing="8dp"
+        android:verticalSpacing="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         </GridView>

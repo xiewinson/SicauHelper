@@ -40,6 +40,13 @@ public class StringUtil {
      */
     public static String getDcode(String htmlStr) {
         String result = "";
+        if(htmlStr.contains("dcode2")) {
+            Log.d("winson", "包含");
+        }
+        else {
+            Log.d("winson", "不包含");
+        }
+
         Pattern pattern = Pattern.compile("dcode2=[0-9]+");
         if (htmlStr != null && !htmlStr.equals("")) {
             Matcher matcher = pattern.matcher(htmlStr);

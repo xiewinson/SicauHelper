@@ -16,5 +16,6 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_news">NewsActivity</string>
+    <string name="title_activity_score_stats">成绩统计</string>
 
 </resources>
