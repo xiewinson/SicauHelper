@@ -91,12 +91,18 @@ public class CursorUtil {
                     String posStr = (position + 1) + "";
                     if(course.getTime().contains(posStr + "-")){
                         String time = course.getTime();
+                        if(time.contains("单")){
+                            course1.setWeek(course.getWeek() + "单");
+                        }
+                        else if(time.contains("双")){
+                            course1.setWeek(course.getWeek() + "双");
+                        }
                         String classroom = course.getClassroom();
                         String[] timeArray = time.split("\\s+");
                         String[] classroomArray = classroom.split("\\s+");
                         for(int i = 0; i < timeArray.length; i++){
                             if(timeArray[i].contains(posStr + "-")){
-                                course1.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-"));
+                                course1.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-").replace("(单)", "").replace("(双)", ""));
                                 course1.setClassroom(classroomArray[i]);
                             }
                         }

@@ -437,10 +437,11 @@ public class NetUtil {
                         UIUtil.showShortToast(context, "亲爱的，你的网络连接有问题，还用个毛啊～");
                     }
                 } else {
-                    UIUtil.showShortToast(context, "一定是教务网出了问题，一定是嗒～");
+//                    UIUtil.showShortToast(context, "一定是教务网出了问题，一定是嗒～");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                UIUtil.showShortToast(context, "额，臣亦不知发生了甚");
             }
 
         }
@@ -449,11 +450,14 @@ public class NetUtil {
         public void onResponse(String result) {
             if (result.contains("密码不对")) {
                 UIUtil.showShortToast(context, "你连学号和密码都忘了吗～那么，拜拜～");
+                onErrorResponse(null);
             } else if (result.contains("登录超时")) {
                 UIUtil.showShortToast(context, "亲爱的，教务系统出问题了～");
+                onErrorResponse(null);
             }
             else if(result.contains("您的电脑上所安装的个人防火墙软件拦截了你的验证信息")){
                 UIUtil.showShortToast(context, "您的电脑上所安装的个人防火墙软件拦截了你的验证信息");
+                onErrorResponse(null);
             }
             else {
                 onSuccess(result);

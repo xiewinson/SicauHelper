@@ -59,7 +59,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
-    private ProgressFragment progressDialog;
+    private AlertDialog progressDialog;
 
     public static CourseFragment newInstance() {
         CourseFragment fragment = new CourseFragment();
@@ -293,7 +293,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     }
 
     private void requestCourseList(final Context context){
-//        progressDialog.show(getActivity().getSupportFragmentManager());
+        progressDialog.show();
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
         Student student = SicauHelperApplication.getInstance().getStudent(context);

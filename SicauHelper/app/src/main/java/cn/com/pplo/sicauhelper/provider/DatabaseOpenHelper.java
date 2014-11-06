@@ -12,7 +12,7 @@ import cn.com.pplo.sicauhelper.leancloud.AVStudent;
  */
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "SICAU_HELPER_DB";
-    public static final int DB_VERSION = 2;
+    public static final int DB_VERSION = 3;
 
     //创建成绩表
     public static final String createScoreSql = "create table " + TableContract.TableScore.TABLE_NAME + "("
@@ -82,9 +82,16 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(createNewsSql);
         db.execSQL(createClassroomSql);
         db.execSQL(createStudentSql);
+        Log.d("winson", "创建数据库完成");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        String DROP_TABLE = "drop table if exists ";
+        db.execSQL(DROP_TABLE + TableContract.TableScore.TABLE_NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableCourse.TABLE_NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableNews.TABLE_NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableClassroom.TABLE_NAME);
+        db.execSQL(DROP_TABLE + AVStudent.NAME);
+        onCreate(db);
     }
 }

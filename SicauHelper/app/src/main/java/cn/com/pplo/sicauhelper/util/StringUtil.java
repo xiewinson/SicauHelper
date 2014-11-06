@@ -221,7 +221,7 @@ public class StringUtil {
             ScoreStats scoreStats = new ScoreStats();
             for (int j = 0; j < scoreList.size(); j++) {
                 Score currentScore = scoreList.get(j);
-                if (!currentScore.getCourse().contains("军训") && (currentScore.getGrade() + "").contains(years.get(i) + "")) {
+                if (!currentScore.getMark().contains("合格") && (currentScore.getGrade() + "").contains(years.get(i) + "")) {
                     if (currentScore.getCategory().equals("必修") || currentScore.getCategory().equals("实践")) {
                         mustNumCount++;
                         mustCreditCount += currentScore.getCredit();
@@ -376,14 +376,23 @@ public class StringUtil {
 
                     Course course = item.clone();
                     String posStr = (position + 1) + "";
+
+                    if(course.getTime().contains("单")){
+                        course.setWeek(course.getWeek() + "单");
+                    }
+                    else if(course.getTime().contains("双")){
+                        course.setWeek(course.getWeek() + "双");
+                    }
                     if (item.getTime().contains(posStr + "-")) {
                         String time = item.getTime();
                         String classroom = item.getClassroom();
                         String[] timeArray = time.split("\\s+");
                         String[] classroomArray = classroom.split("\\s+");
+
                         for (int i = 0; i < timeArray.length; i++) {
                             if (timeArray[i].contains(posStr + "-")) {
-                                course.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-"));
+
+                                course.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-").replace("(单)", "").replace("(双)", ""));
                                 course.setClassroom(classroomArray[i]);
                             }
                         }

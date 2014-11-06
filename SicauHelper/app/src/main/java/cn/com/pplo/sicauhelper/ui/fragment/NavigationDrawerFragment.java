@@ -27,12 +27,16 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 /**
@@ -62,6 +66,10 @@ public class NavigationDrawerFragment extends BaseFragment {
      * Helper component that ties the action bar to the navigation drawer.
      */
     private ListView mDrawerListView;
+    private TextView nameTv;
+    private TextView sidTv;
+    private ImageView profileIv;
+
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
@@ -133,8 +141,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         };
 
         //增加header
-        View headerView = getActivity().getLayoutInflater().inflate(R.layout.header_navigation, null, false);
-        mDrawerListView.addHeaderView(headerView, null, false);
+        initHeaderView();
         mDrawerListView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
@@ -170,77 +177,23 @@ public class NavigationDrawerFragment extends BaseFragment {
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
     }
 
-
     /**
-     * Users of this fragment must call this method to set up the navigation drawer interactions.
-     *
+     * 初始化headerView
      */
-//    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
-//        mFragmentContainerView = getActivity().findViewById(fragmentId);
-//        mDrawerLayout = drawerLayout;
-//
-//        // set a custom shadow that overlays the main content when the drawer opens
-//        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-//        // set up the drawer's list view with items and click listener
-//
-//        ActionBar actionBar = UIUtil.getSupportActionBar(getActivity());
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//        actionBar.setHomeButtonEnabled(true);
-//
-//        // ActionBarDrawerToggle ties together the the proper interactions
-//        // between the navigation drawer and the action bar app icon.
-//        mDrawerToggle = new ActionBarDrawerToggle(
-//                getActivity(),                    /* host Activity */
-//                mDrawerLayout,                    /* DrawerLayout object */
-//                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
-//                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
-//        ) {
-//            @Override
-//            public void onDrawerClosed(View drawerView) {
-//                super.onDrawerClosed(drawerView);
-//                if (!isAdded()) {
-//                    return;
-//                }
-//
-//                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-//            }
-//
-//            @Override
-//            public void onDrawerOpened(View drawerView) {
-//                super.onDrawerOpened(drawerView);
-//                if (!isAdded()) {
-//                    return;
-//                }
-//
-//                if (!mUserLearnedDrawer) {
-//                    // The user manually opened the drawer; store this flag to prevent auto-showing
-//                    // the navigation drawer automatically in the future.
-//                    mUserLearnedDrawer = true;
-//                    SharedPreferences sp = PreferenceManager
-//                            .getDefaultSharedPreferences(getActivity());
-//                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
-//                }
-//
-//                getActivity().invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-//            }
-//        };
-//
-//        // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
-//        // per the navigation drawer design guidelines.
-//        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-//            mDrawerLayout.openDrawer(mFragmentContainerView);
-//        }
-//
-//        // Defer code dependent on restoration of previous instance state.
-//        mDrawerLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                mDrawerToggle.syncState();
-//            }
-//        });
-//
-//        mDrawerLayout.setDrawerListener(mDrawerToggle);
-//    }
+    private void initHeaderView() {
+        View headerView = getActivity().getLayoutInflater().inflate(R.layout.header_navigation, null, false);
+        nameTv = (TextView) headerView.findViewById(R.id.navigation_name_tv);
+        sidTv = (TextView) headerView.findViewById(R.id.navigation_sid_tv);
+        profileIv = (ImageView) headerView.findViewById(R.id.navigation_head_iv);
+
+        Student student = SicauHelperApplication.getStudent(getActivity());
+        if(student != null) {
+            nameTv.setText(student.getName());
+            sidTv.setText(student.getSid());
+            //TODO 显示用户头像，使用universal-image-loader
+        }
+        mDrawerListView.addHeaderView(headerView, null, false);
+    }
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;

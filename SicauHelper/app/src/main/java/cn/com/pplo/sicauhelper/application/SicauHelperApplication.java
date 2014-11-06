@@ -11,6 +11,7 @@ import com.avos.avoscloud.AVObject;
 import cn.com.pplo.sicauhelper.leancloud.AVStudent;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.util.SQLiteUtil;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
 /**
  * Created by winson on 2014/9/13.
@@ -62,7 +63,7 @@ public class SicauHelperApplication extends Application {
 
     public static Student getStudent(Context context) {
         if(student == null) {
-            setStudent(SQLiteUtil.getLoginStudent(context, "20118622"));
+            setStudent(SQLiteUtil.getLoginStudent(context, SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString()));
         }
         return student;
     }

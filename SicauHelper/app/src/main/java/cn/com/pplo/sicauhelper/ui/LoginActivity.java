@@ -1,6 +1,5 @@
 package cn.com.pplo.sicauhelper.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
@@ -25,12 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.leancloud.AVStudent;
 import cn.com.pplo.sicauhelper.model.Student;
-import cn.com.pplo.sicauhelper.ui.fragment.ProgressFragment;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.SQLiteUtil;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
@@ -40,7 +37,7 @@ public class LoginActivity extends ActionBarActivity {
     private EditText sidEt;
     private EditText pswdEt;
     private Button loginBtn;
-    private ProgressFragment progressDialog;
+    private AlertDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +53,9 @@ public class LoginActivity extends ActionBarActivity {
         pswdEt = (EditText) findViewById(R.id.login_pswd_et);
         progressDialog = UIUtil.getProgressDialog(this, "吾已前往教务系统验证你的学号密码");
 
+        //设置保存在xml的学号密码
+        sidEt.setText(SharedPreferencesUtil.get(this, SharedPreferencesUtil.LOGIN_SID, "").toString());
+        pswdEt.setText(SharedPreferencesUtil.get(this, SharedPreferencesUtil.LOGIN_PSWD, "").toString());
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +64,7 @@ public class LoginActivity extends ActionBarActivity {
 
             //进行登录
             private void login() {
-                progressDialog.show(getSupportFragmentManager());
+                progressDialog.show();
                 final String sid = sidEt.getText().toString().trim();
                 final String pswd = pswdEt.getText().toString().trim();
                 Map<String, String> map = new HashMap<String, String>();
@@ -77,7 +77,7 @@ public class LoginActivity extends ActionBarActivity {
                         try {
                             Log.d("winson", "登录" + result);
                             Student student = StringUtil.parseStudentInfo(result);
-                            saveStudent(student, sid, pswd);
+                            saveAndQueryStudent(student, sid, pswd);
 
                         } catch (Exception e) {
                             UIUtil.dismissProgressDialog(progressDialog);
@@ -97,15 +97,16 @@ public class LoginActivity extends ActionBarActivity {
     }
 
     //存储学生信息到数据库和Application
-    private void saveStudent(final Student student, final String sid, final String pswd) {
+    private void saveAndQueryStudent(final Student student, final String sid, final String pswd) {
+        //首先保存到xml
+        saveSidPswdToXML(LoginActivity.this, sid, pswd);
         student.setSid(sid);
         student.setPswd(pswd);
         student.setProfileUrl("http://jiaowu.sicau.edu.cn/photo/" + sid + ".jpg");
         student.setRole(1);
         student.setBackground("pic_0");
 
-
-
+        //查询其是否创建
         AVQuery<AVStudent> avQuery = AVQuery.getQuery(AVStudent.class);
         avQuery.whereEqualTo("sid", sid);
         avQuery.findInBackground(new FindCallback<AVStudent>() {
@@ -113,9 +114,10 @@ public class LoginActivity extends ActionBarActivity {
             public void done(List<AVStudent> avStudents, AVException e) {
                 //若已存在则跳转到主页面
                 if(e == null && avStudents.size() > 0) {
-                    //TODO 存储到本地数据库
+
                     Log.d("winson", "找到：" + avStudents.toString());
                     SQLiteUtil.saveLoginStudent(LoginActivity.this, student);
+                    UIUtil.dismissProgressDialog(progressDialog);
                     goToMainActivity();
                 }
 
@@ -135,13 +137,13 @@ public class LoginActivity extends ActionBarActivity {
                         public void done(AVException e) {
                             //保存成功
                             if(e == null) {
-                                //TODO 存储到本地数据库
                                 SQLiteUtil.saveLoginStudent(LoginActivity.this, student);
+                                UIUtil.dismissProgressDialog(progressDialog);
                                 goToMainActivity();
                             }
                             //保存失败
                             else {
-                                goToMainActivity();
+                                UIUtil.dismissProgressDialog(progressDialog);
                                 UIUtil.showShortToast(LoginActivity.this, "出现了一个未知的错误");
                                 Log.d("winson", e.getMessage());
                             }
@@ -174,5 +176,16 @@ public class LoginActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 保存用户密码
+     * @param context
+     * @param sid
+     * @param pswd
+     */
+    private void saveSidPswdToXML(Context context, String sid, String pswd) {
+        SharedPreferencesUtil.put(context, SharedPreferencesUtil.LOGIN_SID, sid);
+        SharedPreferencesUtil.put(context, SharedPreferencesUtil.LOGIN_PSWD, pswd);
     }
 }

@@ -49,7 +49,7 @@ import cn.com.pplo.sicauhelper.widget.ViewPadding;
 
 public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
-    private ProgressFragment progressDialog;
+    private AlertDialog progressDialog;
     private SearchView searchView;
 
     private ScoreListAdapter scoreListAdapter;
@@ -209,7 +209,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
      * @param context
      */
     public void requestScoreList(final Context context) {
-        progressDialog.show(getActivity().getSupportFragmentManager());
+        progressDialog.show();
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
         Student student = SicauHelperApplication.getInstance().getStudent(context);

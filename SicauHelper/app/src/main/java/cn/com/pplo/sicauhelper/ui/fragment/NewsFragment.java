@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -43,7 +44,7 @@ import cn.com.pplo.sicauhelper.widget.ViewPadding;
 public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
-    private ProgressFragment progressDialog;
+    private AlertDialog progressDialog;
     private List<News> newsList = new ArrayList<News>();
     private List<News> originalData = new ArrayList<News>();
     private SearchView searchView;
@@ -196,7 +197,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
      * @param context
      */
     public void requestNewsList(final Context context) {
-        progressDialog.show(getActivity().getSupportFragmentManager());
+        progressDialog.show();
 
         NetUtil.getNewsListHtmlStr(context, new NetUtil.NetCallback(context) {
             @Override

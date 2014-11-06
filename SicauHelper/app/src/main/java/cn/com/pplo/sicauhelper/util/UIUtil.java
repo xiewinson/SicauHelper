@@ -39,18 +39,44 @@ public class UIUtil {
     }
 
     /**
+     *
+     * @param context
+     * @param text
+     * @return
+     */
+    public static AlertDialog getProgressDialog(Context context, String text){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = View.inflate(context, R.layout.progress_dialog, null);
+        TextView tv = (TextView) view.findViewById(R.id.progress_dialog_tv);
+        if(!TextUtils.isEmpty(text)) {
+            tv.setText(text);
+        }
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
+    }
+
+    public static void dismissProgressDialog(AlertDialog progressDialog){
+        if(progressDialog != null && progressDialog.isShowing()){
+            progressDialog.cancel();
+        }
+    }
+
+    /**
      * 
      * @param context
      * @param text
      * @return
      */
-    public static ProgressFragment getProgressDialog(Context context, String text){
+    public static ProgressFragment getProgressFragment(Context context, String text){
         ProgressFragment progressFragment = ProgressFragment.newInstance(text);
         progressFragment.setCancelable(false);
         return progressFragment;
     }
 
-    public static void dismissProgressDialog(ProgressFragment progressDialog){
+    public static void dismissProgressFragment(ProgressFragment progressDialog){
         if(progressDialog != null ){
             progressDialog.dismiss();
         }

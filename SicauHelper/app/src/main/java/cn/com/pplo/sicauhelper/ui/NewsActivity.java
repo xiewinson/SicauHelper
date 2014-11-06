@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener2;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.provider.TableContract;
@@ -42,6 +44,7 @@ public class NewsActivity extends BaseActivity {
     private ProgressFragment progressDialog;
     private TextView newsTv;
     private WebView newsWebView;
+    private ScrollView scrollView;
 
     public static void startNewsActivity(Context context, News news){
         Intent intent = new Intent(context, NewsActivity.class);
@@ -60,9 +63,11 @@ public class NewsActivity extends BaseActivity {
 
         newsTv = (TextView) findViewById(R.id.news_tv);
         newsWebView = (WebView) findViewById(R.id.news_webView);
+        scrollView = (ScrollView) findViewById(R.id.news_scrollView);
 
         //对话框
-        progressDialog = UIUtil.getProgressDialog(context, "正在寻找新闻内容...");
+        progressDialog = UIUtil.getProgressFragment(context, "正在寻找新闻内容...");
+        progressDialog.show(getSupportFragmentManager());
         //获得news数据
         data = getIntent().getParcelableExtra(EXTRA_NEWS);
         if(data != null){
@@ -110,14 +115,16 @@ public class NewsActivity extends BaseActivity {
                         e.printStackTrace();
                         news = null;
                     }
+                    finally {
+                        cursor.close();
+                    }
                     return news;
                 }
                 @Override
                 protected void onPostExecute(News news) {
                     super.onPostExecute(news);
                     if(news != null && news.getContent() != null && !news.getContent().equals("")){
-                        newsTv.setText(news.getContent());
-                        loadWebView(newsWebView, news.getSrc());
+                        showData(news);
                     }
                     else {
                         requestNewsContent(context, data.getId());
@@ -129,12 +136,26 @@ public class NewsActivity extends BaseActivity {
     }
 
     /**
+     * 将数据显示出来
+     * @param news
+     */
+    private void showData(News news) {
+        newsTv.setText(news.getContent());
+        UIUtil.dismissProgressFragment(progressDialog);
+        loadWebView(newsWebView, news.getSrc());
+        Log.d("winson", scrollView.getMaxScrollAmount() + "可滑动量");
+        if(scrollView.getMaxScrollAmount() > 0){
+            scrollView.setOnTouchListener(new OnScrollHideOrShowActionBarListener2(this, getSupportActionBar()));
+        }
+    }
+
+    /**
      * 请求新闻内容
      * @param context
      * @param id
      */
     private void requestNewsContent(Context context, int id){
-        progressDialog.show(getSupportFragmentManager());
+
         Map<String, String> params = new HashMap<String, String>();
         params.put("bianhao", id + "");
         NetUtil.getNewsHtmlStr(context, params, new NetUtil.NetCallback(context) {
@@ -172,14 +193,12 @@ public class NewsActivity extends BaseActivity {
 
 
                 //显示新闻内容
-                newsTv.setText(data.getContent());
-                UIUtil.dismissProgressDialog(progressDialog);
-                loadWebView(newsWebView, data.getSrc());
+                showData(data);
             }
 
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                UIUtil.dismissProgressDialog(progressDialog);
+                UIUtil.dismissProgressFragment(progressDialog);
                 super.onErrorResponse(volleyError);
             }
         });

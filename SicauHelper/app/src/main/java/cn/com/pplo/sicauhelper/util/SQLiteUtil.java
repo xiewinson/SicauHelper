@@ -45,16 +45,22 @@ public class SQLiteUtil {
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(Uri.parse(SicauHelperProvider.URI_STUDENT_ALL), null, AVStudent.SID + "=?", new String[]{sid}, null);
         Student student = null;
-        while (cursor.moveToNext()) {
-            student = new Student();
-            student.setName(cursor.getString(cursor.getColumnIndex(AVStudent.NAME)));
-            student.setRole(cursor.getInt(cursor.getColumnIndex(AVStudent.ROLE)));
-            student.setSchool(cursor.getInt(cursor.getColumnIndex(AVStudent.SCHOOL)));
-            student.setProfileUrl(cursor.getString(cursor.getColumnIndex(AVStudent.PROFILE_URL)));
-            student.setBackground(cursor.getString(cursor.getColumnIndex(AVStudent.BACKGROUND)));
-            student.setNickName(cursor.getString(cursor.getColumnIndex(AVStudent.NICKNAME)));
-            student.setPswd(cursor.getString(cursor.getColumnIndex(AVStudent.PSWD)));
-            student.setSid(cursor.getString(cursor.getColumnIndex(AVStudent.SID)));
+        try {
+            while (cursor.moveToNext()) {
+                student = new Student();
+                student.setName(cursor.getString(cursor.getColumnIndex(AVStudent.NAME)));
+                student.setRole(cursor.getInt(cursor.getColumnIndex(AVStudent.ROLE)));
+                student.setSchool(cursor.getInt(cursor.getColumnIndex(AVStudent.SCHOOL)));
+                student.setProfileUrl(cursor.getString(cursor.getColumnIndex(AVStudent.PROFILE_URL)));
+                student.setBackground(cursor.getString(cursor.getColumnIndex(AVStudent.BACKGROUND)));
+                student.setNickName(cursor.getString(cursor.getColumnIndex(AVStudent.NICKNAME)));
+                student.setPswd(cursor.getString(cursor.getColumnIndex(AVStudent.PSWD)));
+                student.setSid(cursor.getString(cursor.getColumnIndex(AVStudent.SID)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
         }
         return student;
     }

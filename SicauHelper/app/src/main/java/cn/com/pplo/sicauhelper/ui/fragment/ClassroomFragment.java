@@ -45,7 +45,7 @@ import cn.com.pplo.sicauhelper.util.UIUtil;
 public class ClassroomFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private GridView gridView;
-    private ProgressFragment progressDialog;
+    private AlertDialog progressDialog;
     private ClassroomAdapter classroomAdapter;
     private List<Classroom> data = new ArrayList<Classroom>();
     private List<Classroom> filterData = new ArrayList<Classroom>();
@@ -102,7 +102,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
      * @param context
      */
     private void requestClassroomList(final Context context) {
-        progressDialog.show(getActivity().getSupportFragmentManager());
+        progressDialog.show();
         NetUtil.getClassroomListHtmlStr(context, new NetUtil.NetCallback(context) {
             @Override
             protected void onSuccess(String result) {
