@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.ContentValues;
@@ -58,7 +59,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
-    private ProgressDialog progressDialog;
+    private ProgressFragment progressDialog;
 
     public static CourseFragment newInstance() {
         CourseFragment fragment = new CourseFragment();
@@ -292,10 +293,10 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     }
 
     private void requestCourseList(final Context context){
-        progressDialog.show();
+//        progressDialog.show(getActivity().getSupportFragmentManager());
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
-        Student student = SicauHelperApplication.getInstance().getStudent();
+        Student student = SicauHelperApplication.getInstance().getStudent(context);
         if (student != null) {
             params.put("user", student.getSid() + "");
             params.put("pwd", student.getPswd());

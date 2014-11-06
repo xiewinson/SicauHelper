@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
 
+import cn.com.pplo.sicauhelper.leancloud.AVStudent;
+
 public class SicauHelperProvider extends ContentProvider {
     public static final String AUTHORITY = "cn.com.pplo.sicauhelper.provider";
     private static UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -48,6 +50,15 @@ public class SicauHelperProvider extends ContentProvider {
     private static final int CODE_CLASSROOM_ALL = 80;
     public static final String URI_CLASSROOM_ALL = "content://" + AUTHORITY + "/" + CLASSROOM_ALL + "";
 
+    //Student
+    private static final String STUDENT_SINGLE = "student/#";
+    private static final int CODE_STUDENT_SINGLE = 90;
+    public static final String URI_STUDENT_SINGLE = "content://" + AUTHORITY + "/" + STUDENT_SINGLE;
+
+    private static final String STUDENT_ALL = "student";
+    private static final int CODE_STUDENT_ALL = 100;
+    public static final String URI_STUDENT_ALL = "content://" + AUTHORITY + "/" + STUDENT_ALL + "";
+
 
     static {
         uriMatcher.addURI(AUTHORITY, SCORE_ALL, CODE_SCORE_ALL);
@@ -61,6 +72,9 @@ public class SicauHelperProvider extends ContentProvider {
 
         uriMatcher.addURI(AUTHORITY, CLASSROOM_ALL, CODE_CLASSROOM_ALL);
         uriMatcher.addURI(AUTHORITY, CLASSROOM_SINGLE, CODE_CLASSROOM_SINGLE);
+
+        uriMatcher.addURI(AUTHORITY, STUDENT_ALL, CODE_STUDENT_ALL);
+        uriMatcher.addURI(AUTHORITY, STUDENT_SINGLE, CODE_STUDENT_SINGLE);
     }
 
     private SQLiteOpenHelper sqliteOpenHelper;
@@ -100,6 +114,10 @@ public class SicauHelperProvider extends ContentProvider {
             case CODE_CLASSROOM_ALL:
                 long classroomAllId = sqliteDatabase.insert(TableContract.TableClassroom.TABLE_NAME, null, values);
                 return Uri.withAppendedPath(uri, classroomAllId + "");
+
+            case CODE_STUDENT_ALL:
+                long studentId = sqliteDatabase.insert(AVStudent.TABLE_NAME, null, values);
+                return Uri.withAppendedPath(uri, studentId + "");
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -108,7 +126,7 @@ public class SicauHelperProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase sqliteDatabase = sqliteOpenHelper.getReadableDatabase();
+        SQLiteDatabase sqliteDatabase = sqliteOpenHelper.getWritableDatabase();
         Log.d("winson", "match:" + uriMatcher.match(uri));
         switch (uriMatcher.match(uri)){
 
@@ -137,6 +155,12 @@ public class SicauHelperProvider extends ContentProvider {
             case CODE_CLASSROOM_SINGLE:
                 return null;
 
+            case CODE_STUDENT_ALL:
+                Cursor  studentAllCursor = sqliteDatabase.query(AVStudent.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+                return studentAllCursor;
+            case CODE_STUDENT_SINGLE:
+                return null;
+
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -156,6 +180,9 @@ public class SicauHelperProvider extends ContentProvider {
                 return sqliteDatabase.delete(TableContract.TableCourse.TABLE_NAME, selection, selectionArgs);
             case CODE_CLASSROOM_ALL:
                 return sqliteDatabase.delete(TableContract.TableClassroom.TABLE_NAME, selection, selectionArgs);
+            case CODE_STUDENT_ALL:
+                return sqliteDatabase.delete(AVStudent.TABLE_NAME, selection, selectionArgs);
+
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -177,6 +204,13 @@ public class SicauHelperProvider extends ContentProvider {
             //更新新闻
             case CODE_NEWS_SINGLE:
                 return sqliteDatabase.update(TableContract.TableNews.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+
+            //更新学生
+            case CODE_NEWS_ALL:
+                return sqliteDatabase.update(AVStudent.TABLE_NAME,
                         values,
                         selection,
                         selectionArgs);

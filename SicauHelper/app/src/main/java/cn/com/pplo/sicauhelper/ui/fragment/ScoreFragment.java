@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -48,7 +49,7 @@ import cn.com.pplo.sicauhelper.widget.ViewPadding;
 
 public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private ListView listView;
-    private ProgressDialog progressDialog;
+    private ProgressFragment progressDialog;
     private SearchView searchView;
 
     private ScoreListAdapter scoreListAdapter;
@@ -208,10 +209,10 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
      * @param context
      */
     public void requestScoreList(final Context context) {
-        progressDialog.show();
+        progressDialog.show(getActivity().getSupportFragmentManager());
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
-        Student student = SicauHelperApplication.getInstance().getStudent();
+        Student student = SicauHelperApplication.getInstance().getStudent(context);
         if (student != null) {
             params.put("user", student.getSid() + "");
             params.put("pwd", student.getPswd());

@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -44,7 +45,7 @@ import cn.com.pplo.sicauhelper.util.UIUtil;
 public class ClassroomFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private GridView gridView;
-    private ProgressDialog progressDialog;
+    private ProgressFragment progressDialog;
     private ClassroomAdapter classroomAdapter;
     private List<Classroom> data = new ArrayList<Classroom>();
     private List<Classroom> filterData = new ArrayList<Classroom>();
@@ -101,7 +102,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
      * @param context
      */
     private void requestClassroomList(final Context context) {
-        progressDialog.show();
+        progressDialog.show(getActivity().getSupportFragmentManager());
         NetUtil.getClassroomListHtmlStr(context, new NetUtil.NetCallback(context) {
             @Override
             protected void onSuccess(String result) {
@@ -135,7 +136,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
     private void selectOnlyThisSchoolData(boolean isOnlyShowThisSchool) {
         if(isOnlyShowThisSchool) {
             data.clear();
-            String school = StringUtil.schoolCodeToSchool(SicauHelperApplication.getStudent().getSchool());
+            String school = StringUtil.schoolCodeToSchool(SicauHelperApplication.getStudent(getActivity()).getSchool());
 
             for(Classroom classroom : originalData) {
                 if(classroom.getSchool().contains(school)){

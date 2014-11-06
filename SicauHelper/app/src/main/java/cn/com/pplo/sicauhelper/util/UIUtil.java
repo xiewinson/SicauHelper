@@ -1,16 +1,19 @@
 package cn.com.pplo.sicauhelper.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
@@ -20,6 +23,7 @@ import com.nhaarman.listviewanimations.appearance.simple.SwingRightInAnimationAd
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener2;
+import cn.com.pplo.sicauhelper.ui.fragment.ProgressFragment;
 
 /**
  * Created by winson on 2014/9/14.
@@ -40,18 +44,15 @@ public class UIUtil {
      * @param text
      * @return
      */
-    public static ProgressDialog getProgressDialog(Context context, String text){
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage(text);
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        return progressDialog;
+    public static ProgressFragment getProgressDialog(Context context, String text){
+        ProgressFragment progressFragment = ProgressFragment.newInstance(text);
+        progressFragment.setCancelable(false);
+        return progressFragment;
     }
 
-    public static void dismissProgressDialog(ProgressDialog progressDialog){
-        if(progressDialog != null && progressDialog.isShowing()){
-            progressDialog.cancel();
-            progressDialog = null;
+    public static void dismissProgressDialog(ProgressFragment progressDialog){
+        if(progressDialog != null ){
+            progressDialog.dismiss();
         }
     }
 

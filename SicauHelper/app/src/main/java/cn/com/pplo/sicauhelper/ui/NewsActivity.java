@@ -1,6 +1,8 @@
 package cn.com.pplo.sicauhelper.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,6 +29,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.ui.fragment.ProgressFragment;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -36,7 +39,7 @@ public class NewsActivity extends BaseActivity {
     private final static String EXTRA_NEWS = "extra_news";
     private News data;
 
-    private ProgressDialog progressDialog;
+    private ProgressFragment progressDialog;
     private TextView newsTv;
     private WebView newsWebView;
 
@@ -131,7 +134,7 @@ public class NewsActivity extends BaseActivity {
      * @param id
      */
     private void requestNewsContent(Context context, int id){
-        progressDialog.show();
+        progressDialog.show(getSupportFragmentManager());
         Map<String, String> params = new HashMap<String, String>();
         params.put("bianhao", id + "");
         NetUtil.getNewsHtmlStr(context, params, new NetUtil.NetCallback(context) {
@@ -222,6 +225,5 @@ public class NewsActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }

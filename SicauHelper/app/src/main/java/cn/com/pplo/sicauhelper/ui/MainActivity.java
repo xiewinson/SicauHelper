@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity
 //        s.setPswd("winson");
 //        s.setSchool(2);
 //        SicauHelperApplication.setStudent(s);
-        if (SicauHelperApplication.getStudent() == null) {
+        if (SicauHelperApplication.getStudent(this) == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             this.finish();

@@ -72,7 +72,7 @@ public class AVStudent extends AVObject {
     public int getRole() {
         return getInt(ROLE);
     }
-    public void seRole(int role) {
+    public void setRole(int role) {
         put(ROLE, role);
     }
 }

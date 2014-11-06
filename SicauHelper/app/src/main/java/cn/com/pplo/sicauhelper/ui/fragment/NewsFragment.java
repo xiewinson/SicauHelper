@@ -1,7 +1,6 @@
 package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,16 +24,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
-
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Filter;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
-import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener2;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
@@ -50,7 +43,7 @@ import cn.com.pplo.sicauhelper.widget.ViewPadding;
 public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private ListView listView;
-    private ProgressDialog progressDialog;
+    private ProgressFragment progressDialog;
     private List<News> newsList = new ArrayList<News>();
     private List<News> originalData = new ArrayList<News>();
     private SearchView searchView;
@@ -203,7 +196,8 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
      * @param context
      */
     public void requestNewsList(final Context context) {
-        progressDialog.show();
+        progressDialog.show(getActivity().getSupportFragmentManager());
+
         NetUtil.getNewsListHtmlStr(context, new NetUtil.NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {

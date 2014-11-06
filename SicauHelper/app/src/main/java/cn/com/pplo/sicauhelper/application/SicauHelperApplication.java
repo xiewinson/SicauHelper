@@ -10,6 +10,7 @@ import com.avos.avoscloud.AVObject;
 
 import cn.com.pplo.sicauhelper.leancloud.AVStudent;
 import cn.com.pplo.sicauhelper.model.Student;
+import cn.com.pplo.sicauhelper.util.SQLiteUtil;
 
 /**
  * Created by winson on 2014/9/13.
@@ -59,7 +60,10 @@ public class SicauHelperApplication extends Application {
         return requestQueue;
     }
 
-    public static Student getStudent() {
+    public static Student getStudent(Context context) {
+        if(student == null) {
+            setStudent(SQLiteUtil.getLoginStudent(context, "20118622"));
+        }
         return student;
     }
 
