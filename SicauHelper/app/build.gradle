@@ -40,4 +40,5 @@ dependencies {
     compile 'com.nhaarman.listviewanimations:lib-manipulation:3.1.0@aar'
     compile 'com.nhaarman.listviewanimations:lib-core-slh:3.1.0@aar'
     compile 'com.jpardogo.googleprogressbar:library:+'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
 }

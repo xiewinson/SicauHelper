@@ -7,6 +7,18 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.decode.BaseImageDecoder;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.nostra13.universalimageloader.utils.StorageUtils;
+
+import java.io.File;
 
 import cn.com.pplo.sicauhelper.leancloud.AVStudent;
 import cn.com.pplo.sicauhelper.model.Student;
@@ -25,9 +37,14 @@ public class SicauHelperApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //初始化AVObject相关配置
         AVObject.registerSubclass(AVStudent.class);
         AVOSCloud.initialize(getApplicationContext(), "gu8z4el96hz1rkljtsiytkatoxtjesia6fl2aoliahdfczku", "1vbe06cd1u430vjzz0t8s6wfyk6t3kimesc85mtplln69p5z");
         sicauHelperApplication = getInstance();
+        //初始化ImageLoader配置
+        ImageLoaderConfiguration cofig = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+        ImageLoader.getInstance().init(cofig);
+
     }
 
     public SicauHelperApplication() {
@@ -61,6 +78,11 @@ public class SicauHelperApplication extends Application {
         return requestQueue;
     }
 
+    /**
+     * 取得登录Student对象，若
+     * @param context
+     * @return
+     */
     public static Student getStudent(Context context) {
         if(student == null) {
             setStudent(SQLiteUtil.getLoginStudent(context, SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString()));

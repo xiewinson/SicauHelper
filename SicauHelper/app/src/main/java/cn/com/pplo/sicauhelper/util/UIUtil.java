@@ -22,6 +22,7 @@ import com.nhaarman.listviewanimations.appearance.simple.SwingLeftInAnimationAda
 import com.nhaarman.listviewanimations.appearance.simple.SwingRightInAnimationAdapter;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
 import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener2;
 import cn.com.pplo.sicauhelper.ui.fragment.ProgressFragment;
 
@@ -113,7 +114,7 @@ public class UIUtil {
      */
     public static void setListViewScrollHideOrShowActionBar(Context context, ListView listView, ActionBar actionBar) {
         if(listView.getMaxScrollAmount() > 0) {
-            listView.setOnTouchListener(new OnScrollHideOrShowActionBarListener2(context, actionBar));
+            listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(actionBar));
         }
     }
 

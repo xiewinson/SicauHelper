@@ -27,6 +27,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ import java.util.Map;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Student;
+import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 /**
@@ -167,8 +170,10 @@ public class NavigationDrawerFragment extends BaseFragment {
                 iv.setImageResource(icons[position]);
                 if(position == mCurrentSelectedPosition) {
                     convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
+                    tv.setTextColor(Color.parseColor("#212121"));
                 }
                 else {
+                    tv.setTextColor(Color.parseColor("#757575"));
                     convertView.setBackgroundResource(R.drawable.btn_navigation_item);
                 }
                 return convertView;
@@ -191,6 +196,7 @@ public class NavigationDrawerFragment extends BaseFragment {
             nameTv.setText(student.getName());
             sidTv.setText(student.getSid());
             //TODO 显示用户头像，使用universal-image-loader
+            ImageLoader.getInstance().displayImage(student.getProfileUrl(), profileIv, ImageUtil.getDisplayImageOption(getActivity()));
         }
         mDrawerListView.addHeaderView(headerView, null, false);
     }

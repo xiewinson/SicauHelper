@@ -52,7 +52,9 @@ import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
+import cn.com.pplo.sicauhelper.widget.DepthPageTransformer;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
+import cn.com.pplo.sicauhelper.widget.ZoomOutPageTransformer;
 
 public class CourseFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -108,6 +110,8 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
     private void initViewPager(Context context, List<List<Course>> data) {
         viewPagerAdapter = new ViewPagerAdapter(context, data);
+        //page切换动画
+        viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         viewPager.setAdapter(viewPagerAdapter);
         pagerSlidingTabStrip.setViewPager(viewPager);
         pagerSlidingTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
