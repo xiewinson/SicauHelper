@@ -115,7 +115,12 @@ public class LoginActivity extends ActionBarActivity {
                 //若已存在则跳转到主页面
                 if(e == null && avStudents.size() > 0) {
 
-                    Log.d("winson", "找到：" + avStudents.toString());
+                    AVStudent avStudent = avStudents.get(0);
+                    student.setNickName(avStudent.getNickName());
+                    student.setName(avStudent.getName());
+                    student.setRole(avStudent.getRole());
+                    student.setBackground(avStudent.getBackground());
+                    student.setProfileUrl(avStudent.getProfileUrl());
                     SQLiteUtil.saveLoginStudent(LoginActivity.this, student);
                     UIUtil.dismissProgressDialog(progressDialog);
                     goToMainActivity();
@@ -127,7 +132,7 @@ public class LoginActivity extends ActionBarActivity {
                     avStudent.setSid(student.getSid());
                     avStudent.setBackground(student.getBackground());
                     avStudent.setName(student.getName());
-                    avStudent.setNickname(student.getNickName());
+                    avStudent.setNickName(student.getName());
                     avStudent.setProfileUrl(student.getProfileUrl());
                     avStudent.setPswd(student.getPswd());
                     avStudent.setSchool(student.getSchool());
@@ -137,6 +142,7 @@ public class LoginActivity extends ActionBarActivity {
                         public void done(AVException e) {
                             //保存成功
                             if(e == null) {
+                                student.setNickName(student.getName());
                                 SQLiteUtil.saveLoginStudent(LoginActivity.this, student);
                                 UIUtil.dismissProgressDialog(progressDialog);
                                 goToMainActivity();

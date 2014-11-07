@@ -11,13 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="72dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/navigation_head_iv"
-            android:clickable="true"
             android:src="@drawable/ic_wb_sunny_white_48dp"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:scaleType="center"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:border_width="1dp"
+            app:border_color="#ffffff"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" />
 
@@ -28,6 +29,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:textStyle="bold"
                 android:id="@+id/navigation_name_tv"
                 android:textColor="#ffffff"
                 android:text="谢文森"
@@ -38,7 +40,7 @@
                 android:layout_marginTop="2dp"
                 android:id="@+id/navigation_sid_tv"
                 android:textSize="12sp"
-                android:textColor="#b3b3b3"
+                android:textColor="#ffffff"
                 android:text="20118622"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

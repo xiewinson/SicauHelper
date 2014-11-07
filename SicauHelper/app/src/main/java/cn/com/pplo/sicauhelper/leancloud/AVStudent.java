@@ -35,10 +35,10 @@ public class AVStudent extends AVObject {
         put(NAME, name);
     }
 
-    public String getNickname(){
+    public String getNickName(){
         return getString(NICKNAME);
     }
-    public void setNickname(String nickname) {
+    public void setNickName(String nickname) {
         put(NICKNAME, nickname);
     }
 

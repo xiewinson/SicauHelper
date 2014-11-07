@@ -41,6 +41,7 @@ import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -71,8 +72,7 @@ public class NavigationDrawerFragment extends BaseFragment {
     private ListView mDrawerListView;
     private TextView nameTv;
     private TextView sidTv;
-    private ImageView profileIv;
-
+    private CircleImageView profileIv;
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
@@ -116,6 +116,7 @@ public class NavigationDrawerFragment extends BaseFragment {
 
     /**
      * 初始化listView
+     *
      * @param inflater
      * @param container
      */
@@ -136,7 +137,7 @@ public class NavigationDrawerFragment extends BaseFragment {
                 R.drawable.ic_shopping_cart_grey600_24dp
         };
         final String[] titles = {
-        getString(R.string.title_cource),
+                getString(R.string.title_cource),
                 getString(R.string.title_score),
                 getString(R.string.title_news),
                 getString(R.string.title_classroom),
@@ -168,11 +169,10 @@ public class NavigationDrawerFragment extends BaseFragment {
                 ImageView iv = (ImageView) convertView.findViewById(R.id.navigation_item_iv);
                 tv.setText(titles[position]);
                 iv.setImageResource(icons[position]);
-                if(position == mCurrentSelectedPosition) {
+                if (position == mCurrentSelectedPosition) {
                     convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
                     tv.setTextColor(Color.parseColor("#212121"));
-                }
-                else {
+                } else {
                     tv.setTextColor(Color.parseColor("#757575"));
                     convertView.setBackgroundResource(R.drawable.btn_navigation_item);
                 }
@@ -189,13 +189,12 @@ public class NavigationDrawerFragment extends BaseFragment {
         View headerView = getActivity().getLayoutInflater().inflate(R.layout.header_navigation, null, false);
         nameTv = (TextView) headerView.findViewById(R.id.navigation_name_tv);
         sidTv = (TextView) headerView.findViewById(R.id.navigation_sid_tv);
-        profileIv = (ImageView) headerView.findViewById(R.id.navigation_head_iv);
+        profileIv = (CircleImageView) headerView.findViewById(R.id.navigation_head_iv);
 
         Student student = SicauHelperApplication.getStudent(getActivity());
-        if(student != null) {
-            nameTv.setText(student.getName());
+        if (student != null) {
+            nameTv.setText(student.getNickName());
             sidTv.setText(student.getSid());
-            //TODO 显示用户头像，使用universal-image-loader
             ImageLoader.getInstance().displayImage(student.getProfileUrl(), profileIv, ImageUtil.getDisplayImageOption(getActivity()));
         }
         mDrawerListView.addHeaderView(headerView, null, false);

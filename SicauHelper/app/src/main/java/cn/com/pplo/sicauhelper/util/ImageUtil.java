@@ -29,7 +29,6 @@ public class ImageUtil {
                 .cacheOnDisk(true)//设置下载的图片是否缓存在SD卡中
                 .considerExifParams(true)  //是否考虑JPEG图像EXIF参数（旋转，翻转）
                 .bitmapConfig(Bitmap.Config.RGB_565)//设置图片的解码类型//
-                .displayer(new RoundedBitmapDisplayer(5, 5))
                 .build();//构建完成
         return options;
     }
