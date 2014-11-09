@@ -45,20 +45,17 @@ import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.ViewPadding;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
 public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private ListView listView;
+    private StickyListHeadersListView listView;
     private AlertDialog progressDialog;
     private SearchView searchView;
 
     private ScoreListAdapter scoreListAdapter;
     private List<Score> scoreList = new ArrayList<Score>();
     private List<Score> originalList = new ArrayList<Score>();
-
-    private static final int MENU_ITEM_ID_DETAIL = 222;
-    private static final int MENU_ITEM_ID_SEARCH = 333;
-
 
     public static ScoreFragment newInstance() {
         ScoreFragment fragment = new ScoreFragment();
@@ -98,7 +95,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     }
 
     private void setUp(View view) {
-        listView = (ListView) view.findViewById(R.id.score_listView);
+        listView = (StickyListHeadersListView) view.findViewById(R.id.score_listView);
 //        setListViewTopBottomPadding(listView);
         listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
         listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
@@ -110,7 +107,8 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     //详情列表
     private void initScoreDetailAdapter() {
         scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList);
-        UIUtil.setListViewInitAnimation("bottom", listView, scoreListAdapter);
+//        UIUtil.setListViewInitAnimation("bottom", listView, scoreListAdapter);
+        listView.setAdapter(scoreListAdapter);
     }
 
     @Override
@@ -124,7 +122,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Log.d("winson", "焦点：" + hasFocus);
                 if (hasFocus) {
                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                         @Override
@@ -134,7 +131,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 
                         @Override
                         public boolean onQueryTextChange(String s) {
-                            Log.d("winson", "开始匹配");
                             scoreListAdapter.setFilter(new ScoreFilter());
                             scoreListAdapter.getFilter().filter(s);
                             return false;
@@ -191,13 +187,12 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
      */
     private void notifyDataSetChanged(List<Score> list) {
         if (list != null) {
-            Log.d("winson", "初始化正常list:" + list);
             scoreList.clear();
             scoreList.addAll(list);
             scoreListAdapter.notifyDataSetChanged();
             //恢复到第一个
             listView.setSelection(0);
-            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
+//            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
         }
     }
 
@@ -288,7 +283,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //更新数据
             notifyDataSetChanged((List<Score>) results.values);
-
         }
     }
 

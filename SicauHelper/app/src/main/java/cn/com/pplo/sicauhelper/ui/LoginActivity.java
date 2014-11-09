@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.leancloud.AVStudent;
+import cn.com.pplo.sicauhelper.dao.StudentDAO;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.SQLiteUtil;
@@ -107,41 +108,27 @@ public class LoginActivity extends ActionBarActivity {
         student.setBackground("pic_0");
 
         //查询其是否创建
-        AVQuery<AVStudent> avQuery = AVQuery.getQuery(AVStudent.class);
-        avQuery.whereEqualTo("sid", sid);
-        avQuery.findInBackground(new FindCallback<AVStudent>() {
+        new StudentDAO().find(new FindCallback<AVObject>() {
             @Override
-            public void done(List<AVStudent> avStudents, AVException e) {
+            public void done(List<AVObject> avStudents, AVException e) {
                 //若已存在则跳转到主页面
-                if(e == null && avStudents.size() > 0) {
-
-                    AVStudent avStudent = avStudents.get(0);
-                    student.setNickName(avStudent.getNickName());
-                    student.setName(avStudent.getName());
-                    student.setRole(avStudent.getRole());
-                    student.setBackground(avStudent.getBackground());
-                    student.setProfileUrl(avStudent.getProfileUrl());
-                    SQLiteUtil.saveLoginStudent(LoginActivity.this, student);
+                if (e == null && avStudents.size() > 0) {
+                    AVObject avStudent = avStudents.get(0);
+                    SQLiteUtil.saveLoginStudent(LoginActivity.this, new StudentDAO().toModel(avStudent));
                     UIUtil.dismissProgressDialog(progressDialog);
                     goToMainActivity();
                 }
 
                 //若不存在，则存储到AVOS
                 else {
-                    AVStudent avStudent = new AVStudent();
-                    avStudent.setSid(student.getSid());
-                    avStudent.setBackground(student.getBackground());
-                    avStudent.setName(student.getName());
-                    avStudent.setNickName(student.getName());
-                    avStudent.setProfileUrl(student.getProfileUrl());
-                    avStudent.setPswd(student.getPswd());
-                    avStudent.setSchool(student.getSchool());
-                    avStudent.setRole(student.getRole());
-                    avStudent.saveInBackground(new SaveCallback() {
+                    //新建用户时将用户名设为用户昵称
+                    student.setNickName(student.getName());
+                    StudentDAO studentDAO = new StudentDAO();
+                    studentDAO.save(student, new SaveCallback() {
                         @Override
                         public void done(AVException e) {
                             //保存成功
-                            if(e == null) {
+                            if (e == null) {
                                 student.setNickName(student.getName());
                                 SQLiteUtil.saveLoginStudent(LoginActivity.this, student);
                                 UIUtil.dismissProgressDialog(progressDialog);
@@ -155,10 +142,9 @@ public class LoginActivity extends ActionBarActivity {
                             }
                         }
                     });
-
                 }
             }
-        });
+        }, sid);
 
     }
 

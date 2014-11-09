@@ -5,8 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import cn.com.pplo.sicauhelper.leancloud.AVStudent;
-
 /**
  * Created by Administrator on 2014/9/19.
  */
@@ -58,16 +56,16 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + ")";
 
     //创建学生表
-    public static final String createStudentSql = "create table " + AVStudent.TABLE_NAME + "("
+    public static final String createStudentSql = "create table " +  TableContract.TableStudent.TABLE_NAME + "("
             + " id " + " integer primary key autoincrement, "
-            + AVStudent.BACKGROUND + " text, "
-            + AVStudent.NAME + " text, "
-            + AVStudent.NICKNAME + " text, "
-            + AVStudent.PROFILE_URL + " text, "
-            + AVStudent.PSWD + " text, "
-            + AVStudent.SID + " text, "
-            + AVStudent.ROLE + " integer, "
-            + AVStudent.SCHOOL + " integer "
+            + TableContract.TableStudent._BACKGROUND + " text, "
+            + TableContract.TableStudent._NAME + " text, "
+            + TableContract.TableStudent._NICKNAME + " text, "
+            + TableContract.TableStudent._PROFILE_URL + " text, "
+            + TableContract.TableStudent._PSWD + " text, "
+            + TableContract.TableStudent._SID + " text, "
+            + TableContract.TableStudent._ROLE + " integer, "
+            + TableContract.TableStudent._SCHOOL + " integer "
             + ")";
 
 
@@ -91,7 +89,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE + TableContract.TableCourse.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableNews.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableClassroom.TABLE_NAME);
-        db.execSQL(DROP_TABLE + AVStudent.NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableStudent._NAME);
         onCreate(db);
     }
 }

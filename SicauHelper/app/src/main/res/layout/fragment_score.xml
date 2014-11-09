@@ -4,15 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
+    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
         android:id="@+id/score_listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:divider="@null"
+        android:divider="#eeeeee"
         android:scrollbarStyle="outsideOverlay"
-        android:dividerHeight="8dp"
-        android:listSelector="@android:color/transparent"></ListView>
+        android:dividerHeight="1dp"
+        android:listSelector="@android:color/transparent">
+        </se.emilsjolander.stickylistheaders.StickyListHeadersListView>
 
 </LinearLayout>

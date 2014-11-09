@@ -65,4 +65,21 @@ public class TableContract {
         String _SCHOOL = "_school";
     }
 
+    /**
+     * 学生表
+     */
+    public interface TableStudent extends BaseColumns {
+
+        public static final String TABLE_NAME = "Student";
+
+        public static final String _SID = "sid";
+        public static final String _NAME = "name";
+        public static final String _NICKNAME = "nickName";
+        public static final String _PSWD = "pswd";
+        public static final String _SCHOOL = "school";
+        public static final String _PROFILE_URL = "profileUrl";
+        public static final String _BACKGROUND = "background";
+        public static final String _ROLE = "role";
+    }
+
 }

@@ -22,11 +22,12 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 /**
  * Created by winson on 2014/10/28.
  */
-public class ScoreListAdapter extends BaseAdapter implements Filterable {
+public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyListHeadersAdapter {
 
     private ScoreFragment.ScoreFilter scoreFilter;
     private Context context;
@@ -54,18 +55,20 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //若是上半学期则在左边，反之则在右边
-        if (String.valueOf(getItem(position).getGrade()).contains(".1")) {
+        ViewHolder holder = null;
+        if(convertView == null) {
+            holder = new ViewHolder();
             convertView = View.inflate(context, R.layout.item_fragment_score_list, null);
-        } else {
-            convertView = View.inflate(context, R.layout.item_fragment_score_list_right, null);
+            holder.categoryTv = (TextView) convertView.findViewById(R.id.category_tv);
+            holder.scoreView = (TextView) convertView.findViewById(R.id.score_tv);
+            holder.courseTv = (TextView) convertView.findViewById(R.id.course_tv);
+            holder.ratingBar = (RatingBar) convertView.findViewById(R.id.rating_bar);
+            holder.creditTv = (TextView) convertView.findViewById(R.id.credit_tv);
+            convertView.setTag(holder);
         }
-        TextView categoryTv = (TextView) convertView.findViewById(R.id.category_tv);
-        TextView gradeTv = (TextView) convertView.findViewById(R.id.grade_tv);
-        final TextView scoreView = (TextView) convertView.findViewById(R.id.score_tv);
-        TextView courseTv = (TextView) convertView.findViewById(R.id.course_tv);
-        RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.rating_bar);
-        TextView creditTv = (TextView) convertView.findViewById(R.id.credit_tv);
+        else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
         String category = getItem(position).getCategory();
         int circleShape = 0;
@@ -86,7 +89,8 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable {
             circleShape = R.drawable.circle_purple;
             color = context.getResources().getColor(R.color.purple_500);
         }
-        scoreView.setOnClickListener(new View.OnClickListener() {
+        final ViewHolder finalHolder = holder;
+        holder.scoreView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RotateAnimation animation = new RotateAnimation(0, 360, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
@@ -94,42 +98,33 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable {
                 animation.setDuration(500);
 
                 Log.d("winson", "点击了...");
-                scoreView.startAnimation(animation);
+                finalHolder.scoreView.startAnimation(animation);
             }
         });
 
-        categoryTv.setTextColor(color);
-        scoreView.setBackgroundResource(circleShape);
-        scoreView.setTextColor(Color.WHITE);
+        holder.categoryTv.setTextColor(color);
+        holder.scoreView.setBackgroundResource(circleShape);
+        holder.scoreView.setTextColor(Color.WHITE);
 
-        //显示学年
-        String[] gradeArray = (getItem(position).getGrade() + "").split("\\.");
-        String upOrDown = "";
-        if (gradeArray[1].equals("1")) {
-            upOrDown = "上学年";
-        } else {
-            upOrDown = "下学年";
-        }
-        gradeTv.setText(gradeArray[0] + upOrDown);
-        scoreView.setText(getItem(position).getMark() + "");
-        courseTv.setText(getItem(position).getCourse() + "");
-        creditTv.setText(getItem(position).getCredit() + "学分");
-        categoryTv.setText("#" + getItem(position).getCategory() + "#");
+
+        holder.scoreView.setText(getItem(position).getMark() + "");
+        holder.courseTv.setText(getItem(position).getCourse() + "");
+        holder.creditTv.setText(getItem(position).getCredit() + "学分");
+        holder.categoryTv.setText("#" + getItem(position).getCategory() + "#");
 
         //设置星星个数
         if ((getItem(position).getCredit() > 5)) {
-            ratingBar.setNumStars(10);
+            holder.ratingBar.setNumStars(10);
         } else {
 //                ratingBar.setMax(5);
-            ratingBar.setNumStars(5);
+            holder.ratingBar.setNumStars(5);
         }
         //设置星星颜色
-        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        LayerDrawable stars = (LayerDrawable) holder.ratingBar.getProgressDrawable();
         stars.getDrawable(0).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(1).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(2).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        ratingBar.setRating(getItem(position).getCredit());
-
+        holder.ratingBar.setRating(getItem(position).getCredit());
         return convertView;
     }
 
@@ -144,5 +139,45 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable {
     }
 
 
+    @Override
+    public View getHeaderView(int position, View convertView, ViewGroup viewGroup) {
+        HeaderViewHolder holder = null;
+        if(convertView == null) {
+            holder = new HeaderViewHolder();
+            convertView = View.inflate(context, R.layout.item_header_fragment_score_list, null);
+            holder.headerTv = (TextView) convertView.findViewById(R.id.header_tv);
+            convertView.setTag(holder);
+        }
+        else {
+            holder = (HeaderViewHolder) convertView.getTag();
+        }
+        //显示学年
+        String[] gradeArray = (getItem(position).getGrade() + "").split("\\.");
+        String upOrDown = "";
+        if (gradeArray[1].equals("1")) {
+            upOrDown = "上学年";
+        } else {
+            upOrDown = "下学年";
+        }
+        holder.headerTv.setText(gradeArray[0] + upOrDown);
+        return convertView;
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        return Long.parseLong((data.get(position).getGrade() + "").replace(".", ""));
+    }
+
+    private class ViewHolder {
+        TextView categoryTv;
+        TextView scoreView;
+        TextView courseTv;
+        RatingBar ratingBar;
+        TextView creditTv;
+    }
+
+    private class HeaderViewHolder {
+        TextView headerTv;
+    }
 }
 
