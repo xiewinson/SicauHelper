@@ -1,12 +1,19 @@
 package cn.com.pplo.sicauhelper.util;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedVignetteBitmapDisplayer;
+
+import java.io.File;
 
 import cn.com.pplo.sicauhelper.R;
 
@@ -32,4 +39,38 @@ public class ImageUtil {
                 .build();//构建完成
         return options;
     }
+
+    /**
+     * 通过uri取得图片path
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static String imageUriToPath(Context context, Uri uri) {
+        String result = "";
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+            cursor.moveToFirst();
+            result = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+            return result;
+        }
+    }
+
+    public static String getImageFolderPath(Context context) {
+        String packPath = "";
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            packPath = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        }
+        else {
+            packPath = context.getFilesDir() + File.separator + "Pictures";
+        }
+        return packPath;
+    }
+
 }

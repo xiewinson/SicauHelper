@@ -2,7 +2,6 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,13 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.SaveCallback;
-
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.ui.AddGoodsActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
-import cn.com.pplo.sicauhelper.ui.NewGoodsActivity;
 
 public class MarketFragment extends BaseFragment {
     public static MarketFragment newInstance() {
@@ -70,7 +65,7 @@ public class MarketFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_add) {
-            NewGoodsActivity.startNewGoodsActivity(getActivity());
+            AddGoodsActivity.startNewGoodsActivity(getActivity());
         }
         return super.onOptionsItemSelected(item);
     }
