@@ -272,6 +272,8 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
      */
     private ListView getDateListView(Context context, List<Course> list) {
         ListView listView  = new ListView(context);
+        listView.setDivider(getResources().getDrawable(android.R.color.transparent));
+        listView.setDividerHeight(0);
 //                (ListView) View.inflate(context, R.layout.fragment_course_date, null);
         Log.d("winson", "结果：" + list);
         listView.setAdapter(new CourseAdapter(context, list));

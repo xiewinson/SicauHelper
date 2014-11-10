@@ -47,6 +47,11 @@
             android:name=".ui.ScoreStatsActivity"
             android:label="@string/title_activity_score_stats" >
         </activity>
+        <activity
+            android:name=".ui.NewGoodsActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:label="@string/title_activity_new_goods" >
+        </activity>
     </application>
 
 </manifest>

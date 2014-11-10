@@ -4,8 +4,8 @@
     android:id="@+id/course_listView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:divider="#dddddd"
-    android:dividerHeight="1dp"
+    android:divider="@android:color/transparent"
+    android:dividerHeight="0dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:visibility="gone"></ListView>

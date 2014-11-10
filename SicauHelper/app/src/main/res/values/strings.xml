@@ -3,7 +3,7 @@
 
     <string name="app_name">SicauHelper</string>
     <string name="title_home">首页</string>
-    <string name="title_market">川农市场</string>
+    <string name="title_market">跳蚤市场</string>
     <string name="title_cource">理论课表</string>
     <string name="title_score">我的成绩</string>
     <string name="title_news">教务新闻</string>
@@ -17,5 +17,24 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_news">NewsActivity</string>
     <string name="title_activity_score_stats">成绩统计</string>
+    <string name="title_activity_new_goods">NewGoodsActivity</string>
 
+    <string-array name="school">
+        <item>雅安</item>
+        <item>成都</item>
+        <item>都江堰</item>
+    </string-array>
+
+    <string-array name="goods_category">
+        <item>衣物</item>
+        <item>书本</item>
+        <item>食物</item>
+        <item>学习</item>
+        <item>杂项</item>
+    </string-array>
+
+    <string-array name="image_select">
+        <item>立刻拍照</item>
+        <item>本地相册</item>
+    </string-array>
 </resources>

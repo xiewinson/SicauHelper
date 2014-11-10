@@ -8,9 +8,9 @@
         android:id="@+id/score_listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#eeeeee"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
         android:scrollbarStyle="outsideOverlay"
-        android:dividerHeight="1dp"
         android:listSelector="@android:color/transparent">
         </se.emilsjolander.stickylistheaders.StickyListHeadersListView>
 

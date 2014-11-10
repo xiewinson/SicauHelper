@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_send"
+        android:title="发送"
+        android:icon="@drawable/ic_send_white_24dp"
+        android:orderInCategory="2"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_image"
+        android:title="图片"
+        android:icon="@drawable/ic_camera_alt_white_24dp"
+        android:orderInCategory="1"
+        app:showAsAction="always" />
+</menu>
