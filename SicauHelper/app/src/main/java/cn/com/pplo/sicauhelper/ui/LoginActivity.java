@@ -113,10 +113,7 @@ public class LoginActivity extends ActionBarActivity {
             public void done(List<AVObject> avStudents, AVException e) {
                 //若已存在则跳转到主页面
                 if (e == null && avStudents.size() > 0) {
-                    AVObject avStudent = avStudents.get(0);
-                    SQLiteUtil.saveLoginStudent(LoginActivity.this, new StudentDAO().toModel(avStudent));
-                    UIUtil.dismissProgressDialog(progressDialog);
-                    goToMainActivity();
+                    saveAndGoToMainActivity(avStudents);
                 }
 
                 //若不存在，则存储到AVOS
@@ -129,10 +126,17 @@ public class LoginActivity extends ActionBarActivity {
                         public void done(AVException e) {
                             //保存成功
                             if (e == null) {
-                                student.setNickName(student.getName());
-                                SQLiteUtil.saveLoginStudent(LoginActivity.this, student);
-                                UIUtil.dismissProgressDialog(progressDialog);
-                                goToMainActivity();
+                                new StudentDAO().find(new FindCallback<AVObject>() {
+                                    @Override
+                                    public void done(List<AVObject> avObjects, AVException e) {
+                                        if (e == null && avObjects.size() > 0) {
+                                            saveAndGoToMainActivity(avObjects);
+                                        }
+                                        else {
+                                            UIUtil.showShortToast(LoginActivity.this, "出现了一个未知的错误");
+                                        }
+                                    }
+                                }, sid);
                             }
                             //保存失败
                             else {
@@ -148,13 +152,18 @@ public class LoginActivity extends ActionBarActivity {
 
     }
 
-    //跳转到MainActivity
-    private void goToMainActivity() {
+    /**
+     * 存储数据并跳转到主页面
+     * @param avStudents
+     */
+    private void saveAndGoToMainActivity(List<AVObject> avStudents) {
+        AVObject avStudent = avStudents.get(0);
+        SQLiteUtil.saveLoginStudent(this, new StudentDAO().toModel(avStudent));
+        UIUtil.dismissProgressDialog(progressDialog);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         LoginActivity.this.finish();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -8,12 +8,20 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.ProgressCallback;
+import com.avos.avoscloud.SaveCallback;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.RoundedVignetteBitmapDisplayer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 
@@ -62,6 +70,11 @@ public class ImageUtil {
         }
     }
 
+    /**
+     * 取得图片文件夹位置
+     * @param context
+     * @return
+     */
     public static String getImageFolderPath(Context context) {
         String packPath = "";
         if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -73,4 +86,46 @@ public class ImageUtil {
         return packPath;
     }
 
+    /**
+     * 取得AVFile
+     * @param context
+     * @param pathList
+     * @return
+     * @throws IOException
+     */
+    public static List<AVFile> getAVFileList(Context context, List<String> pathList) throws IOException {
+       List<AVFile> avFiles = new ArrayList<AVFile>();
+        for (String path : pathList) {
+           avFiles.add(AVFile.withAbsoluteLocalPath(SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "") + "_" + System.currentTimeMillis() + ".jpg",
+                   path));
+       }
+        return avFiles;
+    }
+
+    public static abstract class SaveImageCallback extends SaveCallback {
+
+        public Context context;
+
+        protected SaveImageCallback(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void done(AVException e) {
+            if(e == null) {
+                onSuccess();
+            }
+            else {
+                Log.d("winson", "图片出错：" + e.getMessage() + "           ");
+                e.printStackTrace();
+                UIUtil.showShortToast(context, "图片上传出错");
+            }
+        }
+
+        public abstract void onSuccess();
+    }
+
+    public interface OnImageUploadFinishListener {
+        public void onFinish(List<AVFile> avFiles);
+    }
 }

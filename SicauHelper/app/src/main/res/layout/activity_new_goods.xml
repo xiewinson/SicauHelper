@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/abc_edit_text_material"
                 android:inputType="number"
-                android:text="18元" />
+                android:text="18" />
 
         </LinearLayout>
 

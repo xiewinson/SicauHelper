@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -16,10 +17,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -97,15 +102,136 @@ public class AddGoodsActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_image) {
-            if(imageList.size() < 4) {
+            if (imageList.size() < 4) {
                 getImageSelectDialog(AddGoodsActivity.this).show();
-            }
-            else {
+            } else {
                 UIUtil.showShortToast(AddGoodsActivity.this, "最多只能添加四张图片");
             }
             return true;
+        } else if (id == R.id.action_send) {
+            try {
+                /**
+                 * 上传最终结果
+                 */
+                upload(AddGoodsActivity.this, ImageUtil.getAVFileList(AddGoodsActivity.this, imageList), new ImageUtil.OnImageUploadFinishListener() {
+                    @Override
+                    public void onFinish(List<AVFile> avFiles) {
+                        //创建对象
+                        AVObject avObject = new AVObject("TestGoods");
+                        //上传图片
+                        for (int i = 0; i < avFiles.size(); i++) {
+                            avObject.put("image" + i, avFiles.get(i));
+                        }
+                        //类别
+                        avObject.put("category", categorySpinner.getSelectedItemPosition());
+                        //校区
+                        avObject.put("school", schoolSpinner.getSelectedItemPosition());
+                        //标题
+                        avObject.put("title", titleEt.getText().toString().trim());
+                        //内容
+                        avObject.put("content", titleEt.getText().toString().trim());
+                        //价格
+                        avObject.put("price", priceEt.getText().toString().trim());
+                        //发布人(学生)
+                        avObject.put("student", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
+                        //手机型号
+                        avObject.put("mobile", Build.BRAND + "," + Build.MODEL + "," + Build.VERSION.RELEASE);
+
+//                        添加图片到列表
+//                        avObject.addAll("pictures", avFiles);
+                        avObject.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(AVException e) {
+                                if (e == null) {
+                                    Log.d("winson", "上传对象成功");
+                                } else {
+                                    Log.d("winson", "上传对象失败：" + e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                UIUtil.showShortToast(AddGoodsActivity.this, "上传失败");
+            }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 上传数据
+     *
+     * @param context
+     */
+    private void upload(Context context, final List<AVFile> avFiles, final ImageUtil.OnImageUploadFinishListener finishListener) {
+        if (avFiles.size() > 0) {
+            if (avFiles.size() == 1) {
+                avFiles.get(0).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                    @Override
+                    public void onSuccess() {
+                        finishListener.onFinish(avFiles);
+                    }
+                });
+            }
+            else if(avFiles.size() == 2) {
+                avFiles.get(0).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                    @Override
+                    public void onSuccess() {
+                        avFiles.get(1).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                            @Override
+                            public void onSuccess() {
+                                finishListener.onFinish(avFiles);
+                            }
+                        });
+                    }
+                });
+            }
+            else if(avFiles.size() == 3) {
+                avFiles.get(0).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                    @Override
+                    public void onSuccess() {
+                        avFiles.get(1).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                            @Override
+                            public void onSuccess() {
+                                avFiles.get(2).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                                    @Override
+                                    public void onSuccess() {
+                                        finishListener.onFinish(avFiles);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+            else if(avFiles.size() == 4) {
+                avFiles.get(0).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                    @Override
+                    public void onSuccess() {
+                        avFiles.get(1).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                            @Override
+                            public void onSuccess() {
+                                avFiles.get(2).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                                    @Override
+                                    public void onSuccess() {
+                                        avFiles.get(3).saveInBackground(new ImageUtil.SaveImageCallback(context) {
+                                            @Override
+                                            public void onSuccess() {
+                                                finishListener.onFinish(avFiles);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        else {
+            finishListener.onFinish(avFiles);
+        }
     }
 
     /**
@@ -177,6 +303,7 @@ public class AddGoodsActivity extends BaseActivity {
 
     /**
      * 将图片显示出来并暂存在list中
+     *
      * @param context
      * @param path
      */

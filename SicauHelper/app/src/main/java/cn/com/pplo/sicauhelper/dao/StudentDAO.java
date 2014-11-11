@@ -1,5 +1,7 @@
 package cn.com.pplo.sicauhelper.dao;
 
+import android.util.Log;
+
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
@@ -55,6 +57,9 @@ public class StudentDAO implements BaseDAO<Student> {
         student.setSchool(avStudent.getInt("school"));
         student.setPswd(avStudent.getString("pswd"));
         student.setSid(avStudent.getString("sid"));
+        student.setObjectId(avStudent.getObjectId());
+        student.setCreatedAt(avStudent.getCreatedAt().toString());
+        student.setUpdatedAt(avStudent.getUpdatedAt().toString());
         return student;
     }
 

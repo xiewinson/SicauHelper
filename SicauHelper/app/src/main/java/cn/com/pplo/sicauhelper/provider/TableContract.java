@@ -73,6 +73,7 @@ public class TableContract {
         public static final String TABLE_NAME = "Student";
 
         public static final String _SID = "sid";
+        public static final String _OBJECTID = "objectId";
         public static final String _NAME = "name";
         public static final String _NICKNAME = "nickName";
         public static final String _PSWD = "pswd";
@@ -80,6 +81,8 @@ public class TableContract {
         public static final String _PROFILE_URL = "profileUrl";
         public static final String _BACKGROUND = "background";
         public static final String _ROLE = "role";
+        public static final String _CREATED_AT = "createdAt";
+        public static final String _UPDATED_AT = "updatedAt";
     }
 
 }

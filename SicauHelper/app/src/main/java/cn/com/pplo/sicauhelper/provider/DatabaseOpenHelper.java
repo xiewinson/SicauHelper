@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "SICAU_HELPER_DB";
-    public static final int DB_VERSION = 3;
+    public static final int DB_VERSION = 4;
 
     //创建成绩表
     public static final String createScoreSql = "create table " + TableContract.TableScore.TABLE_NAME + "("
@@ -64,6 +64,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + TableContract.TableStudent._PROFILE_URL + " text, "
             + TableContract.TableStudent._PSWD + " text, "
             + TableContract.TableStudent._SID + " text, "
+            + TableContract.TableStudent._OBJECTID + " text, "
+            + TableContract.TableStudent._CREATED_AT + " text, "
+            + TableContract.TableStudent._UPDATED_AT + " text, "
             + TableContract.TableStudent._ROLE + " integer, "
             + TableContract.TableStudent._SCHOOL + " integer "
             + ")";
@@ -89,7 +92,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE + TableContract.TableCourse.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableNews.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableClassroom.TABLE_NAME);
-        db.execSQL(DROP_TABLE + TableContract.TableStudent._NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableStudent.TABLE_NAME);
         onCreate(db);
     }
 }
