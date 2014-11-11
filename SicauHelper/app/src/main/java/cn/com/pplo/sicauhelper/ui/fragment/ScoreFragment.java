@@ -97,8 +97,8 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     private void setUp(View view) {
         listView = (StickyListHeadersListView) view.findViewById(R.id.score_listView);
 //        setListViewTopBottomPadding(listView);
-        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
-        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
+//        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
+//        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
         progressDialog = UIUtil.getProgressDialog(getActivity(), "找找找～正在教务系统上找你的成绩表");
         initScoreDetailAdapter();
         getLoaderManager().initLoader(0, null, this);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,8 +22,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.LocationManagerProxy;
+import com.amap.api.location.LocationProviderProxy;
+import com.avos.avoscloud.AVCloud;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.SaveCallback;
 
@@ -36,7 +43,7 @@ import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
-public class AddGoodsActivity extends BaseActivity {
+public class AddGoodsActivity extends BaseActivity implements AMapLocationListener {
 
     private EditText titleEt;
     private EditText contentEt;
@@ -44,9 +51,23 @@ public class AddGoodsActivity extends BaseActivity {
     private Spinner schoolSpinner;
     private Spinner categorySpinner;
     private LinearLayout imageLayout;
+    private LocationManagerProxy mLocationManagerProxy;
 
     public static final int REQUEST_CODE_PICK_IMAGE = 1991;
     public static final int REQUEST_CODE_CAPTURE_IMAGE = 1992;
+
+    /**
+     * 纬度
+     */
+    private double latitude;
+    /**
+     * 经度
+     */
+    private double longitude;
+    /**
+     * 地址
+     */
+    private String address;
 
     /**
      * 拍照后存储的位置
@@ -71,8 +92,26 @@ public class AddGoodsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_goods);
+
+        initLocation();
         getSupportActionBar().setTitle("新增商品");
         setUp();
+    }
+
+    //初始化定位
+    private void initLocation() {
+        mLocationManagerProxy = LocationManagerProxy.getInstance(this);
+        mLocationManagerProxy.requestLocationData(LocationProviderProxy.AMapNetwork, 60 * 1000, 100, this);
+        mLocationManagerProxy.setGpsEnable(false);
+    }
+
+    //销毁定位
+    private void stopLocation() {
+        if (mLocationManagerProxy != null) {
+            mLocationManagerProxy.removeUpdates(this);
+            mLocationManagerProxy.destory();
+        }
+        mLocationManagerProxy = null;
     }
 
     private void setUp() {
@@ -110,6 +149,7 @@ public class AddGoodsActivity extends BaseActivity {
             return true;
         } else if (id == R.id.action_send) {
             try {
+                stopLocation();
                 /**
                  * 上传最终结果
                  */
@@ -129,13 +169,17 @@ public class AddGoodsActivity extends BaseActivity {
                         //标题
                         avObject.put("title", titleEt.getText().toString().trim());
                         //内容
-                        avObject.put("content", titleEt.getText().toString().trim());
+                        avObject.put("content", contentEt.getText().toString().trim());
                         //价格
                         avObject.put("price", priceEt.getText().toString().trim());
                         //发布人(学生)
                         avObject.put("student", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
                         //手机型号
                         avObject.put("mobile", Build.BRAND + "," + Build.MODEL + "," + Build.VERSION.RELEASE);
+                        //经纬度
+                        avObject.put("location", new AVGeoPoint(latitude, longitude));
+                        //详细地址
+                        avObject.put("address", address);
 
 //                        添加图片到列表
 //                        avObject.addAll("pictures", avFiles);
@@ -333,5 +377,36 @@ public class AddGoodsActivity extends BaseActivity {
             }
         });
         imageLayout.addView(view);
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        //获取位置信息
+        if(aMapLocation != null && aMapLocation.getAMapException().getErrorCode() == 0) {
+            longitude = aMapLocation.getLongitude();
+            latitude = aMapLocation.getLatitude();
+            address = aMapLocation.getAddress();
+            Log.d("winson", longitude + "  " + latitude + "  " + address);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }

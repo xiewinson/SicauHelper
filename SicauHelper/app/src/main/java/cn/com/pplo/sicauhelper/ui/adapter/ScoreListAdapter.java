@@ -159,7 +159,15 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         } else {
             upOrDown = "下学年";
         }
-        holder.headerTv.setText(gradeArray[0] + upOrDown);
+
+        //计算有几门课
+        int count = 0;
+        for(Score score : data) {
+            if(score.getGrade() == getItem(position).getGrade()) {
+                count++;
+            }
+        }
+        holder.headerTv.setText(gradeArray[0] + upOrDown + "  " + count + "门课");
         return convertView;
     }
 
