@@ -2,9 +2,11 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:background="@color/indigo_500"
+    android:layout_height="48dp"
+    android:background="@color/indigo_700"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <TextView
@@ -12,7 +14,8 @@
         android:text="2011上学期"
         android:textColor="#ffffff"
         android:textSize="18sp"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="48dp" />
 
 </LinearLayout>

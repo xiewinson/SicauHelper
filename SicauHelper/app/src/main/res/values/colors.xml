@@ -4,12 +4,20 @@
     <color name="purple_500">#9c27b0</color>
     <color name="red_500">#e51c23</color>
     <color name="deep_purple_500">#673ab7</color>
+
+    <color name="indigo_700">#303F9F</color>
     <color name="indigo_500">#3f5eb5</color>
+    <color name="indigo_400">#5c6bc0</color>
+    <color name="indigo_100">#C5CAE9</color>
+
     <color name="blue_500">#5677fc</color>
     <color name="light_blue_500">#03a9f4</color>
     <color name="cyan_500">#00bcd4</color>
     <color name="teal_500">#009688</color>
+
+    <color name="green_700">#0a7e07</color>
     <color name="green_500">#259b24</color>
+
     <color name="light_green_500">#8bc34a</color>
     <color name="lime_500">#cddc39</color>
     <color name="yellow_500">#ffeb3b</color>
