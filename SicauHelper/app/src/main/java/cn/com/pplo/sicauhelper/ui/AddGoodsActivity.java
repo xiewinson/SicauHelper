@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
@@ -153,49 +154,87 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
                 /**
                  * 上传最终结果
                  */
-                upload(AddGoodsActivity.this, ImageUtil.getAVFileList(AddGoodsActivity.this, imageList), new ImageUtil.OnImageUploadFinishListener() {
-                    @Override
-                    public void onFinish(List<AVFile> avFiles) {
-                        //创建对象
-                        AVObject avObject = new AVObject("TestGoods");
-                        //上传图片
-                        for (int i = 0; i < avFiles.size(); i++) {
-                            avObject.put("image" + i, avFiles.get(i));
-                        }
-                        //类别
-                        avObject.put("category", categorySpinner.getSelectedItemPosition());
-                        //校区
-                        avObject.put("school", schoolSpinner.getSelectedItemPosition());
-                        //标题
-                        avObject.put("title", titleEt.getText().toString().trim());
-                        //内容
-                        avObject.put("content", contentEt.getText().toString().trim());
-                        //价格
-                        avObject.put("price", priceEt.getText().toString().trim());
-                        //发布人(学生)
-                        avObject.put("student", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
-                        //手机型号
-                        avObject.put("mobile", Build.BRAND + "," + Build.MODEL + "," + Build.VERSION.RELEASE);
-                        //经纬度
-                        avObject.put("location", new AVGeoPoint(latitude, longitude));
-                        //详细地址
-                        avObject.put("address", address);
 
-//                        添加图片到列表
-//                        avObject.addAll("pictures", avFiles);
-                        avObject.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(AVException e) {
-                                if (e == null) {
-                                    Log.d("winson", "上传对象成功");
-                                } else {
-                                    Log.d("winson", "上传对象失败：" + e.getMessage());
-                                }
+                for(int i = 0; i < 500; i++) {
+                    //类别
+                    AVObject avObject = new AVObject("TestGoods");
+                    avObject.put("category", new Random().nextInt(9));
+                    //校区
+                    avObject.put("school", new Random().nextInt(3));
+                    //标题
+                    avObject.put("title", new Random().nextFloat() + "啊");
+                    //内容
+                    avObject.put("content", new Random().nextFloat() + "恩");
+                    //价格
+                    avObject.put("price", new Random().nextInt(1001) + "");
+                    //发布人(学生)
+                    avObject.put("student", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
+                    //手机型号
+                    avObject.put("mobile", Build.BRAND + "," + Build.MODEL + "," + Build.VERSION.RELEASE);
+                    //经纬度
+                    avObject.put("location", new AVGeoPoint(latitude, longitude));
+                    //详细地址
+                    avObject.put("address", address);
+
+                    avObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(AVException e) {
+                            if (e == null) {
+                                Log.d("winson", "上传对象成功");
+                            } else {
+                                Log.d("winson", "上传对象失败：" + e.getMessage());
                             }
-                        });
-                    }
-                });
-            } catch (IOException e) {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    });
+                }
+//                upload(AddGoodsActivity.this, ImageUtil.getAVFileList(AddGoodsActivity.this, imageList), new ImageUtil.OnImageUploadFinishListener() {
+//                    @Override
+//                    public void onFinish(List<AVFile> avFiles) {
+//                        //创建对象
+//                        AVObject avObject = new AVObject("TestGoods");
+//                        //上传图片
+//                        for (int i = 0; i < avFiles.size(); i++) {
+//                            avObject.put("image" + i, avFiles.get(i));
+//                        }
+//                        //类别
+//                        avObject.put("category", categorySpinner.getSelectedItemPosition());
+//                        //校区
+//                        avObject.put("school", schoolSpinner.getSelectedItemPosition());
+//                        //标题
+//                        avObject.put("title", titleEt.getText().toString().trim());
+//                        //内容
+//                        avObject.put("content", contentEt.getText().toString().trim());
+//                        //价格
+//                        改为数字型avObject.put("price", priceEt.getText().toString().trim());
+//                        //发布人(学生)
+//                        avObject.put("student", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
+//                        //手机型号
+//                        avObject.put("mobile", Build.BRAND + "," + Build.MODEL + "," + Build.VERSION.RELEASE);
+//                        //经纬度
+//                        avObject.put("location", new AVGeoPoint(latitude, longitude));
+//                        //详细地址
+//                        avObject.put("address", address);
+//
+////                        添加图片到列表
+////                        avObject.addAll("pictures", avFiles);
+//                        avObject.saveInBackground(new SaveCallback() {
+//                            @Override
+//                            public void done(AVException e) {
+//                                if (e == null) {
+//                                    Log.d("winson", "上传对象成功");
+//                                } else {
+//                                    Log.d("winson", "上传对象失败：" + e.getMessage());
+//                                }
+//                            }
+//                        });
+//                    }
+//                });
+            } catch (Exception e) {
                 e.printStackTrace();
                 UIUtil.showShortToast(AddGoodsActivity.this, "上传失败");
             }
