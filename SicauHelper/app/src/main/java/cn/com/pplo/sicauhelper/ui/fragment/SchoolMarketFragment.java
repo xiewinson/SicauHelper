@@ -4,14 +4,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.FindCallback;
+
+import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.dao.GoodsDAO;
 import cn.com.pplo.sicauhelper.ui.AddGoodsActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
@@ -20,6 +29,8 @@ public class SchoolMarketFragment extends BaseFragment {
 
     private static final String SCHOOL_POSITION = "school_position";
     private int schoolPosition = 0;
+
+    private ListView listView;
 
     public static SchoolMarketFragment newInstance(int position) {
         SchoolMarketFragment fragment = new SchoolMarketFragment();
@@ -61,7 +72,38 @@ public class SchoolMarketFragment extends BaseFragment {
     }
 
     private void setUp(Context context, View view) {
+        listView = (ListView) view.findViewById(R.id.goods_listView);
 
+        new GoodsDAO().find(schoolPosition, new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                if(e == null) {
+                    Log.d("winson", list.size() + "个");
+                    for (AVObject avObject : list) {
+                        Log.d("winson", new GoodsDAO().toModel(avObject).toString());
+                    }
+                }
+                else {
+                    Log.d("winson", "出错：" + e.getMessage());
+                }
+            }
+        });
+
+        //TODO 实现分页查询
+        new GoodsDAO().find(schoolPosition, new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                if(e == null) {
+                    Log.d("winson", "新的：" + list.size() + "个");
+                    for (AVObject avObject : list) {
+                        Log.d("winson", new GoodsDAO().toModel(avObject).toString());
+                    }
+                }
+                else {
+                    Log.d("winson", "出错：" + e.getMessage());
+                }
+            }
+        });
     }
 
     @Override

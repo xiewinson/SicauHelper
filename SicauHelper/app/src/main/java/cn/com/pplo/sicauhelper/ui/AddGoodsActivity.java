@@ -166,11 +166,15 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
                     //内容
                     avObject.put("content", new Random().nextFloat() + "恩");
                     //价格
-                    avObject.put("price", new Random().nextInt(1001) + "");
+                    avObject.put("price", new Random().nextInt(1001));
                     //发布人(学生)
                     avObject.put("student", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
                     //手机型号
-                    avObject.put("mobile", Build.BRAND + "," + Build.MODEL + "," + Build.VERSION.RELEASE);
+                    avObject.put("model", Build.MODEL);
+                    //手机品牌
+                    avObject.put("brand", Build.BRAND);
+                    //手机系统版本
+                    avObject.put("version", Build.VERSION.RELEASE);
                     //经纬度
                     avObject.put("location", new AVGeoPoint(latitude, longitude));
                     //详细地址
@@ -210,11 +214,15 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
 //                        //内容
 //                        avObject.put("content", contentEt.getText().toString().trim());
 //                        //价格
-//                        改为数字型avObject.put("price", priceEt.getText().toString().trim());
+//                       avObject.put("price", Float.parseFloat(priceEt.getText().toString().trim()));
 //                        //发布人(学生)
 //                        avObject.put("student", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
 //                        //手机型号
-//                        avObject.put("mobile", Build.BRAND + "," + Build.MODEL + "," + Build.VERSION.RELEASE);
+//                        avObject.put("mobile", Build.MODEL);
+//                        //手机品牌
+//                        avObject.put("brand", Build.BRAND);
+//                        //手机系统版本
+//                        avObject.put("version", Build.VERSION.RELEASE);
 //                        //经纬度
 //                        avObject.put("location", new AVGeoPoint(latitude, longitude));
 //                        //详细地址
@@ -427,11 +435,15 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
             address = aMapLocation.getAddress();
             Log.d("winson", longitude + "  " + latitude + "  " + address);
         }
+        else {
+            Log.d("winson", aMapLocation.getAMapException().getMessage());
+        }
     }
 
     @Override
     public void onLocationChanged(Location location) {
-
+//        longitude = location.getLongitude();
+//        latitude = location.getLatitude();
     }
 
     @Override

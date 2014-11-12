@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -68,10 +69,47 @@ public class MarketFragment extends BaseFragment {
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
-        getSupportActionBar(context).setBackgroundDrawable(getResources().getDrawable(R.color.green_500));
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.green_700);
+        getSupportActionBar(context).setBackgroundDrawable(getResources().getDrawable(R.color.blue_500));
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.blue_700);
         viewPager.setAdapter(viewPagerAdapter);
         pagerSlidingTabStrip.setViewPager(viewPager);
+
+        pagerSlidingTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                ActionBar actionBar = getSupportActionBar(getActivity());
+                if(actionBar.isShowing() == false){
+                    actionBar.show();
+                }
+                int color = 0;
+                int tabColor = 0;
+                switch (position){
+                    case 0:
+                        color = R.color.blue_500;
+                        tabColor = R.color.blue_700;
+                        break;
+                    case 1:
+                        color = R.color.orange_500;
+                        tabColor = R.color.orange_700;
+                        break;
+                    case 2:
+                        color = R.color.green_500;
+                        tabColor = R.color.green_700;
+                        break;
+                }
+                actionBar.setBackgroundDrawable(getResources().getDrawable(color));
+                setPagerSlidingTabStyle(pagerSlidingTabStrip, tabColor);
+            }
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
     @Override

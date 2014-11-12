@@ -12,7 +12,6 @@ import java.util.List;
 public interface BaseDAO<T> {
     public void save(T t, SaveCallback callback);
     public void update(T t);
-    public void find(FindCallback callback, String... queryStr);
     public void delete(long id);
     public T toModel(AVObject avObject);
 }

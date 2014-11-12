@@ -143,10 +143,6 @@ public class NewsActivity extends BaseActivity {
         newsTv.setText(news.getContent());
         UIUtil.dismissProgressFragment(progressDialog);
         loadWebView(newsWebView, news.getSrc());
-        Log.d("winson", scrollView.getMaxScrollAmount() + "可滑动量");
-        if(scrollView.getMaxScrollAmount() > 0){
-            scrollView.setOnTouchListener(new OnScrollHideOrShowActionBarListener2(this, getSupportActionBar()));
-        }
     }
 
     /**

@@ -34,10 +34,9 @@ public class StudentDAO implements BaseDAO<Student> {
 
     }
 
-    @Override
-    public void find(FindCallback callback, String... queryStr) {
+    public void find(FindCallback callback, String sid) {
         AVQuery<AVObject> query = new AVQuery<AVObject>(TableContract.TableStudent.TABLE_NAME);
-        query.whereEqualTo(TableContract.TableStudent._SID, queryStr[0]);
+        query.whereEqualTo(TableContract.TableStudent._SID, sid);
         query.findInBackground(callback);
     }
 

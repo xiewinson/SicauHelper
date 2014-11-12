@@ -70,19 +70,42 @@ public class TableContract {
      */
     public interface TableStudent extends BaseColumns {
 
-        public static final String TABLE_NAME = "Student";
+        String TABLE_NAME = "Student";
 
-        public static final String _SID = "sid";
-        public static final String _OBJECTID = "objectId";
-        public static final String _NAME = "name";
-        public static final String _NICKNAME = "nickName";
-        public static final String _PSWD = "pswd";
-        public static final String _SCHOOL = "school";
-        public static final String _PROFILE_URL = "profileUrl";
-        public static final String _BACKGROUND = "background";
-        public static final String _ROLE = "role";
-        public static final String _CREATED_AT = "createdAt";
-        public static final String _UPDATED_AT = "updatedAt";
+        String _SID = "sid";
+        String _OBJECTID = "objectId";
+        String _NAME = "name";
+        String _NICKNAME = "nickName";
+        String _PSWD = "pswd";
+        String _SCHOOL = "school";
+        String _PROFILE_URL = "profileUrl";
+        String _BACKGROUND = "background";
+        String _ROLE = "role";
+        String _CREATED_AT = "createdAt";
+        String _UPDATED_AT = "updatedAt";
     }
 
+    /**
+     * 商品表
+     */
+    public interface TableGoods extends BaseColumns {
+
+        String TABLE_NAME = "Goods";
+
+        String _OBJECTID = "objectId";
+        String _CATEGORY = "category";
+        String _SCHOOL = "school";
+        String _TITLE = "title";
+        String _CONTENT = "content";
+        String _PRICE = "price";
+        String _STUDENT = "student";
+        String _MODEL = "model";
+        String _BRAND = "brand";
+        String _VERSION = "version";
+        String _LONGITUDE = "longitude";
+        String _LATITUDE = "latitude";
+        String _ADDRESS = "address";
+        String _CREATED_AT = "createdAt";
+        String _UPDATED_AT = "updatedAt";
+    }
 }
