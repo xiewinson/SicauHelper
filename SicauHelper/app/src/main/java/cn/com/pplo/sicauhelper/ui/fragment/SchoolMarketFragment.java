@@ -29,6 +29,7 @@ public class SchoolMarketFragment extends BaseFragment {
 
     private static final String SCHOOL_POSITION = "school_position";
     private int schoolPosition = 0;
+    private String[] schoolArray;
 
     private ListView listView;
 
@@ -48,6 +49,7 @@ public class SchoolMarketFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         schoolPosition = getArguments().getInt(SCHOOL_POSITION);
+        schoolArray = getResources().getStringArray(R.array.school);
     }
 
     @Override

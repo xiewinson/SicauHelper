@@ -26,6 +26,7 @@ public class SQLiteUtil {
         ContentResolver resolver = context.getContentResolver();
         resolver.delete(Uri.parse(SicauHelperProvider.URI_STUDENT_ALL), TableContract.TableStudent._SID + " =?", new String[]{student.getSid()});
         ContentValues values = new ContentValues();
+        values.put(TableContract.TableStudent._ID, student.getId());
         values.put(TableContract.TableStudent._SID, student.getSid());
         values.put(TableContract.TableStudent._OBJECTID, student.getObjectId());
         values.put(TableContract.TableStudent._NAME, student.getName());
@@ -61,6 +62,7 @@ public class SQLiteUtil {
                 student.setNickName(cursor.getString(cursor.getColumnIndex(TableContract.TableStudent._NICKNAME)));
                 student.setPswd(cursor.getString(cursor.getColumnIndex(TableContract.TableStudent._PSWD)));
                 student.setSid(cursor.getString(cursor.getColumnIndex(TableContract.TableStudent._SID)));
+                student.setId(cursor.getLong(cursor.getColumnIndex(TableContract.TableStudent._ID)));
                 student.setObjectId(cursor.getString(cursor.getColumnIndex(TableContract.TableStudent._OBJECTID)));
                 student.setCreatedAt(cursor.getString(cursor.getColumnIndex(TableContract.TableStudent._CREATED_AT)));
                 student.setUpdatedAt(cursor.getString(cursor.getColumnIndex(TableContract.TableStudent._UPDATED_AT)));

@@ -108,7 +108,7 @@ public class LoginActivity extends ActionBarActivity {
         student.setBackground("pic_0");
 
         //查询其是否创建
-        new StudentDAO().find(new FindCallback<AVObject>() {
+        new StudentDAO().find(sid, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> avStudents, AVException e) {
                 //若已存在则跳转到主页面
@@ -126,7 +126,7 @@ public class LoginActivity extends ActionBarActivity {
                         public void done(AVException e) {
                             //保存成功
                             if (e == null) {
-                                new StudentDAO().find(new FindCallback<AVObject>() {
+                                new StudentDAO().find(sid, new FindCallback<AVObject>() {
                                     @Override
                                     public void done(List<AVObject> avObjects, AVException e) {
                                         if (e == null && avObjects.size() > 0) {
@@ -136,7 +136,7 @@ public class LoginActivity extends ActionBarActivity {
                                             UIUtil.showShortToast(LoginActivity.this, "出现了一个未知的错误");
                                         }
                                     }
-                                }, sid);
+                                });
                             }
                             //保存失败
                             else {
@@ -148,7 +148,7 @@ public class LoginActivity extends ActionBarActivity {
                     });
                 }
             }
-        }, sid);
+        });
 
     }
 

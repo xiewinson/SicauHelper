@@ -65,6 +65,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
         goods.setPrice(avObject.getInt(TableContract.TableGoods._PRICE));
         goods.setSchool(avObject.getInt(TableContract.TableGoods._SCHOOL));
         goods.setTitle(avObject.getString(TableContract.TableGoods._TITLE));
+        goods.setId(avObject.getLong("goods_id"));
 
         goods.setLatitude(avObject.getAVGeoPoint("location").getLatitude() + "");
         goods.setLongitude(avObject.getAVGeoPoint("location").getLongitude() + "");

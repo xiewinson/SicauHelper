@@ -34,7 +34,7 @@ public class StudentDAO implements BaseDAO<Student> {
 
     }
 
-    public void find(FindCallback callback, String sid) {
+    public void find(String sid, FindCallback callback) {
         AVQuery<AVObject> query = new AVQuery<AVObject>(TableContract.TableStudent.TABLE_NAME);
         query.whereEqualTo(TableContract.TableStudent._SID, sid);
         query.findInBackground(callback);
@@ -57,6 +57,7 @@ public class StudentDAO implements BaseDAO<Student> {
         student.setPswd(avStudent.getString("pswd"));
         student.setSid(avStudent.getString("sid"));
         student.setObjectId(avStudent.getObjectId());
+        student.setId(avStudent.getLong("sutdent_id"));
         student.setCreatedAt(avStudent.getCreatedAt().toString());
         student.setUpdatedAt(avStudent.getUpdatedAt().toString());
         return student;

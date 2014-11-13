@@ -28,6 +28,8 @@ public class MarketFragment extends BaseFragment {
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private ViewPagerAdapter viewPagerAdapter;
 
+    private String[] schoolArray;
+
     public static MarketFragment newInstance() {
         MarketFragment fragment = new MarketFragment();
         return fragment;
@@ -41,6 +43,7 @@ public class MarketFragment extends BaseFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(getResources().getString(R.string.title_market));
+        schoolArray = getResources().getStringArray(R.array.school);
     }
 
     @Override
@@ -150,15 +153,7 @@ public class MarketFragment extends BaseFragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position == 0) {
-                return "雅安";
-            }
-            else if(position == 1) {
-                return "成都";
-            }
-            else {
-                return "都江堰";
-            }
+            return schoolArray[position];
         }
     }
 }

@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "SICAU_HELPER_DB";
-    public static final int DB_VERSION = 4;
+    public static final int DB_VERSION = 5;
 
     //创建成绩表
     public static final String createScoreSql = "create table " + TableContract.TableScore.TABLE_NAME + "("
@@ -57,7 +57,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     //创建学生表
     public static final String createStudentSql = "create table " +  TableContract.TableStudent.TABLE_NAME + "("
-            + " id " + " integer primary key autoincrement, "
+            + TableContract.TableStudent._ID +  " integer primary key, "
             + TableContract.TableStudent._BACKGROUND + " text, "
             + TableContract.TableStudent._NAME + " text, "
             + TableContract.TableStudent._NICKNAME + " text, "
