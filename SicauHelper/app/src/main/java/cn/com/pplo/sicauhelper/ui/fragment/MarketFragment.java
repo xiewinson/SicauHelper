@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.ui.AddGoodsActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
@@ -113,6 +114,8 @@ public class MarketFragment extends BaseFragment {
 
             }
         });
+        //选中当前登录用户校区
+        viewPager.setCurrentItem(SicauHelperApplication.getStudent(context).getSchool())     ;
     }
 
     @Override

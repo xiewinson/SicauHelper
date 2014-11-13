@@ -17,13 +17,19 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.FindCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.dao.GoodsDAO;
 import cn.com.pplo.sicauhelper.ui.AddGoodsActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.ui.adapter.GoodsAdapter;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.Options;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 public class SchoolMarketFragment extends BaseFragment {
 
@@ -31,7 +37,10 @@ public class SchoolMarketFragment extends BaseFragment {
     private int schoolPosition = 0;
     private String[] schoolArray;
 
+    private PullToRefreshLayout mPullToRefreshLayout;
     private ListView listView;
+    private GoodsAdapter goodsAdapter;
+    private List<AVObject> data = new ArrayList<AVObject>();
 
     public static SchoolMarketFragment newInstance(int position) {
         SchoolMarketFragment fragment = new SchoolMarketFragment();
@@ -74,7 +83,28 @@ public class SchoolMarketFragment extends BaseFragment {
     }
 
     private void setUp(Context context, View view) {
+        mPullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.ptr_layout);
         listView = (ListView) view.findViewById(R.id.goods_listView);
+        goodsAdapter = new GoodsAdapter(context, data);
+        listView.setAdapter(goodsAdapter);
+
+        //TODO 更改actionBarrefreshh位置
+        ActionBarPullToRefresh.from(getActivity())
+                .allChildrenArePullable()
+                .options(Options.create()
+                                .refreshOnUp(true)
+                                .build()
+                )
+                .allChildrenArePullable()
+                .listener(new OnRefreshListener() {
+                    @Override
+                    public void onRefreshStarted(View view) {
+                        if (!mPullToRefreshLayout.isRefreshing()) {
+
+                        }
+                    }
+                })
+                .setup(mPullToRefreshLayout);
 
         new GoodsDAO().find(schoolPosition, new FindCallback<AVObject>() {
             @Override
@@ -84,22 +114,9 @@ public class SchoolMarketFragment extends BaseFragment {
                     for (AVObject avObject : list) {
                         Log.d("winson", new GoodsDAO().toModel(avObject).toString());
                     }
-                }
-                else {
-                    Log.d("winson", "出错：" + e.getMessage());
-                }
-            }
-        });
+                    data.addAll(list);
+                    goodsAdapter.notifyDataSetChanged();
 
-        //TODO 实现分页查询
-        new GoodsDAO().find(schoolPosition, new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> list, AVException e) {
-                if(e == null) {
-                    Log.d("winson", "新的：" + list.size() + "个");
-                    for (AVObject avObject : list) {
-                        Log.d("winson", new GoodsDAO().toModel(avObject).toString());
-                    }
                 }
                 else {
                     Log.d("winson", "出错：" + e.getMessage());

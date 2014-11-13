@@ -29,24 +29,16 @@ public class GoodsDAO implements BaseDAO<Goods> {
      */
     public void find(int school, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>("TestGoods");
+        //取10条
         avQuery.setLimit(10);
-        avQuery.orderByDescending(TableContract.TableGoods._UPDATED_AT);
+        //id降序
+        avQuery.orderByDescending("goods_id");
+        //选校区
+        avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
         avQuery.include("student");
         avQuery.findInBackground(callback);
     }
 
-    /**
-     * 查询指定校区的goods列表
-     * @param school
-     * @param callback
-     */
-    public void find2(int school, FindCallback callback) {
-        AVQuery<AVObject> avQuery = new AVQuery<AVObject>("TestGoods");
-        avQuery.setLimit(10);
-        avQuery.orderByDescending(TableContract.TableGoods._UPDATED_AT);
-        avQuery.include("student");
-        avQuery.findInBackground(callback);
-    }
 
     @Override
     public void delete(long id) {
@@ -66,7 +58,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
         goods.setSchool(avObject.getInt(TableContract.TableGoods._SCHOOL));
         goods.setTitle(avObject.getString(TableContract.TableGoods._TITLE));
         goods.setId(avObject.getLong("goods_id"));
-
+        goods.setCommentCount(avObject.getLong(TableContract.TableGoods._COMMENT_COUNT));
         goods.setLatitude(avObject.getAVGeoPoint("location").getLatitude() + "");
         goods.setLongitude(avObject.getAVGeoPoint("location").getLongitude() + "");
         goods.setUpdatedAt(avObject.getUpdatedAt().toString());

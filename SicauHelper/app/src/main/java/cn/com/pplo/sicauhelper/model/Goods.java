@@ -20,6 +20,8 @@ public class Goods {
     private String address;
     private String createdAt;
     private String updatedAt;
+    private long commentCount;
+
 
     public long getId() {
         return id;
@@ -149,16 +151,24 @@ public class Goods {
         this.updatedAt = updatedAt;
     }
 
+    public long getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(long commentCount) {
+        this.commentCount = commentCount;
+    }
+
     @Override
     public String toString() {
         return "Goods{" +
-                "price=" + price +
-                ", id=" + id +
+                "id=" + id +
                 ", objectId='" + objectId + '\'' +
                 ", category=" + category +
                 ", school=" + school +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", price=" + price +
                 ", student=" + student +
                 ", model='" + model + '\'' +
                 ", brand='" + brand + '\'' +
@@ -168,6 +178,7 @@ public class Goods {
                 ", address='" + address + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
+                ", commentCount=" + commentCount +
                 '}';
     }
 }

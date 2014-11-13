@@ -107,5 +107,6 @@ public class TableContract {
         String _ADDRESS = "address";
         String _CREATED_AT = "createdAt";
         String _UPDATED_AT = "updatedAt";
+        String _COMMENT_COUNT = "commentCount";
     }
 }
