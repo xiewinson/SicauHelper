@@ -3,7 +3,6 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.avos.avoscloud.AVException;
@@ -22,14 +22,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.dao.GoodsDAO;
-import cn.com.pplo.sicauhelper.ui.AddGoodsActivity;
-import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.GoodsAdapter;
-import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.Options;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 public class SchoolMarketFragment extends BaseFragment {
 
@@ -37,8 +30,8 @@ public class SchoolMarketFragment extends BaseFragment {
     private int schoolPosition = 0;
     private String[] schoolArray;
 
-    private PullToRefreshLayout mPullToRefreshLayout;
     private ListView listView;
+    private View footerView;
     private GoodsAdapter goodsAdapter;
     private List<AVObject> data = new ArrayList<AVObject>();
 
@@ -79,50 +72,91 @@ public class SchoolMarketFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("winson", schoolPosition + "  " + "创建完成");
         setUp(getActivity(), view);
     }
 
     private void setUp(Context context, View view) {
-        mPullToRefreshLayout = (PullToRefreshLayout) view.findViewById(R.id.ptr_layout);
         listView = (ListView) view.findViewById(R.id.goods_listView);
         goodsAdapter = new GoodsAdapter(context, data);
+
+        //加载更多进度条
+        footerView = View.inflate(context, R.layout.footer_progress, null);
+        footerView.setVisibility(View.GONE);
+        listView.addFooterView(footerView);
+
         listView.setAdapter(goodsAdapter);
 
-        //TODO 更改actionBarrefreshh位置
-        ActionBarPullToRefresh.from(getActivity())
-                .allChildrenArePullable()
-                .options(Options.create()
-                                .refreshOnUp(true)
-                                .build()
-                )
-                .allChildrenArePullable()
-                .listener(new OnRefreshListener() {
-                    @Override
-                    public void onRefreshStarted(View view) {
-                        if (!mPullToRefreshLayout.isRefreshing()) {
-
-                        }
-                    }
-                })
-                .setup(mPullToRefreshLayout);
-
-        new GoodsDAO().find(schoolPosition, new FindCallback<AVObject>() {
+        //滑到最下面加载更多
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void done(List<AVObject> list, AVException e) {
-                if(e == null) {
-                    Log.d("winson", list.size() + "个");
-                    for (AVObject avObject : list) {
-                        Log.d("winson", new GoodsDAO().toModel(avObject).toString());
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if ((firstVisibleItem + visibleItemCount) > (totalItemCount - 2)) {
+
+                    if (footerView.getVisibility() == View.GONE && data.size() > 0) {
+                        Log.d("winson", "加载更多");
+                        footerView.setVisibility(View.VISIBLE);
                     }
-                    data.addAll(list);
-                    goodsAdapter.notifyDataSetChanged();
 
                 }
-                else {
+            }
+        });
+
+        findInCache();
+    }
+
+    /**
+     * 从缓存中取
+     */
+    private void findInCache() {
+        new GoodsDAO().findInCache(schoolPosition, new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                if (e == null) {
+                    Log.d("winson", list.size() + "个");
+                    //若为0.则
+                    if (list.size() == 0) {
+                        findNewData();
+                    } else {
+                        notifyDataSetChanged(list, false);
+                    }
+                } else {
+                    Log.d("winson", "出错：" + e.getMessage());
+                    findNewData();
+                }
+            }
+        });
+    }
+
+    /**
+     * 从网络取新的并清空缓存
+     */
+    private void findNewData() {
+        new GoodsDAO().findNewData(schoolPosition, new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                if (e == null) {
+                    Log.d("winson", list.size() + "个");
+                    notifyDataSetChanged(list, true);
+                    listView.setSelection(0);
+                } else {
                     Log.d("winson", "出错：" + e.getMessage());
                 }
             }
         });
+    }
+
+    private void notifyDataSetChanged(List<AVObject> list, boolean isRefresh) {
+        if (isRefresh) {
+            data.clear();
+        }
+        data.addAll(list);
+        goodsAdapter.notifyDataSetChanged();
     }
 
     @Override

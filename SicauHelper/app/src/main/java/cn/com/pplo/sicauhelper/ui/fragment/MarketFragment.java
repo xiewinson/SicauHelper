@@ -76,6 +76,7 @@ public class MarketFragment extends BaseFragment {
         getSupportActionBar(context).setBackgroundDrawable(getResources().getDrawable(R.color.blue_500));
         setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.blue_700);
         viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setOffscreenPageLimit(3);
         pagerSlidingTabStrip.setViewPager(viewPager);
 
         pagerSlidingTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

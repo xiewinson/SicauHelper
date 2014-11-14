@@ -27,8 +27,9 @@ public class GoodsDAO implements BaseDAO<Goods> {
      * @param school
      * @param callback
      */
-    public void find(int school, FindCallback callback) {
+    public void findInCache(int school, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>("TestGoods");
+        avQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_ONLY);
         //取10条
         avQuery.setLimit(10);
         //id降序
@@ -38,6 +39,31 @@ public class GoodsDAO implements BaseDAO<Goods> {
         avQuery.include("student");
         avQuery.findInBackground(callback);
     }
+
+    /**
+     * 查询指定校区的goods列表
+     * @param school
+     * @param callback
+     */
+    public void findNewData(int school, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>("TestGoods");
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
+
+        //若有缓存则清空
+        if(avQuery.hasCachedResult()) {
+            avQuery.clearCachedResult();
+        }
+        //取10条
+        avQuery.setLimit(10);
+        //id降序
+        avQuery.orderByDescending("goods_id");
+        //选校区
+        avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
+        avQuery.include("student");
+        avQuery.findInBackground(callback);
+    }
+
+    
 
 
     @Override
