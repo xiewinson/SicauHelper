@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import java.util.List;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.dao.GoodsDAO;
 import cn.com.pplo.sicauhelper.ui.adapter.GoodsAdapter;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 
 public class SchoolMarketFragment extends BaseFragment {
 
@@ -30,6 +32,7 @@ public class SchoolMarketFragment extends BaseFragment {
     private int schoolPosition = 0;
     private String[] schoolArray;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
     private View footerView;
     private GoodsAdapter goodsAdapter;
@@ -76,7 +79,18 @@ public class SchoolMarketFragment extends BaseFragment {
         setUp(getActivity(), view);
     }
 
-    private void setUp(Context context, View view) {
+    private void setUp(final Context context, View view) {
+        //下拉刷新
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.school_market_swipe_container);
+        swipeRefreshLayout.setColorSchemeResources(R.color.blue_500, R.color.orange_500, R.color.green_500);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                findNewData();
+            }
+        });
+
         listView = (ListView) view.findViewById(R.id.goods_listView);
         goodsAdapter = new GoodsAdapter(context, data);
 
@@ -101,8 +115,8 @@ public class SchoolMarketFragment extends BaseFragment {
                     if (footerView.getVisibility() == View.GONE && data.size() > 0) {
                         Log.d("winson", "加载更多");
                         footerView.setVisibility(View.VISIBLE);
+                        findById(data.get(data.size() - 1).getLong("goods_id"));
                     }
-
                 }
             }
         });
@@ -146,6 +160,34 @@ public class SchoolMarketFragment extends BaseFragment {
                     listView.setSelection(0);
                 } else {
                     Log.d("winson", "出错：" + e.getMessage());
+                }
+                if(swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * 加载更多
+     */
+    private void findById(long goods_id) {
+        new GoodsDAO().findById(schoolPosition, goods_id, new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                if (e == null) {
+                    Log.d("winson", list.size() + "个");
+                    if(list.size() == 0) {
+                        UIUtil.showShortToast(getActivity(), "已经没有更多商品啦");
+                        footerView.setVisibility(View.INVISIBLE);
+                    }
+                    else {
+                        notifyDataSetChanged(list, false);
+                        footerView.setVisibility(View.GONE);
+                    }
+                } else {
+                    Log.d("winson", "出错：" + e.getMessage());
+                    footerView.setVisibility(View.GONE);
                 }
             }
         });

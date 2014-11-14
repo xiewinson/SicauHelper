@@ -23,7 +23,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
     }
 
     /**
-     * 查询指定校区的goods列表
+     * 在缓存中查询指定校区的goods列表
      * @param school
      * @param callback
      */
@@ -41,7 +41,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
     }
 
     /**
-     * 查询指定校区的goods列表
+     * 查询指定校区的最新goods列表
      * @param school
      * @param callback
      */
@@ -63,7 +63,24 @@ public class GoodsDAO implements BaseDAO<Goods> {
         avQuery.findInBackground(callback);
     }
 
-    
+    /**
+     * 查询指定校区的从指定id开始的goods列表
+     * @param school
+     * @param callback
+     */
+    public void findById(int school, long goods_id, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>("TestGoods");
+        //小于指定id
+        avQuery.whereLessThan("goods_id", goods_id);
+        //取10条
+        avQuery.setLimit(10);
+        //id降序
+        avQuery.orderByDescending("goods_id");
+        //选校区
+        avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
+        avQuery.include("student");
+        avQuery.findInBackground(callback);
+    }
 
 
     @Override
