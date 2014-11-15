@@ -43,7 +43,7 @@ public class ScoreStatsActivity extends BaseActivity {
         UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.teal_500);
         listView = (ListView) findViewById(R.id.score_static_listView);
         listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar()));
-        listView.addHeaderView(ViewPadding.getActionBarPadding(context, R.color.eeeeee));
+        listView.addHeaderView(ViewPadding.getActionBarPadding(context, R.color.grey_200));
         statsAdapter = new ScoreStatsAdapter(context, StringUtil.parseScoreStatsList(data));
         UIUtil.setListViewInitAnimation("bottom", listView, statsAdapter);
         UIUtil.setListViewScrollHideOrShowActionBar(context, listView, getSupportActionBar());

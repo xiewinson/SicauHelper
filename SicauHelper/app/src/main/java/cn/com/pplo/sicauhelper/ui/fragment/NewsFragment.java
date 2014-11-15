@@ -90,7 +90,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         listView = (ListView) view.findViewById(R.id.news_listView);
 //        listView.setTextFilterEnabled(true);
         //设置actionbar的间距
-        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
+        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.grey_200));
 
         progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的～");
         //listView上下补点间距

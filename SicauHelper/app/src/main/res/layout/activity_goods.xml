@@ -2,7 +2,7 @@
 
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/school_market_swipe_container"
+    android:id="@+id/goods_swipe_container"
     android:orientation="vertical"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
@@ -10,7 +10,7 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@+id/goods_listView"
+        android:id="@+id/comment_listView"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:scrollbarStyle="outsideOverlay"
@@ -18,5 +18,5 @@
         android:dividerHeight="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        </ListView>
+    </ListView>
 </android.support.v4.widget.SwipeRefreshLayout>

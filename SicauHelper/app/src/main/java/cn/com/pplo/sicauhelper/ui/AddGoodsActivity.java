@@ -41,6 +41,7 @@ import java.util.Random;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
@@ -155,9 +156,13 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
                  * 上传最终结果
                  */
 
-                for(int i = 0; i < 500; i++) {
+                for(int i = 0; i < 100; i++) {
+
                     //类别
-                    AVObject avObject = new AVObject("TestGoods");
+                    AVObject avObject = new AVObject(TableContract.TableGoods.TABLE_NAME);
+                    //上传图片
+                    AVFile file = new AVFile(System.currentTimeMillis() + ".jpg", "http://jiaowu.sicau.edu.cn/photo/2011878" + new Random().nextInt(10) +".jpg", null);
+                    avObject.put("image" + 0, file);
                     avObject.put("category", new Random().nextInt(9));
                     //校区
                     avObject.put("school", new Random().nextInt(3));
@@ -200,7 +205,7 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
 //                    @Override
 //                    public void onFinish(List<AVFile> avFiles) {
 //                        //创建对象
-//                        AVObject avObject = new AVObject("TestGoods");
+//                        AVObject avObject = new AVObject(TableContract.TableGoods.TABLE_NAME);
 //                        //上传图片
 //                        for (int i = 0; i < avFiles.size(); i++) {
 //                            avObject.put("image" + i, avFiles.get(i));

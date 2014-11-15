@@ -19,7 +19,9 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.dao.StudentDAO;
 import cn.com.pplo.sicauhelper.model.Goods;
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.ui.GoodsActivity;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
+import cn.com.pplo.sicauhelper.util.TimeUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -63,8 +65,9 @@ public class GoodsAdapter extends BaseAdapter {
             holder.titleTv = (TextView) convertView.findViewById(R.id.goods_title_tv);;
             holder.contentTv = (TextView) convertView.findViewById(R.id.goods_content_tv);;
             holder.imageLayout = (LinearLayout) convertView.findViewById(R.id.goods_image_layout);
-            holder.commentBtn = (Button) convertView.findViewById(R.id.goods_comment_btn);;
+            holder.commentBtn = (TextView) convertView.findViewById(R.id.goods_comment_btn);;
             holder.deviceTv = (TextView) convertView.findViewById(R.id.goods_device_tv);;
+            holder.locationTv = (TextView) convertView.findViewById(R.id.goods_location_tv);;
             convertView.setTag(holder);
         }
         else {
@@ -89,16 +92,16 @@ public class GoodsAdapter extends BaseAdapter {
 //        goods.setStudent(new StudentDAO().toModel(avObject.getAVObject()));
 //        goods.setObjectId(avObject.getObjectId());
 
-        AVObject avGoods = getItem(position);
+        final AVObject avGoods = getItem(position);
         AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._STUDENT);
         //头像
         ImageLoader.getInstance().displayImage(avStudent.getString(TableContract.TableStudent._PROFILE_URL), holder.headIv, ImageUtil.getDisplayImageOption(context));
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableStudent._NAME));
         //时间
-        holder.dateTv.setText(avGoods.getUpdatedAt().toString());
-        //类别
-        holder.categoryTv.setText(avGoods.getInt(TableContract.TableGoods._CATEGORY) + "");
+        holder.dateTv.setText(TimeUtil.timeToFriendlTime(avGoods.getUpdatedAt().toString()));
+        //类别(暂时用来写价格)
+        holder.categoryTv.setText("￥" + avGoods.getInt(TableContract.TableGoods._PRICE) + "");
         //标题
         holder.titleTv.setText(avGoods.getString(TableContract.TableGoods._TITLE));
         //内容
@@ -106,9 +109,19 @@ public class GoodsAdapter extends BaseAdapter {
         //评论
         holder.commentBtn.setText(avGoods.getLong(TableContract.TableGoods._COMMENT_COUNT) + "");
         //手机
-        holder.deviceTv.setText("来自" + avGoods.getString(TableContract.TableGoods._BRAND) + " "
-                + avGoods.getString(TableContract.TableGoods._MODEL) + "("
-                + avGoods.getString(TableContract.TableGoods._VERSION) + ")");
+        holder.deviceTv.setText("来自 " + avGoods.getString(TableContract.TableGoods._BRAND) + " "
+                + avGoods.getString(TableContract.TableGoods._MODEL) + " ("
+                + avGoods.getString(TableContract.TableGoods._VERSION) + ") ");
+        //地址
+        holder.locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
+
+        //打开详细页面
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GoodsActivity.startGoodsActivity(context, avGoods.getObjectId());
+            }
+        });
         return convertView;
     }
 
@@ -120,7 +133,8 @@ public class GoodsAdapter extends BaseAdapter {
         TextView titleTv;
         TextView contentTv;
         LinearLayout imageLayout;
-        Button commentBtn;
+        TextView commentBtn;
         TextView deviceTv;
+        TextView locationTv;
     }
 }

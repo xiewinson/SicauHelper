@@ -88,6 +88,7 @@ public class SchoolMarketFragment extends BaseFragment {
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
                 findNewData();
+                footerView.setVisibility(View.GONE);
             }
         });
 
@@ -133,7 +134,7 @@ public class SchoolMarketFragment extends BaseFragment {
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
-                    //若为0.则
+                    //若为0.则进行网络请求
                     if (list.size() == 0) {
                         findNewData();
                     } else {

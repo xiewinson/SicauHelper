@@ -28,7 +28,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
      * @param callback
      */
     public void findInCache(int school, FindCallback callback) {
-        AVQuery<AVObject> avQuery = new AVQuery<AVObject>("TestGoods");
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         avQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_ONLY);
         //取10条
         avQuery.setLimit(10);
@@ -36,7 +36,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
         avQuery.orderByDescending("goods_id");
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
-        avQuery.include("student");
+        avQuery.include(TableContract.TableGoods._STUDENT);
         avQuery.findInBackground(callback);
     }
 
@@ -46,7 +46,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
      * @param callback
      */
     public void findNewData(int school, FindCallback callback) {
-        AVQuery<AVObject> avQuery = new AVQuery<AVObject>("TestGoods");
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
 
         //若有缓存则清空
@@ -59,7 +59,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
         avQuery.orderByDescending("goods_id");
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
-        avQuery.include("student");
+        avQuery.include(TableContract.TableGoods._STUDENT);
         avQuery.findInBackground(callback);
     }
 
@@ -69,7 +69,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
      * @param callback
      */
     public void findById(int school, long goods_id, FindCallback callback) {
-        AVQuery<AVObject> avQuery = new AVQuery<AVObject>("TestGoods");
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         //小于指定id
         avQuery.whereLessThan("goods_id", goods_id);
         //取10条
@@ -78,7 +78,7 @@ public class GoodsDAO implements BaseDAO<Goods> {
         avQuery.orderByDescending("goods_id");
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
-        avQuery.include("student");
+        avQuery.include(TableContract.TableGoods._STUDENT);
         avQuery.findInBackground(callback);
     }
 

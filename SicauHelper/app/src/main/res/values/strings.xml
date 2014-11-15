@@ -24,7 +24,6 @@
         <item>成都</item>
         <item>都江堰</item>
     </string-array>
-
     <string-array name="goods_category">
         <item>衣物</item>
         <item>书本</item>
@@ -32,9 +31,11 @@
         <item>学习</item>
         <item>杂项</item>
     </string-array>
-
     <string-array name="image_select">
         <item>立刻拍照</item>
         <item>本地相册</item>
     </string-array>
+
+    <string name="title_activity_goods">GoodsActivity</string>
+
 </resources>
