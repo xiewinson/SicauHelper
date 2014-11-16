@@ -113,9 +113,9 @@ public class UIUtil {
      * 设置滑动监听隐藏/显示actionBar
      */
     public static void setListViewScrollHideOrShowActionBar(Context context, ListView listView, ActionBar actionBar) {
-        if(listView.getMaxScrollAmount() > 0) {
+//        if(listView.getMaxScrollAmount() > 0) {
             listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(actionBar));
-        }
+//        }
     }
 
     /**

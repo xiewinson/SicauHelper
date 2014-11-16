@@ -109,4 +109,27 @@ public class TableContract {
         String _UPDATED_AT = "updatedAt";
         String _COMMENT_COUNT = "commentCount";
     }
+
+    /**
+     * 学生表
+     */
+    public interface TableGoodsComment extends BaseColumns {
+
+        String TABLE_NAME = "GoodsComment";
+
+        String _SEND_STUDENT = "sendStudent";
+        String _RECEIVE_STUDENT = "receiveStudent";
+        String _CONTENT = "content";
+        String _GOODS = "goods";
+        String _GOODS_COMMENT_ID = "comment_id";
+        String _IS_WATCHED = "isWatched";
+        String _INVISIBLE = "invisible";
+        String _MODEL = "model";
+        String _BRAND = "brand";
+        String _VERSION = "version";
+
+        String _OBJECTID = "objectId";
+        String _CREATED_AT = "createdAt";
+        String _UPDATED_AT = "updatedAt";
+    }
 }

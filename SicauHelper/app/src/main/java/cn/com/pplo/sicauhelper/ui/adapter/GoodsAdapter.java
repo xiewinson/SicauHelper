@@ -5,9 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -22,6 +24,7 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.GoodsActivity;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.TimeUtil;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -60,14 +63,14 @@ public class GoodsAdapter extends BaseAdapter {
             convertView = View.inflate(context, R.layout.item_goods_list, null);
             holder.headIv = (CircleImageView) convertView.findViewById(R.id.goods_head_iv);
             holder.nameTv = (TextView) convertView.findViewById(R.id.goods_name_tv);
-            holder.dateTv = (TextView) convertView.findViewById(R.id.goods_time_tv);;
-            holder.categoryTv = (TextView) convertView.findViewById(R.id.goods_category_tv);;
-            holder.titleTv = (TextView) convertView.findViewById(R.id.goods_title_tv);;
-            holder.contentTv = (TextView) convertView.findViewById(R.id.goods_content_tv);;
+            holder.dateTv = (TextView) convertView.findViewById(R.id.goods_time_tv);
+            holder.categoryTv = (TextView) convertView.findViewById(R.id.goods_category_tv);
+            holder.titleTv = (TextView) convertView.findViewById(R.id.goods_title_tv);
+            holder.contentTv = (TextView) convertView.findViewById(R.id.goods_content_tv);
             holder.imageLayout = (LinearLayout) convertView.findViewById(R.id.goods_image_layout);
-            holder.commentBtn = (TextView) convertView.findViewById(R.id.goods_comment_btn);;
-            holder.deviceTv = (TextView) convertView.findViewById(R.id.goods_device_tv);;
-            holder.locationTv = (TextView) convertView.findViewById(R.id.goods_location_tv);;
+            holder.commentBtn = (TextView) convertView.findViewById(R.id.goods_comment_btn);
+            holder.deviceTv = (TextView) convertView.findViewById(R.id.goods_device_tv);
+            holder.locationTv = (TextView) convertView.findViewById(R.id.goods_location_tv);
             convertView.setTag(holder);
         }
         else {
@@ -99,7 +102,7 @@ public class GoodsAdapter extends BaseAdapter {
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableStudent._NAME));
         //时间
-        holder.dateTv.setText(TimeUtil.timeToFriendlTime(avGoods.getUpdatedAt().toString()));
+        holder.dateTv.setText(TimeUtil.timeToFriendlTime(avGoods.getCreatedAt().toString()));
         //类别(暂时用来写价格)
         holder.categoryTv.setText("￥" + avGoods.getInt(TableContract.TableGoods._PRICE) + "");
         //标题
@@ -114,12 +117,25 @@ public class GoodsAdapter extends BaseAdapter {
                 + avGoods.getString(TableContract.TableGoods._VERSION) + ") ");
         //地址
         holder.locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
+        //显示图片
+        List<AVFile> imageList = ImageUtil.getAVFileListByAVGoods(avGoods);
+        holder.imageLayout.removeAllViews();
+        for(AVFile avFile : imageList) {
+            ImageView imageView = new ImageView(context);
+            int width = (int)UIUtil.parseDpToPx(context, 60);
+            int height = (int)UIUtil.parseDpToPx(context, 40);
+            imageView.setPadding(0, 0, (int) UIUtil.parseDpToPx(context, 8), 0);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            ImageLoader.getInstance().displayImage(avFile.getThumbnailUrl(false, width, height), imageView, ImageUtil.getDisplayImageOption(context));
+            holder.imageLayout.addView(imageView);
+        }
 
         //打开详细页面
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GoodsActivity.startGoodsActivity(context, avGoods.getObjectId());
+                GoodsActivity.startGoodsActivity(context, avGoods.getObjectId(), avGoods.getInt(TableContract.TableGoods._SCHOOL));
             }
         });
         return convertView;

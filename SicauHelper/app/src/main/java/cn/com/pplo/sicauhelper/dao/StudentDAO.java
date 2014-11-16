@@ -13,9 +13,8 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 /**
  * Created by winson on 2014/11/9.
  */
-public class StudentDAO implements BaseDAO<Student> {
+public class StudentDAO {
 
-    @Override
     public void save(Student student, SaveCallback callback) {
         AVObject avObject = new AVObject(TableContract.TableStudent.TABLE_NAME);
         avObject.put(TableContract.TableStudent._SID, student.getSid());
@@ -29,7 +28,6 @@ public class StudentDAO implements BaseDAO<Student> {
         avObject.saveInBackground(callback);
     }
 
-    @Override
     public void update(Student student) {
 
     }
@@ -40,12 +38,10 @@ public class StudentDAO implements BaseDAO<Student> {
         query.findInBackground(callback);
     }
 
-    @Override
     public void delete(long id) {
 
     }
 
-    @Override
     public Student toModel(AVObject avStudent) {
         Student student = new Student();
         student.setNickName(avStudent.getString("nickName"));

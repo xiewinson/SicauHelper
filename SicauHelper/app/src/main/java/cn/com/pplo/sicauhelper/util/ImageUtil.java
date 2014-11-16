@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.ProgressCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -102,6 +103,32 @@ public class ImageUtil {
         return avFiles;
     }
 
+    /**
+     * 取得AVGoods中存放的图片
+     * @param avGoods
+     * @return
+     */
+    public static List<AVFile> getAVFileListByAVGoods(AVObject avGoods) {
+        List<AVFile> result = new ArrayList<AVFile>();
+        AVFile imageFile0 = avGoods.getAVFile("image0");
+        AVFile imageFile1 = avGoods.getAVFile("image1");
+        AVFile imageFile2 = avGoods.getAVFile("image2");
+        AVFile imageFile3 = avGoods.getAVFile("image3");
+        if(imageFile0 != null) {
+            result.add(imageFile0);
+        }
+        if(imageFile1 != null) {
+            result.add(imageFile1);
+        }
+        if(imageFile2 != null) {
+            result.add(imageFile2);
+        }
+        if(imageFile3 != null) {
+            result.add(imageFile3);
+        }
+        return result;
+    }
+
     public static abstract class SaveImageCallback extends SaveCallback {
 
         public Context context;
@@ -128,4 +155,5 @@ public class ImageUtil {
     public interface OnImageUploadFinishListener {
         public void onFinish(List<AVFile> avFiles);
     }
+
 }

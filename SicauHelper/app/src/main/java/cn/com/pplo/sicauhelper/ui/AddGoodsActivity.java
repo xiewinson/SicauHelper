@@ -161,7 +161,7 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
                     //类别
                     AVObject avObject = new AVObject(TableContract.TableGoods.TABLE_NAME);
                     //上传图片
-                    AVFile file = new AVFile(System.currentTimeMillis() + ".jpg", "http://jiaowu.sicau.edu.cn/photo/2011878" + new Random().nextInt(10) +".jpg", null);
+                    AVFile file = new AVFile(System.currentTimeMillis() + ".jpg", "http://jiaowu.sicau.edu.cn/photo/2011862" + new Random().nextInt(10) +".jpg", null);
                     avObject.put("image" + 0, file);
                     avObject.put("category", new Random().nextInt(9));
                     //校区

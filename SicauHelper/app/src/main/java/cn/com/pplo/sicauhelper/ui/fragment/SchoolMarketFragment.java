@@ -100,7 +100,7 @@ public class SchoolMarketFragment extends BaseFragment {
         footerView.setVisibility(View.GONE);
         listView.addFooterView(footerView);
 
-        listView.setAdapter(goodsAdapter);
+        UIUtil.setListViewInitAnimation("bottom", listView, goodsAdapter);
 
         //滑到最下面加载更多
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -173,16 +173,15 @@ public class SchoolMarketFragment extends BaseFragment {
      * 加载更多
      */
     private void findById(long goods_id) {
-        new GoodsDAO().findById(schoolPosition, goods_id, new FindCallback<AVObject>() {
+        new GoodsDAO().findSinceId(schoolPosition, goods_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
-                    if(list.size() == 0) {
+                    if (list.size() == 0) {
                         UIUtil.showShortToast(getActivity(), "已经没有更多商品啦");
                         footerView.setVisibility(View.INVISIBLE);
-                    }
-                    else {
+                    } else {
                         notifyDataSetChanged(list, false);
                         footerView.setVisibility(View.GONE);
                     }

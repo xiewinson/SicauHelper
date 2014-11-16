@@ -11,16 +11,7 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 /**
  * Created by winson on 2014/11/12.
  */
-public class GoodsDAO implements BaseDAO<Goods> {
-    @Override
-    public void save(Goods goods, SaveCallback callback) {
-
-    }
-
-    @Override
-    public void update(Goods goods) {
-
-    }
+public class GoodsDAO {
 
     /**
      * 在缓存中查询指定校区的goods列表
@@ -68,8 +59,9 @@ public class GoodsDAO implements BaseDAO<Goods> {
      * @param school
      * @param callback
      */
-    public void findById(int school, long goods_id, FindCallback callback) {
+    public void findSinceId(int school, long goods_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
         //小于指定id
         avQuery.whereLessThan("goods_id", goods_id);
         //取10条
@@ -82,13 +74,24 @@ public class GoodsDAO implements BaseDAO<Goods> {
         avQuery.findInBackground(callback);
     }
 
+    /**
+     * 查询指定objectId对应的goods
+     * @param callback
+     */
+    public void findByObjectId(AVQuery.CachePolicy cachePolicy, String objectId, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
+        avQuery.setCachePolicy(cachePolicy);
+        avQuery.whereEqualTo(TableContract.TableGoods._OBJECTID, objectId);
+        avQuery.include(TableContract.TableGoods._STUDENT);
+        avQuery.findInBackground(callback);
+    }
 
-    @Override
+
+
     public void delete(long id) {
 
     }
 
-    @Override
     public Goods toModel(AVObject avObject) {
         Goods goods = new Goods();
         goods.setAddress(avObject.getString(TableContract.TableGoods._ADDRESS));
