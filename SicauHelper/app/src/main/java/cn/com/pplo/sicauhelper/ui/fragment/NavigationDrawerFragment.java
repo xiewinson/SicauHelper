@@ -27,6 +27,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVUser;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.w3c.dom.Text;
@@ -39,6 +40,7 @@ import java.util.Map;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Student;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -191,11 +193,11 @@ public class NavigationDrawerFragment extends BaseFragment {
         sidTv = (TextView) headerView.findViewById(R.id.navigation_sid_tv);
         profileIv = (CircleImageView) headerView.findViewById(R.id.navigation_head_iv);
 
-        Student student = SicauHelperApplication.getStudent(getActivity());
-        if (student != null) {
-            nameTv.setText(student.getNickName());
-            sidTv.setText(student.getSid());
-            ImageLoader.getInstance().displayImage(student.getProfileUrl(), profileIv, ImageUtil.getDisplayImageOption(getActivity()));
+        AVUser avUser = SicauHelperApplication.getStudent();
+        if (avUser != null) {
+            nameTv.setText(avUser.getString(TableContract.TableStudent._NICKNAME));
+            sidTv.setText(avUser.getString(TableContract.TableStudent._SID));
+            ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableStudent._PROFILE_URL).getUrl(), profileIv, ImageUtil.getDisplayImageOption(getActivity()));
         }
         mDrawerListView.addHeaderView(headerView, null, false);
     }

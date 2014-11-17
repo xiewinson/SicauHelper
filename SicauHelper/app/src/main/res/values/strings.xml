@@ -35,18 +35,17 @@
         <item>立刻拍照</item>
         <item>本地相册</item>
     </string-array>
-
     <string-array name="comment_option_0">
         <item>回复</item>
         <item>投诉</item>
         <item>删除</item>
     </string-array>
-
     <string-array name="comment_option_1">
         <item>回复</item>
         <item>投诉</item>
     </string-array>
 
     <string name="title_activity_goods">GoodsActivity</string>
+    <string name="title_activity_search_goods">SearchGoodsActivity</string>
 
 </resources>

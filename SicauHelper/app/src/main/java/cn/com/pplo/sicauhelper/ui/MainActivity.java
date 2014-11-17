@@ -2,6 +2,7 @@ package cn.com.pplo.sicauhelper.ui;
 
 import android.app.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+
+import com.avos.avoscloud.AVUser;
 
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Student;
@@ -42,6 +45,15 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    /**
+     * 启动主页面
+     * @param context
+     */
+    public static void startMainActivity(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +61,7 @@ public class MainActivity extends ActionBarActivity
         Log.d("winson", "手机型号：" + Build.MODEL + "\n系统版本：" + Build.VERSION.RELEASE + "\n手机品牌：" + Build.BRAND);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        if (SicauHelperApplication.getStudent(this) == null) {
+        if (AVUser.getCurrentUser() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             this.finish();
@@ -201,7 +213,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        SicauHelperApplication.setStudent(null);
         finish();
     }
 }

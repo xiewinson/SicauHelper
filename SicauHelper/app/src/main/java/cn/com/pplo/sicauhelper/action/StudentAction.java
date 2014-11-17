@@ -1,11 +1,12 @@
-package cn.com.pplo.sicauhelper.dao;
+package cn.com.pplo.sicauhelper.action;
 
-import android.util.Log;
-
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.SaveCallback;
+import com.avos.avoscloud.LogInCallback;
+import com.avos.avoscloud.SignUpCallback;
 
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.TableContract;
@@ -13,19 +14,34 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 /**
  * Created by winson on 2014/11/9.
  */
-public class StudentDAO {
+public class StudentAction {
 
-    public void save(Student student, SaveCallback callback) {
-        AVObject avObject = new AVObject(TableContract.TableStudent.TABLE_NAME);
-        avObject.put(TableContract.TableStudent._SID, student.getSid());
-        avObject.put(TableContract.TableStudent._BACKGROUND, student.getBackground());
-        avObject.put(TableContract.TableStudent._NAME, student.getName());
-        avObject.put(TableContract.TableStudent._NICKNAME, student.getNickName());
-        avObject.put(TableContract.TableStudent._PROFILE_URL, student.getProfileUrl());
-        avObject.put(TableContract.TableStudent._PSWD, student.getPswd());
-        avObject.put(TableContract.TableStudent._SCHOOL, student.getSchool());
-        avObject.put(TableContract.TableStudent._ROLE, student.getRole());
-        avObject.saveInBackground(callback);
+    public void signUp(Student student, SignUpCallback callback) {
+        AVUser avUser = new AVUser();
+        avUser.setUsername(student.getSid());
+        avUser.setPassword(student.getSid());
+        avUser.put(TableContract.TableStudent._SID, student.getSid());
+        avUser.put(TableContract.TableStudent._BACKGROUND, student.getBackground());
+        avUser.put(TableContract.TableStudent._NAME, student.getName());
+        avUser.put(TableContract.TableStudent._NICKNAME, student.getNickName());
+        //存储头像
+        AVFile headImage = new AVFile(System.currentTimeMillis() + "_" +student.getSid() + ".jpg", student.getProfileUrl(), null);
+        avUser.put(TableContract.TableStudent._PROFILE_URL, headImage);
+
+        avUser.put(TableContract.TableStudent._PSWD, student.getPswd());
+        avUser.put(TableContract.TableStudent._SCHOOL, student.getSchool());
+        avUser.put(TableContract.TableStudent._ROLE, student.getRole());
+        avUser.signUpInBackground(callback);
+    }
+
+    /**
+     * 登录
+     * @param sid
+     * @param pswd
+     * @param callback
+     */
+    public void logIn(String sid, String pswd, LogInCallback callback) {
+        AVUser.logInInBackground(sid, pswd, callback);
     }
 
     public void update(Student student) {

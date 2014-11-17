@@ -124,7 +124,7 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
         categorySpinner = (Spinner) findViewById(R.id.category_spinner);
         imageLayout = (LinearLayout) findViewById(R.id.image_layout);
         schoolSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.school)));
-        schoolSpinner.setSelection(SicauHelperApplication.getStudent(this).getSchool());
+        schoolSpinner.setSelection(SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL));
         categorySpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.goods_category)));
     }
 
@@ -173,7 +173,7 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
                     //价格
                     avObject.put("price", new Random().nextInt(1001));
                     //发布人(学生)
-                    avObject.put("student", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
+                    avObject.put("user", SicauHelperApplication.getStudent());
                     //手机型号
                     avObject.put("model", Build.MODEL);
                     //手机品牌
@@ -221,7 +221,7 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
 //                        //价格
 //                       avObject.put("price", Float.parseFloat(priceEt.getText().toString().trim()));
 //                        //发布人(学生)
-//                        avObject.put("student", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
+//                        avObject.put("user", AVObject.createWithoutData("Student", SicauHelperApplication.getStudent(AddGoodsActivity.this).getObjectId()));
 //                        //手机型号
 //                        avObject.put("mobile", Build.MODEL);
 //                        //手机品牌

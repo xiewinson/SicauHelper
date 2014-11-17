@@ -14,20 +14,17 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.SaveCallback;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.LogInCallback;
+import com.avos.avoscloud.SignUpCallback;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.dao.StudentDAO;
+import cn.com.pplo.sicauhelper.action.StudentAction;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.util.NetUtil;
-import cn.com.pplo.sicauhelper.util.SQLiteUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -78,7 +75,7 @@ public class LoginActivity extends ActionBarActivity {
                         try {
                             Log.d("winson", "登录" + result);
                             Student student = StringUtil.parseStudentInfo(result);
-                            saveAndQueryStudent(student, sid, pswd);
+                            logInOrSignUpStudent(student, sid, pswd);
 
                         } catch (Exception e) {
                             UIUtil.dismissProgressDialog(progressDialog);
@@ -98,7 +95,7 @@ public class LoginActivity extends ActionBarActivity {
     }
 
     //存储学生信息到数据库和Application
-    private void saveAndQueryStudent(final Student student, final String sid, final String pswd) {
+    private void logInOrSignUpStudent(final Student student, final String sid, final String pswd) {
         //首先保存到xml
         saveSidPswdToXML(LoginActivity.this, sid, pswd);
         student.setSid(sid);
@@ -107,42 +104,31 @@ public class LoginActivity extends ActionBarActivity {
         student.setRole(1);
         student.setBackground("pic_0");
 
-        //查询其是否创建
-        new StudentDAO().find(sid, new FindCallback<AVObject>() {
+        //登录
+        new StudentAction().logIn(sid, sid, new LogInCallback() {
             @Override
-            public void done(List<AVObject> avStudents, AVException e) {
+            public void done(AVUser avUser, AVException e) {
                 //若已存在则跳转到主页面
-                if (e == null && avStudents.size() > 0) {
-                    saveAndGoToMainActivity(avStudents);
+                if (e == null) {
+                    startMainActivity();
                 }
 
-                //若不存在，则存储到AVOS
+                //若不存在，则创建用户
                 else {
                     //新建用户时将用户名设为用户昵称
                     student.setNickName(student.getName());
-                    StudentDAO studentDAO = new StudentDAO();
-                    studentDAO.save(student, new SaveCallback() {
+                    new StudentAction().signUp(student, new SignUpCallback() {
                         @Override
                         public void done(AVException e) {
-                            //保存成功
+
+                            //创建成功
                             if (e == null) {
-                                new StudentDAO().find(sid, new FindCallback<AVObject>() {
-                                    @Override
-                                    public void done(List<AVObject> avObjects, AVException e) {
-                                        if (e == null && avObjects.size() > 0) {
-                                            saveAndGoToMainActivity(avObjects);
-                                        }
-                                        else {
-                                            UIUtil.showShortToast(LoginActivity.this, "出现了一个未知的错误");
-                                        }
-                                    }
-                                });
+                                startMainActivity();
                             }
-                            //保存失败
                             else {
-                                UIUtil.dismissProgressDialog(progressDialog);
                                 UIUtil.showShortToast(LoginActivity.this, "出现了一个未知的错误");
                                 Log.d("winson", e.getMessage());
+                                UIUtil.dismissProgressDialog(progressDialog);
                             }
                         }
                     });
@@ -154,11 +140,9 @@ public class LoginActivity extends ActionBarActivity {
 
     /**
      * 存储数据并跳转到主页面
-     * @param avStudents
      */
-    private void saveAndGoToMainActivity(List<AVObject> avStudents) {
-        AVObject avStudent = avStudents.get(0);
-        SQLiteUtil.saveLoginStudent(this, new StudentDAO().toModel(avStudent));
+    private void startMainActivity() {
+
         UIUtil.dismissProgressDialog(progressDialog);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

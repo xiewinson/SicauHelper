@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,13 +12,9 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.dao.StudentDAO;
-import cn.com.pplo.sicauhelper.model.Goods;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.GoodsActivity;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
@@ -96,9 +91,9 @@ public class GoodsAdapter extends BaseAdapter {
 //        goods.setObjectId(avObject.getObjectId());
 
         final AVObject avGoods = getItem(position);
-        AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._STUDENT);
+        AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._USER);
         //头像
-        ImageLoader.getInstance().displayImage(avStudent.getString(TableContract.TableStudent._PROFILE_URL), holder.headIv, ImageUtil.getDisplayImageOption(context));
+        ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableStudent._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayImageOption(context));
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableStudent._NAME));
         //时间

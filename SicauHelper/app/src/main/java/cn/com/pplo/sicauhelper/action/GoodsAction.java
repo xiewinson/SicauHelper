@@ -1,17 +1,15 @@
-package cn.com.pplo.sicauhelper.dao;
+package cn.com.pplo.sicauhelper.action;
 
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
-import com.avos.avoscloud.SaveCallback;
 
-import cn.com.pplo.sicauhelper.model.Goods;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 
 /**
  * Created by winson on 2014/11/12.
  */
-public class GoodsDAO {
+public class GoodsAction {
 
     /**
      * 在缓存中查询指定校区的goods列表
@@ -27,7 +25,7 @@ public class GoodsDAO {
         avQuery.orderByDescending("goods_id");
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
-        avQuery.include(TableContract.TableGoods._STUDENT);
+        avQuery.include(TableContract.TableGoods._USER);
         avQuery.findInBackground(callback);
     }
 
@@ -50,7 +48,7 @@ public class GoodsDAO {
         avQuery.orderByDescending("goods_id");
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
-        avQuery.include(TableContract.TableGoods._STUDENT);
+        avQuery.include(TableContract.TableGoods._USER);
         avQuery.findInBackground(callback);
     }
 
@@ -70,7 +68,7 @@ public class GoodsDAO {
         avQuery.orderByDescending("goods_id");
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
-        avQuery.include(TableContract.TableGoods._STUDENT);
+        avQuery.include(TableContract.TableGoods._USER);
         avQuery.findInBackground(callback);
     }
 
@@ -82,7 +80,47 @@ public class GoodsDAO {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         avQuery.setCachePolicy(cachePolicy);
         avQuery.whereEqualTo(TableContract.TableGoods._OBJECTID, objectId);
-        avQuery.include(TableContract.TableGoods._STUDENT);
+        avQuery.include(TableContract.TableGoods._USER);
+        avQuery.findInBackground(callback);
+    }
+
+
+    /**
+     * 查询指定校区的匹配字符串的最新goods列表
+     * @param school
+     * @param callback
+     */
+    public void findDataByTitle(int school, String str, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
+        avQuery.whereContains(TableContract.TableGoods._TITLE, str);
+        //取10条
+        avQuery.setLimit(10);
+        //id降序
+        avQuery.orderByDescending("goods_id");
+        //选校区
+        avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
+        avQuery.include(TableContract.TableGoods._USER);
+        avQuery.findInBackground(callback);
+    }
+
+    /**
+     * 查询指定校区的匹配字符串从指定id开始的goods列表
+     * @param school
+     * @param callback
+     */
+    public void findDataByTitleSinceId(int school, String str, long goods_id, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
+        avQuery.whereContains(TableContract.TableGoods._TITLE, str);
+
+        //小于指定id
+        avQuery.whereLessThan("goods_id", goods_id);
+        //取10条
+        avQuery.setLimit(10);
+        //id降序
+        avQuery.orderByDescending("goods_id");
+        //选校区
+        avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
+        avQuery.include(TableContract.TableGoods._USER);
         avQuery.findInBackground(callback);
     }
 
@@ -90,28 +128,5 @@ public class GoodsDAO {
 
     public void delete(long id) {
 
-    }
-
-    public Goods toModel(AVObject avObject) {
-        Goods goods = new Goods();
-        goods.setAddress(avObject.getString(TableContract.TableGoods._ADDRESS));
-        goods.setBrand(avObject.getString(TableContract.TableGoods._BRAND));
-        goods.setCategory(avObject.getInt(TableContract.TableGoods._CATEGORY));
-        goods.setContent(avObject.getString(TableContract.TableGoods._CONTENT));
-        goods.setVersion(avObject.getString(TableContract.TableGoods._VERSION));
-        goods.setModel(avObject.getString(TableContract.TableGoods._MODEL));
-        goods.setPrice(avObject.getInt(TableContract.TableGoods._PRICE));
-        goods.setSchool(avObject.getInt(TableContract.TableGoods._SCHOOL));
-        goods.setTitle(avObject.getString(TableContract.TableGoods._TITLE));
-        goods.setId(avObject.getLong("goods_id"));
-        goods.setCommentCount(avObject.getLong(TableContract.TableGoods._COMMENT_COUNT));
-        goods.setLatitude(avObject.getAVGeoPoint("location").getLatitude() + "");
-        goods.setLongitude(avObject.getAVGeoPoint("location").getLongitude() + "");
-        goods.setUpdatedAt(avObject.getUpdatedAt().toString());
-        goods.setCreatedAt(avObject.getCreatedAt().toString());
-        goods.setStudent(new StudentDAO().toModel(avObject.getAVObject(TableContract.TableGoods._STUDENT)));
-        goods.setObjectId(avObject.getObjectId());
-
-        return goods;
     }
 }

@@ -66,6 +66,10 @@
             android:name="cn.com.pplo.sicauhelper.ui.GoodsActivity"
             android:label="@string/title_activity_goods" >
         </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.SearchGoodsActivity"
+            android:label="@string/title_activity_search_goods" >
+        </activity>
     </application>
 
 </manifest>

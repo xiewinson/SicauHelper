@@ -1,4 +1,4 @@
-package cn.com.pplo.sicauhelper.dao;
+package cn.com.pplo.sicauhelper.action;
 
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
@@ -10,7 +10,7 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 /**
  * Created by winson on 2014/11/16.
  */
-public class GoodsCommentDAO {
+public class GoodsCommentAction {
 
 
     /**
@@ -27,8 +27,8 @@ public class GoodsCommentDAO {
         avQuery.orderByAscending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
         //取出关联的对象
         avQuery.include(TableContract.TableGoodsComment._GOODS);
-        avQuery.include(TableContract.TableGoodsComment._SEND_STUDENT);
-        avQuery.include(TableContract.TableGoodsComment._RECEIVE_STUDENT);
+        avQuery.include(TableContract.TableGoodsComment._SEND_USER);
+        avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
 
         avQuery.findInBackground(callback);
     }
@@ -54,8 +54,8 @@ public class GoodsCommentDAO {
 
         //取出关联的对象
         avQuery.include(TableContract.TableGoodsComment._GOODS);
-        avQuery.include(TableContract.TableGoodsComment._SEND_STUDENT);
-        avQuery.include(TableContract.TableGoodsComment._RECEIVE_STUDENT);
+        avQuery.include(TableContract.TableGoodsComment._SEND_USER);
+        avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
 
         avQuery.findInBackground(callback);
     }
@@ -78,8 +78,8 @@ public class GoodsCommentDAO {
 
         //取出关联的对象
         avQuery.include(TableContract.TableGoodsComment._GOODS);
-        avQuery.include(TableContract.TableGoodsComment._SEND_STUDENT);
-        avQuery.include(TableContract.TableGoodsComment._RECEIVE_STUDENT);
+        avQuery.include(TableContract.TableGoodsComment._SEND_USER);
+        avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
 
         avQuery.findInBackground(callback);
     }

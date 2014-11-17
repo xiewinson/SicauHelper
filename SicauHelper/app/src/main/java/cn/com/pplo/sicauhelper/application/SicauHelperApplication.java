@@ -6,10 +6,11 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.AVUser;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 import cn.com.pplo.sicauhelper.model.Student;
-import cn.com.pplo.sicauhelper.util.SQLiteUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
 /**
@@ -17,7 +18,7 @@ import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
  */
 public class SicauHelperApplication extends Application {
     private static RequestQueue requestQueue;
-    private static Student student;
+    private static AVUser student;
     private static SicauHelperApplication sicauHelperApplication;
     private static Object lockObj = new Object();
 
@@ -65,18 +66,13 @@ public class SicauHelperApplication extends Application {
     }
 
     /**
-     * 取得登录Student对象，若
-     * @param context
+     * 取得登录Student对象，若为null则重新取得
      * @return
      */
-    public static Student getStudent(Context context) {
+    public static AVUser getStudent() {
         if(student == null) {
-            setStudent(SQLiteUtil.getLoginStudent(context, SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString()));
+            student = AVUser.getCurrentUser();
         }
         return student;
-    }
-
-    public static void setStudent(Student student) {
-        SicauHelperApplication.student = student;
     }
 }

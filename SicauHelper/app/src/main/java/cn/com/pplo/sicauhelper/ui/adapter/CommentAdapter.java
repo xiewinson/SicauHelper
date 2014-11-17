@@ -62,16 +62,16 @@ public class CommentAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         final AVObject avComment = getItem(position);
-        AVObject avStudent = avComment.getAVObject(TableContract.TableGoodsComment._SEND_STUDENT);
+        AVObject avStudent = avComment.getAVObject(TableContract.TableGoodsComment._SEND_USER);
         //头像
-        ImageLoader.getInstance().displayImage(avStudent.getString(TableContract.TableStudent._PROFILE_URL), holder.headIv, ImageUtil.getDisplayImageOption(context));
+        ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableStudent._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayImageOption(context));
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableStudent._NAME));
         //时间
         holder.timeTv.setText(TimeUtil.timeToFriendlTime(avComment.getCreatedAt().toString()));
         //内容
         String content = avComment.getString(TableContract.TableGoodsComment._CONTENT);
-        AVObject avReceive = avComment.getAVObject(TableContract.TableGoodsComment._RECEIVE_STUDENT);
+        AVObject avReceive = avComment.getAVObject(TableContract.TableGoodsComment._RECEIVE_USER);
         if(avReceive != null) {
             content = "回复 " + avReceive.getString(TableContract.TableStudent._NICKNAME) + ": " + content;
         }

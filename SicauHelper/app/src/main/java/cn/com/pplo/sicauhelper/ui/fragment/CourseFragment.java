@@ -50,6 +50,7 @@ import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.CourseAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.DepthPageTransformer;
@@ -153,6 +154,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 //                actionBar.setBackgroundDrawable(getResources().getDrawable(color));
 //                setPagerSlidingTabStyle(pagerSlidingTabStrip, color);
             }
+
             @Override
             public void onPageScrollStateChanged(int i) {
 
@@ -162,7 +164,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         //根据星期几选定课程表
         Calendar calendar = Calendar.getInstance();
         int date = 0;
-        switch (calendar.get(Calendar.DAY_OF_WEEK)){
+        switch (calendar.get(Calendar.DAY_OF_WEEK)) {
             case Calendar.MONDAY:
                 date = 0;
                 break;
@@ -203,7 +205,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_refresh) {
+        if (id == R.id.action_refresh) {
             requestCourseList(getActivity());
         }
         return super.onOptionsItemSelected(item);
@@ -231,7 +233,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position == 0){
+            if (position == 0) {
                 return "星期一";
             } else if (position == 1) {
                 return "星期二";
@@ -266,12 +268,13 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
     /**
      * 取得每日课程表列表
+     *
      * @param context
      * @param list
      * @return
      */
     private ListView getDateListView(Context context, List<Course> list) {
-        ListView listView  = new ListView(context);
+        ListView listView = new ListView(context);
         listView.setDivider(getResources().getDrawable(android.R.color.transparent));
         listView.setDividerHeight(0);
 //                (ListView) View.inflate(context, R.layout.fragment_course_date, null);
@@ -289,7 +292,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 
-        if (cursor != null  && cursor.getCount() > 0) {
+        if (cursor != null && cursor.getCount() > 0) {
             List<List<Course>> data = CursorUtil.parseCourseList(cursor);
             initViewPager(getActivity(), data);
         } else {
@@ -298,32 +301,30 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
     }
 
-    private void requestCourseList(final Context context){
+    private void requestCourseList(final Context context) {
         progressDialog.show();
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
-        Student student = SicauHelperApplication.getInstance().getStudent(context);
-        if (student != null) {
-            params.put("user", student.getSid() + "");
-            params.put("pwd", student.getPswd());
-            params.put("lb", "S");
-            NetUtil.getCourse2HtmlStr(context, params, new NetUtil.NetCallback(context) {
-                @Override
-                public void onSuccess(String result) {
-                    final List<Course> tempList = StringUtil.parseCourseInfo(result);
-                    initViewPager(context, StringUtil.parseCourseDateInfo(tempList));
-                    UIUtil.dismissProgressDialog(progressDialog);
-                    SaveIntentService.startActionCourseAll(context, tempList);
-                }
+        params.put("user", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString());
+        params.put("pwd", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_PSWD, "").toString());
+        params.put("lb", "S");
+        NetUtil.getCourse2HtmlStr(context, params, new NetUtil.NetCallback(context) {
+            @Override
+            public void onSuccess(String result) {
+                final List<Course> tempList = StringUtil.parseCourseInfo(result);
+                initViewPager(context, StringUtil.parseCourseDateInfo(tempList));
+                UIUtil.dismissProgressDialog(progressDialog);
+                SaveIntentService.startActionCourseAll(context, tempList);
+            }
 
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    UIUtil.dismissProgressDialog(progressDialog);
-                    super.onErrorResponse(volleyError);
-                }
-            });
-        }
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                UIUtil.dismissProgressDialog(progressDialog);
+                super.onErrorResponse(volleyError);
+            }
+        });
     }
+
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 

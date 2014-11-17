@@ -30,6 +30,8 @@ import cn.com.pplo.sicauhelper.ui.fragment.ProgressFragment;
  * Created by winson on 2014/9/14.
  */
 public class UIUtil {
+
+    public static final String LISTVIEW_ANIM_BOTTOM = "bottom";
     /**显示短Toast
      *
      * @param context
@@ -92,6 +94,25 @@ public class UIUtil {
     public static void setActionBarColor(Context context, ActionBar actionBarColor, int resId){
         actionBarColor.setBackgroundDrawable(context.getResources().getDrawable(resId));
     }
+        /**
+     * 设置actionbar颜色根据校区
+     * @param context
+     * @param actionBarColor
+     */
+    public static void setActionBarColorBySchool(Context context, int school, ActionBar actionBarColor){
+
+        int color = 0;
+        if (school == 0) {
+            color = R.color.blue_500;
+        } else if (school == 1) {
+            color = R.color.orange_500;
+        } else {
+            color = R.color.green_500;
+        }
+        UIUtil.setActionBarColor(context, actionBarColor, color);
+    }
+
+
 
     public static void setListViewInitAnimation(String type, AbsListView absListView, BaseAdapter baseAdapter) {
         AnimationAdapter animationAdapter = null;

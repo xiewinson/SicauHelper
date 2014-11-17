@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.dao.GoodsDAO;
+import cn.com.pplo.sicauhelper.action.GoodsAction;
+import cn.com.pplo.sicauhelper.ui.SearchGoodsActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.GoodsAdapter;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
@@ -113,7 +114,7 @@ public class SchoolMarketFragment extends BaseFragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if ((firstVisibleItem + visibleItemCount) > (totalItemCount - 2)) {
 
-                    if (footerView.getVisibility() == View.GONE && data.size() > 0) {
+                    if (footerView.getVisibility() == View.GONE && data.size() >= 10) {
                         Log.d("winson", "加载更多");
                         footerView.setVisibility(View.VISIBLE);
                         findById(data.get(data.size() - 1).getLong("goods_id"));
@@ -129,7 +130,7 @@ public class SchoolMarketFragment extends BaseFragment {
      * 从缓存中取
      */
     private void findInCache() {
-        new GoodsDAO().findInCache(schoolPosition, new FindCallback<AVObject>() {
+        new GoodsAction().findInCache(schoolPosition, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -152,7 +153,7 @@ public class SchoolMarketFragment extends BaseFragment {
      * 从网络取新的并清空缓存
      */
     private void findNewData() {
-        new GoodsDAO().findNewData(schoolPosition, new FindCallback<AVObject>() {
+        new GoodsAction().findNewData(schoolPosition, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -162,7 +163,7 @@ public class SchoolMarketFragment extends BaseFragment {
                 } else {
                     Log.d("winson", "出错：" + e.getMessage());
                 }
-                if(swipeRefreshLayout.isRefreshing()) {
+                if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
             }
@@ -173,7 +174,7 @@ public class SchoolMarketFragment extends BaseFragment {
      * 加载更多
      */
     private void findById(long goods_id) {
-        new GoodsDAO().findSinceId(schoolPosition, goods_id, new FindCallback<AVObject>() {
+        new GoodsAction().findSinceId(schoolPosition, goods_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -209,13 +210,18 @@ public class SchoolMarketFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //        inflater.inflate(R.menu.market, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+//        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_refresh) {
+            swipeRefreshLayout.setRefreshing(true);
+            findNewData();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

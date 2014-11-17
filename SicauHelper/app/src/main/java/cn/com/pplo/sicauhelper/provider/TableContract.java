@@ -98,7 +98,7 @@ public class TableContract {
         String _TITLE = "title";
         String _CONTENT = "content";
         String _PRICE = "price";
-        String _STUDENT = "student";
+        String _USER = "user";
         String _MODEL = "model";
         String _BRAND = "brand";
         String _VERSION = "version";
@@ -117,8 +117,8 @@ public class TableContract {
 
         String TABLE_NAME = "GoodsComment";
 
-        String _SEND_STUDENT = "sendStudent";
-        String _RECEIVE_STUDENT = "receiveStudent";
+        String _SEND_USER = "sendUser";
+        String _RECEIVE_USER = "receiveUser";
         String _CONTENT = "content";
         String _GOODS = "goods";
         String _GOODS_COMMENT_ID = "comment_id";

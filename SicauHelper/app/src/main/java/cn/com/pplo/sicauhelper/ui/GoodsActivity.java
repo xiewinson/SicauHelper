@@ -25,6 +25,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
@@ -35,9 +36,8 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
-import cn.com.pplo.sicauhelper.dao.GoodsCommentDAO;
-import cn.com.pplo.sicauhelper.dao.GoodsDAO;
-import cn.com.pplo.sicauhelper.model.Student;
+import cn.com.pplo.sicauhelper.action.GoodsAction;
+import cn.com.pplo.sicauhelper.action.GoodsCommentAction;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.adapter.CommentAdapter;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
@@ -106,15 +106,7 @@ public class GoodsActivity extends BaseActivity {
         commentEt = (EditText) findViewById(R.id.comment_et);
         sendBtn = (Button) findViewById(R.id.comment_send_btn);
 
-        int color = 0;
-        if (school == 0) {
-            color = R.color.blue_500;
-        } else if (school == 1) {
-            color = R.color.orange_500;
-        } else {
-            color = R.color.green_500;
-        }
-        UIUtil.setActionBarColor(context, getSupportActionBar(), color);
+        UIUtil.setActionBarColorBySchool(context, school, getSupportActionBar());
 
         //下拉刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.goods_swipe_container);
@@ -123,6 +115,7 @@ public class GoodsActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
+                initGoodsData(context);
                 findNewData(objectId);
                 footerView.setVisibility(View.GONE);
             }
@@ -174,16 +167,16 @@ public class GoodsActivity extends BaseActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         String[] optionArray = null;
 
-        Student student = SicauHelperApplication.getStudent(context);
-        Log.d("winson", "学号：" + avComment.getAVObject(TableContract.TableGoodsComment._SEND_STUDENT).getString(TableContract.TableStudent._SID));
-
+        AVUser avUser = SicauHelperApplication.getStudent();
+        Log.d("winson", "学号：" + avComment.getAVObject(TableContract.TableGoodsComment._SEND_USER).getString(TableContract.TableStudent._SID));
+        int roleId = avUser.getInt(TableContract.TableStudent._ROLE);
         //若为管理员或者是本人发表
-        if (student.getRole() == 0 ||
-                student.getSid().equals(avComment.getAVObject(TableContract.TableGoodsComment._SEND_STUDENT).getString(TableContract.TableStudent._SID))) {
+        if (roleId == 0 ||
+                avUser.getString(TableContract.TableStudent._SID).equals(avComment.getAVObject(TableContract.TableGoodsComment._SEND_USER).getString(TableContract.TableStudent._SID))) {
             optionArray = getResources().getStringArray(R.array.comment_option_0);
         }
         //若为普通用户
-        else if(student.getRole() == 1) {
+        else if(roleId == 1) {
             optionArray = getResources().getStringArray(R.array.comment_option_1);
         }
 
@@ -193,7 +186,7 @@ public class GoodsActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 //回复
                 if (which == 0) {
-                    receiveStudent = avComment.getAVObject(TableContract.TableGoodsComment._SEND_STUDENT);
+                    receiveStudent = avComment.getAVObject(TableContract.TableGoodsComment._SEND_USER);
                     commentEt.setHint("回复 " + receiveStudent.getString(TableContract.TableStudent._NICKNAME) + " 的评论");
                 }
                 //投诉
@@ -217,15 +210,15 @@ public class GoodsActivity extends BaseActivity {
      * @param context
      */
     private void initGoodsData(final Context context) {
-        new GoodsDAO().findByObjectId(AVQuery.CachePolicy.CACHE_THEN_NETWORK, objectId, new FindCallback<AVObject>() {
+        new GoodsAction().findByObjectId(AVQuery.CachePolicy.CACHE_THEN_NETWORK, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> avObjects, AVException e) {
                 if (e == null) {
                     Log.d("winson", "更新商品数据");
                     avGoods = avObjects.get(0);
-                    AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._STUDENT);
+                    AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._USER);
                     //头像
-                    ImageLoader.getInstance().displayImage(avStudent.getString(TableContract.TableStudent._PROFILE_URL), headIv, ImageUtil.getDisplayImageOption(context));
+                    ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableStudent._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(context));
                     //名字
                     nameTv.setText(avStudent.getString(TableContract.TableStudent._NAME));
                     //时间
@@ -319,12 +312,10 @@ public class GoodsActivity extends BaseActivity {
         avComment.put(TableContract.TableGoodsComment._GOODS, AVObject.createWithoutData(TableContract.TableGoods.TABLE_NAME,
                 objectId));
         //发送者
-        avComment.put(TableContract.TableGoodsComment._SEND_STUDENT,
-                AVObject.createWithoutData(TableContract.TableStudent.TABLE_NAME,
-                        SicauHelperApplication.getStudent(this).getObjectId()));
+        avComment.put(TableContract.TableGoodsComment._SEND_USER, SicauHelperApplication.getStudent());
         //接收者
         if (receiveStudent != null) {
-            avComment.put(TableContract.TableGoodsComment._RECEIVE_STUDENT, receiveStudent);
+            avComment.put(TableContract.TableGoodsComment._RECEIVE_USER, receiveStudent);
         }
         //内容
         avComment.put(TableContract.TableGoodsComment._CONTENT, commentStr);
@@ -362,7 +353,7 @@ public class GoodsActivity extends BaseActivity {
      * 更新评论数量
      */
     private void addCommentCount() {
-        new GoodsCommentDAO().count(avGoods, new CountCallback() {
+        new GoodsCommentAction().count(avGoods, new CountCallback() {
             @Override
             public void done(int count, AVException e) {
                 if (e != null) {
@@ -393,7 +384,7 @@ public class GoodsActivity extends BaseActivity {
      * 从缓存中取
      */
     private void findInCacheThenNetwork(final String objectId) {
-        new GoodsCommentDAO().findInCacheThenNetwork(objectId, new FindCallback<AVObject>() {
+        new GoodsCommentAction().findInCacheThenNetwork(objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -413,7 +404,8 @@ public class GoodsActivity extends BaseActivity {
      * 从网络取新的并清空缓存
      */
     private void findNewData(String objectId) {
-        new GoodsCommentDAO().findNewData(objectId, new FindCallback<AVObject>() {
+        footerView.setVisibility(View.GONE);
+        new GoodsCommentAction().findNewData(objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -434,7 +426,7 @@ public class GoodsActivity extends BaseActivity {
      * 加载更多
      */
     private void findById(String objectId, long comment_id) {
-        new GoodsCommentDAO().findSinceId(objectId, comment_id, new FindCallback<AVObject>() {
+        new GoodsCommentAction().findSinceId(objectId, comment_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -472,7 +464,8 @@ public class GoodsActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_goods, menu);
+        super.onCreateOptionsMenu(menu);
+//        getMenuInflater().inflate(R.menu.menu_goods, menu);
         return true;
     }
 
@@ -484,9 +477,13 @@ public class GoodsActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            swipeRefreshLayout.setRefreshing(true);
+            initGoodsData(this);
+            findNewData(objectId);
             return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

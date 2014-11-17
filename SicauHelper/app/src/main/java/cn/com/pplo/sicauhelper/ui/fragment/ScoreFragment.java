@@ -42,6 +42,7 @@ import cn.com.pplo.sicauhelper.ui.ScoreStatsActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.ScoreListAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.ViewPadding;
@@ -207,10 +208,8 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         progressDialog.show();
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
-        Student student = SicauHelperApplication.getInstance().getStudent(context);
-        if (student != null) {
-            params.put("user", student.getSid() + "");
-            params.put("pwd", student.getPswd());
+        params.put("user", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString());
+        params.put("pwd", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_PSWD, "").toString());
             params.put("lb", "S");
 
             NetUtil.getScoreHtmlStr(getActivity(), params, new NetUtil.NetCallback(getActivity()) {
@@ -236,7 +235,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
                     super.onErrorResponse(volleyError);
                 }
             });
-        }
     }
 
     /**

@@ -18,8 +18,10 @@ import android.view.ViewGroup;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.AddGoodsActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.ui.SearchGoodsActivity;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 import cn.com.pplo.sicauhelper.widget.ZoomOutPageTransformer;
 
@@ -116,7 +118,7 @@ public class MarketFragment extends BaseFragment {
             }
         });
         //选中当前登录用户校区
-        viewPager.setCurrentItem(SicauHelperApplication.getStudent(context).getSchool())     ;
+        viewPager.setCurrentItem(SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL))     ;
     }
 
     @Override
@@ -135,6 +137,10 @@ public class MarketFragment extends BaseFragment {
         int id = item.getItemId();
         if(id == R.id.action_add) {
             AddGoodsActivity.startNewGoodsActivity(getActivity());
+        }
+        else if(id == R.id.action_search) {
+            SearchGoodsActivity.startSearchGoodsActivity(getActivity(), viewPager.getCurrentItem());
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
