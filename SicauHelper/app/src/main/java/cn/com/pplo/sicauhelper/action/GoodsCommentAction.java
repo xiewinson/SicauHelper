@@ -1,8 +1,12 @@
 package cn.com.pplo.sicauhelper.action;
 
+import android.util.Log;
+
+import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.CountCallback;
+import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
 import cn.com.pplo.sicauhelper.provider.TableContract;
@@ -15,12 +19,13 @@ public class GoodsCommentAction {
 
     /**
      * 在缓存中查询指定商品的评论列表
+     *
      * @param callback
      */
     public void findInCacheThenNetwork(String objectId, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
         avQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_THEN_NETWORK);
-        avQuery.whereEqualTo(TableContract.TableGoodsComment._GOODS,  AVObject.createWithoutData(TableContract.TableGoods.TABLE_NAME, objectId));
+        avQuery.whereEqualTo(TableContract.TableGoodsComment._GOODS, AVObject.createWithoutData(TableContract.TableGoods.TABLE_NAME, objectId));
         //取10条
         avQuery.setLimit(10);
         //id降序
@@ -35,16 +40,17 @@ public class GoodsCommentAction {
 
     /**
      * 查询指定商品的最新评论列表
+     *
      * @param callback
      */
     public void findNewData(String objectId, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
-        avQuery.whereEqualTo(TableContract.TableGoodsComment._GOODS,  AVObject.createWithoutData(TableContract.TableGoods.TABLE_NAME, objectId));
+        avQuery.whereEqualTo(TableContract.TableGoodsComment._GOODS, AVObject.createWithoutData(TableContract.TableGoods.TABLE_NAME, objectId));
 
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
 
         //若有缓存则清空
-        if(avQuery.hasCachedResult()) {
+        if (avQuery.hasCachedResult()) {
             avQuery.clearCachedResult();
         }
         //取10条
@@ -62,6 +68,7 @@ public class GoodsCommentAction {
 
     /**
      * 查询评论的从指定id开始的评论列表
+     *
      * @param callback
      */
     public void findSinceId(String objectId, long comment_id, FindCallback callback) {
@@ -83,11 +90,26 @@ public class GoodsCommentAction {
 
         avQuery.findInBackground(callback);
     }
-    
+
+    /**
+     * 统计评论数量
+     *
+     * @param avGoods
+     * @param callback
+     */
     public void count(AVObject avGoods, CountCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
         avQuery.whereEqualTo(TableContract.TableGoodsComment._GOODS, avGoods);
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
         avQuery.countInBackground(callback);
+    }
+
+    /**
+     * 删除指定评论
+     *
+     * @param avComment
+     */
+    public void delete(AVObject avComment, DeleteCallback callback) {
+        avComment.deleteInBackground(callback);
     }
 }

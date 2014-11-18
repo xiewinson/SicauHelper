@@ -23,7 +23,6 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.GoodsAction;
-import cn.com.pplo.sicauhelper.ui.SearchGoodsActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.GoodsAdapter;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
@@ -123,26 +122,24 @@ public class SchoolMarketFragment extends BaseFragment {
             }
         });
 
-        findInCache();
+        findInCacheThenNetwork();
     }
 
     /**
      * 从缓存中取
      */
-    private void findInCache() {
-        new GoodsAction().findInCache(schoolPosition, new FindCallback<AVObject>() {
+    private void findInCacheThenNetwork() {
+        new GoodsAction().findInCacheThenNetwork(schoolPosition, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
                     //若为0.则进行网络请求
-                    if (list.size() == 0) {
-                        findNewData();
-                    } else {
-                        notifyDataSetChanged(list, false);
-                    }
+                    notifyDataSetChanged(list, true);
                 } else {
-                    Log.d("winson", "出错：" + e.getMessage());
+                    if (!e.getMessage().contains("Cache")) {
+                        UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，下拉刷新试试吧");
+                    }
                     findNewData();
                 }
             }
@@ -161,6 +158,7 @@ public class SchoolMarketFragment extends BaseFragment {
                     notifyDataSetChanged(list, true);
                     listView.setSelection(0);
                 } else {
+                    UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，重新试试吧");
                     Log.d("winson", "出错：" + e.getMessage());
                 }
                 if (swipeRefreshLayout.isRefreshing()) {
@@ -187,6 +185,7 @@ public class SchoolMarketFragment extends BaseFragment {
                         footerView.setVisibility(View.GONE);
                     }
                 } else {
+                    UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，重新试试吧");
                     Log.d("winson", "出错：" + e.getMessage());
                     footerView.setVisibility(View.GONE);
                 }

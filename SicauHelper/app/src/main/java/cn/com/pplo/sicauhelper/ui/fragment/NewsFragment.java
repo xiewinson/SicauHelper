@@ -30,8 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.NewsActivity;
@@ -82,7 +84,10 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.deep_purple_500));
+        //根据校区设置actionBar颜色
+        UIUtil.setActionBarColorBySchool(getActivity(),
+                SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL),
+                getSupportActionBar(getActivity()));
         setUp(getActivity(), view);
     }
 

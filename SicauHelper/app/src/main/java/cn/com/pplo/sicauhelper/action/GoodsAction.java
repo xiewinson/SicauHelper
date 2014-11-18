@@ -2,6 +2,7 @@ package cn.com.pplo.sicauhelper.action;
 
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
 import cn.com.pplo.sicauhelper.provider.TableContract;
@@ -16,9 +17,9 @@ public class GoodsAction {
      * @param school
      * @param callback
      */
-    public void findInCache(int school, FindCallback callback) {
+    public void findInCacheThenNetwork(int school, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
-        avQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_ONLY);
+        avQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_THEN_NETWORK);
         //取10条
         avQuery.setLimit(10);
         //id降序
@@ -85,6 +86,7 @@ public class GoodsAction {
     }
 
 
+    //TODO 需要使用CQL查询匹配用户昵称查询
     /**
      * 查询指定校区的匹配字符串的最新goods列表
      * @param school
@@ -125,8 +127,10 @@ public class GoodsAction {
     }
 
 
-
-    public void delete(long id) {
-
+    /**
+     * 删除
+     */
+    public void delete(AVObject avGoods, DeleteCallback callback) {
+        //TODO 删除商品和跟商品有关的评论和图片
     }
 }

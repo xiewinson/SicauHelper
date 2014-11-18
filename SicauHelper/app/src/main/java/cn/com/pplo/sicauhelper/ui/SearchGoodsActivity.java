@@ -89,13 +89,14 @@ public class SearchGoodsActivity extends BaseActivity {
                                         if (e == null) {
                                             Log.d("winson", list.size() + "个");
                                             if (list.size() == 0) {
-                                                UIUtil.showShortToast(SearchGoodsActivity.this, "已经没有更多评论啦！");
+                                                UIUtil.showShortToast(SearchGoodsActivity.this, "已经没有更多符合条件的商品啦！");
                                                 footerView.setVisibility(View.INVISIBLE);
                                             } else {
                                                 notifyDataSetChanged(list);
                                                 footerView.setVisibility(View.GONE);
                                             }
                                         } else {
+                                            UIUtil.showShortToast(SearchGoodsActivity.this, "你的网络好像有点问题，重新试试吧");
                                             Log.d("winson", "出错：" + e.getMessage());
                                             footerView.setVisibility(View.GONE);
                                         }
@@ -144,9 +145,13 @@ public class SearchGoodsActivity extends BaseActivity {
                     public void done(List<AVObject> list, AVException e) {
                         if (e == null) {
                             Log.d("winson", list.size() + "个");
+                            if (list.size() == 0) {
+                                UIUtil.showShortToast(SearchGoodsActivity.this, "没有任何符合条件的商品");
+                            }
                             notifyDataSetChanged(list);
                             listView.setSelection(0);
                         } else {
+                            UIUtil.showShortToast(SearchGoodsActivity.this, "你的网络好像有点问题，重新试试吧");
                             Log.d("winson", "出错：" + e.getMessage());
                         }
                     }
