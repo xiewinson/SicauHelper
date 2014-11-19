@@ -47,11 +47,10 @@
 
     <string name="title_activity_goods">GoodsActivity</string>
     <string name="title_activity_search_goods">SearchGoodsActivity</string>
-
     <string name="is_delete_comment">是否要删除这条评论?不能恢复的哦</string>
     <string name="is_delete_goods">是否要删除这个商品?不能恢复的哦</string>
-
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
 
 </resources>

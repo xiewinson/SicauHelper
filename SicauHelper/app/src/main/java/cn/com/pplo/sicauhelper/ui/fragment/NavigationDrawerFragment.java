@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.w3c.dom.Text;
@@ -75,6 +76,10 @@ public class NavigationDrawerFragment extends BaseFragment {
     private TextView nameTv;
     private TextView sidTv;
     private CircleImageView profileIv;
+    private View settingBtn;
+    private View helpBtn;
+    private View feedbackBtn;
+
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
@@ -112,19 +117,18 @@ public class NavigationDrawerFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-        initListView(inflater, container);
-        return mDrawerListView;
+        View view = inflater.inflate( R.layout.fragment_navigation_drawer, container, false);
+        initListView(view);
+        return view;
     }
 
     /**
      * 初始化listView
      *
-     * @param inflater
-     * @param container
      */
-    private void initListView(LayoutInflater inflater, ViewGroup container) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
+    private void initListView(View view) {
+
+        mDrawerListView = (ListView) view.findViewById(R.id.navigation_drawer_listView);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -182,6 +186,20 @@ public class NavigationDrawerFragment extends BaseFragment {
             }
         });
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        //底部按钮
+        settingBtn = view.findViewById(R.id.navigation_setting);
+        helpBtn = view.findViewById(R.id.navigation_help);
+        feedbackBtn = view.findViewById(R.id.navigation_feedback);
+
+        //反馈页面
+        feedbackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedbackAgent agent = new FeedbackAgent(getActivity());
+                agent.startDefaultThreadActivity();
+            }
+        });
     }
 
     /**

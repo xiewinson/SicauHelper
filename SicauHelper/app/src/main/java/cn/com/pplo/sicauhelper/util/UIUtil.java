@@ -38,7 +38,11 @@ public class UIUtil {
      * @param title
      */
     public static void showShortToast(Context context, String title) {
-        Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+        try {
+            Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

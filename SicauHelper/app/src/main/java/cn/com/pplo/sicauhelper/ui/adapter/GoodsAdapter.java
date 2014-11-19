@@ -113,7 +113,7 @@ public class GoodsAdapter extends BaseAdapter {
         //地址
         holder.locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
         //显示图片
-        List<AVFile> imageList = ImageUtil.getAVFileListByAVGoods(avGoods);
+        List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
         holder.imageLayout.removeAllViews();
         for(AVFile avFile : imageList) {
             ImageView imageView = new ImageView(context);

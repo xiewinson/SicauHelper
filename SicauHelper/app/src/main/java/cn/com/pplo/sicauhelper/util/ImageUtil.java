@@ -105,15 +105,15 @@ public class ImageUtil {
 
     /**
      * 取得AVGoods中存放的图片
-     * @param avGoods
+     * @param avObject
      * @return
      */
-    public static List<AVFile> getAVFileListByAVGoods(AVObject avGoods) {
+    public static List<AVFile> getAVFileListByAVObject(AVObject avObject) {
         List<AVFile> result = new ArrayList<AVFile>();
-        AVFile imageFile0 = avGoods.getAVFile("image0");
-        AVFile imageFile1 = avGoods.getAVFile("image1");
-        AVFile imageFile2 = avGoods.getAVFile("image2");
-        AVFile imageFile3 = avGoods.getAVFile("image3");
+        AVFile imageFile0 = avObject.getAVFile("image0");
+        AVFile imageFile1 = avObject.getAVFile("image1");
+        AVFile imageFile2 = avObject.getAVFile("image2");
+        AVFile imageFile3 = avObject.getAVFile("image3");
         if(imageFile0 != null) {
             result.add(imageFile0);
         }

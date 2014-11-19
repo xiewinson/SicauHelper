@@ -1,11 +1,18 @@
 package cn.com.pplo.sicauhelper.action;
 
+import android.util.Log;
+
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
+import java.util.List;
+
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.util.ImageUtil;
 
 /**
  * Created by winson on 2014/11/12.
@@ -131,6 +138,24 @@ public class GoodsAction {
      * 删除
      */
     public void delete(AVObject avGoods, DeleteCallback callback) {
-        //TODO 删除商品和跟商品有关的评论和图片
+//        List<AVFile> avFiles = ImageUtil.getAVFileListByAVObject(avGoods);
+        //删除关联图片,暂时不用。AVFile的文件存储没有上限，并且删除并不太方便
+//        for (AVFile avFile : avFiles) {
+//            if(avFile != null) {
+//                avFile.deleteInBackground(new DeleteCallback() {
+//                    @Override
+//                    public void done(AVException e) {
+//                        if(e != null) {
+//                            Log.d("winson", "删除图片失败：" + e.getMessage());
+//                        }
+//                        else {
+//                            Log.d("winson", "删除图片成功");
+//                        }
+//                    }
+//                });
+//            }
+//        }
+        //删除商品
+        avGoods.deleteInBackground(callback);
     }
 }

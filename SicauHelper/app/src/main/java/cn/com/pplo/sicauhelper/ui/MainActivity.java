@@ -18,7 +18,13 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 
+import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.feedback.Comment;
+import com.avos.avoscloud.feedback.FeedbackAgent;
+import com.avos.avoscloud.feedback.FeedbackThread;
+
+import java.util.List;
 
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Student;
@@ -66,6 +72,20 @@ public class MainActivity extends ActionBarActivity
             startActivity(intent);
             this.finish();
         } else {
+            //接受反馈通知
+            FeedbackAgent agent = new FeedbackAgent(this);
+//            agent.sync();
+            agent.getDefaultThread().sync(new FeedbackThread.SyncCallback() {
+                @Override
+                public void onCommentsSend(List<Comment> comments, AVException e) {
+                    Log.d("winson", comments.size() + "条评论send");
+                }
+
+                @Override
+                public void onCommentsFetch(List<Comment> comments, AVException e) {
+                    Log.d("winson", comments.size() + "条评论");
+                }
+            });
             initView();
         }
     }

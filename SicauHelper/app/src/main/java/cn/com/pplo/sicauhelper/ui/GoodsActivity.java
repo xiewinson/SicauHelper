@@ -56,10 +56,11 @@ public class GoodsActivity extends BaseActivity {
     private static final int ACTION_ITEM_DELETE_GOODS = -1000;
     private static final int ACTION_ITEM_EDIT_GOODS = -1001;
 
-
     private ListView listView;
     private EditText commentEt;
     private Button sendBtn;
+
+    private AlertDialog progressDialog;
 
     private View headerView;
     private CircleImageView headIv;
@@ -107,6 +108,8 @@ public class GoodsActivity extends BaseActivity {
     private void setUp(final Context context) {
         objectId = getIntent().getStringExtra(EXTRA_OBJECT_ID);
         school = getIntent().getIntExtra(EXTRA_SCHOOL, 0);
+
+        progressDialog = UIUtil.getProgressDialog(context, "正在发表评论...");
 
         listView = (ListView) findViewById(R.id.comment_listView);
         commentEt = (EditText) findViewById(R.id.comment_et);
@@ -199,11 +202,11 @@ public class GoodsActivity extends BaseActivity {
                 }
                 //投诉
                 else if (which == 1) {
-
+                    DialogUtil.showComplainDialog(context, DialogUtil.GOODS_COMMENT, avComment);
                 }
                 //删除
                 else {
-                    DialogUtil.showDeleteDialog(context, DialogUtil.DELETE_COMMENT, avComment, new DeleteCallback() {
+                    DialogUtil.showDeleteDialog(context, DialogUtil.GOODS_COMMENT, avComment, new DeleteCallback() {
                         @Override
                         public void done(AVException e) {
                             if (e == null) {
@@ -263,7 +266,7 @@ public class GoodsActivity extends BaseActivity {
                     //地址
                     locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
                     //显示图片
-                    List<AVFile> imageList = ImageUtil.getAVFileListByAVGoods(avGoods);
+                    List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
                     imageLayout.removeAllViews();
                     for (AVFile avFile : imageList) {
                         ImageView imageView = new ImageView(context);
@@ -279,6 +282,10 @@ public class GoodsActivity extends BaseActivity {
                     headerView.setVisibility(View.VISIBLE);
                 } else {
 //                    UIUtil.showShortToast(context, "你的网络好像不太好");
+                    //商品已被删除
+                    if(e.getMessage().contains("java.lang.IndexOutOfBoundsException")){
+                        UIUtil.showShortToast(context, "商品应该已经被删除了，找不到它了");
+                    }
                     Log.d("winson", "加载出错：" + e.getMessage());
                 }
             }
@@ -331,6 +338,9 @@ public class GoodsActivity extends BaseActivity {
      * @param commentStr
      */
     private void sendComment(String commentStr) {
+        if(progressDialog != null) {
+            progressDialog.show();
+        }
         AVObject avComment = new AVObject(TableContract.TableGoodsComment.TABLE_NAME);
 
         //存商品
@@ -359,6 +369,7 @@ public class GoodsActivity extends BaseActivity {
         avComment.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
+                UIUtil.dismissProgressDialog(progressDialog);
                 if (e != null) {
                     Log.d("winson", e.getMessage());
                     UIUtil.showShortToast(GoodsActivity.this, "发布失败，请重试");
@@ -528,11 +539,29 @@ public class GoodsActivity extends BaseActivity {
         }
         //删除商品信息
         else if(id == ACTION_ITEM_DELETE_GOODS) {
-
+            DialogUtil.showDeleteDialog(this, DialogUtil.GOODS, avGoods, new DeleteCallback() {
+                @Override
+                public void done(AVException e) {
+                    if(e == null) {
+                        UIUtil.showShortToast(GoodsActivity.this, "商品应该已经被删除了，找不到它了");
+                        GoodsActivity.this.finish();
+                        Log.d("winson", "删除商品成功");
+                    }
+                    else {
+                        UIUtil.showShortToast(GoodsActivity.this, "商品删除失败了");
+                        Log.d("winson", "删除商品失败：" + e.getMessage());
+                    }
+                }
+            });
         }
         //修改商品信息
         else if(id == ACTION_ITEM_EDIT_GOODS) {
 
+        }
+
+        //投诉商品
+        else if(id == R.id.action_complain) {
+            DialogUtil.showComplainDialog(this, DialogUtil.GOODS, avGoods);
         }
 
 

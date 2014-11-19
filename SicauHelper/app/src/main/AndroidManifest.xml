@@ -70,6 +70,9 @@
             android:name="cn.com.pplo.sicauhelper.ui.SearchGoodsActivity"
             android:label="@string/title_activity_search_goods" >
         </activity>
+        <activity
+            android:name="com.avos.avoscloud.feedback.ThreadActivity" >
+        </activity>
     </application>
 
 </manifest>
