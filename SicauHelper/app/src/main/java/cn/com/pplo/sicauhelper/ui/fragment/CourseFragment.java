@@ -102,7 +102,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     }
 
     private void setUp(View view) {
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表～");
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表");
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
         setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.green_700);

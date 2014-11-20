@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -64,6 +65,14 @@ public class NewsActivity extends BaseActivity {
         newsTv = (TextView) findViewById(R.id.news_tv);
         newsWebView = (WebView) findViewById(R.id.news_webView);
         scrollView = (ScrollView) findViewById(R.id.news_scrollView);
+
+        //设置webView可缩放
+        WebSettings webSettings = newsWebView.getSettings();
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setSupportZoom(true);
+        newsWebView.setInitialScale(10);
 
         //对话框
         progressDialog = UIUtil.getProgressFragment(context, "正在寻找新闻内容...");

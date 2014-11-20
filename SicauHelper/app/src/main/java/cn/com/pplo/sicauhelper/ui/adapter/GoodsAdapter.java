@@ -117,8 +117,8 @@ public class GoodsAdapter extends BaseAdapter {
         holder.imageLayout.removeAllViews();
         for(AVFile avFile : imageList) {
             ImageView imageView = new ImageView(context);
-            int width = (int)UIUtil.parseDpToPx(context, 60);
-            int height = (int)UIUtil.parseDpToPx(context, 40);
+            int width = (int)UIUtil.parseDpToPx(context, 40);
+            int height = (int)UIUtil.parseDpToPx(context, 30);
             imageView.setPadding(0, 0, (int) UIUtil.parseDpToPx(context, 8), 0);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);

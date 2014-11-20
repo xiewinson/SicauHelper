@@ -68,7 +68,7 @@ public class ClassroomAdapter extends BaseAdapter implements Filterable {
         int imgSrc = 0;
         if(time.contains("上午")) {
             color = R.color.cyan_500;
-            imgSrc = R.drawable.ic_brightness_1_white_48dp;
+            imgSrc = R.drawable.ic_brightness_5_white_48dp;
         }
         else if(time.contains("下午")) {
             color = R.color.amber_500;

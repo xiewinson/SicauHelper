@@ -36,6 +36,7 @@ import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.ScoreStatsActivity;
@@ -92,6 +93,9 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        UIUtil.setActionBarColorBySchool(getActivity(),
+                SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL),
+                getSupportActionBar(getActivity()));
         setUp(view);
     }
 

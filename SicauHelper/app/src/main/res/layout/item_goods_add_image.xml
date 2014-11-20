@@ -3,11 +3,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <ImageView
+        android:background="#dddddd"
+        android:padding="2dp"
         android:layout_margin="8dp"
         android:id="@+id/goods_iv"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
         android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         />
     <Button
         android:layout_margin="8dp"

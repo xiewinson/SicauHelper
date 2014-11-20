@@ -1,6 +1,8 @@
 package cn.com.pplo.sicauhelper.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,11 +27,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.ui.AddGoodsActivity;
 
 /**
  * Created by Administrator on 2014/11/7.
  */
 public class ImageUtil {
+
+    public static final int REQUEST_CODE_PICK_IMAGE = 1991;
+    public static final int REQUEST_CODE_CAPTURE_IMAGE = 1992;
+    public static final int REQUEST_CODE_CROP_IMAGE = 1993;
 
     /**
      * 取得展示图片选项
@@ -127,6 +134,33 @@ public class ImageUtil {
             result.add(imageFile3);
         }
         return result;
+    }
+
+    /**
+     * 裁剪图片
+     * @param activity
+     * @param imageUri
+     * @return
+     */
+    public static void cropImage(Activity activity, Uri imageUri, String resultPath) {
+        //创建图片文件
+        File resultFile = new File(resultPath);
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(imageUri, "image/*");
+        //下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 4);
+        intent.putExtra("aspectY", 3);
+        intent.putExtra("scale", true);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true); // no face detection
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 800 );
+        intent.putExtra("outputY", 600);
+        intent.putExtra("return-data", false);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(resultFile));
+        activity.startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
     }
 
     public static abstract class SaveImageCallback extends SaveCallback {
