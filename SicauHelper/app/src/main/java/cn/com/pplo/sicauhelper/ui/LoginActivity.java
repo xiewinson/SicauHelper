@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -112,7 +113,11 @@ public class LoginActivity extends ActionBarActivity {
                 if (e == null) {
                     startMainActivity();
                 }
-
+                //若姓名为空
+                else if(TextUtils.isEmpty(student.getName())) {
+                    UIUtil.showShortToast(LoginActivity.this, "你先去教务系统进行评教后再来使用吧");
+                    return;
+                }
                 //若不存在，则创建用户
                 else {
                     //新建用户时将用户名设为用户昵称

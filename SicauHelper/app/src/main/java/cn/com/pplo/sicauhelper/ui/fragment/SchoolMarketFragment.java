@@ -86,9 +86,7 @@ public class SchoolMarketFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
                 findNewData();
-                footerView.setVisibility(View.GONE);
             }
         });
 
@@ -150,6 +148,8 @@ public class SchoolMarketFragment extends BaseFragment {
      * 从网络取新的并清空缓存
      */
     private void findNewData() {
+        swipeRefreshLayout.setRefreshing(true);
+        footerView.setVisibility(View.GONE);
         new GoodsAction().findNewData(schoolPosition, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
@@ -217,7 +217,6 @@ public class SchoolMarketFragment extends BaseFragment {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            swipeRefreshLayout.setRefreshing(true);
             findNewData();
             return true;
         }

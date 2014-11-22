@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -129,6 +130,37 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
         schoolSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.school)));
         schoolSpinner.setSelection(SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL));
         categorySpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.goods_category)));
+
+
+        int school = schoolSpinner.getSelectedItemPosition();
+        setActionBarColor(school);
+        schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setActionBarColor(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    /**
+     * 设置颜色
+     * @param school
+     */
+    private void setActionBarColor(int school) {
+        int color = 0;
+        if (school == 0) {
+            color = R.color.blue_500;
+        } else if (school == 1) {
+            color = R.color.orange_500;
+        } else {
+            color = R.color.green_500;
+        }
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(color));
     }
 
 
@@ -157,6 +189,8 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
             /**
              * 上传最终结果
              */
+            //隐藏软键盘
+            UIUtil.hideSoftKeyboard(this, priceEt);
             upload(AddGoodsActivity.this, avImageList);
         }
 //                for(int i = 0; i < 100; i++) {
@@ -215,6 +249,19 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
      */
 
     private void upload(Context context, final List<AVFile> avFiles) {
+        if(TextUtils.isEmpty(priceEt.getText().toString().trim())) {
+            UIUtil.showShortToast(context, "价格不可为空");
+            return;
+        }
+        else if(TextUtils.isEmpty(titleEt.getText().toString().trim())) {
+            UIUtil.showShortToast(context, "标题不可为空");
+            return;
+        }
+        else if(TextUtils.isEmpty(contentEt.getText().toString().trim())) {
+            UIUtil.showShortToast(context, "内容不可为空");
+            return;
+        }
+
         AVObject avObject = new AVObject(TableContract.TableGoods.TABLE_NAME);
 
         //类别

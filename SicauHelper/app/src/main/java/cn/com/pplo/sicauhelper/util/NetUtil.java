@@ -343,6 +343,7 @@ public class NetUtil {
      */
     public static void getNewsHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback){
         try {
+            Log.d("winson", "开始请求新闻");
             //请求教务首页的HTML页面
             getOrPostRequest(context,
                     Request.Method.GET,
@@ -437,7 +438,7 @@ public class NetUtil {
                         UIUtil.showShortToast(context, "亲爱的，你的网络连接有问题，还用个毛啊");
                     }
                 } else {
-//                    UIUtil.showShortToast(context, "一定是教务网出了问题，一定是嗒");
+                    UIUtil.showShortToast(context, "额，臣亦不知发生了甚");
                 }
             } catch (Exception e) {
                 e.printStackTrace();

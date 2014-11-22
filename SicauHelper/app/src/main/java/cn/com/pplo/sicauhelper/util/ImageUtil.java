@@ -57,25 +57,15 @@ public class ImageUtil {
     }
 
     /**
-     * 通过uri取得图片path
-     * @param context
-     * @param uri
+     * 通过AVFile list取得图片url数组
      * @return
      */
-    public static String imageUriToPath(Context context, Uri uri) {
-        String result = "";
-        Cursor cursor = null;
-        try {
-            cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
-            cursor.moveToFirst();
-            result = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            cursor.close();
-            return result;
+    public static String[] getImageUrlsByAVFileList(List<AVFile> avFiles) {
+        String[] result = new String[avFiles.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = avFiles.get(i).getUrl();
         }
+        return result;
     }
 
     /**

@@ -36,9 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.action.CommentAction;
 import cn.com.pplo.sicauhelper.action.GoodsAction;
-import cn.com.pplo.sicauhelper.action.GoodsCommentAction;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.adapter.CommentAdapter;
 import cn.com.pplo.sicauhelper.util.DialogUtil;
@@ -259,6 +259,13 @@ public class GoodsActivity extends BaseActivity {
                     contentTv.setText(avGoods.getString(TableContract.TableGoods._CONTENT));
                     //评论
                     commentBtn.setText(avGoods.getLong(TableContract.TableGoods._COMMENT_COUNT) + "");
+                    commentBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            receiveStudent = null;
+                            commentEt.setHint("");
+                        }
+                    });
                     //手机
                     deviceTv.setText("来自 " + avGoods.getString(TableContract.TableGoods._BRAND) + " "
                             + avGoods.getString(TableContract.TableGoods._MODEL) + " ("
@@ -266,17 +273,29 @@ public class GoodsActivity extends BaseActivity {
                     //地址
                     locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
                     //显示图片
-                    List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
+                    final List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
+                    //图片url列表
+                    final String[] imageUrl = ImageUtil.getImageUrlsByAVFileList(imageList);
+
                     imageLayout.removeAllViews();
+                    int childPosition = 0;
                     for (AVFile avFile : imageList) {
-                        ImageView imageView = new ImageView(context);
+                        final ImageView imageView = new ImageView(context);
                         int width = (int) UIUtil.parseDpToPx(context, 40);
                         int height = (int) UIUtil.parseDpToPx(context, 30);
                         imageView.setPadding(0, 0, (int) UIUtil.parseDpToPx(context, 8), 0);
                         imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
                         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        imageView.setTag(childPosition);
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                GalleryActivity.startGalleryActivity(context, imageUrl, (Integer) view.getTag());
+                            }
+                        });
                         ImageLoader.getInstance().displayImage(avFile.getThumbnailUrl(false, width, height), imageView, ImageUtil.getDisplayImageOption(context));
                         imageLayout.addView(imageView);
+                        childPosition ++;
                     }
                     //显示headerView
                     headerView.setVisibility(View.VISIBLE);
@@ -302,6 +321,7 @@ public class GoodsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String commentStr = commentEt.getText().toString().trim();
+                UIUtil.hideSoftKeyboard(GoodsActivity.this, sendBtn);
                 if (TextUtils.isEmpty(commentStr)) {
                     UIUtil.showShortToast(GoodsActivity.this, "评论不可以是空的哦");
                 } else {
@@ -389,7 +409,7 @@ public class GoodsActivity extends BaseActivity {
      * 更新评论数量
      */
     private void addCommentCount(final boolean isRefreshComment) {
-        new GoodsCommentAction().count(avGoods, new CountCallback() {
+        new CommentAction().count(CommentAction.COMMENT_GOODS, avGoods, new CountCallback() {
             @Override
             public void done(int count, AVException e) {
                 if (e != null) {
@@ -422,7 +442,7 @@ public class GoodsActivity extends BaseActivity {
      * 从缓存中取
      */
     private void findCommentInCacheThenNetwork(final String objectId) {
-        new GoodsCommentAction().findInCacheThenNetwork(objectId, new FindCallback<AVObject>() {
+        new CommentAction().findInCacheThenNetwork(CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -442,8 +462,9 @@ public class GoodsActivity extends BaseActivity {
      * 从网络取新的并清空缓存
      */
     private void findNewCommentData(String objectId) {
+        swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new GoodsCommentAction().findNewData(objectId, new FindCallback<AVObject>() {
+        new CommentAction().findNewData(CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -465,7 +486,7 @@ public class GoodsActivity extends BaseActivity {
      * 加载更多
      */
     private void findCommentById(String objectId, long comment_id) {
-        new GoodsCommentAction().findSinceId(objectId, comment_id, new FindCallback<AVObject>() {
+        new CommentAction().findSinceId(CommentAction.COMMENT_GOODS, objectId, comment_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {

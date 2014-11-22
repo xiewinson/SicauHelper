@@ -76,7 +76,7 @@ public class MarketFragment extends BaseFragment {
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
         getSupportActionBar(context).setBackgroundDrawable(getResources().getDrawable(R.color.blue_500));
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.blue_700);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.blue_500);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
         pagerSlidingTabStrip.setViewPager(viewPager);
@@ -98,15 +98,15 @@ public class MarketFragment extends BaseFragment {
                 switch (position){
                     case 0:
                         color = R.color.blue_500;
-                        tabColor = R.color.blue_700;
+                        tabColor = R.color.blue_500;
                         break;
                     case 1:
                         color = R.color.orange_500;
-                        tabColor = R.color.orange_700;
+                        tabColor = R.color.orange_500;
                         break;
                     case 2:
                         color = R.color.green_500;
-                        tabColor = R.color.green_700;
+                        tabColor = R.color.green_500;
                         break;
                 }
                 actionBar.setBackgroundDrawable(getResources().getDrawable(color));

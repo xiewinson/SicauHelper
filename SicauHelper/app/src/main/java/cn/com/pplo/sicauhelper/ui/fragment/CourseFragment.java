@@ -105,7 +105,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表");
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.green_700);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.green_500);
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -187,7 +187,6 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
                 date = 6;
                 break;
         }
-        ;
         viewPager.setCurrentItem(date);
     }
 

@@ -104,14 +104,14 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 //        setListViewTopBottomPadding(listView);
 //        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
 //        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "找找找～正在教务系统上找你的成绩表");
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "正在教务系统上找你的成绩表");
         initScoreDetailAdapter();
         getLoaderManager().initLoader(0, null, this);
     }
 
     //详情列表
     private void initScoreDetailAdapter() {
-        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList);
+        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList, SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL));
 //        UIUtil.setListViewInitAnimation("bottom", listView, scoreListAdapter);
         listView.setAdapter(scoreListAdapter);
     }

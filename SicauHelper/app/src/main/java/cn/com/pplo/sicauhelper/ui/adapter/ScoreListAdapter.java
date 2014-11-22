@@ -32,10 +32,12 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
     private ScoreFragment.ScoreFilter scoreFilter;
     private Context context;
     private List<Score> data;
+    private int school;
 
-    public ScoreListAdapter(Context context, List<Score> list) {
+    public ScoreListAdapter(Context context, List<Score> list, int school) {
         this.context = context;
         this.data = list;
+        this.school = school;
     }
 
     @Override
@@ -88,6 +90,10 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         } else if (category.equals("实践")) {
             circleShape = R.drawable.circle_purple;
             color = context.getResources().getColor(R.color.purple_500);
+        }
+        else if (category.equals("方向")) {
+            circleShape = R.drawable.circle_brown;
+            color = context.getResources().getColor(R.color.brown_500);
         }
         final ViewHolder finalHolder = holder;
         holder.scoreView.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +165,21 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         } else {
             upOrDown = "下学年";
         }
+
+        //设置header颜色
+        int color = 0;
+        switch (school){
+            case 0:
+                color = R.color.blue_500;
+                break;
+            case 1:
+                color = R.color.orange_500;
+                break;
+            case 2:
+                color = R.color.green_500;
+                break;
+        }
+        convertView.setBackgroundResource(color);
 
         //计算有几门课
         int count = 0;

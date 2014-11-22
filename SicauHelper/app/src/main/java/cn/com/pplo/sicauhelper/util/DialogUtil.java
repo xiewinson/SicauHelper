@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.action.CommentAction;
 import cn.com.pplo.sicauhelper.action.GoodsAction;
-import cn.com.pplo.sicauhelper.action.GoodsCommentAction;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 
@@ -56,7 +56,7 @@ public class DialogUtil {
                     public void onClick(DialogInterface dialog, int which) {
                         //删除评论
                         if (type == GOODS_COMMENT) {
-                            new GoodsCommentAction().delete(avObject, callback);
+                            new CommentAction().delete(avObject, callback);
                         }
                         //删除商品
                         else if (type == GOODS) {

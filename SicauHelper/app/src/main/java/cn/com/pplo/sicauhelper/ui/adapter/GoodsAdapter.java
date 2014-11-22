@@ -16,6 +16,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.ui.GalleryActivity;
 import cn.com.pplo.sicauhelper.ui.GoodsActivity;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.TimeUtil;
@@ -114,7 +115,10 @@ public class GoodsAdapter extends BaseAdapter {
         holder.locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
         //显示图片
         List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
+        //图片url列表
+        final String[] imageUrl = ImageUtil.getImageUrlsByAVFileList(imageList);
         holder.imageLayout.removeAllViews();
+        int childPosition = 0;
         for(AVFile avFile : imageList) {
             ImageView imageView = new ImageView(context);
             int width = (int)UIUtil.parseDpToPx(context, 40);
@@ -122,8 +126,16 @@ public class GoodsAdapter extends BaseAdapter {
             imageView.setPadding(0, 0, (int) UIUtil.parseDpToPx(context, 8), 0);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setTag(childPosition);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    GalleryActivity.startGalleryActivity(context, imageUrl, (Integer) view.getTag());
+                }
+            });
             ImageLoader.getInstance().displayImage(avFile.getThumbnailUrl(false, width, height), imageView, ImageUtil.getDisplayImageOption(context));
             holder.imageLayout.addView(imageView);
+            childPosition ++;
         }
 
         //打开详细页面

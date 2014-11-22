@@ -73,6 +73,9 @@
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity" >
         </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.GalleryActivity" >
+        </activity>
     </application>
 
 </manifest>
