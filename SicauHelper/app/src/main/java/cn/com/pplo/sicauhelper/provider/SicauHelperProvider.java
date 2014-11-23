@@ -114,7 +114,7 @@ public class SicauHelperProvider extends ContentProvider {
                 return Uri.withAppendedPath(uri, classroomAllId + "");
 
             case CODE_STUDENT_ALL:
-                long studentId = sqliteDatabase.insert(TableContract.TableStudent.TABLE_NAME, null, values);
+                long studentId = sqliteDatabase.insert(TableContract.TableUser.TABLE_NAME, null, values);
                 return Uri.withAppendedPath(uri, studentId + "");
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
@@ -154,7 +154,7 @@ public class SicauHelperProvider extends ContentProvider {
                 return null;
 
             case CODE_STUDENT_ALL:
-                Cursor  studentAllCursor = sqliteDatabase.query(TableContract.TableStudent.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+                Cursor  studentAllCursor = sqliteDatabase.query(TableContract.TableUser.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
                 return studentAllCursor;
             case CODE_STUDENT_SINGLE:
                 return null;
@@ -179,7 +179,7 @@ public class SicauHelperProvider extends ContentProvider {
             case CODE_CLASSROOM_ALL:
                 return sqliteDatabase.delete(TableContract.TableClassroom.TABLE_NAME, selection, selectionArgs);
             case CODE_STUDENT_ALL:
-                return sqliteDatabase.delete(TableContract.TableStudent.TABLE_NAME, selection, selectionArgs);
+                return sqliteDatabase.delete(TableContract.TableUser.TABLE_NAME, selection, selectionArgs);
 
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
@@ -208,7 +208,7 @@ public class SicauHelperProvider extends ContentProvider {
 
             //更新学生
             case CODE_NEWS_ALL:
-                return sqliteDatabase.update(TableContract.TableStudent.TABLE_NAME,
+                return sqliteDatabase.update(TableContract.TableUser.TABLE_NAME,
                         values,
                         selection,
                         selectionArgs);

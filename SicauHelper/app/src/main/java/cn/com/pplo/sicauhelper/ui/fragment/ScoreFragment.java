@@ -2,7 +2,6 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,7 +11,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 
@@ -31,10 +28,7 @@ import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
-import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
 import cn.com.pplo.sicauhelper.model.Score;
-import cn.com.pplo.sicauhelper.model.ScoreStats;
-import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
@@ -46,7 +40,6 @@ import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
-import cn.com.pplo.sicauhelper.widget.ViewPadding;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
@@ -94,7 +87,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         UIUtil.setActionBarColorBySchool(getActivity(),
-                SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL),
+                SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL),
                 getSupportActionBar(getActivity()));
         setUp(view);
     }
@@ -111,7 +104,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 
     //详情列表
     private void initScoreDetailAdapter() {
-        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList, SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL));
+        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList, SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL));
 //        UIUtil.setListViewInitAnimation("bottom", listView, scoreListAdapter);
         listView.setAdapter(scoreListAdapter);
     }

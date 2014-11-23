@@ -37,7 +37,14 @@ public class CommentAction {
             avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
         }
         else if(type == COMMENT_STATUS) {
-
+            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableStatusComment._STATUS, AVObject.createWithoutData(TableContract.TableStatus.TABLE_NAME, objectId));
+            //id降序
+            avQuery.orderByAscending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableStatusComment._STATUS);
+            avQuery.include(TableContract.TableStatusComment._SEND_USER);
+            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
         }
         avQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_THEN_NETWORK);
         //取10条
@@ -63,7 +70,14 @@ public class CommentAction {
             avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
         }
         else if(type == COMMENT_STATUS) {
-
+            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableStatusComment._STATUS, AVObject.createWithoutData(TableContract.TableStatus.TABLE_NAME, objectId));
+            //id降序
+            avQuery.orderByAscending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableStatusComment._STATUS);
+            avQuery.include(TableContract.TableStatusComment._SEND_USER);
+            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
         }
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
         //若有缓存则清空
@@ -95,7 +109,16 @@ public class CommentAction {
             avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
         }
         else if(type == COMMENT_STATUS) {
-
+            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableStatusComment._STATUS, AVObject.createWithoutData(TableContract.TableStatus.TABLE_NAME, objectId));
+            //小于指定id
+            avQuery.whereGreaterThan(TableContract.TableStatusComment._STATUS_COMMENT_ID, comment_id);
+            //id降序
+            avQuery.orderByAscending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableStatusComment._STATUS);
+            avQuery.include(TableContract.TableStatusComment._SEND_USER);
+            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
         }
 
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
@@ -119,7 +142,8 @@ public class CommentAction {
             avQuery.whereEqualTo(TableContract.TableGoodsComment._GOODS, avGoods);
         }
         else if(type == COMMENT_STATUS) {
-
+            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableStatusComment._STATUS, avGoods);
         }
 
 

@@ -1,7 +1,6 @@
 package cn.com.pplo.sicauhelper.ui;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,7 +45,12 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
-public class AddGoodsActivity extends BaseActivity implements AMapLocationListener {
+public class AddActivity extends BaseActivity implements AMapLocationListener {
+
+    public static final String EXTRA_ADD_TYPE = "add_type";
+    public static final int TYPE_GOODS = 888;
+    public static final int TYPE_STATUS = 999;
+    private int type;
 
     private EditText titleEt;
     private EditText contentEt;
@@ -85,8 +89,9 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
      *
      * @param context
      */
-    public static void startNewGoodsActivity(Context context) {
-        Intent intent = new Intent(context, AddGoodsActivity.class);
+    public static void startAddActivity(Context context, int type) {
+        Intent intent = new Intent(context, AddActivity.class);
+        intent.putExtra(EXTRA_ADD_TYPE, type);
         context.startActivity(intent);
     }
 
@@ -95,8 +100,9 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_goods);
 
+        type = getIntent().getIntExtra(EXTRA_ADD_TYPE, 0);
         initLocation();
-        getSupportActionBar().setTitle("新增商品");
+
         setUp();
     }
 
@@ -127,24 +133,37 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
         schoolSpinner = (Spinner) findViewById(R.id.school_spinner);
         categorySpinner = (Spinner) findViewById(R.id.category_spinner);
         imageLayout = (LinearLayout) findViewById(R.id.image_layout);
+
         schoolSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.school)));
-        schoolSpinner.setSelection(SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL));
+        schoolSpinner.setSelection(SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL));
         categorySpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.goods_category)));
 
+        //商品
+        if(type == TYPE_GOODS) {
+            getSupportActionBar().setTitle("新商品");
+            int school = schoolSpinner.getSelectedItemPosition();
+            setActionBarColor(school);
+            schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(type == TYPE_GOODS) {
+                        setActionBarColor(position);
+                    }
+                }
 
-        int school = schoolSpinner.getSelectedItemPosition();
-        setActionBarColor(school);
-        schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setActionBarColor(position);
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+                }
+            });
+        }
+        //若为新帖子则隐藏校区选项
+        else if(type == TYPE_STATUS) {
+            getSupportActionBar().setTitle("新帖子");
+            UIUtil.setActionBarColor(AddActivity.this, getSupportActionBar(), R.color.red_500);
+            schoolSpinner.setVisibility(View.GONE);
+            priceEt.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -179,9 +198,9 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
         int id = item.getItemId();
         if (id == R.id.action_image) {
             if (avImageList.size() < 4) {
-                getImageSelectDialog(AddGoodsActivity.this).show();
+                getImageSelectDialog(AddActivity.this).show();
             } else {
-                UIUtil.showShortToast(AddGoodsActivity.this, "最多只能添加四张图片");
+                UIUtil.showShortToast(AddActivity.this, "最多只能添加四张图片");
             }
             return true;
         } else if (id == R.id.action_send) {
@@ -190,57 +209,18 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
              * 上传最终结果
              */
             //隐藏软键盘
-            UIUtil.hideSoftKeyboard(this, priceEt);
-            upload(AddGoodsActivity.this, avImageList);
-        }
-//                for(int i = 0; i < 100; i++) {
-//
-//                    //类别
-//                    AVObject avObject = new AVObject(TableContract.TableGoods.TABLE_NAME);
-//                    //上传图片
-//                    AVFile file = new AVFile(System.currentTimeMillis() + ".jpg", "http://jiaowu.sicau.edu.cn/photo/2011862" + new Random().nextInt(10) +".jpg", null);
-//                    avObject.put("image" + 0, file);
-//                    avObject.put("category", new Random().nextInt(9));
-//                    //校区
-//                    avObject.put("school", new Random().nextInt(3));
-//                    //标题
-//                    avObject.put("title", new Random().nextFloat() + "啊");
-//                    //内容
-//                    avObject.put("content", new Random().nextFloat() + "恩");
-//                    //价格
-//                    avObject.put("price", new Random().nextInt(1001));
-//                    //发布人(学生)
-//                    avObject.put("user", SicauHelperApplication.getStudent());
-//                    //手机型号
-//                    avObject.put("model", Build.MODEL);
-//                    //手机品牌
-//                    avObject.put("brand", Build.BRAND);
-//                    //手机系统版本
-//                    avObject.put("version", Build.VERSION.RELEASE);
-//                    //经纬度
-//                    avObject.put("location", new AVGeoPoint(latitude, longitude));
-//                    //详细地址
-//                    avObject.put("address", address);
-//
-//                    avObject.saveInBackground(new SaveCallback() {
-//                        @Override
-//                        public void done(AVException e) {
-//                            if (e == null) {
-//                                Log.d("winson", "上传对象成功");
-//                            } else {
-//                                Log.d("winson", "上传对象失败：" + e.getMessage());
-//                            }
-//                            try {
-//                                Thread.sleep(100);
-//                            } catch (InterruptedException e1) {
-//                                e1.printStackTrace();
-//                            }
-//                        }
-//                    });
-//                }
+            UIUtil.hideSoftKeyboard(this, titleEt);
+            if(type == TYPE_GOODS) {
+                uploadGoods(AddActivity.this, avImageList);
+            }
+            else if(type == TYPE_STATUS) {
+                uploadStatus(AddActivity.this, avImageList);
+            }
 
+        }
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * 上传数据
@@ -248,7 +228,7 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
      * @param context
      */
 
-    private void upload(Context context, final List<AVFile> avFiles) {
+    private void uploadGoods(Context context, final List<AVFile> avFiles) {
         if(TextUtils.isEmpty(priceEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "价格不可为空");
             return;
@@ -265,30 +245,28 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
         AVObject avObject = new AVObject(TableContract.TableGoods.TABLE_NAME);
 
         //类别
-        avObject.put("category", categorySpinner.getSelectedItemPosition());
+        avObject.put(TableContract.TableGoods._CATEGORY, categorySpinner.getSelectedItemPosition());
         //校区
-        avObject.put("school", schoolSpinner.getSelectedItemPosition());
+        avObject.put(TableContract.TableGoods._SCHOOL, schoolSpinner.getSelectedItemPosition());
         //标题
-        avObject.put("title", titleEt.getText().toString().trim());
+        avObject.put(TableContract.TableGoods._TITLE, titleEt.getText().toString().trim());
         //内容
-        avObject.put("content", contentEt.getText().toString().trim());
+        avObject.put(TableContract.TableGoods._CONTENT, contentEt.getText().toString().trim());
         //价格
-        avObject.put("price", Float.parseFloat(priceEt.getText().toString().trim()));
+        avObject.put(TableContract.TableGoods._PRICE, Float.parseFloat(priceEt.getText().toString().trim()));
         //发布人(学生)
-        avObject.put("user", SicauHelperApplication.getStudent());
+        avObject.put(TableContract.TableGoods._USER, SicauHelperApplication.getStudent());
         //手机型号
-        avObject.put("model", Build.MODEL);
+        avObject.put(TableContract.TableGoods._MODEL, Build.MODEL);
         //手机品牌
-        avObject.put("brand", Build.BRAND);
+        avObject.put(TableContract.TableGoods._BRAND, Build.BRAND);
         //手机系统版本
-        avObject.put("version", Build.VERSION.RELEASE);
+        avObject.put(TableContract.TableGoods._VERSION, Build.VERSION.RELEASE);
         //经纬度
         avObject.put("location", new AVGeoPoint(latitude, longitude));
         //详细地址
-        avObject.put("address", address);
+        avObject.put(TableContract.TableGoods._ADDRESS, address);
 
-//                        添加图片到列表
-//        avObject.addAll("pictures", avImageList);
 //        上传图片
         for (int i = 0; i < avFiles.size(); i++) {
             avObject.put("image" + i, avFiles.get(i));
@@ -304,6 +282,58 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
             }
         });
     }
+
+    /**
+     * 上传帖子
+     * @param context
+     * @param avFiles
+     */
+    private void uploadStatus(Context context, List<AVFile> avFiles) {
+
+        if(TextUtils.isEmpty(titleEt.getText().toString().trim())) {
+            UIUtil.showShortToast(context, "标题不可为空");
+            return;
+        }
+        else if(TextUtils.isEmpty(contentEt.getText().toString().trim())) {
+            UIUtil.showShortToast(context, "内容不可为空");
+            return;
+        }
+
+        AVObject avObject = new AVObject(TableContract.TableStatus.TABLE_NAME);
+
+        //标题
+        avObject.put(TableContract.TableStatus._TITLE, titleEt.getText().toString().trim());
+        //内容
+        avObject.put(TableContract.TableStatus._CONTENT, contentEt.getText().toString().trim());
+        //发布人(学生)
+        avObject.put(TableContract.TableStatus._USER, SicauHelperApplication.getStudent());
+        //手机型号
+        avObject.put(TableContract.TableStatus._MODEL, Build.MODEL);
+        //手机品牌
+        avObject.put(TableContract.TableStatus._BRAND, Build.BRAND);
+        //手机系统版本
+        avObject.put(TableContract.TableStatus._VERSION, Build.VERSION.RELEASE);
+        //经纬度
+        avObject.put("location", new AVGeoPoint(latitude, longitude));
+        //详细地址
+        avObject.put(TableContract.TableGoods._ADDRESS, address);
+
+//        上传图片
+        for (int i = 0; i < avFiles.size(); i++) {
+            avObject.put("image" + i, avFiles.get(i));
+        }
+        avObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(AVException e) {
+                if (e == null) {
+                    Log.d("winson", "上传对象成功");
+                } else {
+                    Log.d("winson", "上传对象失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
 
     /**
      * 取得图片选择Dialog
@@ -361,7 +391,7 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
 
                         try {
                             final AVFile avFile = AVFile.withAbsoluteLocalPath(
-                                    SicauHelperApplication.getStudent().getString(TableContract.TableStudent._SID)
+                                    SicauHelperApplication.getStudent().getString(TableContract.TableUser._SID)
                                             + "_goods_" + System.currentTimeMillis() + ".jpg", resultPath);
 
                             if (avFile != null) {
@@ -392,16 +422,16 @@ public class AddGoodsActivity extends BaseActivity implements AMapLocationListen
      * @param avFile
      */
     private void uploadImage(final Context context, final AVFile avFile) {
-        final AlertDialog uploadImgDialog = UIUtil.getProgressDialog(AddGoodsActivity.this, "上传图片中...");
+        final AlertDialog uploadImgDialog = UIUtil.getProgressDialog(AddActivity.this, "上传图片中...");
         uploadImgDialog.show();
         avFile.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
                 UIUtil.dismissProgressDialog(uploadImgDialog);
                 if (e == null) {
-                    UIUtil.showShortToast(AddGoodsActivity.this, "上传图片成功");
+                    UIUtil.showShortToast(AddActivity.this, "上传图片成功");
                     avImageList.add(avFile);
-                    showImage(AddGoodsActivity.this, resultPath);
+                    showImage(AddActivity.this, resultPath);
                     Log.d("winson", "当前的图片列表个数为" + avImageList.size() + "   " + avImageList);
                 } else {
                     new AlertDialog.Builder(context)

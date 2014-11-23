@@ -22,39 +22,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.action.GoodsAction;
-import cn.com.pplo.sicauhelper.ui.adapter.GoodsAdapter;
+import cn.com.pplo.sicauhelper.action.StatusAction;
+import cn.com.pplo.sicauhelper.ui.AddActivity;
+import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.ui.SearchGoodsActivity;
+import cn.com.pplo.sicauhelper.ui.adapter.StatusAdapter;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
-public class SchoolMarketFragment extends BaseFragment {
-
-    private static final String SCHOOL_POSITION = "school_position";
-    private int schoolPosition = 0;
-    private String[] schoolArray;
+public class StatusFragment extends BaseFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
     private View footerView;
-    private GoodsAdapter goodsAdapter;
+    private StatusAdapter statusAdapter;
     private List<AVObject> data = new ArrayList<AVObject>();
 
-    public static SchoolMarketFragment newInstance(int position) {
-        SchoolMarketFragment fragment = new SchoolMarketFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(SCHOOL_POSITION, position);
-        fragment.setArguments(bundle);
+    public static StatusFragment newInstance() {
+        StatusFragment fragment = new StatusFragment();
+
         return fragment;
     }
 
-    public SchoolMarketFragment() {
+    public StatusFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        schoolPosition = getArguments().getInt(SCHOOL_POSITION);
-        schoolArray = getResources().getStringArray(R.array.school);
+        ((MainActivity) activity).onSectionAttached(getResources().getString(R.string.title_status));
     }
 
     @Override
@@ -69,19 +65,19 @@ public class SchoolMarketFragment extends BaseFragment {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_school_market, container, false);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.red_500);
+        return inflater.inflate(R.layout.fragment_status, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("winson", schoolPosition + "  " + "创建完成");
         setUp(getActivity(), view);
     }
 
     private void setUp(final Context context, View view) {
         //下拉刷新
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.school_market_swipe_container);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.status_swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.blue_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -90,15 +86,15 @@ public class SchoolMarketFragment extends BaseFragment {
             }
         });
 
-        listView = (ListView) view.findViewById(R.id.goods_listView);
-        goodsAdapter = new GoodsAdapter(context, data);
+        listView = (ListView) view.findViewById(R.id.status_listView);
+        statusAdapter = new StatusAdapter(context, data);
 
         //加载更多进度条
         footerView = View.inflate(context, R.layout.footer_progress, null);
         footerView.setVisibility(View.GONE);
         listView.addFooterView(footerView);
 
-        UIUtil.setListViewInitAnimation("bottom", listView, goodsAdapter);
+        UIUtil.setListViewInitAnimation(UIUtil.LISTVIEW_ANIM_BOTTOM, listView, statusAdapter);
 
         //滑到最下面加载更多
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -114,7 +110,7 @@ public class SchoolMarketFragment extends BaseFragment {
                     if (footerView.getVisibility() == View.GONE && data.size() >= 10) {
                         Log.d("winson", "加载更多");
                         footerView.setVisibility(View.VISIBLE);
-                        findById(data.get(data.size() - 1).getLong("goods_id"));
+                        findById(data.get(data.size() - 1).getLong("status_id"));
                     }
                 }
             }
@@ -127,7 +123,7 @@ public class SchoolMarketFragment extends BaseFragment {
      * 从缓存中取
      */
     private void findInCacheThenNetwork() {
-        new GoodsAction().findInCacheThenNetwork(schoolPosition, new FindCallback<AVObject>() {
+        new StatusAction().findInCacheThenNetwork(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -150,7 +146,7 @@ public class SchoolMarketFragment extends BaseFragment {
     private void findNewData() {
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new GoodsAction().findNewData(schoolPosition, new FindCallback<AVObject>() {
+        new StatusAction().findNewData(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -171,8 +167,8 @@ public class SchoolMarketFragment extends BaseFragment {
     /**
      * 加载更多
      */
-    private void findById(long goods_id) {
-        new GoodsAction().findSinceId(schoolPosition, goods_id, new FindCallback<AVObject>() {
+    private void findById(long status_id) {
+        new StatusAction().findSinceId(status_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -198,7 +194,7 @@ public class SchoolMarketFragment extends BaseFragment {
             data.clear();
         }
         data.addAll(list);
-        goodsAdapter.notifyDataSetChanged();
+        statusAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -208,15 +204,22 @@ public class SchoolMarketFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.market, menu);
+        inflater.inflate(R.menu.market, menu);
 //        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
+        int id = item.getItemId();
+        if(id == R.id.action_add) {
+            AddActivity.startAddActivity(getActivity(), AddActivity.TYPE_STATUS);
+        }
+        else if(id == R.id.action_search) {
+//            SearchGoodsActivity.startSearchGoodsActivity(getActivity(), viewPager.getCurrentItem());
+            return true;
+        }
+        else if (id == R.id.action_refresh) {
             findNewData();
             return true;
         }

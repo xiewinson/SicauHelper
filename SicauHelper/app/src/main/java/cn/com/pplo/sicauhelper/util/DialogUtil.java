@@ -23,6 +23,7 @@ import java.util.List;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.CommentAction;
 import cn.com.pplo.sicauhelper.action.GoodsAction;
+import cn.com.pplo.sicauhelper.action.StatusAction;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 
@@ -33,6 +34,8 @@ public class DialogUtil {
 
     public static final int GOODS_COMMENT = 1;
     public static final int GOODS = 2;
+    public static final int STATUS_COMMENT = 3;
+    public static final int STATUS = 4;
 
     /**
      * 显示删除dialog
@@ -50,6 +53,12 @@ public class DialogUtil {
         else if(type == GOODS) {
             msgRes = R.string.is_delete_goods;
         }
+        else if(type == STATUS_COMMENT) {
+            msgRes = R.string.is_delete_comment;
+        }
+        else if(type == STATUS) {
+            msgRes = R.string.is_delete_status;
+        }
         builder.setMessage(msgRes)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
@@ -61,6 +70,12 @@ public class DialogUtil {
                         //删除商品
                         else if (type == GOODS) {
                             new GoodsAction().delete(avObject, callback);
+                        }
+                        else if(type == STATUS_COMMENT) {
+                            new CommentAction().delete(avObject, callback);
+                        }
+                        else if(type == STATUS) {
+                            new StatusAction().delete(avObject, callback);
                         }
                     }
                 })
@@ -96,6 +111,14 @@ public class DialogUtil {
         else if(type == GOODS) {
             tv.setText("为何你要投诉这件商品?");
         }
+        //投诉帖子评论
+        else if(type == STATUS_COMMENT) {
+            tv.setText("为何你要投诉这条评论?");
+        }
+        //投诉帖子
+        else if(type == STATUS) {
+            tv.setText("为何你要投诉这个帖子?");
+        }
 
         alertDialog = builder.setView(view)
                 .setPositiveButton("发送", new DialogInterface.OnClickListener() {
@@ -112,8 +135,8 @@ public class DialogUtil {
                         FeedbackThread thread = agent.getDefaultThread();
                         //投诉人
                         thread.setContact("【投诉人："
-                                + SicauHelperApplication.getStudent().getString(TableContract.TableStudent._NAME)
-                                + "(" + SicauHelperApplication.getStudent().getString(TableContract.TableStudent._SID)  + ")" +"】");
+                                + SicauHelperApplication.getStudent().getString(TableContract.TableUser._NAME)
+                                + "(" + SicauHelperApplication.getStudent().getString(TableContract.TableUser._SID)  + ")" +"】");
                         Comment newComment = new Comment("这是一个用户反馈");
                         //设置投诉者的类型
                         newComment.setCommentType(Comment.CommentType.USER);
@@ -124,9 +147,9 @@ public class DialogUtil {
                         if(type == GOODS_COMMENT) {
                             newComment.setType("1");
                             AVUser avUser = avObject.getAVObject(TableContract.TableGoodsComment._SEND_USER);
-                            newComment.setContent("【评论objectId: " + avObject.getObjectId() +"】"
+                            newComment.setContent("【商品评论objectId: " + avObject.getObjectId() +"】"
                                     + "【评论内容: " + avObject.getString(TableContract.TableGoodsComment._CONTENT) +"】"
-                                    + "【评论者: " + avUser.getString(TableContract.TableStudent._NAME) + avUser.getString(TableContract.TableStudent._SID) +"】"
+                                    + "【评论者: " + avUser.getString(TableContract.TableUser._NAME) + avUser.getString(TableContract.TableUser._SID) +"】"
                                     + complainStr);
                         }
                         //投诉商品
@@ -135,7 +158,26 @@ public class DialogUtil {
                             AVUser avUser = avObject.getAVObject(TableContract.TableGoods._USER);
                             newComment.setContent("【商品objectId: " + avObject.getObjectId() +"】"
                                     + "【商品标题: " + avObject.getString(TableContract.TableGoods._TITLE) +"】"
-                                    + "【发布者: " + avUser.getString(TableContract.TableStudent._NAME) + avUser.getString(TableContract.TableStudent._SID) +"】"
+                                    + "【发布者: " + avUser.getString(TableContract.TableUser._NAME) + avUser.getString(TableContract.TableUser._SID) +"】"
+                                    + complainStr);
+                        }
+
+                        //投诉评论
+                        if(type == STATUS_COMMENT) {
+                            newComment.setType("3");
+                            AVUser avUser = avObject.getAVObject(TableContract.TableStatusComment._SEND_USER);
+                            newComment.setContent("【帖子评论objectId: " + avObject.getObjectId() +"】"
+                                    + "【评论内容: " + avObject.getString(TableContract.TableStatusComment._CONTENT) +"】"
+                                    + "【评论者: " + avUser.getString(TableContract.TableUser._NAME) + avUser.getString(TableContract.TableUser._SID) +"】"
+                                    + complainStr);
+                        }
+                        //投诉商品
+                        else if(type == STATUS) {
+                            newComment.setType("4");
+                            AVUser avUser = avObject.getAVObject(TableContract.TableStatus._USER);
+                            newComment.setContent("【商品objectId: " + avObject.getObjectId() +"】"
+                                    + "【帖子标题: " + avObject.getString(TableContract.TableStatus._TITLE) +"】"
+                                    + "【发布者: " + avUser.getString(TableContract.TableUser._NAME) + avUser.getString(TableContract.TableUser._SID) +"】"
                                     + complainStr);
                         }
                         thread.add(newComment);

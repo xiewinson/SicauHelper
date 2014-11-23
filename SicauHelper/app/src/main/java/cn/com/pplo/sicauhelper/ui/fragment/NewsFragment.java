@@ -86,7 +86,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         super.onViewCreated(view, savedInstanceState);
         //根据校区设置actionBar颜色
         UIUtil.setActionBarColorBySchool(getActivity(),
-                SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL),
+                SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL),
                 getSupportActionBar(getActivity()));
         setUp(getActivity(), view);
     }

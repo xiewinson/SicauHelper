@@ -3,15 +3,11 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,31 +15,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
-import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
-import cn.com.pplo.sicauhelper.util.UIUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -140,14 +124,16 @@ public class NavigationDrawerFragment extends BaseFragment {
                 R.drawable.ic_school_grey600_24dp,
                 R.drawable.ic_whatshot_grey600_24dp,
                 R.drawable.ic_location_city_grey600_24dp,
-                R.drawable.ic_shopping_cart_grey600_24dp
+                R.drawable.ic_shopping_cart_grey600_24dp,
+                R.drawable.ic_group_grey600_24dp
         };
         final String[] titles = {
                 getString(R.string.title_cource),
                 getString(R.string.title_score),
                 getString(R.string.title_news),
                 getString(R.string.title_classroom),
-                getString(R.string.title_market)
+                getString(R.string.title_market),
+                getString(R.string.title_status)
         };
 
         //增加header
@@ -155,7 +141,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         mDrawerListView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
-                return 5;
+                return icons.length;
             }
 
             @Override
@@ -213,9 +199,9 @@ public class NavigationDrawerFragment extends BaseFragment {
 
         AVUser avUser = SicauHelperApplication.getStudent();
         if (avUser != null) {
-            nameTv.setText(avUser.getString(TableContract.TableStudent._NICKNAME));
-            sidTv.setText(avUser.getString(TableContract.TableStudent._SID));
-            ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableStudent._PROFILE_URL).getUrl(), profileIv, ImageUtil.getDisplayImageOption(getActivity()));
+            nameTv.setText(avUser.getString(TableContract.TableUser._NICKNAME));
+            sidTv.setText(avUser.getString(TableContract.TableUser._SID));
+            ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), profileIv, ImageUtil.getDisplayImageOption(getActivity()));
         }
         mDrawerListView.addHeaderView(headerView, null, false);
     }

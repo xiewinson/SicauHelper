@@ -38,6 +38,7 @@ import java.util.List;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.CommentAction;
 import cn.com.pplo.sicauhelper.action.GoodsAction;
+import cn.com.pplo.sicauhelper.action.StatusAction;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.adapter.CommentAdapter;
@@ -49,12 +50,12 @@ import cn.com.pplo.sicauhelper.util.UserUtil;
 import cn.com.pplo.sicauhelper.widget.ViewPadding;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class GoodsActivity extends BaseActivity {
+public class StatusActivity extends BaseActivity {
 
     private static final String EXTRA_OBJECT_ID = "object_id";
     private static final String EXTRA_SCHOOL = "school";
-    private static final int ACTION_ITEM_DELETE_GOODS = -1000;
-    private static final int ACTION_ITEM_EDIT_GOODS = -1001;
+    private static final int ACTION_ITEM_DELETE_STATUS = -1000;
+    private static final int ACTION_ITEM_EDIT_STATUS = -1001;
 
     private ListView listView;
     private EditText commentEt;
@@ -79,7 +80,7 @@ public class GoodsActivity extends BaseActivity {
 
     private String objectId;
     private int school;
-    private AVObject avGoods;
+    private AVObject avStatus;
 
     //接收回复者
     private AVObject receiveStudent;
@@ -88,19 +89,17 @@ public class GoodsActivity extends BaseActivity {
     private List<AVObject> data = new ArrayList<AVObject>();
 
 
-    public static void startGoodsActivity(Context context, String objectId, int school) {
-        Intent intent = new Intent(context, GoodsActivity.class);
+    public static void startStatusActivity(Context context, String objectId, int school) {
+        Intent intent = new Intent(context, StatusActivity.class);
         intent.putExtra(EXTRA_OBJECT_ID, objectId);
         intent.putExtra(EXTRA_SCHOOL, school);
         context.startActivity(intent);
     }
 
-    ;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods);
+        setContentView(R.layout.activity_status);
         getSupportActionBar().setTitle("");
         setUp(this);
     }
@@ -118,30 +117,30 @@ public class GoodsActivity extends BaseActivity {
         UIUtil.setActionBarColorBySchool(context, school, getSupportActionBar());
 
         //下拉刷新
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.goods_swipe_container);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.status_swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.blue_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
-                initGoodsData(context);
+                initStatusData(context);
                 findNewCommentData(objectId);
                 footerView.setVisibility(View.GONE);
             }
         });
 
         //header
-        headerView = View.inflate(context, R.layout.header_goods, null);
-        headIv = (CircleImageView) headerView.findViewById(R.id.goods_head_iv);
-        nameTv = (TextView) headerView.findViewById(R.id.goods_name_tv);
-        dateTv = (TextView) headerView.findViewById(R.id.goods_time_tv);
-        categoryTv = (TextView) headerView.findViewById(R.id.goods_category_tv);
-        titleTv = (TextView) headerView.findViewById(R.id.goods_title_tv);
-        contentTv = (TextView) headerView.findViewById(R.id.goods_content_tv);
-        imageLayout = (LinearLayout) headerView.findViewById(R.id.goods_image_layout);
-        commentBtn = (TextView) headerView.findViewById(R.id.goods_comment_btn);
-        deviceTv = (TextView) headerView.findViewById(R.id.goods_device_tv);
-        locationTv = (TextView) headerView.findViewById(R.id.goods_location_tv);
+        headerView = View.inflate(context, R.layout.header_status, null);
+        headIv = (CircleImageView) headerView.findViewById(R.id.status_head_iv);
+        nameTv = (TextView) headerView.findViewById(R.id.status_name_tv);
+        dateTv = (TextView) headerView.findViewById(R.id.status_time_tv);
+        categoryTv = (TextView) headerView.findViewById(R.id.status_category_tv);
+        titleTv = (TextView) headerView.findViewById(R.id.status_title_tv);
+        contentTv = (TextView) headerView.findViewById(R.id.status_content_tv);
+        imageLayout = (LinearLayout) headerView.findViewById(R.id.status_image_layout);
+        commentBtn = (TextView) headerView.findViewById(R.id.status_comment_btn);
+        deviceTv = (TextView) headerView.findViewById(R.id.status_device_tv);
+        locationTv = (TextView) headerView.findViewById(R.id.status_location_tv);
         headerView.setVisibility(View.GONE);
         listView.addHeaderView(headerView, null, false);
 
@@ -164,8 +163,8 @@ public class GoodsActivity extends BaseActivity {
             }
         });
 
-        //初始化商品数据
-        initGoodsData(context);
+        //初始化帖子数据
+        initStatusData(context);
         //初始化评论数据
         initCommentData();
     }
@@ -184,7 +183,7 @@ public class GoodsActivity extends BaseActivity {
         if (UserUtil.isAdmin(avUser)){
             optionArray = getResources().getStringArray(R.array.comment_option_0);
         }
-        else if (avUser.getString(TableContract.TableUser._SID).equals(avComment.getAVObject(TableContract.TableGoodsComment._SEND_USER).getString(TableContract.TableUser._SID))) {
+        else if (avUser.getString(TableContract.TableUser._SID).equals(avComment.getAVObject(TableContract.TableStatusComment._SEND_USER).getString(TableContract.TableUser._SID))) {
             optionArray = getResources().getStringArray(R.array.comment_option_0);
         }
         //若为普通用户
@@ -197,16 +196,16 @@ public class GoodsActivity extends BaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 //回复
                 if (which == 0) {
-                    receiveStudent = avComment.getAVObject(TableContract.TableGoodsComment._SEND_USER);
+                    receiveStudent = avComment.getAVObject(TableContract.TableStatusComment._SEND_USER);
                     commentEt.setHint("回复 " + receiveStudent.getString(TableContract.TableUser._NICKNAME) + " 的评论");
                 }
                 //投诉
                 else if (which == 1) {
-                    DialogUtil.showComplainDialog(context, DialogUtil.GOODS_COMMENT, avComment);
+                    DialogUtil.showComplainDialog(context, DialogUtil.STATUS_COMMENT, avComment);
                 }
                 //删除
                 else {
-                    DialogUtil.showDeleteDialog(context, DialogUtil.GOODS_COMMENT, avComment, new DeleteCallback() {
+                    DialogUtil.showDeleteDialog(context, DialogUtil.STATUS_COMMENT, avComment, new DeleteCallback() {
                         @Override
                         public void done(AVException e) {
                             if (e == null) {
@@ -231,34 +230,34 @@ public class GoodsActivity extends BaseActivity {
 
 
     /**
-     * 初始化goods数据
+     * 初始化status数据
      *
      * @param context
      */
-    private void initGoodsData(final Context context) {
-        new GoodsAction().findByObjectId(AVQuery.CachePolicy.CACHE_THEN_NETWORK, objectId, new FindCallback<AVObject>() {
+    private void initStatusData(final Context context) {
+        new StatusAction().findByObjectId(AVQuery.CachePolicy.CACHE_THEN_NETWORK, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> avObjects, AVException e) {
                 if (e == null) {
 //                    更新菜单
                     invalidateOptionsMenu();
-                    Log.d("winson", "更新商品数据");
-                    avGoods = avObjects.get(0);
-                    AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._USER);
+                    Log.d("winson", "更新帖子数据");
+                    avStatus = avObjects.get(0);
+                    AVObject avStudent = avStatus.getAVObject(TableContract.TableStatus._USER);
                     //头像
                     ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(context));
                     //名字
                     nameTv.setText(avStudent.getString(TableContract.TableUser._NAME));
                     //时间
-                    dateTv.setText(TimeUtil.timeToFriendlTime(avGoods.getCreatedAt().toString()));
-                    //类别(暂时用来写价格)
-                    categoryTv.setText("￥" + avGoods.getInt(TableContract.TableGoods._PRICE) + "");
+                    dateTv.setText(TimeUtil.timeToFriendlTime(avStatus.getCreatedAt().toString()));
+                    //类别(暂时不用)
+//                    categoryTv.setText("￥" + avStatus.getInt(TableContract.TableStatus._PRICE) + "");
                     //标题
-                    titleTv.setText(avGoods.getString(TableContract.TableGoods._TITLE));
+                    titleTv.setText(avStatus.getString(TableContract.TableStatus._TITLE));
                     //内容
-                    contentTv.setText(avGoods.getString(TableContract.TableGoods._CONTENT));
+                    contentTv.setText(avStatus.getString(TableContract.TableStatus._CONTENT));
                     //评论
-                    commentBtn.setText(avGoods.getLong(TableContract.TableGoods._COMMENT_COUNT) + "");
+                    commentBtn.setText(avStatus.getLong(TableContract.TableStatus._COMMENT_COUNT) + "");
                     commentBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -267,13 +266,13 @@ public class GoodsActivity extends BaseActivity {
                         }
                     });
                     //手机
-                    deviceTv.setText("来自 " + avGoods.getString(TableContract.TableGoods._BRAND) + " "
-                            + avGoods.getString(TableContract.TableGoods._MODEL) + " ("
-                            + avGoods.getString(TableContract.TableGoods._VERSION) + ") ");
+                    deviceTv.setText("来自 " + avStatus.getString(TableContract.TableStatus._BRAND) + " "
+                            + avStatus.getString(TableContract.TableStatus._MODEL) + " ("
+                            + avStatus.getString(TableContract.TableStatus._VERSION) + ") ");
                     //地址
-                    locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
+                    locationTv.setText(avStatus.getString(TableContract.TableStatus._ADDRESS));
                     //显示图片
-                    final List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
+                    final List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avStatus);
                     //图片url列表
                     final String[] imageUrl = ImageUtil.getImageUrlsByAVFileList(imageList);
 
@@ -301,9 +300,9 @@ public class GoodsActivity extends BaseActivity {
                     headerView.setVisibility(View.VISIBLE);
                 } else {
 //                    UIUtil.showShortToast(context, "你的网络好像不太好");
-                    //商品已被删除
+                    //帖子已被删除
                     if(e.getMessage().contains("java.lang.IndexOutOfBoundsException")){
-                        UIUtil.showShortToast(context, "商品应该已经被删除了，找不到它了");
+                        UIUtil.showShortToast(context, "帖子应该已经被删除了，找不到它了");
                     }
                     Log.d("winson", "加载出错：" + e.getMessage());
                 }
@@ -321,9 +320,9 @@ public class GoodsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String commentStr = commentEt.getText().toString().trim();
-                UIUtil.hideSoftKeyboard(GoodsActivity.this, sendBtn);
+                UIUtil.hideSoftKeyboard(StatusActivity.this, sendBtn);
                 if (TextUtils.isEmpty(commentStr)) {
-                    UIUtil.showShortToast(GoodsActivity.this, "评论不可以是空的哦");
+                    UIUtil.showShortToast(StatusActivity.this, "评论不可以是空的哦");
                 } else {
                     sendComment(commentStr);
                 }
@@ -344,7 +343,7 @@ public class GoodsActivity extends BaseActivity {
                     if (footerView.getVisibility() == View.GONE && data.size() >= 10) {
                         Log.d("winson", "加载更多");
                         footerView.setVisibility(View.VISIBLE);
-                        findCommentById(objectId, data.get(data.size() - 1).getLong(TableContract.TableGoodsComment._GOODS_COMMENT_ID));
+                        findCommentById(objectId, data.get(data.size() - 1).getLong(TableContract.TableStatusComment._STATUS_COMMENT_ID));
                     }
                 }
             }
@@ -361,30 +360,30 @@ public class GoodsActivity extends BaseActivity {
         if(progressDialog != null) {
             progressDialog.show();
         }
-        AVObject avComment = new AVObject(TableContract.TableGoodsComment.TABLE_NAME);
+        AVObject avComment = new AVObject(TableContract.TableStatusComment.TABLE_NAME);
 
-        //存商品
-        avComment.put(TableContract.TableGoodsComment._GOODS, AVObject.createWithoutData(TableContract.TableGoods.TABLE_NAME,
+        //存帖子
+        avComment.put(TableContract.TableStatusComment._STATUS, AVObject.createWithoutData(TableContract.TableStatus.TABLE_NAME,
                 objectId));
         //发送者
-        avComment.put(TableContract.TableGoodsComment._SEND_USER, SicauHelperApplication.getStudent());
+        avComment.put(TableContract.TableStatusComment._SEND_USER, SicauHelperApplication.getStudent());
         //接收者
         if (receiveStudent != null) {
-            avComment.put(TableContract.TableGoodsComment._RECEIVE_USER, receiveStudent);
+            avComment.put(TableContract.TableStatusComment._RECEIVE_USER, receiveStudent);
         }
         //内容
-        avComment.put(TableContract.TableGoodsComment._CONTENT, commentStr);
+        avComment.put(TableContract.TableStatusComment._CONTENT, commentStr);
         //手机型号
-        avComment.put(TableContract.TableGoodsComment._MODEL, Build.MODEL);
+        avComment.put(TableContract.TableStatusComment._MODEL, Build.MODEL);
         //手机品牌
-        avComment.put(TableContract.TableGoodsComment._BRAND, Build.BRAND);
+        avComment.put(TableContract.TableStatusComment._BRAND, Build.BRAND);
         //手机系统版本
-        avComment.put(TableContract.TableGoodsComment._VERSION, Build.VERSION.RELEASE);
+        avComment.put(TableContract.TableStatusComment._VERSION, Build.VERSION.RELEASE);
 
         //是否匿名
-        avComment.put(TableContract.TableGoodsComment._INVISIBLE, false);
+        avComment.put(TableContract.TableStatusComment._INVISIBLE, false);
         //是否已经阅读过
-        avComment.put(TableContract.TableGoodsComment._IS_WATCHED, true);
+        avComment.put(TableContract.TableStatusComment._IS_WATCHED, true);
 
         avComment.saveInBackground(new SaveCallback() {
             @Override
@@ -392,9 +391,9 @@ public class GoodsActivity extends BaseActivity {
                 UIUtil.dismissProgressDialog(progressDialog);
                 if (e != null) {
                     Log.d("winson", e.getMessage());
-                    UIUtil.showShortToast(GoodsActivity.this, "发布失败，请重试");
+                    UIUtil.showShortToast(StatusActivity.this, "发布失败，请重试");
                 } else {
-                    UIUtil.showShortToast(GoodsActivity.this, "发布成功");
+                    UIUtil.showShortToast(StatusActivity.this, "发布成功");
                     //清空editText
                     commentEt.setHint("");
                     commentEt.setText("");
@@ -409,16 +408,16 @@ public class GoodsActivity extends BaseActivity {
      * 更新评论数量
      */
     private void addCommentCount(final boolean isRefreshComment) {
-        new CommentAction().count(CommentAction.COMMENT_GOODS, avGoods, new CountCallback() {
+        new CommentAction().count(CommentAction.COMMENT_STATUS, avStatus, new CountCallback() {
             @Override
             public void done(int count, AVException e) {
                 if (e != null) {
                     Log.d("winson", e.getMessage());
                 } else {
                     //得到评论数
-                    avGoods.setFetchWhenSave(true);
-                    avGoods.put(TableContract.TableGoods._COMMENT_COUNT, count);
-                    avGoods.saveInBackground(new SaveCallback() {
+                    avStatus.setFetchWhenSave(true);
+                    avStatus.put(TableContract.TableStatus._COMMENT_COUNT, count);
+                    avStatus.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(AVException e) {
                             if (e != null) {
@@ -426,8 +425,8 @@ public class GoodsActivity extends BaseActivity {
                             } else {
                                 Log.d("winson", "更新评论数量成功");
                             }
-                            //更新商品数据和评论
-                            initGoodsData(GoodsActivity.this);
+                            //更新帖子数据和评论
+                            initStatusData(StatusActivity.this);
                             if (isRefreshComment) {
                                 findNewCommentData(objectId);
                             }
@@ -442,7 +441,7 @@ public class GoodsActivity extends BaseActivity {
      * 从缓存中取
      */
     private void findCommentInCacheThenNetwork(final String objectId) {
-        new CommentAction().findInCacheThenNetwork(CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
+        new CommentAction().findInCacheThenNetwork(CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -450,7 +449,7 @@ public class GoodsActivity extends BaseActivity {
                     notifyDataSetChanged(list, true);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
-                        UIUtil.showShortToast(GoodsActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
+                        UIUtil.showShortToast(StatusActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
                     }
                     Log.d("winson", "出错：" + e.getMessage());
                 }
@@ -464,7 +463,7 @@ public class GoodsActivity extends BaseActivity {
     private void findNewCommentData(String objectId) {
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new CommentAction().findNewData(CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
+        new CommentAction().findNewData(CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -472,7 +471,7 @@ public class GoodsActivity extends BaseActivity {
                     notifyDataSetChanged(list, true);
                     listView.setSelection(0);
                 } else {
-                    UIUtil.showShortToast(GoodsActivity.this, "你的网络好像有点问题，重新试试吧");
+                    UIUtil.showShortToast(StatusActivity.this, "你的网络好像有点问题，重新试试吧");
                     Log.d("winson", "出错：" + e.getMessage());
                 }
                 if (swipeRefreshLayout.isRefreshing()) {
@@ -486,20 +485,20 @@ public class GoodsActivity extends BaseActivity {
      * 加载更多
      */
     private void findCommentById(String objectId, long comment_id) {
-        new CommentAction().findSinceId(CommentAction.COMMENT_GOODS, objectId, comment_id, new FindCallback<AVObject>() {
+        new CommentAction().findSinceId(CommentAction.COMMENT_STATUS, objectId, comment_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
                     if (list.size() == 0) {
-                        UIUtil.showShortToast(GoodsActivity.this, "已经没有更多评论啦！");
+                        UIUtil.showShortToast(StatusActivity.this, "已经没有更多评论啦！");
                         footerView.setVisibility(View.INVISIBLE);
                     } else {
                         notifyDataSetChanged(list, false);
                         footerView.setVisibility(View.GONE);
                     }
                 } else {
-                    UIUtil.showShortToast(GoodsActivity.this, "你的网络好像有点问题，重新试试吧");
+                    UIUtil.showShortToast(StatusActivity.this, "你的网络好像有点问题，重新试试吧");
                     Log.d("winson", "出错：" + e.getMessage());
                     footerView.setVisibility(View.GONE);
                 }
@@ -526,18 +525,18 @@ public class GoodsActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_goods, menu);
+        getMenuInflater().inflate(R.menu.menu_status, menu);
         //若为管理员或者是本人发表则添加删除按钮
         AVUser avUser = SicauHelperApplication.getStudent();
-        if (avGoods != null && (UserUtil.isAdmin(avUser) ||
-                avUser.getString(TableContract.TableUser._SID).equals(avGoods.getAVObject(TableContract.TableGoods._USER).getString(TableContract.TableUser._SID)))){
-            menu.add(0, ACTION_ITEM_DELETE_GOODS, 0, "删除")
+        if (avStatus != null && (UserUtil.isAdmin(avUser) ||
+                avUser.getString(TableContract.TableUser._SID).equals(avStatus.getAVObject(TableContract.TableStatus._USER).getString(TableContract.TableUser._SID)))){
+            menu.add(0, ACTION_ITEM_DELETE_STATUS, 0, "删除")
                     .setIcon(R.drawable.ic_delete_white_24dp)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
         //若为本人发表则添加修改按钮
-        if (avGoods != null && avUser.getString(TableContract.TableUser._SID).equals(avGoods.getAVObject(TableContract.TableGoods._USER).getString(TableContract.TableUser._SID))){
-            menu.add(1, ACTION_ITEM_EDIT_GOODS, 1, "修改")
+        if (avStatus != null && avUser.getString(TableContract.TableUser._SID).equals(avStatus.getAVObject(TableContract.TableStatus._USER).getString(TableContract.TableUser._SID))){
+            menu.add(1, ACTION_ITEM_EDIT_STATUS, 1, "修改")
                     .setIcon(R.drawable.ic_mode_edit_white_24dp)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
@@ -554,35 +553,35 @@ public class GoodsActivity extends BaseActivity {
         //刷新
         if (id == R.id.action_refresh) {
             swipeRefreshLayout.setRefreshing(true);
-            initGoodsData(this);
+            initStatusData(this);
             findNewCommentData(objectId);
             return true;
         }
-        //删除商品信息
-        else if(id == ACTION_ITEM_DELETE_GOODS) {
-            DialogUtil.showDeleteDialog(this, DialogUtil.GOODS, avGoods, new DeleteCallback() {
+        //删除帖子信息
+        else if(id == ACTION_ITEM_DELETE_STATUS) {
+            DialogUtil.showDeleteDialog(this, DialogUtil.STATUS, avStatus, new DeleteCallback() {
                 @Override
                 public void done(AVException e) {
                     if(e == null) {
-                        UIUtil.showShortToast(GoodsActivity.this, "商品应该已经被删除了，找不到它了");
-                        GoodsActivity.this.finish();
-                        Log.d("winson", "删除商品成功");
+                        UIUtil.showShortToast(StatusActivity.this, "帖子应该已经被删除了，找不到它了");
+                        StatusActivity.this.finish();
+                        Log.d("winson", "删除帖子成功");
                     }
                     else {
-                        UIUtil.showShortToast(GoodsActivity.this, "商品删除失败了");
-                        Log.d("winson", "删除商品失败：" + e.getMessage());
+                        UIUtil.showShortToast(StatusActivity.this, "帖子删除失败了");
+                        Log.d("winson", "删除帖子失败：" + e.getMessage());
                     }
                 }
             });
         }
-        //修改商品信息
-        else if(id == ACTION_ITEM_EDIT_GOODS) {
+        //修改帖子信息
+        else if(id == ACTION_ITEM_EDIT_STATUS) {
 
         }
 
-        //投诉商品
+        //投诉帖子
         else if(id == R.id.action_complain) {
-            DialogUtil.showComplainDialog(this, DialogUtil.GOODS, avGoods);
+            DialogUtil.showComplainDialog(this, DialogUtil.STATUS, avStatus);
         }
 
 

@@ -20,17 +20,17 @@ public class StudentAction {
         AVUser avUser = new AVUser();
         avUser.setUsername(student.getSid());
         avUser.setPassword(student.getSid());
-        avUser.put(TableContract.TableStudent._SID, student.getSid());
-        avUser.put(TableContract.TableStudent._BACKGROUND, student.getBackground());
-        avUser.put(TableContract.TableStudent._NAME, student.getName());
-        avUser.put(TableContract.TableStudent._NICKNAME, student.getNickName());
+        avUser.put(TableContract.TableUser._SID, student.getSid());
+        avUser.put(TableContract.TableUser._BACKGROUND, student.getBackground());
+        avUser.put(TableContract.TableUser._NAME, student.getName());
+        avUser.put(TableContract.TableUser._NICKNAME, student.getNickName());
         //存储头像
         AVFile headImage = new AVFile(System.currentTimeMillis() + "_" +student.getSid() + ".jpg", student.getProfileUrl(), null);
-        avUser.put(TableContract.TableStudent._PROFILE_URL, headImage);
+        avUser.put(TableContract.TableUser._PROFILE_URL, headImage);
 
-        avUser.put(TableContract.TableStudent._PSWD, student.getPswd());
-        avUser.put(TableContract.TableStudent._SCHOOL, student.getSchool());
-        avUser.put(TableContract.TableStudent._ROLE, student.getRole());
+        avUser.put(TableContract.TableUser._PSWD, student.getPswd());
+        avUser.put(TableContract.TableUser._SCHOOL, student.getSchool());
+        avUser.put(TableContract.TableUser._ROLE, student.getRole());
         avUser.signUpInBackground(callback);
     }
 
@@ -49,8 +49,8 @@ public class StudentAction {
     }
 
     public void find(String sid, FindCallback callback) {
-        AVQuery<AVObject> query = new AVQuery<AVObject>(TableContract.TableStudent.TABLE_NAME);
-        query.whereEqualTo(TableContract.TableStudent._SID, sid);
+        AVQuery<AVObject> query = new AVQuery<AVObject>(TableContract.TableUser.TABLE_NAME);
+        query.whereEqualTo(TableContract.TableUser._SID, sid);
         query.findInBackground(callback);
     }
 

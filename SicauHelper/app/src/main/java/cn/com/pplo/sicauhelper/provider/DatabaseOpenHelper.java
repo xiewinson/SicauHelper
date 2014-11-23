@@ -56,19 +56,19 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + ")";
 
     //创建学生表
-    public static final String createStudentSql = "create table " +  TableContract.TableStudent.TABLE_NAME + "("
-            + TableContract.TableStudent._ID +  " integer primary key, "
-            + TableContract.TableStudent._BACKGROUND + " text, "
-            + TableContract.TableStudent._NAME + " text, "
-            + TableContract.TableStudent._NICKNAME + " text, "
-            + TableContract.TableStudent._PROFILE_URL + " text, "
-            + TableContract.TableStudent._PSWD + " text, "
-            + TableContract.TableStudent._SID + " text, "
-            + TableContract.TableStudent._OBJECTID + " text, "
-            + TableContract.TableStudent._CREATED_AT + " text, "
-            + TableContract.TableStudent._UPDATED_AT + " text, "
-            + TableContract.TableStudent._ROLE + " integer, "
-            + TableContract.TableStudent._SCHOOL + " integer "
+    public static final String createStudentSql = "create table " +  TableContract.TableUser.TABLE_NAME + "("
+            + TableContract.TableUser._ID +  " integer primary key, "
+            + TableContract.TableUser._BACKGROUND + " text, "
+            + TableContract.TableUser._NAME + " text, "
+            + TableContract.TableUser._NICKNAME + " text, "
+            + TableContract.TableUser._PROFILE_URL + " text, "
+            + TableContract.TableUser._PSWD + " text, "
+            + TableContract.TableUser._SID + " text, "
+            + TableContract.TableUser._OBJECTID + " text, "
+            + TableContract.TableUser._CREATED_AT + " text, "
+            + TableContract.TableUser._UPDATED_AT + " text, "
+            + TableContract.TableUser._ROLE + " integer, "
+            + TableContract.TableUser._SCHOOL + " integer "
             + ")";
 
 
@@ -92,7 +92,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE + TableContract.TableCourse.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableNews.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableClassroom.TABLE_NAME);
-        db.execSQL(DROP_TABLE + TableContract.TableStudent.TABLE_NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableUser.TABLE_NAME);
         onCreate(db);
     }
 }

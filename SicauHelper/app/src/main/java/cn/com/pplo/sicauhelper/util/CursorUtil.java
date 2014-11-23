@@ -89,20 +89,24 @@ public class CursorUtil {
                 for(int position = 0; position < 7; position++) {
                     Course course1 = course.clone();
                     String posStr = (position + 1) + "";
+
+                    String time = course.getTime();
+                    if(time.contains("单")){
+                        course1.setWeek(course.getWeek() + "单");
+                    }
+                    else if(time.contains("双")){
+                        course1.setWeek(course.getWeek() + "双");
+                    }
+
                     if(course.getTime().contains(posStr + "-")){
-                        String time = course.getTime();
-                        if(time.contains("单")){
-                            course1.setWeek(course.getWeek() + "单");
-                        }
-                        else if(time.contains("双")){
-                            course1.setWeek(course.getWeek() + "双");
-                        }
+
                         String classroom = course.getClassroom();
                         String[] timeArray = time.split("\\s+");
                         String[] classroomArray = classroom.split("\\s+");
                         for(int i = 0; i < timeArray.length; i++){
                             if(timeArray[i].contains(posStr + "-")){
-                                course1.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-").replace("(单)", "").replace("(双)", ""));
+                                String result = timeArray[i].replace(posStr + "-", "").replaceAll(",", "-").replace("(单)", "").replace("(双)", "");
+                                course1.setTime(result);
                                 course1.setClassroom(classroomArray[i]);
                             }
                         }
@@ -126,7 +130,7 @@ public class CursorUtil {
                                 list5.add(course1);
                                 break;
                             case 6:
-                                list6.add(course);
+                                list6.add(course1);
                                 break;
                         }
                     }

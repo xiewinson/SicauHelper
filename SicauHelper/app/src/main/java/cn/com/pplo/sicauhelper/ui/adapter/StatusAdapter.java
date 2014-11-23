@@ -17,7 +17,7 @@ import java.util.List;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.GalleryActivity;
-import cn.com.pplo.sicauhelper.ui.GoodsActivity;
+import cn.com.pplo.sicauhelper.ui.StatusActivity;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.TimeUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -26,12 +26,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by winson on 2014/11/12.
  */
-public class GoodsAdapter extends BaseAdapter {
+public class StatusAdapter extends BaseAdapter {
 
     private Context context;
     private List<AVObject> data;
 
-    public GoodsAdapter(Context context, List<AVObject> data) {
+    public StatusAdapter(Context context, List<AVObject> data) {
         this.context = context;
         this.data = data;
     }
@@ -56,47 +56,47 @@ public class GoodsAdapter extends BaseAdapter {
         Viewholder holder = null;
         if(convertView == null) {
             holder = new Viewholder();
-            convertView = View.inflate(context, R.layout.item_goods_list, null);
-            holder.headIv = (CircleImageView) convertView.findViewById(R.id.goods_head_iv);
-            holder.nameTv = (TextView) convertView.findViewById(R.id.goods_name_tv);
-            holder.dateTv = (TextView) convertView.findViewById(R.id.goods_time_tv);
-            holder.categoryTv = (TextView) convertView.findViewById(R.id.goods_category_tv);
-            holder.titleTv = (TextView) convertView.findViewById(R.id.goods_title_tv);
-            holder.contentTv = (TextView) convertView.findViewById(R.id.goods_content_tv);
-            holder.imageLayout = (LinearLayout) convertView.findViewById(R.id.goods_image_layout);
-            holder.commentBtn = (TextView) convertView.findViewById(R.id.goods_comment_btn);
-            holder.deviceTv = (TextView) convertView.findViewById(R.id.goods_device_tv);
-            holder.locationTv = (TextView) convertView.findViewById(R.id.goods_location_tv);
+            convertView = View.inflate(context, R.layout.item_status_list, null);
+            holder.headIv = (CircleImageView) convertView.findViewById(R.id.status_head_iv);
+            holder.nameTv = (TextView) convertView.findViewById(R.id.status_name_tv);
+            holder.dateTv = (TextView) convertView.findViewById(R.id.status_time_tv);
+            holder.categoryTv = (TextView) convertView.findViewById(R.id.status_category_tv);
+            holder.titleTv = (TextView) convertView.findViewById(R.id.status_title_tv);
+            holder.contentTv = (TextView) convertView.findViewById(R.id.status_content_tv);
+            holder.imageLayout = (LinearLayout) convertView.findViewById(R.id.status_image_layout);
+            holder.commentBtn = (TextView) convertView.findViewById(R.id.status_comment_btn);
+            holder.deviceTv = (TextView) convertView.findViewById(R.id.status_device_tv);
+            holder.locationTv = (TextView) convertView.findViewById(R.id.status_location_tv);
             convertView.setTag(holder);
         }
         else {
             holder = (Viewholder) convertView.getTag();
         }
 
-        final AVObject avGoods = getItem(position);
-        AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._USER);
+        final AVObject avstatus = getItem(position);
+        AVObject avStudent = avstatus.getAVObject(TableContract.TableStatus._USER);
         //头像
         ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayImageOption(context));
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableUser._NAME));
         //时间
-        holder.dateTv.setText(TimeUtil.timeToFriendlTime(avGoods.getCreatedAt().toString()));
-        //类别(暂时用来写价格)
-        holder.categoryTv.setText("￥" + avGoods.getInt(TableContract.TableGoods._PRICE) + "");
+        holder.dateTv.setText(TimeUtil.timeToFriendlTime(avstatus.getCreatedAt().toString()));
+        //类别(暂时不用)
+//        holder.categoryTv.setText("￥" + avstatus.getInt(TableContract.TableStatus._PRICE) + "");
         //标题
-        holder.titleTv.setText(avGoods.getString(TableContract.TableGoods._TITLE));
+        holder.titleTv.setText(avstatus.getString(TableContract.TableStatus._TITLE));
         //内容
-        holder.contentTv.setText(avGoods.getString(TableContract.TableGoods._CONTENT));
+        holder.contentTv.setText(avstatus.getString(TableContract.TableStatus._CONTENT));
         //评论
-        holder.commentBtn.setText(avGoods.getLong(TableContract.TableGoods._COMMENT_COUNT) + "");
+        holder.commentBtn.setText(avstatus.getLong(TableContract.TableStatus._COMMENT_COUNT) + "");
         //手机
-        holder.deviceTv.setText("来自 " + avGoods.getString(TableContract.TableGoods._BRAND) + " "
-                + avGoods.getString(TableContract.TableGoods._MODEL) + " ("
-                + avGoods.getString(TableContract.TableGoods._VERSION) + ") ");
+        holder.deviceTv.setText("来自 " + avstatus.getString(TableContract.TableStatus._BRAND) + " "
+                + avstatus.getString(TableContract.TableStatus._MODEL) + " ("
+                + avstatus.getString(TableContract.TableStatus._VERSION) + ") ");
         //地址
-        holder.locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
+        holder.locationTv.setText(avstatus.getString(TableContract.TableStatus._ADDRESS));
         //显示图片
-        List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
+        List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avstatus);
         //图片url列表
         final String[] imageUrl = ImageUtil.getImageUrlsByAVFileList(imageList);
         holder.imageLayout.removeAllViews();
@@ -124,7 +124,7 @@ public class GoodsAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GoodsActivity.startGoodsActivity(context, avGoods.getObjectId(), avGoods.getInt(TableContract.TableGoods._SCHOOL));
+                StatusActivity.startStatusActivity(context, avstatus.getObjectId(), avstatus.getAVObject(TableContract.TableStatus._USER).getInt(TableContract.TableUser._SCHOOL));
             }
         });
         return convertView;

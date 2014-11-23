@@ -2,7 +2,6 @@ package cn.com.pplo.sicauhelper.util;
 
 import com.avos.avoscloud.AVUser;
 
-import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 
 /**
@@ -11,7 +10,7 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 public class UserUtil {
     public static boolean isAdmin(AVUser avUser) {
         boolean result = false;
-        int roleId = avUser.getInt(TableContract.TableStudent._ROLE);
+        int roleId = avUser.getInt(TableContract.TableUser._ROLE);
         if(roleId == 0) {
             result = true;
         }

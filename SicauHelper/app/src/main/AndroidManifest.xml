@@ -58,7 +58,7 @@
             android:label="@string/title_activity_score_stats" >
         </activity>
         <activity
-            android:name="cn.com.pplo.sicauhelper.ui.AddGoodsActivity"
+            android:name=".ui.AddActivity"
             android:label="@string/title_activity_new_goods"
             android:windowSoftInputMode="stateHidden" >
         </activity>
@@ -70,11 +70,13 @@
             android:name="cn.com.pplo.sicauhelper.ui.SearchGoodsActivity"
             android:label="@string/title_activity_search_goods" >
         </activity>
-        <activity
-            android:name="com.avos.avoscloud.feedback.ThreadActivity" >
+        <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" >
+        </activity>
+        <activity android:name="cn.com.pplo.sicauhelper.ui.GalleryActivity" >
         </activity>
         <activity
-            android:name="cn.com.pplo.sicauhelper.ui.GalleryActivity" >
+            android:name="cn.com.pplo.sicauhelper.ui.StatusActivity"
+            android:label="@string/title_activity_status" >
         </activity>
     </application>
 

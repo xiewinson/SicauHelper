@@ -3,7 +3,6 @@ package cn.com.pplo.sicauhelper.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
@@ -13,21 +12,15 @@ import android.util.Log;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.ProgressCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.RoundedVignetteBitmapDisplayer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.ui.AddGoodsActivity;
 
 /**
  * Created by Administrator on 2014/11/7.

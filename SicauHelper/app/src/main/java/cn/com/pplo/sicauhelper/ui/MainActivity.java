@@ -35,6 +35,7 @@ import cn.com.pplo.sicauhelper.ui.fragment.NavigationDrawerFragment;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.ui.fragment.NewsFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
+import cn.com.pplo.sicauhelper.ui.fragment.StatusFragment;
 
 
 public class MainActivity extends ActionBarActivity
@@ -182,9 +183,13 @@ public class MainActivity extends ActionBarActivity
             case 3:
                 fragment = ClassroomFragment.newInstance();
                 break;
-                //首页
+            //市场模块
             case 4:
                 fragment = MarketFragment.newInstance();
+                break;
+            //圈子模块
+            case 5:
+                fragment = StatusFragment.newInstance();
                 break;
         }
         FragmentManager fragmentManager = getSupportFragmentManager();

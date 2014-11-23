@@ -30,7 +30,7 @@ public class GoodsAction {
         //取10条
         avQuery.setLimit(10);
         //id降序
-        avQuery.orderByDescending("goods_id");
+        avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
         avQuery.include(TableContract.TableGoods._USER);
@@ -53,7 +53,7 @@ public class GoodsAction {
         //取10条
         avQuery.setLimit(10);
         //id降序
-        avQuery.orderByDescending("goods_id");
+        avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
         avQuery.include(TableContract.TableGoods._USER);
@@ -69,11 +69,11 @@ public class GoodsAction {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
         //小于指定id
-        avQuery.whereLessThan("goods_id", goods_id);
+        avQuery.whereLessThan(TableContract.TableGoods._GOODS_ID, goods_id);
         //取10条
         avQuery.setLimit(10);
         //id降序
-        avQuery.orderByDescending("goods_id");
+        avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
         avQuery.include(TableContract.TableGoods._USER);
@@ -105,7 +105,7 @@ public class GoodsAction {
         //取10条
         avQuery.setLimit(10);
         //id降序
-        avQuery.orderByDescending("goods_id");
+        avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
         avQuery.include(TableContract.TableGoods._USER);
@@ -122,11 +122,11 @@ public class GoodsAction {
         avQuery.whereContains(TableContract.TableGoods._TITLE, str);
 
         //小于指定id
-        avQuery.whereLessThan("goods_id", goods_id);
+        avQuery.whereLessThan(TableContract.TableGoods._GOODS_ID, goods_id);
         //取10条
         avQuery.setLimit(10);
         //id降序
-        avQuery.orderByDescending("goods_id");
+        avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选校区
         avQuery.whereEqualTo(TableContract.TableGoods._SCHOOL, school);
         avQuery.include(TableContract.TableGoods._USER);

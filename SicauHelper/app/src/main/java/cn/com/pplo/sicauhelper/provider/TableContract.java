@@ -40,7 +40,7 @@ public class TableContract {
 
     /**
      * 新闻表
-      */
+     */
     public interface TableNews extends BaseColumns {
 
         String TABLE_NAME = "t_news";
@@ -68,9 +68,9 @@ public class TableContract {
     /**
      * 学生表
      */
-    public interface TableStudent extends BaseColumns {
+    public interface TableUser extends BaseColumns {
 
-        String TABLE_NAME = "Student";
+        String TABLE_NAME = "_User";
 
         String _SID = "sid";
         String _OBJECTID = "objectId";
@@ -108,10 +108,11 @@ public class TableContract {
         String _CREATED_AT = "createdAt";
         String _UPDATED_AT = "updatedAt";
         String _COMMENT_COUNT = "commentCount";
+        String _GOODS_ID = "goods_id";
     }
 
     /**
-     * 学生表
+     * 商品评论表
      */
     public interface TableGoodsComment extends BaseColumns {
 
@@ -122,6 +123,52 @@ public class TableContract {
         String _CONTENT = "content";
         String _GOODS = "goods";
         String _GOODS_COMMENT_ID = "comment_id";
+        String _IS_WATCHED = "isWatched";
+        String _INVISIBLE = "invisible";
+        String _MODEL = "model";
+        String _BRAND = "brand";
+        String _VERSION = "version";
+
+        String _OBJECTID = "objectId";
+        String _CREATED_AT = "createdAt";
+        String _UPDATED_AT = "updatedAt";
+    }
+
+    /**
+     * 论坛表
+     */
+    public interface TableStatus extends BaseColumns {
+
+        String TABLE_NAME = "Status";
+
+        String _OBJECTID = "objectId";
+        String _TITLE = "title";
+        String _CONTENT = "content";
+        String _USER = "user";
+        String _MODEL = "model";
+        String _BRAND = "brand";
+        String _VERSION = "version";
+        String _LONGITUDE = "longitude";
+        String _LATITUDE = "latitude";
+        String _ADDRESS = "address";
+        String _CREATED_AT = "createdAt";
+        String _UPDATED_AT = "updatedAt";
+        String _COMMENT_COUNT = "commentCount";
+        String _STATUS_ID = "status_id";
+    }
+
+    /**
+     * 论坛评论表
+     */
+    public interface TableStatusComment extends BaseColumns {
+
+        String TABLE_NAME = "StatusComment";
+
+        String _SEND_USER = "sendUser";
+        String _RECEIVE_USER = "receiveUser";
+        String _CONTENT = "content";
+        String _STATUS = "status";
+        String _STATUS_COMMENT_ID = "comment_id";
         String _IS_WATCHED = "isWatched";
         String _INVISIBLE = "invisible";
         String _MODEL = "model";

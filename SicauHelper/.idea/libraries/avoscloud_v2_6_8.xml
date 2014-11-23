@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="avosfeedback-v2.6.7">
+  <library name="avoscloud-v2.6.8">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/avosfeedback-v2.6.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/libs/avoscloud-v2.6.8.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

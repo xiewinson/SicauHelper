@@ -2,7 +2,6 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -87,7 +86,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         UIUtil.setActionBarColorBySchool(getActivity(),
-                SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL),
+                SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL),
                 getSupportActionBar(getActivity()));
         setUp(view, getActivity());
     }
@@ -140,7 +139,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
     private void selectOnlyThisSchoolData(boolean isOnlyShowThisSchool) {
         if(isOnlyShowThisSchool) {
             data.clear();
-            String school = StringUtil.schoolCodeToSchool(SicauHelperApplication.getStudent().getInt(TableContract.TableStudent._SCHOOL));
+            String school = StringUtil.schoolCodeToSchool(SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL));
 
             for(Classroom classroom : originalData) {
                 if(classroom.getSchool().contains(school)){
