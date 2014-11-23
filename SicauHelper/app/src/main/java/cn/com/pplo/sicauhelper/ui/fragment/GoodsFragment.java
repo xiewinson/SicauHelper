@@ -17,12 +17,14 @@ import android.widget.ListView;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.FindCallback;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.GoodsAction;
+import cn.com.pplo.sicauhelper.ui.AddActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.GoodsAdapter;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
@@ -35,6 +37,7 @@ public class GoodsFragment extends BaseFragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
     private View footerView;
+    private FloatingActionButton fab;
     private GoodsAdapter goodsAdapter;
     private List<AVObject> data = new ArrayList<AVObject>();
 
@@ -69,7 +72,7 @@ public class GoodsFragment extends BaseFragment {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_school_market, container, false);
+        return inflater.inflate(R.layout.fragment_goods, container, false);
     }
 
     @Override
@@ -93,6 +96,7 @@ public class GoodsFragment extends BaseFragment {
         listView = (ListView) view.findViewById(R.id.goods_listView);
         goodsAdapter = new GoodsAdapter(context, data);
 
+
         //加载更多进度条
         footerView = View.inflate(context, R.layout.footer_progress, null);
         footerView.setVisibility(View.GONE);
@@ -100,15 +104,48 @@ public class GoodsFragment extends BaseFragment {
 
         UIUtil.setListViewInitAnimation(UIUtil.LISTVIEW_ANIM_BOTTOM, listView, goodsAdapter);
 
-        //滑到最下面加载更多
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+        //添加fab
+        fab = (FloatingActionButton) view.findViewById(R.id.goods_add_fab);
+        int normalColor = 0;
+        int pressColor = 0;
+        int rippleColor = 0;
+        switch (schoolPosition) {
+            case 0:
+                normalColor = R.color.blue_500;
+                pressColor = R.color.blue_900;
+                rippleColor = R.color.blue_400;
+                break;
+            case 1:
+                normalColor = R.color.orange_500;
+                pressColor = R.color.orange_900;
+                rippleColor = R.color.orange_400;
+                break;
+            case 2:
+                normalColor = R.color.green_500;
+                pressColor = R.color.green_900;
+                rippleColor = R.color.green_400;
+                break;
+        }
 
+        UIUtil.initFab(getActivity(), fab, listView, normalColor, pressColor, rippleColor, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddActivity.startAddActivity(context, AddActivity.TYPE_GOODS);
+            }
+        }, new FloatingActionButton.FabOnScrollListener(){
+            @Override
+            public void onScrollDown() {
+                super.onScrollDown();
+            }
+
+            @Override
+            public void onScrollUp() {
+                super.onScrollUp();
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
                 if ((firstVisibleItem + visibleItemCount) > (totalItemCount - 2)) {
 
                     if (footerView.getVisibility() == View.GONE && data.size() >= 10) {
@@ -119,7 +156,6 @@ public class GoodsFragment extends BaseFragment {
                 }
             }
         });
-
         findInCacheThenNetwork();
     }
 

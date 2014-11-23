@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.melnykov.fab.FloatingActionButton;
+
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
@@ -134,10 +136,7 @@ public class MarketFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_add) {
-            AddActivity.startAddActivity(getActivity(), AddActivity.TYPE_GOODS);
-        }
-        else if(id == R.id.action_search) {
+        if(id == R.id.action_search) {
             SearchGoodsActivity.startSearchGoodsActivity(getActivity(), viewPager.getCurrentItem());
             return true;
         }

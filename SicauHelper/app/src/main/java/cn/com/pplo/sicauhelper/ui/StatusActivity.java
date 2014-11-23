@@ -279,20 +279,7 @@ public class StatusActivity extends BaseActivity {
                     imageLayout.removeAllViews();
                     int childPosition = 0;
                     for (AVFile avFile : imageList) {
-                        final ImageView imageView = new ImageView(context);
-                        int width = (int) UIUtil.parseDpToPx(context, 40);
-                        int height = (int) UIUtil.parseDpToPx(context, 30);
-                        imageView.setPadding(0, 0, (int) UIUtil.parseDpToPx(context, 8), 0);
-                        imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
-                        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        imageView.setTag(childPosition);
-                        imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                GalleryActivity.startGalleryActivity(context, imageUrl, (Integer) view.getTag());
-                            }
-                        });
-                        ImageLoader.getInstance().displayImage(avFile.getThumbnailUrl(false, width, height), imageView, ImageUtil.getDisplayImageOption(context));
+                        ImageView imageView = ImageUtil.getThumImageView(imageUrl, childPosition, avFile, context);
                         imageLayout.addView(imageView);
                         childPosition ++;
                     }
@@ -309,6 +296,8 @@ public class StatusActivity extends BaseActivity {
             }
         });
     }
+
+
 
     /**
      * 获得评论列表

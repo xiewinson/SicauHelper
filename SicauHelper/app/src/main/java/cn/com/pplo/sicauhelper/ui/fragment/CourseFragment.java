@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -22,6 +23,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +47,7 @@ import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.CourseAdapter;
@@ -91,7 +94,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.green_500));
+
         return inflater.inflate(R.layout.fragment_course, container, false);
     }
 
@@ -105,7 +108,26 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表");
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.green_500);
+
+        //设置actionBar颜色
+        int color = 0;
+        int tabColor = 0;
+        switch (SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL)){
+            case 0:
+                color = R.color.blue_500;
+                tabColor = R.color.blue_500;
+                break;
+            case 1:
+                color = R.color.orange_500;
+                tabColor = R.color.orange_500;
+                break;
+            case 2:
+                color = R.color.green_500;
+                tabColor = R.color.green_500;
+                break;
+        }
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), color);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, tabColor);
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -253,9 +275,22 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            View view = getDateListView(context, data.get(position));
-            container.addView(view);
-            return view;
+            ListView listView = getDateListView(context, data.get(position));
+            if(listView.getAdapter().getCount() < 1) {
+                TextView textView = new TextView(context);
+                textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                textView.setGravity(Gravity.CENTER_HORIZONTAL);
+                textView.setPadding(0, (int) UIUtil.parseDpToPx(context, 48), 0, 0);
+                textView.setTextSize(UIUtil.parseSpToPx(context, 16));
+                textView.setTextColor(Color.parseColor("#aaaaaa"));
+                textView.setText("这一天没有理论课\n好好玩吧");
+                container.addView(textView);
+                return textView;
+            }
+            else {
+                container.addView(listView);
+                return listView;
+            }
         }
 
         @Override
@@ -276,10 +311,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         ListView listView = new ListView(context);
         listView.setDivider(getResources().getDrawable(android.R.color.transparent));
         listView.setDividerHeight(0);
-//                (ListView) View.inflate(context, R.layout.fragment_course_date, null);
-        Log.d("winson", "结果：" + list);
         listView.setAdapter(new CourseAdapter(context, list));
-        UIUtil.setListViewScrollHideOrShowActionBar(context, listView, getSupportActionBar(getActivity()));
         return listView;
     }
 

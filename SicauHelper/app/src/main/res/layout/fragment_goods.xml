@@ -3,11 +3,10 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="?actionBarSize">
+    android:orientation="vertical">
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/status_swipe_container"
+        android:id="@+id/school_market_swipe_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -15,7 +14,7 @@
         android:paddingRight="8dp">
 
         <ListView
-            android:id="@+id/status_listView"
+            android:id="@+id/goods_listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
@@ -26,7 +25,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/status_add_fab"
+        android:id="@+id/goods_add_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
@@ -34,5 +33,5 @@
         android:src="@drawable/ic_add_white_24dp"
         fab:fab_colorNormal="@color/red_500"
         fab:fab_colorPressed="@color/red_900"
-        fab:fab_colorRipple="@color/red_400"/>
+        fab:fab_colorRipple="@color/red_400" />
 </FrameLayout>

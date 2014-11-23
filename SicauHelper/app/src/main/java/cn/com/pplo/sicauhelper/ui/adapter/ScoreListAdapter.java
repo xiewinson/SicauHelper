@@ -95,20 +95,7 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
             circleShape = R.drawable.circle_brown;
             color = context.getResources().getColor(R.color.brown_500);
         }
-        final ViewHolder finalHolder = holder;
-        holder.scoreView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RotateAnimation animation = new RotateAnimation(0, 360, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
 
-                animation.setDuration(500);
-
-                Log.d("winson", "点击了...");
-                finalHolder.scoreView.startAnimation(animation);
-            }
-        });
-
-        holder.categoryTv.setTextColor(color);
         holder.scoreView.setBackgroundResource(circleShape);
         holder.scoreView.setTextColor(Color.WHITE);
 
@@ -116,7 +103,7 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         holder.scoreView.setText(getItem(position).getMark() + "");
         holder.courseTv.setText(getItem(position).getCourse() + "");
         holder.creditTv.setText(getItem(position).getCredit() + "学分");
-        holder.categoryTv.setText("#" + getItem(position).getCategory() + "#");
+        holder.categoryTv.setText(getItem(position).getCategory() + "");
 
         //设置星星个数
         if ((getItem(position).getCredit() > 5)) {

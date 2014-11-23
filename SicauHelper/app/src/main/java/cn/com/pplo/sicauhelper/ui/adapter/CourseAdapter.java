@@ -83,7 +83,7 @@ public class CourseAdapter extends BaseAdapter {
         holder.timeTv.setBackgroundResource(circleShape);
 
         //设置课程类型
-        holder.categoryTv.setText("#" + course.getCategory() + "#");
+        holder.categoryTv.setText(course.getCategory() + "");
         //设置教室
         holder.classroomTv.setText(course.getClassroom() + "(" + course.getWeek() + "周)");
 

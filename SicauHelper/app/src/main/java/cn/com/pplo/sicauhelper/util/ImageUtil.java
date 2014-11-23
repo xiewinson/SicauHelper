@@ -4,16 +4,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.SaveCallback;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.ui.GalleryActivity;
 
 /**
  * Created by Administrator on 2014/11/7.
@@ -120,6 +126,32 @@ public class ImageUtil {
     }
 
     /**
+     * 取得缩略图imageView
+     * @param imageUrl
+     * @param childPosition
+     * @param avFile
+     * @param context
+     * @return
+     */
+    public static ImageView getThumImageView(final String[] imageUrl, int childPosition, AVFile avFile, final Context context) {
+        final ImageView imageView = new ImageView(context);
+        int width = (int) UIUtil.parseDpToPx(context, 60);
+        int height = (int) UIUtil.parseDpToPx(context, 60);
+        imageView.setPadding(0, 0, (int) UIUtil.parseDpToPx(context, 8), 0);
+        imageView.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setTag(childPosition);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GalleryActivity.startGalleryActivity(context, imageUrl, (Integer) view.getTag());
+            }
+        });
+        ImageLoader.getInstance().displayImage(avFile.getThumbnailUrl(false, width, height), imageView, ImageUtil.getDisplayImageOption(context));
+        return imageView;
+    }
+
+    /**
      * 裁剪图片
      * @param activity
      * @param imageUri
@@ -133,18 +165,19 @@ public class ImageUtil {
         //下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
         intent.putExtra("crop", "true");
         // aspectX aspectY 是宽高的比例
-        intent.putExtra("aspectX", 4);
-        intent.putExtra("aspectY", 3);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true); // no face detection
         // outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", 800 );
-        intent.putExtra("outputY", 600);
+        intent.putExtra("outputX", 800);
+        intent.putExtra("outputY", 800);
         intent.putExtra("return-data", false);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(resultFile));
         activity.startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
     }
+
 
     public static abstract class SaveImageCallback extends SaveCallback {
 

@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.SwingLeftInAnimationAdapter;
@@ -119,8 +120,32 @@ public class UIUtil {
         UIUtil.setActionBarColor(context, actionBarColor, color);
     }
 
+    /**
+     * 初始化fab
+     * @param context
+     * @param fab
+     * @param listView
+     * @param normalColor
+     * @param pressColor
+     * @param rippleColor
+     * @param listener
+     */
+    public static void initFab(final Context context, FloatingActionButton fab, ListView listView, int normalColor, int pressColor, int rippleColor, View.OnClickListener listener, FloatingActionButton.FabOnScrollListener fabOnScrollListener) {
+
+        fab.setColorNormalResId(normalColor);
+        fab.setColorPressedResId(pressColor);
+        fab.setColorRippleResId(rippleColor);
+        fab.attachToListView(listView, fabOnScrollListener);
+        fab.setOnClickListener(listener);
+    }
 
 
+    /**
+     * 设置listView动画
+     * @param type
+     * @param absListView
+     * @param baseAdapter
+     */
     public static void setListViewInitAnimation(String type, AbsListView absListView, BaseAdapter baseAdapter) {
         AnimationAdapter animationAdapter = null;
         if(type == "bottom") {

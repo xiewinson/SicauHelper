@@ -292,16 +292,16 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             int shapeRes = 0;
             if (category.equals("雅安")) {
                 category = "雅";
-                shapeRes = R.drawable.square_blue;
+                shapeRes = R.drawable.circle_blue;
             } else if (category.equals("成都")) {
                 category = "成";
-                shapeRes = R.drawable.square_orange;
+                shapeRes = R.drawable.circle_orange;
             } else if (category.equals("都江堰")) {
                 category = "堰";
-                shapeRes = R.drawable.square_green;
+                shapeRes = R.drawable.circle_green;
             } else {
                 category = "全";
-                shapeRes = R.drawable.square_red;
+                shapeRes = R.drawable.circle_red;
             }
             holder.categoryTv.setText(category);
             holder.categoryTv.setBackgroundResource(shapeRes);

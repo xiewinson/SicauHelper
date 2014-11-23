@@ -9,7 +9,7 @@
         android:id="@+id/goods_iv"
         android:scaleType="centerInside"
         android:layout_width="200dp"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         />
     <Button
         android:layout_margin="8dp"

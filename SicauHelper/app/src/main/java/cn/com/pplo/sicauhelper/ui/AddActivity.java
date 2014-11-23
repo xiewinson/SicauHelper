@@ -98,7 +98,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_goods);
+        setContentView(R.layout.activity_add);
 
         type = getIntent().getIntExtra(EXTRA_ADD_TYPE, 0);
         initLocation();
@@ -162,6 +162,8 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
             getSupportActionBar().setTitle("新帖子");
             UIUtil.setActionBarColor(AddActivity.this, getSupportActionBar(), R.color.red_500);
             schoolSpinner.setVisibility(View.GONE);
+            findViewById(R.id.add_school_layout).setVisibility(View.GONE);
+            findViewById(R.id.add_price_layout).setVisibility(View.GONE);
             priceEt.setVisibility(View.GONE);
         }
     }
@@ -431,7 +433,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
                 if (e == null) {
                     UIUtil.showShortToast(AddActivity.this, "上传图片成功");
                     avImageList.add(avFile);
-                    showImage(AddActivity.this, resultPath);
+                    showImage(AddActivity.this, resultPath, avFile);
                     Log.d("winson", "当前的图片列表个数为" + avImageList.size() + "   " + avImageList);
                 } else {
                     new AlertDialog.Builder(context)
@@ -455,11 +457,11 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
 
     /**
      * 将图片显示出来并暂存在list中
-     *
-     * @param context
+     *  @param context
      * @param path
+     * @param avFile
      */
-    public void showImage(final Context context, final String path) {
+    public void showImage(final Context context, final String path, final AVFile avFile) {
         final View view = View.inflate(context, R.layout.item_goods_add_image, null);
         ImageView goodsIv = (ImageView) view.findViewById(R.id.goods_iv);
         Bitmap bitmap = BitmapFactory.decodeFile(path);
@@ -478,7 +480,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 imageLayout.removeView(view);
-                                avImageList.remove(path);
+                                avImageList.remove(avFile);
                                 Log.d("winson", "当前的图片列表个数为" + avImageList.size() + "   " + avImageList);
                             }
                         })

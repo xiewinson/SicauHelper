@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.FindCallback;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class StatusFragment extends BaseFragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
     private View footerView;
+    private FloatingActionButton fab;
     private StatusAdapter statusAdapter;
     private List<AVObject> data = new ArrayList<AVObject>();
 
@@ -44,7 +46,6 @@ public class StatusFragment extends BaseFragment {
     }
 
     public StatusFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -96,15 +97,28 @@ public class StatusFragment extends BaseFragment {
 
         UIUtil.setListViewInitAnimation(UIUtil.LISTVIEW_ANIM_BOTTOM, listView, statusAdapter);
 
-        //滑到最下面加载更多
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        //添加fab
+        fab = (FloatingActionButton) view.findViewById(R.id.status_add_fab);
+        UIUtil.initFab(getActivity(), fab, listView, R.color.red_500, R.color.red_900, R.color.red_400, new View.OnClickListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            public void onClick(View v) {
+                AddActivity.startAddActivity(context, AddActivity.TYPE_STATUS);
 
+            }
+        }, new FloatingActionButton.FabOnScrollListener(){
+            @Override
+            public void onScrollDown() {
+                super.onScrollDown();
+            }
+
+            @Override
+            public void onScrollUp() {
+                super.onScrollUp();
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                super.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
                 if ((firstVisibleItem + visibleItemCount) > (totalItemCount - 2)) {
 
                     if (footerView.getVisibility() == View.GONE && data.size() >= 10) {
@@ -118,6 +132,8 @@ public class StatusFragment extends BaseFragment {
 
         findInCacheThenNetwork();
     }
+
+
 
     /**
      * 从缓存中取
@@ -212,10 +228,7 @@ public class StatusFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         //noinspection SimplifiableIfStatement
         int id = item.getItemId();
-        if(id == R.id.action_add) {
-            AddActivity.startAddActivity(getActivity(), AddActivity.TYPE_STATUS);
-        }
-        else if(id == R.id.action_search) {
+        if(id == R.id.action_search) {
 //            SearchGoodsActivity.startSearchGoodsActivity(getActivity(), viewPager.getCurrentItem());
             return true;
         }
