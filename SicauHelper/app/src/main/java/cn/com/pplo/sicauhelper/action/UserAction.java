@@ -14,7 +14,7 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 /**
  * Created by winson on 2014/11/9.
  */
-public class StudentAction {
+public class UserAction {
 
     public void signUp(Student student, SignUpCallback callback) {
         AVUser avUser = new AVUser();
@@ -42,6 +42,17 @@ public class StudentAction {
      */
     public void logIn(String sid, String pswd, LogInCallback callback) {
         AVUser.logInInBackground(sid, pswd, callback);
+    }
+
+    /**
+     * 查询指定objectId对应的user
+     * @param callback
+     */
+    public void findByObjectId(AVQuery.CachePolicy cachePolicy, String objectId, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableUser.TABLE_NAME);
+        avQuery.setCachePolicy(cachePolicy);
+        avQuery.whereEqualTo(TableContract.TableUser._OBJECTID, objectId);
+        avQuery.findInBackground(callback);
     }
 
     public void update(Student student) {

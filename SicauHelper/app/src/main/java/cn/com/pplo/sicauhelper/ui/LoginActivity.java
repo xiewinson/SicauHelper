@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.action.StudentAction;
+import cn.com.pplo.sicauhelper.action.UserAction;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
@@ -106,7 +106,7 @@ public class LoginActivity extends ActionBarActivity {
         student.setBackground("pic_0");
 
         //登录
-        new StudentAction().logIn(sid, sid, new LogInCallback() {
+        new UserAction().logIn(sid, sid, new LogInCallback() {
             @Override
             public void done(AVUser avUser, AVException e) {
                 //若已存在则跳转到主页面
@@ -122,7 +122,7 @@ public class LoginActivity extends ActionBarActivity {
                 else {
                     //新建用户时将用户名设为用户昵称
                     student.setNickName(student.getName());
-                    new StudentAction().signUp(student, new SignUpCallback() {
+                    new UserAction().signUp(student, new SignUpCallback() {
                         @Override
                         public void done(AVException e) {
 

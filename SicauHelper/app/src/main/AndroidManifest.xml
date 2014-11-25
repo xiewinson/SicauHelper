@@ -58,7 +58,7 @@
             android:label="@string/title_activity_score_stats" >
         </activity>
         <activity
-            android:name=".ui.AddActivity"
+            android:name="cn.com.pplo.sicauhelper.ui.AddActivity"
             android:label="@string/title_activity_new_goods"
             android:windowSoftInputMode="stateHidden" >
         </activity>
@@ -77,6 +77,10 @@
         <activity
             android:name="cn.com.pplo.sicauhelper.ui.StatusActivity"
             android:label="@string/title_activity_status" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.UserActivity"
+            android:label="@string/title_activity_user" >
         </activity>
     </application>
 

@@ -26,7 +26,6 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.StatusAction;
 import cn.com.pplo.sicauhelper.ui.AddActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
-import cn.com.pplo.sicauhelper.ui.SearchGoodsActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.StatusAdapter;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 

@@ -27,7 +27,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.ui.UserActivity;
+import cn.com.pplo.sicauhelper.util.ColorUtil;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -197,12 +200,23 @@ public class NavigationDrawerFragment extends BaseFragment {
         sidTv = (TextView) headerView.findViewById(R.id.navigation_sid_tv);
         profileIv = (CircleImageView) headerView.findViewById(R.id.navigation_head_iv);
 
-        AVUser avUser = SicauHelperApplication.getStudent();
+        final AVUser avUser = SicauHelperApplication.getStudent();
         if (avUser != null) {
             nameTv.setText(avUser.getString(TableContract.TableUser._NICKNAME));
             sidTv.setText(avUser.getString(TableContract.TableUser._SID));
             ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), profileIv, ImageUtil.getDisplayImageOption(getActivity()));
         }
+
+        //设置人的背景颜色
+        headerView.findViewById(R.id.navigation_user).setBackgroundResource(ColorUtil.getColorBySchool(getActivity(), avUser.getInt(TableContract.TableUser._SCHOOL))
+        );
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserActivity.startUserActivity(getActivity(), SicauHelperApplication.getStudent().getObjectId());
+            }
+        });
+
         mDrawerListView.addHeaderView(headerView, null, false);
     }
 
