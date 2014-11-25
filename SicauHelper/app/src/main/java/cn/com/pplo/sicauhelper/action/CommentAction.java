@@ -148,6 +148,7 @@ public class CommentAction {
         if(type == GOODS_SEND_COMMENT) {
             avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
             avQuery.whereEqualTo(TableContract.TableGoodsComment._SEND_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
             //id降序
             avQuery.orderByDescending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
             //取出关联的对象
@@ -158,6 +159,7 @@ public class CommentAction {
         else if(type == GOODS_RECEIVE_COMMENT) {
             avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
             avQuery.whereEqualTo(TableContract.TableGoodsComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
             //id降序
             avQuery.orderByDescending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
             //取出关联的对象
@@ -168,6 +170,7 @@ public class CommentAction {
         if(type == STATUS_SEND_COMMENT) {
             avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
             avQuery.whereEqualTo(TableContract.TableStatusComment._SEND_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
             //id降序
             avQuery.orderByDescending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
             //取出关联的对象
@@ -178,6 +181,7 @@ public class CommentAction {
         else if(type == STATUS_RECEIVE_COMMENT) {
             avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
             avQuery.whereEqualTo(TableContract.TableStatusComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
             //id降序
             avQuery.orderByDescending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
             //取出关联的对象
@@ -189,6 +193,73 @@ public class CommentAction {
 
         //取10条
         avQuery.setLimit(10);
+        avQuery.findInBackground(callback);
+    }
+
+    /**
+     * 查询评论的从指定id指定类型开始的评论列表
+     *
+     * @param callback
+     */
+    public void findSinceIdByType(int type, String objectId, long comment_id, FindCallback callback) {
+        AVQuery<AVObject> avQuery = null;
+        if(type == GOODS_SEND_COMMENT) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableGoodsComment._SEND_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
+            //小于指定id
+            avQuery.whereLessThan(TableContract.TableGoodsComment._GOODS_COMMENT_ID, comment_id);
+            //id降序
+            avQuery.orderByDescending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableGoodsComment._GOODS);
+            avQuery.include(TableContract.TableGoodsComment._SEND_USER);
+            avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
+        }
+        else if(GOODS_RECEIVE_COMMENT == type) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableGoodsComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
+            //小于指定id
+            avQuery.whereLessThan(TableContract.TableGoodsComment._GOODS_COMMENT_ID, comment_id);
+            //id降序
+            avQuery.orderByDescending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableGoodsComment._GOODS);
+            avQuery.include(TableContract.TableGoodsComment._SEND_USER);
+            avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
+        }
+        else if(type == STATUS_SEND_COMMENT) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableStatusComment._SEND_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
+            //小于指定id
+            avQuery.whereLessThan(TableContract.TableStatusComment._STATUS_COMMENT_ID, comment_id);
+            //id降序
+            avQuery.orderByDescending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableStatusComment._STATUS);
+            avQuery.include(TableContract.TableStatusComment._SEND_USER);
+            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
+        }
+        else if(GOODS_RECEIVE_COMMENT == type) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableStatusComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
+            //小于指定id
+            avQuery.whereLessThan(TableContract.TableStatusComment._STATUS_COMMENT_ID, comment_id);
+            //id降序
+            avQuery.orderByDescending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableStatusComment._STATUS);
+            avQuery.include(TableContract.TableStatusComment._SEND_USER);
+            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
+        }
+
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
+        //取10条
+        avQuery.setLimit(10);
+
         avQuery.findInBackground(callback);
     }
 

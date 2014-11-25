@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.avos.avoscloud.AVException;
@@ -83,13 +85,51 @@ public class CommentActivity extends BaseActivity {
         footerView.setVisibility(View.GONE);
         listView.addFooterView(footerView);
         listView.setFooterDividersEnabled(false);
-        listView.addFooterView(ViewPadding.getActionBarPadding(this, android.R.color.white));
+        listView.addFooterView(ViewPadding.getActionBarPadding(this, android.R.color.white), null, false);
 
         commentAdapter = new CommentAdapter(context, data);
         listView.setAdapter(commentAdapter);
 
         //获取新数据
         findNewCommentData(objectId, commentType);
+
+        //滑到最下面后加载更多
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if ((firstVisibleItem + visibleItemCount) > (totalItemCount - 2)) {
+
+                    if (footerView.getVisibility() == View.GONE && data.size() >= 10) {
+                        Log.d("winson", "加载更多");
+                        footerView.setVisibility(View.VISIBLE);
+                        findCommentById(objectId, data.get(data.size() - 1).getLong("comment_id"), commentType);
+                    }
+                }
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(commentType == CommentAction.GOODS_SEND_COMMENT || commentType == CommentAction.GOODS_RECEIVE_COMMENT) {
+                    GoodsActivity.startGoodsActivity(CommentActivity.this,
+                            data.get((int) id).getAVObject(TableContract.TableGoodsComment._GOODS).getObjectId(),
+                            data.get((int) id).getAVObject(TableContract.TableGoodsComment._GOODS).
+                                    getAVUser(TableContract.TableGoods._USER).getInt(TableContract.TableUser._SCHOOL));
+                }
+                else {
+                   StatusActivity.startStatusActivity(CommentActivity.this,
+                           data.get((int) id).getAVObject(TableContract.TableStatusComment._STATUS).getObjectId(),
+                           data.get((int) id).getAVObject(TableContract.TableStatusComment._STATUS).
+                                   getAVUser(TableContract.TableGoods._USER).getInt(TableContract.TableUser._SCHOOL));
+                }
+            }
+        });
     }
 
 
@@ -122,7 +162,7 @@ public class CommentActivity extends BaseActivity {
      * 加载更多
      */
     private void findCommentById(String objectId, long comment_id, int commentType) {
-        new CommentAction().findSinceId(CommentAction.COMMENT_STATUS, objectId, comment_id, new FindCallback<AVObject>() {
+        new CommentAction().findSinceIdByType(commentType, objectId, comment_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
