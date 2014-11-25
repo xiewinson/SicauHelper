@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,9 +18,12 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.action.CommentAction;
 import cn.com.pplo.sicauhelper.action.UserAction;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.ColorUtil;
@@ -31,6 +35,7 @@ public class UserActivity extends BaseActivity {
 
     public static final String EXTRA_OBJECT_ID = "object_id";
 
+    private int primaryColor;
     private String objectId;
     private AVUser avUser;
 
@@ -39,6 +44,16 @@ public class UserActivity extends BaseActivity {
     private TextView nameTv;
     private TextView schoolTv;
     private TextView gradeTv;
+
+    private TextView goodsCountTv;
+    private TextView statusCountTv;
+
+    private TextView goodsSendCommentTv;
+    private TextView goodsReceiveCommentTv;
+
+    private TextView statusSendCommentTv;
+    private TextView statusReceiveCommentTv;
+
 
 
     public static void startUserActivity(Context context, String objectId) {
@@ -66,6 +81,15 @@ public class UserActivity extends BaseActivity {
         gradeTv = (TextView) findViewById(R.id.user_grade_tv);
         backgroundView = findViewById(R.id.user_background);
 
+        goodsCountTv = (TextView) findViewById(R.id.user_goods_tv);
+        statusCountTv = (TextView) findViewById(R.id.user_status_tv);
+
+        goodsSendCommentTv = (TextView) findViewById(R.id.user_goods_send_comment_tv);
+        statusSendCommentTv = (TextView) findViewById(R.id.user_status_send_comment_tv);
+
+        goodsReceiveCommentTv = (TextView) findViewById(R.id.user_goods_receive_comment_tv);
+        statusReceiveCommentTv = (TextView) findViewById(R.id.user_status_receive_comment_tv);
+
         findUser(objectId, AVQuery.CachePolicy.CACHE_THEN_NETWORK);
     }
 
@@ -79,13 +103,7 @@ public class UserActivity extends BaseActivity {
             @Override
             public void done(List<AVUser> list, AVException e) {
                 if (e == null && list.size() > 0) {
-                    avUser = list.get(0);
-                    nameTv.setText(avUser.getString(TableContract.TableUser._NICKNAME));
-                    int school = avUser.getInt(TableContract.TableUser._SCHOOL);
-                    backgroundView.setBackgroundResource(ColorUtil.getColorBySchool(UserActivity.this, school));
-                    schoolTv.setText(getResources().getStringArray(R.array.school)[school] + "校区");
-                    gradeTv.setText(avUser.getString(TableContract.TableUser._SID).substring(0, 4) + " 级");
-                    ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(UserActivity.this));
+                    initView(list);
                 } else {
                     if (e != null && !e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(UserActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
@@ -93,6 +111,35 @@ public class UserActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void initView(List<AVUser> list) {
+        avUser = list.get(0);
+
+        primaryColor = ColorUtil.getColorBySchool(this, avUser.getInt(TableContract.TableUser._SCHOOL));
+
+        goodsSendCommentTv.setTextColor(getResources().getColor(primaryColor));
+        goodsReceiveCommentTv.setTextColor(getResources().getColor(primaryColor));
+
+        statusSendCommentTv.setTextColor(getResources().getColor(primaryColor));
+        statusReceiveCommentTv.setTextColor(getResources().getColor(primaryColor));
+
+        OnCommentBtnClickListener onCommentBtnClickListener = new OnCommentBtnClickListener(this);
+        goodsSendCommentTv.setOnClickListener(onCommentBtnClickListener);
+        goodsSendCommentTv.setOnClickListener(onCommentBtnClickListener);
+
+        goodsSendCommentTv.setOnClickListener(onCommentBtnClickListener);
+        goodsReceiveCommentTv.setOnClickListener(onCommentBtnClickListener);
+
+        statusSendCommentTv.setOnClickListener(onCommentBtnClickListener);
+        statusReceiveCommentTv.setOnClickListener(onCommentBtnClickListener);
+
+        nameTv.setText(avUser.getString(TableContract.TableUser._NICKNAME));
+        int school = avUser.getInt(TableContract.TableUser._SCHOOL);
+        backgroundView.setBackgroundResource(primaryColor);
+        schoolTv.setText(getResources().getStringArray(R.array.school)[school] + "校区");
+        gradeTv.setText(avUser.getString(TableContract.TableUser._SID).substring(0, 4) + " 级");
+        ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(this));
     }
 
 
@@ -116,5 +163,44 @@ public class UserActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class OnCommentBtnClickListener implements View.OnClickListener {
+        private Context context;
+
+        private OnCommentBtnClickListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            //点击商品数量
+            if(id == R.id.user_goods_tv){
+
+            }
+            //点击评论数量
+            else if(id == R.id.user_status_tv){
+
+            }
+            //点击商品发出评论
+            else if(id == R.id.user_goods_send_comment_tv){
+                CommentActivity.startCommentActivity(context, objectId, CommentAction.GOODS_SEND_COMMENT);
+            }
+            //点击帖子发出评论
+            else if(id == R.id.user_status_send_comment_tv){
+                CommentActivity.startCommentActivity(context, objectId, CommentAction.STATUS_SEND_COMMENT);
+
+            }
+            //点击商品收到评论
+            else if(id == R.id.user_goods_receive_comment_tv){
+                CommentActivity.startCommentActivity(context, objectId, CommentAction.GOODS_RECEIVE_COMMENT);
+
+            }
+            //点击帖子收到评论
+            else if(id == R.id.user_status_receive_comment_tv){
+                CommentActivity.startCommentActivity(context, objectId, CommentAction.STATUS_RECEIVE_COMMENT);
+            }
+        }
     }
 }

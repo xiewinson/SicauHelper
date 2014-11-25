@@ -7,38 +7,38 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <LinearLayout
-            android:layout_gravity="center_horizontal"
             android:padding="32dp"
-            android:gravity="center"
-            android:background="@color/red_500"
             android:id="@+id/user_background"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_marginTop="16dp"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_gravity="center"
                 android:id="@+id/user_head_iv"
                 android:src="@drawable/ic_account_circle_white_48dp"
                 android:layout_width="100dp"
                 android:scaleType="centerCrop"
                 android:layout_height="100dp"
+                app:border_width="1dp"
                 app:border_color="#ffffff" />
 
-            <TextView
-                android:paddingTop="4dp"
-                android:id="@+id/user_name_tv"
-                android:textColor="#ffffff"
-                android:textSize="34sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
             <LinearLayout
-                android:paddingTop="4dp"
+                android:layout_gravity="bottom"
+                android:gravity="bottom"
+                android:layout_marginLeft="32dp"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
+                <TextView
+                    android:paddingTop="4dp"
+                    android:id="@+id/user_name_tv"
+                    android:textColor="#ffffff"
+                    android:textSize="22sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
 
                 <TextView
                     android:id="@+id/user_school_tv"
@@ -47,7 +47,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
-                    android:layout_marginLeft="8dp"
                     android:id="@+id/user_grade_tv"
                     android:textColor="#ffffff"
                     android:textSize="14sp"
@@ -79,37 +78,36 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="商品"
-                    android:textSize="34sp" />
+                    android:textSize="22sp" />
 
                 <TextView
+                    android:id="@+id/user_goods_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
                     android:text="22"
-                    android:textSize="22sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
                 <LinearLayout
-                    android:layout_marginTop="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
 
                     <TextView
+                        android:id="@+id/user_goods_send_comment_tv"
                         android:layout_width="wrap_content"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="发出的评论"
-                        android:textSize="22sp" />
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:gravity="center"
-                        android:layout_weight="1"
+                        android:id="@+id/user_goods_receive_comment_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="8dp"
+                        android:paddingLeft="16dp"
                         android:text="收到的评论"
-                        android:textSize="22sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -138,37 +136,36 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="帖子"
-                        android:textSize="34sp" />
+                        android:textSize="22sp" />
 
                     <TextView
+                        android:id="@+id/user_status_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="8dp"
                         android:text="22"
-                        android:textSize="22sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_marginTop="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
 
                     <TextView
+                        android:id="@+id/user_status_send_comment_tv"
                         android:layout_width="wrap_content"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="发出的评论"
-                        android:textSize="22sp" />
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:gravity="center"
-                        android:layout_weight="1"
+                        android:id="@+id/user_status_receive_comment_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="8dp"
+                        android:paddingLeft="16dp"
                         android:text="收到的评论"
-                        android:textSize="22sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>

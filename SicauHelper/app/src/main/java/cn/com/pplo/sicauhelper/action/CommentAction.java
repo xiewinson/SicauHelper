@@ -5,6 +5,7 @@ import android.util.Log;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
@@ -18,6 +19,15 @@ public class CommentAction {
 
     public static final int COMMENT_GOODS = 888;
     public static final int COMMENT_STATUS = 999;
+
+    /**
+     * 评论类型
+     */
+    public static final int GOODS_SEND_COMMENT = 1001;
+    public static final int GOODS_RECEIVE_COMMENT = 1002;
+    public static final int STATUS_SEND_COMMENT = 1003;
+    public static final int STATUS_RECEIVE_COMMENT = 1004;
+
 
     /**
      * 在缓存中查询指定商品的评论列表
@@ -127,6 +137,61 @@ public class CommentAction {
 
         avQuery.findInBackground(callback);
     }
+
+    /**
+     * 查询指定类型的评论最新列表
+     *
+     * @param callback
+     */
+    public void findNewDataByType(int type, String objectId, FindCallback callback) {
+        AVQuery<AVObject> avQuery = null;
+        if(type == GOODS_SEND_COMMENT) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableGoodsComment._SEND_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            //id降序
+            avQuery.orderByDescending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableGoodsComment._GOODS);
+            avQuery.include(TableContract.TableGoodsComment._SEND_USER);
+            avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
+        }
+        else if(type == GOODS_RECEIVE_COMMENT) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableGoodsComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            //id降序
+            avQuery.orderByDescending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableGoodsComment._GOODS);
+            avQuery.include(TableContract.TableGoodsComment._SEND_USER);
+            avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
+        }
+        if(type == STATUS_SEND_COMMENT) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableStatusComment._SEND_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            //id降序
+            avQuery.orderByDescending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableStatusComment._STATUS);
+            avQuery.include(TableContract.TableStatusComment._SEND_USER);
+            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
+        }
+        else if(type == STATUS_RECEIVE_COMMENT) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableStatusComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            //id降序
+            avQuery.orderByDescending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
+            //取出关联的对象
+            avQuery.include(TableContract.TableStatusComment._STATUS);
+            avQuery.include(TableContract.TableStatusComment._SEND_USER);
+            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
+        }
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
+
+        //取10条
+        avQuery.setLimit(10);
+        avQuery.findInBackground(callback);
+    }
+
 
     /**
      * 统计评论数量

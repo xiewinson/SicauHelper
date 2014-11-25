@@ -158,7 +158,7 @@ public class GoodsActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (data.size() > id) {
+                if (data.size() > 0 && data.size() > id) {
                     showOptionDialog(context, data.get((int) id));
                 }
             }
@@ -429,6 +429,8 @@ public class GoodsActivity extends BaseActivity {
      * 从缓存中取
      */
     private void findCommentInCacheThenNetwork(final String objectId) {
+        swipeRefreshLayout.setRefreshing(true);
+        footerView.setVisibility(View.GONE);
         new CommentAction().findInCacheThenNetwork(CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
@@ -440,6 +442,9 @@ public class GoodsActivity extends BaseActivity {
                         UIUtil.showShortToast(GoodsActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
                     }
                     Log.d("winson", "出错：" + e.getMessage());
+                }
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });

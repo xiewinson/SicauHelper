@@ -208,8 +208,8 @@ public class NavigationDrawerFragment extends BaseFragment {
         }
 
         //设置人的背景颜色
-        headerView.findViewById(R.id.navigation_user).setBackgroundResource(ColorUtil.getColorBySchool(getActivity(), avUser.getInt(TableContract.TableUser._SCHOOL))
-        );
+//        headerView.findViewById(R.id.navigation_user).setBackgroundResource(ColorUtil.getColorBySchool(getActivity(), avUser.getInt(TableContract.TableUser._SCHOOL))
+//        );
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

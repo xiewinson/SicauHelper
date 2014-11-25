@@ -56,5 +56,6 @@
     <string name="title_activity_feedback">FeedbackActivity</string>
     <string name="title_activity_status">StatusActivity</string>
     <string name="title_activity_user">UserActivity</string>
+    <string name="title_activity_comment">CommentActivity</string>
 
 </resources>

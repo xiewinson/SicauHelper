@@ -337,6 +337,7 @@ public class StatusActivity extends BaseActivity {
                 }
             }
         });
+
         findCommentInCacheThenNetwork(objectId);
     }
 
@@ -430,6 +431,7 @@ public class StatusActivity extends BaseActivity {
      * 从缓存中取
      */
     private void findCommentInCacheThenNetwork(final String objectId) {
+        swipeRefreshLayout.setRefreshing(true);
         new CommentAction().findInCacheThenNetwork(CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
@@ -441,6 +443,9 @@ public class StatusActivity extends BaseActivity {
                         UIUtil.showShortToast(StatusActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
                     }
                     Log.d("winson", "出错：" + e.getMessage());
+                }
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });

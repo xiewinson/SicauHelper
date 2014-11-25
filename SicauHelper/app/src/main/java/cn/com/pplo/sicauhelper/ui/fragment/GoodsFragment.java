@@ -163,6 +163,8 @@ public class GoodsFragment extends BaseFragment {
      * 从缓存中取
      */
     private void findInCacheThenNetwork() {
+        swipeRefreshLayout.setRefreshing(true);
+        footerView.setVisibility(View.GONE);
         new GoodsAction().findInCacheThenNetwork(schoolPosition, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
@@ -175,6 +177,9 @@ public class GoodsFragment extends BaseFragment {
                         UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，下拉刷新试试吧");
                     }
                     findNewData();
+                }
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
         });

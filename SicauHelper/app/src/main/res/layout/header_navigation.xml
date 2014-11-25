@@ -4,10 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp" />
-    <LinearLayout
+     <LinearLayout
+        android:background="@color/blue_grey_500"
         android:id="@+id/navigation_user"
         android:orientation="horizontal"
         android:gravity="center_vertical"
