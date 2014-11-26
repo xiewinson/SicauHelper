@@ -1,5 +1,8 @@
 package cn.com.pplo.sicauhelper.action;
 
+import android.util.Log;
+
+import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.DeleteCallback;
@@ -134,7 +137,21 @@ public class StatusAction {
 //                });
 //            }
 //        }
-        //删除商品
+        //删除帖子相关评论
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+        avQuery.whereEqualTo(TableContract.TableStatusComment._STATUS, avStatus);
+        avQuery.deleteAllInBackground(new DeleteCallback() {
+            @Override
+            public void done(AVException e) {
+                if(e == null) {
+                    Log.d("winson", "删除帖子相关评论成功");
+                }
+                else {
+                    Log.d("winson", "删除帖子相关评论失败：" + e.getMessage());
+                }
+            }
+        });
+        //删除帖子
         avStatus.deleteInBackground(callback);
     }
 }

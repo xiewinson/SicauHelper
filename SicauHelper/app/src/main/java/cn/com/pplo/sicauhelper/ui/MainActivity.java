@@ -26,11 +26,10 @@ import com.avos.avoscloud.feedback.FeedbackThread;
 
 import java.util.List;
 
-import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
-import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.ui.fragment.ClassroomFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.MarketFragment;
+import cn.com.pplo.sicauhelper.ui.fragment.MessageDrawerFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.NavigationDrawerFragment;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.ui.fragment.NewsFragment;
@@ -45,6 +44,7 @@ public class MainActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private MessageDrawerFragment messageDrawerFragment;
     private DrawerLayout mDrawerLayout;
 
     /**
@@ -94,9 +94,11 @@ public class MainActivity extends ActionBarActivity
     private void initView() {
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = new NavigationDrawerFragment();
+        messageDrawerFragment = new MessageDrawerFragment();
         mTitle = getTitle();
         // Set up the drawer.
         getSupportFragmentManager().beginTransaction().add(R.id.navigation_drawer, mNavigationDrawerFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.message_drawer, messageDrawerFragment).commit();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setUp(mDrawerLayout, this);
     }
@@ -230,6 +232,14 @@ public class MainActivity extends ActionBarActivity
             }
             else {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        }
+        else if(id == R.id.action_message) {
+            if(!mDrawerLayout.isDrawerOpen(GravityCompat.END)){
+                mDrawerLayout.openDrawer(GravityCompat.END);
+            }
+            else {
+                mDrawerLayout.closeDrawer(GravityCompat.END);
             }
         }
         return super.onOptionsItemSelected(item);

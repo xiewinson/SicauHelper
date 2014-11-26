@@ -45,6 +45,12 @@
         <item>回复</item>
         <item>投诉</item>
     </string-array>
+    <string-array name="message_type">
+        <item>发出的商品评论</item>
+        <item>收到的商品评论</item>
+        <item>发出的圈子评论</item>
+        <item>收到的圈子评论</item>
+    </string-array>
 
     <string name="title_activity_goods">GoodsActivity</string>
     <string name="title_activity_search_goods">SearchGoodsActivity</string>

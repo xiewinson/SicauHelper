@@ -32,7 +32,9 @@ public class CommentActivity extends BaseActivity {
 
     public static final String EXTRA_OBJECT_ID = "object_id";
     public static final String EXTRA_COMMENT_TYPE = "comment_type";
+    public static final String EXTRA_TITLE = "comment_title";
     private String objectId;
+    private String title;
     private int commentType;
     /**
      * 评论类型
@@ -47,10 +49,11 @@ public class CommentActivity extends BaseActivity {
     private CommentAdapter commentAdapter;
     private List<AVObject> data = new ArrayList<AVObject>();
 
-    public static void startCommentActivity(Context context, String objectId, int commentType) {
+    public static void startCommentActivity(Context context, String objectId, int commentType, String title) {
         Intent intent = new Intent(context, CommentActivity.class);
         intent.putExtra(EXTRA_OBJECT_ID, objectId);
         intent.putExtra(EXTRA_COMMENT_TYPE, commentType);
+        intent.putExtra(EXTRA_TITLE, title);
         context.startActivity(intent);
     }
 
@@ -64,6 +67,9 @@ public class CommentActivity extends BaseActivity {
     private void setUp(Context context) {
         objectId = getIntent().getStringExtra(EXTRA_OBJECT_ID);
         commentType = getIntent().getIntExtra(EXTRA_COMMENT_TYPE, 0);
+        title = getIntent().getStringExtra(EXTRA_TITLE);
+
+        getSupportActionBar().setTitle(title);
 
         listView = (ListView) findViewById(R.id.comment_listView);
         UIUtil.setActionBarColorBySchool(context, SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL), getSupportActionBar());
@@ -117,16 +123,28 @@ public class CommentActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(commentType == CommentAction.GOODS_SEND_COMMENT || commentType == CommentAction.GOODS_RECEIVE_COMMENT) {
-                    GoodsActivity.startGoodsActivity(CommentActivity.this,
-                            data.get((int) id).getAVObject(TableContract.TableGoodsComment._GOODS).getObjectId(),
-                            data.get((int) id).getAVObject(TableContract.TableGoodsComment._GOODS).
-                                    getAVUser(TableContract.TableGoods._USER).getInt(TableContract.TableUser._SCHOOL));
+                    AVObject avGoods = data.get((int) id).getAVObject(TableContract.TableGoodsComment._GOODS);
+                    if(avGoods == null) {
+                        UIUtil.showShortToast(CommentActivity.this, "臣以为这条评论所在的商品已被丢弃");
+                    }
+                    else {
+                        GoodsActivity.startGoodsActivity(CommentActivity.this,
+                                avGoods.getObjectId(),
+                                avGoods.getAVUser(TableContract.TableGoods._USER).getInt(TableContract.TableUser._SCHOOL));
+                    }
+
                 }
                 else {
-                   StatusActivity.startStatusActivity(CommentActivity.this,
-                           data.get((int) id).getAVObject(TableContract.TableStatusComment._STATUS).getObjectId(),
-                           data.get((int) id).getAVObject(TableContract.TableStatusComment._STATUS).
-                                   getAVUser(TableContract.TableGoods._USER).getInt(TableContract.TableUser._SCHOOL));
+                    AVObject avStatus = data.get((int) id).getAVObject(TableContract.TableStatusComment._STATUS);
+                    if(avStatus == null) {
+                        UIUtil.showShortToast(CommentActivity.this, "臣以为这条评论所在的帖子已被丢弃");
+                    }
+                    else {
+                        StatusActivity.startStatusActivity(CommentActivity.this,
+                                avStatus.getObjectId(),
+                                avStatus.getAVUser(TableContract.TableGoods._USER).getInt(TableContract.TableUser._SCHOOL));
+                    }
+
                 }
             }
         });
@@ -144,11 +162,13 @@ public class CommentActivity extends BaseActivity {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
-                    Log.d("winson", list.size() + "个");
+                    if(list.size() == 0) {
+                        UIUtil.showShortToast(CommentActivity.this, "臣以为没有评论和大王有关");
+                    }
                     notifyDataSetChanged(list, true);
                     listView.setSelection(0);
                 } else {
-                    UIUtil.showShortToast(CommentActivity.this, "你的网络好像有点问题，重新试试吧");
+                    UIUtil.showShortToast(CommentActivity.this, "大王网络状况是否很差");
                     Log.d("winson", "出错：" + e.getMessage());
                 }
                 if (swipeRefreshLayout.isRefreshing()) {
@@ -212,7 +232,8 @@ public class CommentActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            findNewCommentData(objectId, commentType);
             return true;
         }
 

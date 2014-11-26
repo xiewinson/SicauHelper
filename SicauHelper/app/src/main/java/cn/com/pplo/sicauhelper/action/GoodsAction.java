@@ -155,6 +155,22 @@ public class GoodsAction {
 //                });
 //            }
 //        }
+        //删除商品相关评论
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+        avQuery.whereEqualTo(TableContract.TableGoodsComment._GOODS, avGoods);
+
+            avQuery.deleteAllInBackground(new DeleteCallback() {
+                @Override
+                public void done(AVException e) {
+                    if(e == null) {
+                        Log.d("winson", "删除商品相关评论成功");
+                    }
+                    else {
+                        Log.d("winson", "删除商品相关评论失败：" + e.getMessage());
+                    }
+                }
+            });
+
         //删除商品
         avGoods.deleteInBackground(callback);
     }

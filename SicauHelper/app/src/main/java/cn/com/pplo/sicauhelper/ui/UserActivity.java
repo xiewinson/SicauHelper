@@ -48,13 +48,6 @@ public class UserActivity extends BaseActivity {
     private TextView goodsCountTv;
     private TextView statusCountTv;
 
-    private TextView goodsSendCommentTv;
-    private TextView goodsReceiveCommentTv;
-
-    private TextView statusSendCommentTv;
-    private TextView statusReceiveCommentTv;
-
-
 
     public static void startUserActivity(Context context, String objectId) {
         Intent intent = new Intent(context, UserActivity.class);
@@ -84,12 +77,6 @@ public class UserActivity extends BaseActivity {
         goodsCountTv = (TextView) findViewById(R.id.user_goods_tv);
         statusCountTv = (TextView) findViewById(R.id.user_status_tv);
 
-        goodsSendCommentTv = (TextView) findViewById(R.id.user_goods_send_comment_tv);
-        statusSendCommentTv = (TextView) findViewById(R.id.user_status_send_comment_tv);
-
-        goodsReceiveCommentTv = (TextView) findViewById(R.id.user_goods_receive_comment_tv);
-        statusReceiveCommentTv = (TextView) findViewById(R.id.user_status_receive_comment_tv);
-
         findUser(objectId, AVQuery.CachePolicy.CACHE_THEN_NETWORK);
     }
 
@@ -118,21 +105,7 @@ public class UserActivity extends BaseActivity {
 
         primaryColor = ColorUtil.getColorBySchool(this, avUser.getInt(TableContract.TableUser._SCHOOL));
 
-        goodsSendCommentTv.setTextColor(getResources().getColor(primaryColor));
-        goodsReceiveCommentTv.setTextColor(getResources().getColor(primaryColor));
-
-        statusSendCommentTv.setTextColor(getResources().getColor(primaryColor));
-        statusReceiveCommentTv.setTextColor(getResources().getColor(primaryColor));
-
         OnCommentBtnClickListener onCommentBtnClickListener = new OnCommentBtnClickListener(this);
-        goodsSendCommentTv.setOnClickListener(onCommentBtnClickListener);
-        goodsSendCommentTv.setOnClickListener(onCommentBtnClickListener);
-
-        goodsSendCommentTv.setOnClickListener(onCommentBtnClickListener);
-        goodsReceiveCommentTv.setOnClickListener(onCommentBtnClickListener);
-
-        statusSendCommentTv.setOnClickListener(onCommentBtnClickListener);
-        statusReceiveCommentTv.setOnClickListener(onCommentBtnClickListener);
 
         nameTv.setText(avUser.getString(TableContract.TableUser._NICKNAME));
         int school = avUser.getInt(TableContract.TableUser._SCHOOL);
@@ -182,24 +155,6 @@ public class UserActivity extends BaseActivity {
             //点击评论数量
             else if(id == R.id.user_status_tv){
 
-            }
-            //点击商品发出评论
-            else if(id == R.id.user_goods_send_comment_tv){
-                CommentActivity.startCommentActivity(context, objectId, CommentAction.GOODS_SEND_COMMENT);
-            }
-            //点击帖子发出评论
-            else if(id == R.id.user_status_send_comment_tv){
-                CommentActivity.startCommentActivity(context, objectId, CommentAction.STATUS_SEND_COMMENT);
-
-            }
-            //点击商品收到评论
-            else if(id == R.id.user_goods_receive_comment_tv){
-                CommentActivity.startCommentActivity(context, objectId, CommentAction.GOODS_RECEIVE_COMMENT);
-
-            }
-            //点击帖子收到评论
-            else if(id == R.id.user_status_receive_comment_tv){
-                CommentActivity.startCommentActivity(context, objectId, CommentAction.STATUS_RECEIVE_COMMENT);
             }
         }
     }
