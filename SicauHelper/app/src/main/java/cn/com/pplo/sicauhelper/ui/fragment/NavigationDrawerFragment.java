@@ -27,6 +27,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.ui.FeedbackActivity;
 import cn.com.pplo.sicauhelper.ui.UserActivity;
 import cn.com.pplo.sicauhelper.util.ColorUtil;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
@@ -185,8 +186,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         feedbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FeedbackAgent agent = new FeedbackAgent(getActivity());
-                agent.startDefaultThreadActivity();
+                FeedbackActivity.startFeedbackActivity(getActivity());
             }
         });
     }

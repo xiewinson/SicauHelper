@@ -11,12 +11,15 @@ import android.widget.TextView;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.FindCallback;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.action.GoodsAction;
+import cn.com.pplo.sicauhelper.action.StatusAction;
 import cn.com.pplo.sicauhelper.action.UserAction;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.ColorUtil;
@@ -109,13 +112,43 @@ public class UserActivity extends BaseActivity {
         schoolTv.setText(getResources().getStringArray(R.array.school)[school] + "校区");
         gradeTv.setText(avUser.getString(TableContract.TableUser._SID).substring(0, 4) + " 级");
         ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(this));
+
+        getGoodsCount();
+        getStatusCount();
+    }
+
+    private void getStatusCount() {
+        new StatusAction().countStatusByUser(objectId, new CountCallback() {
+            @Override
+            public void done(int count, AVException e) {
+                if(e != null) {
+                    UIUtil.showShortToast(UserActivity.this, "臣未算出此人所发帖子之数");
+                }
+                else {
+                    statusCountTv.setText("商品\n" + count);
+                }
+            }
+        });
+    }
+
+    private void getGoodsCount() {
+        new GoodsAction().countGoodsByUser(objectId, new CountCallback() {
+            @Override
+            public void done(int count, AVException e) {
+                if (e != null) {
+                    UIUtil.showShortToast(UserActivity.this, "臣未算出此人所发商品之数");
+                } else {
+                    goodsCountTv.setText("圈子\n" + count);
+                }
+            }
+        });
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_user, menu);
+        super.onCreateOptionsMenu(menu);
         return true;
     }
 
@@ -127,7 +160,8 @@ public class UserActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            findUser(objectId, AVQuery.CachePolicy.NETWORK_ONLY);
             return true;
         }
 
@@ -146,11 +180,11 @@ public class UserActivity extends BaseActivity {
             int id = v.getId();
             //点击商品数量
             if(id == R.id.user_goods_tv){
-                UserGoodsActivity.startUserGoodsActivity(UserActivity.this, avUser.getInt(TableContract.TableUser._SCHOOL), objectId, avUser.getString(TableContract.TableUser._NICKNAME));
+                UserGoodsActivity.startUserGoodsActivity(context, avUser.getInt(TableContract.TableUser._SCHOOL), objectId, avUser.getString(TableContract.TableUser._NICKNAME));
             }
             //点击评论数量
             else if(id == R.id.user_status_tv){
-                UserStatusActivity.startUserStatusActivity(UserActivity.this, avUser.getInt(TableContract.TableUser._SCHOOL), objectId, avUser.getString(TableContract.TableUser._NICKNAME));
+                UserStatusActivity.startUserStatusActivity(context, avUser.getInt(TableContract.TableUser._SCHOOL), objectId, avUser.getString(TableContract.TableUser._NICKNAME));
             }
         }
     }

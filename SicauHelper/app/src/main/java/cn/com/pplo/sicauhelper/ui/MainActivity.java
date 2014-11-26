@@ -2,12 +2,16 @@ package cn.com.pplo.sicauhelper.ui;
 
 import android.app.Activity;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -35,6 +39,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.ui.fragment.NewsFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.StatusFragment;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
 
 public class MainActivity extends ActionBarActivity
@@ -73,20 +78,6 @@ public class MainActivity extends ActionBarActivity
             startActivity(intent);
             this.finish();
         } else {
-            //接受反馈通知
-            FeedbackAgent agent = new FeedbackAgent(this);
-//            agent.sync();
-            agent.getDefaultThread().sync(new FeedbackThread.SyncCallback() {
-                @Override
-                public void onCommentsSend(List<Comment> comments, AVException e) {
-                    Log.d("winson", comments.size() + "条评论send");
-                }
-
-                @Override
-                public void onCommentsFetch(List<Comment> comments, AVException e) {
-                    Log.d("winson", comments.size() + "条评论");
-                }
-            });
             initView();
         }
     }
@@ -101,6 +92,47 @@ public class MainActivity extends ActionBarActivity
         getSupportFragmentManager().beginTransaction().add(R.id.message_drawer, messageDrawerFragment).commit();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setUp(mDrawerLayout, this);
+        receiveFeedback();
+    }
+
+    /**
+     * 接收反馈
+     */
+    private void receiveFeedback() {
+        FeedbackAgent agent = new FeedbackAgent(this);
+        final FeedbackThread feedbackThread = agent.getDefaultThread();
+        feedbackThread.sync(new FeedbackThread.SyncCallback() {
+            @Override
+            public void onCommentsSend(List<Comment> comments, AVException e) {
+                Log.d("winson", "当前发送消息数量： " + comments.size());
+            }
+
+            @Override
+            public void onCommentsFetch(List<Comment> comments, AVException e) {
+                Log.d("winson", "当前消息数量： " + comments.size());
+                int currentSize = (Integer)SharedPreferencesUtil.get(MainActivity.this, SharedPreferencesUtil.CURRENT_FEEDBACK_SIZE, 0);
+                Log.d("winson", "存储的数量：" + currentSize);
+                if (feedbackThread.getCommentsList().size() > currentSize) {
+                    Log.d("winson", "你有未查收的新消息");
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this);
+                    Intent intent = new Intent(MainActivity.this, FeedbackActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    PendingIntent pi = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setContentTitle("川农助手回复了您的反馈")
+                            .setContentText("点击查看")
+                            .setTicker("川农助手回复了您的反馈")
+                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setContentIntent(pi)
+                            .setAutoCancel(true);
+                    notificationManager.notify(0, builder.build());
+                } else {
+                    Log.d("winson", "没有新消息");
+                }
+
+            }
+        });
     }
 
     /**

@@ -55,4 +55,12 @@ public class TimeUtil {
         }
         return result;
     }
+
+    /**
+     * 时间戳转换为年:月:日:小时:分钟时间
+     * @return
+     */
+    public static String dateToChinaTime(Date date) {
+        return new java.text.SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(date);
+    }
 }

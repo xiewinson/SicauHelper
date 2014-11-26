@@ -7,6 +7,7 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
@@ -214,5 +215,18 @@ public class GoodsAction {
 
         //删除商品
         avGoods.deleteInBackground(callback);
+    }
+
+
+    /**
+     * 计算指定人的商品数量
+     * @param objectId
+     * @param callback
+     */
+    public void countGoodsByUser(String objectId, CountCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
+        //指定人
+        avQuery.whereEqualTo(TableContract.TableGoods._USER,  AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+        avQuery.countInBackground(callback);
     }
 }

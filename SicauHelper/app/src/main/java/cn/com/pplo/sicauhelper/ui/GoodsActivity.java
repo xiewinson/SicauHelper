@@ -244,9 +244,16 @@ public class GoodsActivity extends BaseActivity {
                     invalidateOptionsMenu();
                     Log.d("winson", "更新商品数据");
                     avGoods = avObjects.get(0);
-                    AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._USER);
+                    final AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._USER);
                     //头像
                     ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(context));
+                    //点击头像打开UserActivity
+                    headIv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UserActivity.startUserActivity(context, avStudent.getObjectId());
+                        }
+                    });
                     //名字
                     nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
                     //时间
@@ -271,7 +278,11 @@ public class GoodsActivity extends BaseActivity {
                             + avGoods.getString(TableContract.TableGoods._MODEL) + " ("
                             + avGoods.getString(TableContract.TableGoods._VERSION) + ") ");
                     //地址
-                    locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
+                    String address = avGoods.getString(TableContract.TableGoods._ADDRESS);
+                    locationTv.setText(address);
+                    if(TextUtils.isEmpty(address)) {
+                        locationTv.setVisibility(View.GONE);
+                    }
                     //显示图片
                     final List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
                     //图片url列表
@@ -545,7 +556,6 @@ public class GoodsActivity extends BaseActivity {
 
         //刷新
         if (id == R.id.action_refresh) {
-            swipeRefreshLayout.setRefreshing(true);
             initGoodsData(this);
             findNewCommentData(objectId);
             return true;

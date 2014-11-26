@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:animateLayoutChanges="true"
     android:padding="16dp"
     android:layout_gravity="center"
     android:gravity="center"
@@ -10,11 +11,13 @@
 
     <LinearLayout
         android:gravity="center"
+        android:animateLayoutChanges="true"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/user_head_iv"
             android:src="@drawable/ic_account_circle_white_48dp"
             android:layout_width="72dp"
@@ -24,6 +27,7 @@
             app:border_color="#ffffff" />
 
         <LinearLayout
+            android:animateLayoutChanges="true"
             android:layout_marginLeft="16dp"
             android:orientation="vertical"
             android:layout_width="wrap_content"
@@ -32,7 +36,6 @@
             <TextView
                 android:textColor="#ffffff"
                 android:paddingTop="4dp"
-                android:text="谢谢"
                 android:id="@+id/user_name_tv"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"
@@ -43,7 +46,6 @@
                 android:textColor="#ffffff"
                 android:id="@+id/user_school_tv"
                 android:textSize="14sp"
-                android:text="空校区"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -51,13 +53,13 @@
                 android:textColor="#ffffff"
                 android:id="@+id/user_grade_tv"
                 android:textSize="14sp"
-                android:text="2016级"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:animateLayoutChanges="true"
         android:gravity="center"
         android:layout_marginTop="16dp"
         android:layout_width="match_parent"
@@ -65,6 +67,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:animateLayoutChanges="true"
             android:padding="16dp"
             android:layout_gravity="center"
             android:orientation="vertical"
@@ -78,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
-                android:text="商品\n525212"
+                android:text="商品\n0"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -87,6 +90,7 @@
             android:layout_height="0dp" />
 
         <LinearLayout
+            android:animateLayoutChanges="true"
             android:padding="16dp"
             android:layout_gravity="center"
             android:orientation="vertical"
@@ -101,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
-                android:text="圈子\n224122"
+                android:text="圈子\n0"
                 android:textSize="18sp" />
         </LinearLayout>
 

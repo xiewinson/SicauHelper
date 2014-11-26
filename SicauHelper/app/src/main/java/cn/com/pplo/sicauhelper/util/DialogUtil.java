@@ -137,7 +137,7 @@ public class DialogUtil {
                         thread.setContact("【投诉人："
                                 + SicauHelperApplication.getStudent().getString(TableContract.TableUser._NAME)
                                 + "(" + SicauHelperApplication.getStudent().getString(TableContract.TableUser._SID)  + ")" +"】");
-                        Comment newComment = new Comment("这是一个用户反馈");
+                        Comment newComment = new Comment();
                         //设置投诉者的类型
                         newComment.setCommentType(Comment.CommentType.USER);
                         //创建时间

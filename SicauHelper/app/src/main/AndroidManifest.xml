@@ -98,6 +98,11 @@
             android:name="cn.com.pplo.sicauhelper.ui.UserStatusActivity"
             android:label="@string/title_activity_user_status" >
         </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.FeedbackActivity"
+            android:label="@string/title_activity_feedback"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
     </application>
 
 </manifest>

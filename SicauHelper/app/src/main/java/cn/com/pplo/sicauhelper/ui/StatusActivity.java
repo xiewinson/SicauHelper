@@ -243,9 +243,16 @@ public class StatusActivity extends BaseActivity {
                     invalidateOptionsMenu();
                     Log.d("winson", "更新帖子数据");
                     avStatus = avObjects.get(0);
-                    AVObject avStudent = avStatus.getAVObject(TableContract.TableStatus._USER);
+                    final AVObject avStudent = avStatus.getAVObject(TableContract.TableStatus._USER);
                     //头像
                     ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(context));
+                    //点击头像打开UserActivity
+                    headIv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UserActivity.startUserActivity(context, avStudent.getObjectId());
+                        }
+                    });
                     //名字
                     nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
                     //时间
@@ -270,7 +277,11 @@ public class StatusActivity extends BaseActivity {
                             + avStatus.getString(TableContract.TableStatus._MODEL) + " ("
                             + avStatus.getString(TableContract.TableStatus._VERSION) + ") ");
                     //地址
-                    locationTv.setText(avStatus.getString(TableContract.TableStatus._ADDRESS));
+                    String address = avStatus.getString(TableContract.TableGoods._ADDRESS);
+                    locationTv.setText(address);
+                    if(TextUtils.isEmpty(address)) {
+                        locationTv.setVisibility(View.GONE);
+                    }
                     //显示图片
                     final List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avStatus);
                     //图片url列表
@@ -546,7 +557,7 @@ public class StatusActivity extends BaseActivity {
 
         //刷新
         if (id == R.id.action_refresh) {
-            swipeRefreshLayout.setRefreshing(true);
+
             initStatusData(this);
             findNewCommentData(objectId);
             return true;

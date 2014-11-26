@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,6 +19,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.GalleryActivity;
 import cn.com.pplo.sicauhelper.ui.GoodsActivity;
+import cn.com.pplo.sicauhelper.ui.UserActivity;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.TimeUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -74,7 +76,7 @@ public class GoodsAdapter extends BaseAdapter {
         }
 
         final AVObject avGoods = getItem(position);
-        AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._USER);
+        final AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._USER);
         //头像
         ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayImageOption(context));
         //名字
@@ -94,7 +96,12 @@ public class GoodsAdapter extends BaseAdapter {
                 + avGoods.getString(TableContract.TableGoods._MODEL) + " ("
                 + avGoods.getString(TableContract.TableGoods._VERSION) + ") ");
         //地址
-        holder.locationTv.setText(avGoods.getString(TableContract.TableGoods._ADDRESS));
+        String address = avGoods.getString(TableContract.TableGoods._ADDRESS);
+        holder.locationTv.setText(address);
+        if(TextUtils.isEmpty(address)) {
+            holder.locationTv.setVisibility(View.GONE);
+        }
+
         //显示图片
         List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
         //图片url列表
@@ -106,6 +113,14 @@ public class GoodsAdapter extends BaseAdapter {
             holder.imageLayout.addView(imageView);
             childPosition ++;
         }
+
+        //点击头像打开UserActivity
+        holder.headIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserActivity.startUserActivity(context, avStudent.getObjectId());
+            }
+        });
 
         //打开详细页面
         convertView.setOnClickListener(new View.OnClickListener() {

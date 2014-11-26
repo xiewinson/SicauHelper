@@ -339,7 +339,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         params.put("user", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString());
         params.put("pwd", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_PSWD, "").toString());
         params.put("lb", "S");
-        NetUtil.getCourse2HtmlStr(context, params, new NetUtil.NetCallback(context) {
+        NetUtil.getCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
             @Override
             public void onSuccess(String result) {
                 final List<Course> tempList = StringUtil.parseCourseInfo(result);

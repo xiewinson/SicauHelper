@@ -19,6 +19,10 @@ public class SharedPreferencesUtil {
     public static final String LOGIN_PSWD = "LOGIN_PSWD";
 
     /**
+     * 当前反馈数量
+     */
+    public static final String CURRENT_FEEDBACK_SIZE = "current_feedback_size";
+    /**
      * 以xml保存键值对
      * @param context
      * @param key
@@ -29,7 +33,9 @@ public class SharedPreferencesUtil {
         SharedPreferences.Editor editor = sp.edit();
         if(value instanceof String) {
             editor.putString(key, (String) value);
-
+        }
+        else if(value instanceof Integer) {
+            editor.putInt(key, (Integer) value);
         }
         editor.apply();
         editor.commit();
@@ -39,6 +45,9 @@ public class SharedPreferencesUtil {
         SharedPreferences sp = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
         if(defaultValue instanceof String) {
             return sp.getString(key, (String) defaultValue);
+        }
+        else if(defaultValue instanceof Integer) {
+            return sp.getInt(key, (Integer) defaultValue);
         }
         else {
             return null;

@@ -6,6 +6,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
@@ -194,5 +195,17 @@ public class StatusAction {
         });
         //删除帖子
         avStatus.deleteInBackground(callback);
+    }
+
+    /**
+     * 计算指定人的帖子数量
+     * @param objectId
+     * @param callback
+     */
+    public void countStatusByUser(String objectId, CountCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
+        //指定人
+        avQuery.whereEqualTo(TableContract.TableStatus._USER,  AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+        avQuery.countInBackground(callback);
     }
 }

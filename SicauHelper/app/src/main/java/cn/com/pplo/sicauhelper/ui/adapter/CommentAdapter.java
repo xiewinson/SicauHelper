@@ -13,6 +13,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.ui.UserActivity;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.TimeUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,9 +63,16 @@ public class CommentAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         final AVObject avComment = getItem(position);
-        AVObject avStudent = avComment.getAVObject(TableContract.TableGoodsComment._SEND_USER);
+        final AVObject avStudent = avComment.getAVObject(TableContract.TableGoodsComment._SEND_USER);
         //头像
         ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayImageOption(context));
+        //点击头像打开UserActivity
+        holder.headIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserActivity.startUserActivity(context, avStudent.getObjectId());
+            }
+        });
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
         //时间
