@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@+id/search_goods_listView"
+        android:id="@+id/search_status_listView"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:scrollbarStyle="outsideOverlay"

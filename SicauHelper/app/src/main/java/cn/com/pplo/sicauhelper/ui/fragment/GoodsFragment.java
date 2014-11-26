@@ -196,6 +196,9 @@ public class GoodsFragment extends BaseFragment {
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
+                    if(list.size() == 0) {
+                        UIUtil.showShortToast(getActivity(), "没有任何商品");
+                    }
                     notifyDataSetChanged(list, true);
                     listView.setSelection(0);
                 } else {

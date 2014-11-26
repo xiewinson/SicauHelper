@@ -114,9 +114,12 @@ public class UIUtil {
             color = R.color.blue_500;
         } else if (school == 1) {
             color = R.color.orange_500;
-        } else {
+        } else if (school == 2){
             color = R.color.green_500;
+        } else {
+            color = R.color.red_500;
         }
+
         UIUtil.setActionBarColor(context, actionBarColor, color);
     }
 

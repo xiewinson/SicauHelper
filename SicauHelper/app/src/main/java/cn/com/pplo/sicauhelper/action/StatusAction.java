@@ -5,6 +5,7 @@ import android.util.Log;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
@@ -100,12 +101,12 @@ public class StatusAction {
      * 查询指定校区的匹配字符串从指定id开始的goods列表
      * @param callback
      */
-    public void findDataByTitleSinceId(String str, long goods_id, FindCallback callback) {
+    public void findDataByTitleSinceId(String str, long status_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
         avQuery.whereContains(TableContract.TableStatus._TITLE, str);
 
         //小于指定id
-        avQuery.whereLessThan(TableContract.TableStatus._STATUS_ID, goods_id);
+        avQuery.whereLessThan(TableContract.TableStatus._STATUS_ID, status_id);
         //取10条
         avQuery.setLimit(10);
         //id降序
@@ -115,6 +116,46 @@ public class StatusAction {
         avQuery.findInBackground(callback);
     }
 
+
+    /**
+     * 查询指定人的最新goods列表
+     * @param objectId
+     * @param callback
+     */
+    public void findNewDataByUser(String objectId, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
+        //选人
+        avQuery.whereEqualTo(TableContract.TableStatus._USER,  AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+
+        //取10条
+        avQuery.setLimit(10);
+        //id降序
+        avQuery.orderByDescending(TableContract.TableStatus._STATUS_ID);
+
+        avQuery.include(TableContract.TableStatus._USER);
+        avQuery.findInBackground(callback);
+    }
+
+    /**
+     * 查询指定人的从指定id开始的status列表
+     * @param objectId
+     * @param callback
+     */
+    public void findDataByUserSinceId(String objectId, long status_id, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
+
+        //小于指定id
+        avQuery.whereLessThan(TableContract.TableStatus._STATUS_ID, status_id);
+        //取10条
+        avQuery.setLimit(10);
+        //id降序
+        avQuery.orderByDescending(TableContract.TableStatus._STATUS_ID);
+        //选人
+        avQuery.whereEqualTo(TableContract.TableStatus._USER, AVUser.createWithoutData(TableContract.TableUser._NAME, objectId));
+        avQuery.include(TableContract.TableStatus._USER);
+        avQuery.findInBackground(callback);
+    }
 
     /**
      * 删除

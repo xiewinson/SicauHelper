@@ -247,7 +247,7 @@ public class StatusActivity extends BaseActivity {
                     //头像
                     ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(context));
                     //名字
-                    nameTv.setText(avStudent.getString(TableContract.TableUser._NAME));
+                    nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
                     //时间
                     dateTv.setText(TimeUtil.timeToFriendlTime(avStatus.getCreatedAt().toString()));
                     //类别(暂时不用)

@@ -6,6 +6,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
@@ -133,6 +134,46 @@ public class GoodsAction {
         avQuery.findInBackground(callback);
     }
 
+
+    /**
+     * 查询指定人的最新goods列表
+     * @param objectId
+     * @param callback
+     */
+    public void findNewDataByUser(String objectId, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
+        //选人
+        avQuery.whereEqualTo(TableContract.TableGoods._USER,  AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+
+        //取10条
+        avQuery.setLimit(10);
+        //id降序
+        avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
+
+        avQuery.include(TableContract.TableGoods._USER);
+        avQuery.findInBackground(callback);
+    }
+
+    /**
+     * 查询指定人的从指定id开始的goods列表
+     * @param objectId
+     * @param callback
+     */
+    public void findDataByUserSinceId(String objectId, long goods_id, FindCallback callback) {
+        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
+
+        //小于指定id
+        avQuery.whereLessThan(TableContract.TableGoods._GOODS_ID, goods_id);
+        //取10条
+        avQuery.setLimit(10);
+        //id降序
+        avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
+        //选人
+        avQuery.whereEqualTo(TableContract.TableGoods._USER, AVUser.createWithoutData(TableContract.TableUser._NAME, objectId));
+        avQuery.include(TableContract.TableGoods._USER);
+        avQuery.findInBackground(callback);
+    }
 
     /**
      * 删除

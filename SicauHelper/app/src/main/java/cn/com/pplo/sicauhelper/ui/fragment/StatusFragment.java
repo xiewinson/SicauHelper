@@ -26,6 +26,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.StatusAction;
 import cn.com.pplo.sicauhelper.ui.AddActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.ui.SearchStatusActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.StatusAdapter;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
@@ -165,6 +166,9 @@ public class StatusFragment extends BaseFragment {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
+                    if(list.size() == 0) {
+                        UIUtil.showShortToast(getActivity(), "没有任何帖子");
+                    }
                     Log.d("winson", list.size() + "个");
                     notifyDataSetChanged(list, true);
                     listView.setSelection(0);
@@ -228,7 +232,7 @@ public class StatusFragment extends BaseFragment {
         //noinspection SimplifiableIfStatement
         int id = item.getItemId();
         if(id == R.id.action_search) {
-//            SearchGoodsActivity.startSearchGoodsActivity(getActivity(), viewPager.getCurrentItem());
+            SearchStatusActivity.startSearchStatusActivity(getActivity());
             return true;
         }
         else if (id == R.id.action_refresh) {

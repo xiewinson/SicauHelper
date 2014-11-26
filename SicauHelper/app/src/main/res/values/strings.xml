@@ -63,5 +63,8 @@
     <string name="title_activity_status">StatusActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_comment">CommentActivity</string>
+    <string name="title_activity_search_status">SearchStatusActivity</string>
+    <string name="title_activity_user_goods">UserGoodsActivity</string>
+    <string name="title_activity_user_status">UserStatusActivity</string>
 
 </resources>

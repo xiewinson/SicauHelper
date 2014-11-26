@@ -130,7 +130,7 @@ public class CommentActivity extends BaseActivity {
                     else {
                         GoodsActivity.startGoodsActivity(CommentActivity.this,
                                 avGoods.getObjectId(),
-                                avGoods.getAVUser(TableContract.TableGoods._USER).getInt(TableContract.TableUser._SCHOOL));
+                                SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL));
                     }
 
                 }
@@ -142,7 +142,7 @@ public class CommentActivity extends BaseActivity {
                     else {
                         StatusActivity.startStatusActivity(CommentActivity.this,
                                 avStatus.getObjectId(),
-                                avStatus.getAVUser(TableContract.TableGoods._USER).getInt(TableContract.TableUser._SCHOOL));
+                                SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL));
                     }
 
                 }

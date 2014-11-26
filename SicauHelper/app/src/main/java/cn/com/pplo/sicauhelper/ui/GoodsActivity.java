@@ -248,7 +248,7 @@ public class GoodsActivity extends BaseActivity {
                     //头像
                     ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(context));
                     //名字
-                    nameTv.setText(avStudent.getString(TableContract.TableUser._NAME));
+                    nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
                     //时间
                     dateTv.setText(TimeUtil.timeToFriendlTime(avGoods.getCreatedAt().toString()));
                     //类别(暂时用来写价格)

@@ -4,8 +4,8 @@
       <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.0.7/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.0.7/res" />
       <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.0.7/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.melnykov/floatingactionbutton/1.0.7/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

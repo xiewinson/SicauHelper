@@ -1,103 +1,110 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:id="@+id/user_background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:gravity="center"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/user_head_iv"
+            android:src="@drawable/ic_account_circle_white_48dp"
+            android:layout_width="72dp"
+            android:scaleType="centerCrop"
+            android:layout_height="72dp"
+            app:border_width="1dp"
+            app:border_color="#ffffff" />
 
         <LinearLayout
-            android:padding="32dp"
-            android:id="@+id/user_background"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_marginTop="16dp"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/user_head_iv"
-                android:src="@drawable/ic_account_circle_white_48dp"
-                android:layout_width="100dp"
-                android:scaleType="centerCrop"
-                android:layout_height="100dp"
-                app:border_width="1dp"
-                app:border_color="#ffffff" />
-
-            <LinearLayout
-                android:layout_gravity="bottom"
-                android:gravity="bottom"
-                android:layout_marginLeft="32dp"
-                android:orientation="vertical"
+            <TextView
+                android:textColor="#ffffff"
+                android:paddingTop="4dp"
+                android:text="谢谢"
+                android:id="@+id/user_name_tv"
+                android:textSize="18sp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:paddingTop="4dp"
-                    android:id="@+id/user_name_tv"
-                    android:textColor="#ffffff"
-                    android:textSize="22sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" />
 
 
-                <TextView
-                    android:id="@+id/user_school_tv"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+            <TextView
+                android:textColor="#ffffff"
+                android:id="@+id/user_school_tv"
+                android:textSize="14sp"
+                android:text="空校区"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/user_grade_tv"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            <TextView
+                android:textColor="#ffffff"
+                android:id="@+id/user_grade_tv"
+                android:textSize="14sp"
+                android:text="2016级"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:padding="16dp"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="商品"
-                android:textSize="22sp" />
-
-            <TextView
+                android:textColor="@color/white_transparent"
+                android:gravity="center"
                 android:id="@+id/user_goods_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
-                android:text="22"
+                android:text="商品\n525212"
                 android:textSize="18sp" />
         </LinearLayout>
 
+        <View
+            android:layout_width="16dp"
+            android:layout_height="0dp" />
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:padding="16dp"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="商品"
-                android:textSize="22sp" />
-
-            <TextView
+                android:textColor="@color/white_transparent"
+                android:gravity="center"
                 android:id="@+id/user_status_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
-                android:text="22"
+                android:text="圈子\n224122"
                 android:textSize="18sp" />
         </LinearLayout>
 
-
     </LinearLayout>
-</ScrollView>
+
+</LinearLayout>

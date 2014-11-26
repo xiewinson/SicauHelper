@@ -1,29 +1,22 @@
 package cn.com.pplo.sicauhelper.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.action.CommentAction;
 import cn.com.pplo.sicauhelper.action.UserAction;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.ColorUtil;
@@ -105,7 +98,10 @@ public class UserActivity extends BaseActivity {
 
         primaryColor = ColorUtil.getColorBySchool(this, avUser.getInt(TableContract.TableUser._SCHOOL));
 
-        OnCommentBtnClickListener onCommentBtnClickListener = new OnCommentBtnClickListener(this);
+        OnCountBtnClickListener onCountBtnClickListener = new OnCountBtnClickListener(this);
+
+        goodsCountTv.setOnClickListener(onCountBtnClickListener);
+        statusCountTv.setOnClickListener(onCountBtnClickListener);
 
         nameTv.setText(avUser.getString(TableContract.TableUser._NICKNAME));
         int school = avUser.getInt(TableContract.TableUser._SCHOOL);
@@ -138,10 +134,10 @@ public class UserActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class OnCommentBtnClickListener implements View.OnClickListener {
+    private class OnCountBtnClickListener implements View.OnClickListener {
         private Context context;
 
-        private OnCommentBtnClickListener(Context context) {
+        private OnCountBtnClickListener(Context context) {
             this.context = context;
         }
 
@@ -150,11 +146,11 @@ public class UserActivity extends BaseActivity {
             int id = v.getId();
             //点击商品数量
             if(id == R.id.user_goods_tv){
-
+                UserGoodsActivity.startUserGoodsActivity(UserActivity.this, avUser.getInt(TableContract.TableUser._SCHOOL), objectId, avUser.getString(TableContract.TableUser._NICKNAME));
             }
             //点击评论数量
             else if(id == R.id.user_status_tv){
-
+                UserStatusActivity.startUserStatusActivity(UserActivity.this, avUser.getInt(TableContract.TableUser._SCHOOL), objectId, avUser.getString(TableContract.TableUser._NICKNAME));
             }
         }
     }

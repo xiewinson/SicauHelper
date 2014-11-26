@@ -66,7 +66,7 @@ public class CommentAdapter extends BaseAdapter {
         //头像
         ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayImageOption(context));
         //名字
-        holder.nameTv.setText(avStudent.getString(TableContract.TableUser._NAME));
+        holder.nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
         //时间
         holder.timeTv.setText(TimeUtil.timeToFriendlTime(avComment.getCreatedAt().toString()));
         //内容
