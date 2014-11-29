@@ -390,35 +390,39 @@ public class StringUtil {
                         String[] classroomArray = classroom.split("\\s+");
 
                         for (int i = 0; i < timeArray.length; i++) {
+                            Log.d("winson", timeArray[i]);
                             if (timeArray[i].contains(posStr + "-")) {
+                                Course newCourse = course.clone();
+                                newCourse.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-").replace("(单)", "").replace("(双)", ""));
+                                newCourse.setClassroom(classroomArray[i]);
 
-                                course.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-").replace("(单)", "").replace("(双)", ""));
-                                course.setClassroom(classroomArray[i]);
+                                switch (position) {
+                                    case 0:
+                                        list0.add(newCourse);
+                                        break;
+                                    case 1:
+                                        list1.add(newCourse);
+                                        break;
+                                    case 2:
+                                        list2.add(newCourse);
+                                        break;
+                                    case 3:
+                                        list3.add(newCourse);
+                                        break;
+                                    case 4:
+                                        list4.add(newCourse);
+                                        break;
+                                    case 5:
+                                        list5.add(newCourse);
+                                        break;
+                                    case 6:
+                                        list6.add(newCourse);
+                                        break;
+                                }
                             }
+
                         }
-                        switch (position) {
-                            case 0:
-                                list0.add(course);
-                                break;
-                            case 1:
-                                list1.add(course);
-                                break;
-                            case 2:
-                                list2.add(course);
-                                break;
-                            case 3:
-                                list3.add(course);
-                                break;
-                            case 4:
-                                list4.add(course);
-                                break;
-                            case 5:
-                                list5.add(course);
-                                break;
-                            case 6:
-                                list6.add(course);
-                                break;
-                        }
+
                     }
                 }
                 Collections.sort(list0);
