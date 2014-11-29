@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:padding="?actionBarSize"
+    android:padding="16dp"
     android:textSize="18sp"
     android:textColor="#aaaaaa"
     android:text="这一天你没有课\n"

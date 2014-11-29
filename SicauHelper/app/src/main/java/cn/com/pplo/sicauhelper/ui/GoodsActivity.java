@@ -555,7 +555,7 @@ public class GoodsActivity extends BaseActivity {
         }
         //修改商品信息
         else if(id == ACTION_ITEM_EDIT_GOODS) {
-
+            AddActivity.startAddActivity(this, AddActivity.TYPE_GOODS, objectId);
         }
 
         //投诉商品

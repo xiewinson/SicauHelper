@@ -2,6 +2,7 @@ package cn.com.pplo.sicauhelper.ui.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;

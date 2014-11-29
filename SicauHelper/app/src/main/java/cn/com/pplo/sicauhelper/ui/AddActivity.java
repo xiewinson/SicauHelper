@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,7 +33,10 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.SaveCallback;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.action.GoodsAction;
+import cn.com.pplo.sicauhelper.action.StatusAction;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
@@ -48,10 +54,13 @@ import cn.com.pplo.sicauhelper.util.UIUtil;
 public class AddActivity extends BaseActivity implements AMapLocationListener {
 
     public static final String EXTRA_ADD_TYPE = "add_type";
+    public static final String EXTRA_OBJECT_ID = "object_id";
+
     public static final int TYPE_GOODS = 888;
     public static final int TYPE_STATUS = 999;
     private int type;
 
+    private AlertDialog progressDialog;
     private EditText titleEt;
     private EditText contentEt;
     private EditText priceEt;
@@ -60,7 +69,9 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
     private LinearLayout imageLayout;
     private LocationManagerProxy mLocationManagerProxy;
     private String resultPath;
+    private String objectId = "";
 
+    private AVObject editObject;
 
     /**
      * 纬度
@@ -95,12 +106,20 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         context.startActivity(intent);
     }
 
+    public static void startAddActivity(Context context, int type, String objectId) {
+        Intent intent = new Intent(context, AddActivity.class);
+        intent.putExtra(EXTRA_ADD_TYPE, type);
+        intent.putExtra(EXTRA_OBJECT_ID, objectId);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
         type = getIntent().getIntExtra(EXTRA_ADD_TYPE, 0);
+        objectId = getIntent().getStringExtra(EXTRA_OBJECT_ID);
         initLocation();
 
         setUp();
@@ -139,14 +158,14 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         categorySpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.goods_category)));
 
         //商品
-        if(type == TYPE_GOODS) {
+        if (type == TYPE_GOODS) {
             getSupportActionBar().setTitle("新商品");
             int school = schoolSpinner.getSelectedItemPosition();
             setActionBarColor(school);
             schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(type == TYPE_GOODS) {
+                    if (type == TYPE_GOODS) {
                         setActionBarColor(position);
                     }
                 }
@@ -156,20 +175,95 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
 
                 }
             });
+            /**
+             * 若有objectId, 则是更新goods
+             */
+            if (!TextUtils.isEmpty(objectId)) {
+                getSupportActionBar().setTitle("修改商品");
+                progressDialog = UIUtil.getProgressDialog(this, "加载中...");
+                progressDialog.show();
+                new GoodsAction().findByObjectId(AVQuery.CachePolicy.CACHE_ELSE_NETWORK, objectId, new FindCallback<AVObject>() {
+                    @Override
+                    public void done(List<AVObject> list, AVException e) {
+                        UIUtil.dismissProgressDialog(progressDialog);
+                        if (e == null && list.size() > 0) {
+                            editObject = list.get(0);
+                            //类别
+                            categorySpinner.setSelection(editObject.getInt(TableContract.TableGoods._CATEGORY));
+                            //校区
+                            schoolSpinner.setSelection(editObject.getInt(TableContract.TableGoods._SCHOOL));
+                            //标题
+                            titleEt.setText(editObject.getString(TableContract.TableGoods._TITLE));
+                            //内容
+                            contentEt.setText(editObject.getString(TableContract.TableGoods._CONTENT));
+                            //价格
+                            priceEt.setText(editObject.getDouble(TableContract.TableGoods._PRICE) + "");
+
+                            avImageList = ImageUtil.getAVFileListByAVObject(editObject);
+                            for (AVFile avFile : avImageList) {
+                                showImageByAVFile(AddActivity.this, avFile);
+                            }
+                        } else {
+                            UIUtil.showShortToast(AddActivity.this, "获取商品信息失败");
+                            AddActivity.this.finish();
+                            if (e != null){
+                                Log.d("winson", "出错：" + e.getMessage());
+                            }
+                        }
+                    }
+                });
+            }
+
         }
         //若为新帖子则隐藏校区选项
-        else if(type == TYPE_STATUS) {
+        else if (type == TYPE_STATUS) {
             getSupportActionBar().setTitle("新帖子");
             UIUtil.setActionBarColor(AddActivity.this, getSupportActionBar(), R.color.red_500);
             schoolSpinner.setVisibility(View.GONE);
             findViewById(R.id.add_school_layout).setVisibility(View.GONE);
             findViewById(R.id.add_price_layout).setVisibility(View.GONE);
             priceEt.setVisibility(View.GONE);
+
+            /**
+             * 若有objectId, 则是更新status
+             */
+            if (!TextUtils.isEmpty(objectId)) {
+                getSupportActionBar().setTitle("修改帖子");
+                progressDialog = UIUtil.getProgressDialog(this, "加载中...");
+                progressDialog.show();
+                new StatusAction().findByObjectId(AVQuery.CachePolicy.CACHE_ELSE_NETWORK, objectId, new FindCallback<AVObject>() {
+                    @Override
+                    public void done(List<AVObject> list, AVException e) {
+                        UIUtil.dismissProgressDialog(progressDialog);
+                        if (e == null && list.size() > 0) {
+                            editObject = list.get(0);
+
+                            //标题
+                            titleEt.setText(editObject.getString(TableContract.TableStatus._TITLE));
+                            //内容
+                            contentEt.setText(editObject.getString(TableContract.TableStatus._CONTENT));
+
+                            avImageList = ImageUtil.getAVFileListByAVObject(editObject);
+                            for (AVFile avFile : avImageList) {
+                                showImageByAVFile(AddActivity.this, avFile);
+                            }
+                        } else {
+                            UIUtil.showShortToast(AddActivity.this, "获取商品信息失败");
+                            AddActivity.this.finish();
+                            if (e != null){
+                                Log.d("winson", "出错：" + e.getMessage());
+                            }
+                        }
+                    }
+                });
+            }
         }
+
     }
 
     /**
      * 设置颜色
+     *
      * @param school
      */
     private void setActionBarColor(int school) {
@@ -212,10 +306,9 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
              */
             //隐藏软键盘
             UIUtil.hideSoftKeyboard(this, titleEt);
-            if(type == TYPE_GOODS) {
+            if (type == TYPE_GOODS) {
                 uploadGoods(AddActivity.this, avImageList);
-            }
-            else if(type == TYPE_STATUS) {
+            } else if (type == TYPE_STATUS) {
                 uploadStatus(AddActivity.this, avImageList);
             }
 
@@ -231,20 +324,20 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
      */
 
     private void uploadGoods(Context context, final List<AVFile> avFiles) {
-        if(TextUtils.isEmpty(priceEt.getText().toString().trim())) {
+        if (TextUtils.isEmpty(priceEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "价格不可为空");
             return;
-        }
-        else if(TextUtils.isEmpty(titleEt.getText().toString().trim())) {
+        } else if (TextUtils.isEmpty(titleEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "标题不可为空");
             return;
-        }
-        else if(TextUtils.isEmpty(contentEt.getText().toString().trim())) {
+        } else if (TextUtils.isEmpty(contentEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "内容不可为空");
             return;
         }
-
-        AVObject avObject = new AVObject(TableContract.TableGoods.TABLE_NAME);
+        AVObject avObject = editObject;
+        if(avObject == null) {
+            avObject = new AVObject(TableContract.TableGoods.TABLE_NAME);
+        }
 
         //类别
         avObject.put(TableContract.TableGoods._CATEGORY, categorySpinner.getSelectedItemPosition());
@@ -269,10 +362,16 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         //详细地址
         avObject.put(TableContract.TableGoods._ADDRESS, address);
 
+
 //        上传图片
+        for(int i = 0; i < 4; i++) {
+            avObject.put("image" + i, null);
+        }
         for (int i = 0; i < avFiles.size(); i++) {
             avObject.put("image" + i, avFiles.get(i));
         }
+
+        avObject.setFetchWhenSave(true);
         avObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
@@ -287,22 +386,24 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
 
     /**
      * 上传帖子
+     *
      * @param context
      * @param avFiles
      */
     private void uploadStatus(Context context, List<AVFile> avFiles) {
 
-        if(TextUtils.isEmpty(titleEt.getText().toString().trim())) {
+        if (TextUtils.isEmpty(titleEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "标题不可为空");
             return;
-        }
-        else if(TextUtils.isEmpty(contentEt.getText().toString().trim())) {
+        } else if (TextUtils.isEmpty(contentEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "内容不可为空");
             return;
         }
 
-        AVObject avObject = new AVObject(TableContract.TableStatus.TABLE_NAME);
-
+        AVObject avObject = editObject;
+        if(avObject == null) {
+            avObject = new AVObject(TableContract.TableStatus.TABLE_NAME);
+        }
         //标题
         avObject.put(TableContract.TableStatus._TITLE, titleEt.getText().toString().trim());
         //内容
@@ -321,9 +422,13 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         avObject.put(TableContract.TableGoods._ADDRESS, address);
 
 //        上传图片
+        for(int i = 0; i < 4; i++) {
+            avObject.put("image" + i, null);
+        }
         for (int i = 0; i < avFiles.size(); i++) {
             avObject.put("image" + i, avFiles.get(i));
         }
+        avObject.setFetchWhenSave(true);
         avObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
@@ -457,7 +562,8 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
 
     /**
      * 将图片显示出来并暂存在list中
-     *  @param context
+     *
+     * @param context
      * @param path
      * @param avFile
      */
@@ -465,10 +571,42 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         final View view = View.inflate(context, R.layout.item_goods_add_image, null);
         ImageView goodsIv = (ImageView) view.findViewById(R.id.goods_iv);
         Bitmap bitmap = BitmapFactory.decodeFile(path);
-        File file = new File(path);
-        Log.d("winson", "大小：" + file.length());
-        Log.d("winson", "大小：" + bitmap.getByteCount() + "   分辨率：" + bitmap.getWidth() + " *" + bitmap.getHeight());
         goodsIv.setImageBitmap(bitmap);
+
+        Button deleteBtn = (Button) view.findViewById(R.id.goods_delete_btn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setMessage("确定删除这张图片？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                imageLayout.removeView(view);
+                                avImageList.remove(avFile);
+                                Log.d("winson", "当前的图片列表个数为" + avImageList.size() + "   " + avImageList);
+                            }
+                        })
+                        .setNegativeButton("取消", null)
+                        .create()
+                        .show();
+
+            }
+        });
+        imageLayout.addView(view);
+    }
+
+    /**
+     * 显示从avFile中所取得的图片
+     *
+     * @param context
+     * @param avFile
+     */
+    public void showImageByAVFile(final Context context, final AVFile avFile) {
+        final View view = View.inflate(context, R.layout.item_goods_add_image, null);
+        ImageView goodsIv = (ImageView) view.findViewById(R.id.goods_iv);
+        int width = (int) UIUtil.parseDpToPx(context, 200);
+        ImageLoader.getInstance().displayImage(avFile.getThumbnailUrl(true, width, width), goodsIv, ImageUtil.getDisplayImageOption(context));
 
         Button deleteBtn = (Button) view.findViewById(R.id.goods_delete_btn);
         deleteBtn.setOnClickListener(new View.OnClickListener() {

@@ -276,7 +276,7 @@ public class StatusActivity extends BaseActivity {
                             + avStatus.getString(TableContract.TableStatus._MODEL) + " ("
                             + avStatus.getString(TableContract.TableStatus._VERSION) + ") ");
                     //地址
-                    String address = avStatus.getString(TableContract.TableGoods._ADDRESS);
+                    String address = avStatus.getString(TableContract.TableStatus._ADDRESS);
                     locationTv.setText(address);
                     if(TextUtils.isEmpty(address)) {
                         locationTv.setVisibility(View.GONE);
@@ -556,7 +556,7 @@ public class StatusActivity extends BaseActivity {
         }
         //修改帖子信息
         else if(id == ACTION_ITEM_EDIT_STATUS) {
-
+            AddActivity.startAddActivity(this, AddActivity.TYPE_STATUS, objectId);
         }
 
         //投诉帖子

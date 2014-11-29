@@ -176,7 +176,7 @@ public class GoodsFragment extends BaseFragment {
                         UIUtil.showShortToast(getActivity(), "没有任何商品");
                     }
                     notifyDataSetChanged(list, true);
-                    listView.setSelection(0);
+//                    listView.setSelection(0);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，下拉刷新试试吧");

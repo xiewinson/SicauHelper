@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethod;
@@ -25,6 +26,8 @@ import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationA
 import com.nhaarman.listviewanimations.appearance.simple.SwingLeftInAnimationAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.SwingRightInAnimationAdapter;
 
+import org.w3c.dom.Text;
+
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
 import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener2;
@@ -36,14 +39,31 @@ import cn.com.pplo.sicauhelper.ui.fragment.ProgressFragment;
 public class UIUtil {
 
     public static final String LISTVIEW_ANIM_BOTTOM = "bottom";
+
+    public static Toast toast;
+    private static Object lockObj = new Object();
+
     /**显示短Toast
      *
      * @param context
      * @param title
      */
     public static void showShortToast(Context context, String title) {
+        if(toast == null) {
+            synchronized (lockObj) {
+                if(toast == null) {
+                    toast = new Toast(context);
+                }
+            }
+        }
         try {
-            Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+            View toastView = View.inflate(context, R.layout.textview_toast, null);
+            TextView textView = (TextView) toastView.findViewById(R.id.toast_textview);
+            textView.setText(title);
+            toast.setView(toastView);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.show();
         } catch (Exception e) {
             e.printStackTrace();
         }

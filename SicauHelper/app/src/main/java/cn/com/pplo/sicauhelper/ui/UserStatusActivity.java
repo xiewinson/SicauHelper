@@ -146,7 +146,7 @@ public class UserStatusActivity extends BaseActivity {
                     }
                     Log.d("winson", list.size() + "个");
                     notifyDataSetChanged(list, true);
-                    listView.setSelection(0);
+//                    listView.setSelection(0);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(UserStatusActivity.this, "你的网络好像有点问题，下拉刷新试试吧");

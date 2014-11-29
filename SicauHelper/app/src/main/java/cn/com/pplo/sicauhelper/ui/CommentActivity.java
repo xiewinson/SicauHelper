@@ -167,7 +167,7 @@ public class CommentActivity extends BaseActivity {
                         UIUtil.showShortToast(CommentActivity.this, "臣以为没有评论和大王有关");
                     }
                     notifyDataSetChanged(list, true);
-                    listView.setSelection(0);
+//                    listView.setSelection(0);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(CommentActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
