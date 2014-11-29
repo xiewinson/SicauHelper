@@ -76,24 +76,6 @@ public class UIUtil {
     }
 
     /**
-     * 
-     * @param context
-     * @param text
-     * @return
-     */
-    public static ProgressFragment getProgressFragment(Context context, String text){
-        ProgressFragment progressFragment = ProgressFragment.newInstance(text);
-        progressFragment.setCancelable(false);
-        return progressFragment;
-    }
-
-    public static void dismissProgressFragment(ProgressFragment progressDialog){
-        if(progressDialog != null ){
-            progressDialog.dismiss();
-        }
-    }
-
-    /**
      * 设置actionbar颜色
      * @param context
      * @param actionBarColor

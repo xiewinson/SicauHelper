@@ -42,7 +42,7 @@ public class NewsActivity extends BaseActivity {
     private final static String EXTRA_NEWS = "extra_news";
     private News data;
 
-    private ProgressFragment progressDialog;
+    private AlertDialog progressDialog;
     private TextView newsTv;
     private WebView newsWebView;
     private ScrollView scrollView;
@@ -75,8 +75,8 @@ public class NewsActivity extends BaseActivity {
         newsWebView.setInitialScale(10);
 
         //对话框
-        progressDialog = UIUtil.getProgressFragment(context, "正在寻找新闻内容...");
-        progressDialog.show(getSupportFragmentManager());
+        progressDialog = UIUtil.getProgressDialog(context, "正在寻找新闻内容...");
+        progressDialog.show();
         //获得news数据
         data = getIntent().getParcelableExtra(EXTRA_NEWS);
         if(data != null){
@@ -150,7 +150,7 @@ public class NewsActivity extends BaseActivity {
      */
     private void showData(News news) {
         newsTv.setText(news.getContent());
-        UIUtil.dismissProgressFragment(progressDialog);
+        UIUtil.dismissProgressDialog(progressDialog);
         loadWebView(newsWebView, news.getSrc());
     }
 
@@ -203,7 +203,7 @@ public class NewsActivity extends BaseActivity {
 
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                UIUtil.dismissProgressFragment(progressDialog);
+                UIUtil.dismissProgressDialog(progressDialog);
                 super.onErrorResponse(volleyError);
             }
         });
