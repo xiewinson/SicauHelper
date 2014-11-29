@@ -37,7 +37,6 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.CommentAction;
-import cn.com.pplo.sicauhelper.action.GoodsAction;
 import cn.com.pplo.sicauhelper.action.StatusAction;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
@@ -124,7 +123,7 @@ public class StatusActivity extends BaseActivity {
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
                 initStatusData(context);
-                findNewCommentData(objectId);
+                findNewData(AVQuery.CachePolicy.NETWORK_ONLY, objectId);
                 footerView.setVisibility(View.GONE);
             }
         });
@@ -349,7 +348,7 @@ public class StatusActivity extends BaseActivity {
             }
         });
 
-        findCommentInCacheThenNetwork(objectId);
+        findNewData(AVQuery.CachePolicy.CACHE_THEN_NETWORK, objectId);
     }
 
     /**
@@ -429,7 +428,7 @@ public class StatusActivity extends BaseActivity {
                             //更新帖子数据和评论
                             initStatusData(StatusActivity.this);
                             if (isRefreshComment) {
-                                findNewCommentData(objectId);
+                                findNewData(AVQuery.CachePolicy.NETWORK_ONLY, objectId);
                             }
                         }
                     });
@@ -441,9 +440,9 @@ public class StatusActivity extends BaseActivity {
     /**
      * 从缓存中取
      */
-    private void findCommentInCacheThenNetwork(final String objectId) {
+    private void findNewData(AVQuery.CachePolicy cachePolicy, final String objectId) {
         swipeRefreshLayout.setRefreshing(true);
-        new CommentAction().findInCacheThenNetwork(CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
+        new CommentAction().findNewDataByObjectId(cachePolicy, CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -453,30 +452,6 @@ public class StatusActivity extends BaseActivity {
                     if (!e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(StatusActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
                     }
-                    Log.d("winson", "出错：" + e.getMessage());
-                }
-                if (swipeRefreshLayout.isRefreshing()) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
-    }
-
-    /**
-     * 从网络取新的并清空缓存
-     */
-    private void findNewCommentData(String objectId) {
-        swipeRefreshLayout.setRefreshing(true);
-        footerView.setVisibility(View.GONE);
-        new CommentAction().findNewData(CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> list, AVException e) {
-                if (e == null) {
-                    Log.d("winson", list.size() + "个");
-                    notifyDataSetChanged(list, true);
-                    listView.setSelection(0);
-                } else {
-                    UIUtil.showShortToast(StatusActivity.this, "你的网络好像有点问题，重新试试吧");
                     Log.d("winson", "出错：" + e.getMessage());
                 }
                 if (swipeRefreshLayout.isRefreshing()) {
@@ -559,7 +534,7 @@ public class StatusActivity extends BaseActivity {
         if (id == R.id.action_refresh) {
 
             initStatusData(this);
-            findNewCommentData(objectId);
+            findNewData(AVQuery.CachePolicy.NETWORK_ONLY, objectId);
             return true;
         }
         //删除帖子信息

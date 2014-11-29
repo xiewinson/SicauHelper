@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -89,7 +90,7 @@ public class GoodsFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                findNewData();
+                findNewData(AVQuery.CachePolicy.NETWORK_ONLY);
             }
         });
 
@@ -156,42 +157,17 @@ public class GoodsFragment extends BaseFragment {
                 }
             }
         });
-        findInCacheThenNetwork();
+        findNewData(AVQuery.CachePolicy.CACHE_THEN_NETWORK);
     }
 
-    /**
-     * 从缓存中取
-     */
-    private void findInCacheThenNetwork() {
-        swipeRefreshLayout.setRefreshing(true);
-        footerView.setVisibility(View.GONE);
-        new GoodsAction().findInCacheThenNetwork(schoolPosition, new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> list, AVException e) {
-                if (e == null) {
-                    Log.d("winson", list.size() + "个");
-                    //若为0.则进行网络请求
-                    notifyDataSetChanged(list, true);
-                } else {
-                    if (!e.getMessage().contains("Cache")) {
-                        UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，下拉刷新试试吧");
-                    }
-                    findNewData();
-                }
-                if (swipeRefreshLayout.isRefreshing()) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
-    }
 
     /**
      * 从网络取新的并清空缓存
      */
-    private void findNewData() {
+    private void findNewData(AVQuery.CachePolicy cachePolicy) {
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new GoodsAction().findNewData(schoolPosition, new FindCallback<AVObject>() {
+        new GoodsAction().findNewData(cachePolicy, schoolPosition, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -202,7 +178,12 @@ public class GoodsFragment extends BaseFragment {
                     notifyDataSetChanged(list, true);
                     listView.setSelection(0);
                 } else {
-                    UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，重新试试吧");
+                    if (!e.getMessage().contains("Cache")) {
+                        UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，下拉刷新试试吧");
+                    }
+                    else {
+                        UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，重新试试吧");
+                    }
                     Log.d("winson", "出错：" + e.getMessage());
                 }
                 if (swipeRefreshLayout.isRefreshing()) {
@@ -261,7 +242,7 @@ public class GoodsFragment extends BaseFragment {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            findNewData();
+            findNewData(AVQuery.CachePolicy.NETWORK_ONLY);
             return true;
         }
         return super.onOptionsItemSelected(item);

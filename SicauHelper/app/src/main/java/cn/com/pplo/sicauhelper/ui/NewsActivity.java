@@ -160,7 +160,9 @@ public class NewsActivity extends BaseActivity {
      * @param id
      */
     private void requestNewsContent(Context context, int id){
-
+        if(!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
         Map<String, String> params = new HashMap<String, String>();
         params.put("bianhao", id + "");
         NetUtil.getNewsHtmlStr(context, params, new NetUtil.NetCallback(context) {

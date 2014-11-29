@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class UserStatusActivity extends BaseActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                findNewData();
+                findNewData(AVQuery.CachePolicy.NETWORK_ONLY);
             }
         });
 
@@ -127,16 +128,16 @@ public class UserStatusActivity extends BaseActivity {
             }
         });
 
-        findNewData();
+        findNewData(AVQuery.CachePolicy.CACHE_THEN_NETWORK);
     }
 
     /**
      * 从网络取新的并清空缓存
      */
-    private void findNewData() {
+    private void findNewData(AVQuery.CachePolicy cachePolicy) {
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new StatusAction().findNewDataByUser(objectId, new FindCallback<AVObject>() {
+        new StatusAction().findNewDataByUser(cachePolicy, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -147,8 +148,12 @@ public class UserStatusActivity extends BaseActivity {
                     notifyDataSetChanged(list, true);
                     listView.setSelection(0);
                 } else {
-                    UIUtil.showShortToast(UserStatusActivity.this, "大王的网络好像有点问题");
-                    Log.d("winson", "出错：" + e.getMessage());
+                    if (!e.getMessage().contains("Cache")) {
+                        UIUtil.showShortToast(UserStatusActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
+                    }
+                    else {
+                        UIUtil.showShortToast(UserStatusActivity.this, "大王的网络好像有点问题");
+                    }
                 }
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
@@ -181,7 +186,7 @@ public class UserStatusActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id == R.id.action_refresh) {
-            findNewData();
+            findNewData(AVQuery.CachePolicy.NETWORK_ONLY);
         }
         //noinspection SimplifiableIfStatement
 

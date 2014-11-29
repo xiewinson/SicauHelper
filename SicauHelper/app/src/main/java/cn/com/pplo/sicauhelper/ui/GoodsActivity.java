@@ -125,7 +125,7 @@ public class GoodsActivity extends BaseActivity {
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
                 initGoodsData(context);
-                findNewCommentData(objectId);
+                findNewData(AVQuery.CachePolicy.NETWORK_ONLY, objectId);
                 footerView.setVisibility(View.GONE);
             }
         });
@@ -347,7 +347,7 @@ public class GoodsActivity extends BaseActivity {
                 }
             }
         });
-        findCommentInCacheThenNetwork(objectId);
+        findNewData(AVQuery.CachePolicy.CACHE_THEN_NETWORK, objectId);
     }
 
     /**
@@ -427,7 +427,7 @@ public class GoodsActivity extends BaseActivity {
                             //更新商品数据和评论
                             initGoodsData(GoodsActivity.this);
                             if (isRefreshComment) {
-                                findNewCommentData(objectId);
+                                findNewData(AVQuery.CachePolicy.NETWORK_ONLY, objectId);
                             }
                         }
                     });
@@ -439,10 +439,10 @@ public class GoodsActivity extends BaseActivity {
     /**
      * 从缓存中取
      */
-    private void findCommentInCacheThenNetwork(final String objectId) {
+    private void findNewData(AVQuery.CachePolicy cachePolicy, final String objectId) {
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new CommentAction().findInCacheThenNetwork(CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
+        new CommentAction().findNewDataByObjectId(cachePolicy, CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -452,30 +452,6 @@ public class GoodsActivity extends BaseActivity {
                     if (!e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(GoodsActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
                     }
-                    Log.d("winson", "出错：" + e.getMessage());
-                }
-                if (swipeRefreshLayout.isRefreshing()) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
-    }
-
-    /**
-     * 从网络取新的并清空缓存
-     */
-    private void findNewCommentData(String objectId) {
-        swipeRefreshLayout.setRefreshing(true);
-        footerView.setVisibility(View.GONE);
-        new CommentAction().findNewData(CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
-            @Override
-            public void done(List<AVObject> list, AVException e) {
-                if (e == null) {
-                    Log.d("winson", list.size() + "个");
-                    notifyDataSetChanged(list, true);
-                    listView.setSelection(0);
-                } else {
-                    UIUtil.showShortToast(GoodsActivity.this, "你的网络好像有点问题，重新试试吧");
                     Log.d("winson", "出错：" + e.getMessage());
                 }
                 if (swipeRefreshLayout.isRefreshing()) {
@@ -557,7 +533,7 @@ public class GoodsActivity extends BaseActivity {
         //刷新
         if (id == R.id.action_refresh) {
             initGoodsData(this);
-            findNewCommentData(objectId);
+            findNewData(AVQuery.CachePolicy.NETWORK_ONLY, objectId);
             return true;
         }
         //删除商品信息

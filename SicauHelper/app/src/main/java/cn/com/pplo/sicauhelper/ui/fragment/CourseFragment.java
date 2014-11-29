@@ -277,13 +277,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         public Object instantiateItem(ViewGroup container, int position) {
             ListView listView = getDateListView(context, data.get(position));
             if(listView.getAdapter().getCount() < 1) {
-                TextView textView = new TextView(context);
-                textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                textView.setGravity(Gravity.CENTER_HORIZONTAL);
-                textView.setPadding(0, (int) UIUtil.parseDpToPx(context, 48), 0, 0);
-                textView.setTextSize(UIUtil.parseSpToPx(context, 16));
-                textView.setTextColor(Color.parseColor("#aaaaaa"));
-                textView.setText("这一天没有理论课\n好好玩吧");
+                TextView textView = (TextView) View.inflate(context, R.layout.course_empty_textview, null);
                 container.addView(textView);
                 return textView;
             }

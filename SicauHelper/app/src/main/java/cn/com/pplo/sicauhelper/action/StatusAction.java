@@ -18,27 +18,12 @@ import cn.com.pplo.sicauhelper.provider.TableContract;
 public class StatusAction {
 
     /**
-     * 在缓存中查询指定校区的goods列表
-     * @param callback
-     */
-    public void findInCacheThenNetwork(FindCallback callback) {
-        AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
-        avQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_THEN_NETWORK);
-        //取10条
-        avQuery.setLimit(10);
-        //id降序
-        avQuery.orderByDescending(TableContract.TableStatus._STATUS_ID);
-        avQuery.include(TableContract.TableStatus._USER);
-        avQuery.findInBackground(callback);
-    }
-
-    /**
      * 查询指定校区的最新goods列表
      * @param callback
      */
-    public void findNewData(FindCallback callback) {
+    public void findNewData(AVQuery.CachePolicy cachePolicy, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
-        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
+        avQuery.setCachePolicy(cachePolicy);
 
         //若有缓存则清空
         if(avQuery.hasCachedResult()) {
@@ -120,12 +105,11 @@ public class StatusAction {
 
     /**
      * 查询指定人的最新goods列表
-     * @param objectId
      * @param callback
      */
-    public void findNewDataByUser(String objectId, FindCallback callback) {
+    public void findNewDataByUser(AVQuery.CachePolicy cachePolicy, String objectId, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
-        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
+        avQuery.setCachePolicy(cachePolicy);
         //选人
         avQuery.whereEqualTo(TableContract.TableStatus._USER,  AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
 
@@ -204,6 +188,7 @@ public class StatusAction {
      */
     public void countStatusByUser(String objectId, CountCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
+        avQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_THEN_NETWORK);
         //指定人
         avQuery.whereEqualTo(TableContract.TableStatus._USER,  AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
         avQuery.countInBackground(callback);

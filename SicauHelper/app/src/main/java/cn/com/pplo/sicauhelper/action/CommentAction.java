@@ -34,7 +34,7 @@ public class CommentAction {
      *
      * @param callback
      */
-    public void findInCacheThenNetwork(int type, String objectId, FindCallback callback) {
+    public void findNewDataByObjectId(AVQuery.CachePolicy cachePolicy, int type, String objectId, FindCallback callback) {
         AVQuery<AVObject> avQuery = null;
         if(type == COMMENT_GOODS) {
             avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
@@ -56,48 +56,12 @@ public class CommentAction {
             avQuery.include(TableContract.TableStatusComment._SEND_USER);
             avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
         }
-        avQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_THEN_NETWORK);
+        avQuery.setCachePolicy(cachePolicy);
         //取10条
         avQuery.setLimit(10);
         avQuery.findInBackground(callback);
     }
 
-    /**
-     * 查询指定商品的最新评论列表
-     *
-     * @param callback
-     */
-    public void findNewData(int type, String objectId, FindCallback callback) {
-        AVQuery<AVObject> avQuery = null;
-        if(type == COMMENT_GOODS) {
-            avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
-            avQuery.whereEqualTo(TableContract.TableGoodsComment._GOODS, AVObject.createWithoutData(TableContract.TableGoods.TABLE_NAME, objectId));
-            //id降序
-            avQuery.orderByAscending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
-            //取出关联的对象
-            avQuery.include(TableContract.TableGoodsComment._GOODS);
-            avQuery.include(TableContract.TableGoodsComment._SEND_USER);
-            avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
-        }
-        else if(type == COMMENT_STATUS) {
-            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
-            avQuery.whereEqualTo(TableContract.TableStatusComment._STATUS, AVObject.createWithoutData(TableContract.TableStatus.TABLE_NAME, objectId));
-            //id降序
-            avQuery.orderByAscending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
-            //取出关联的对象
-            avQuery.include(TableContract.TableStatusComment._STATUS);
-            avQuery.include(TableContract.TableStatusComment._SEND_USER);
-            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
-        }
-        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
-        //若有缓存则清空
-        if (avQuery.hasCachedResult()) {
-            avQuery.clearCachedResult();
-        }
-        //取10条
-        avQuery.setLimit(10);
-        avQuery.findInBackground(callback);
-    }
 
     /**
      * 查询评论的从指定id开始的评论列表
@@ -143,7 +107,7 @@ public class CommentAction {
      *
      * @param callback
      */
-    public void findNewDataByType(int type, String objectId, FindCallback callback) {
+    public void findNewDataByType(AVQuery.CachePolicy cachePolicy, int type, String objectId, FindCallback callback) {
         AVQuery<AVObject> avQuery = null;
         if(type == GOODS_SEND_COMMENT) {
             avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
@@ -189,7 +153,7 @@ public class CommentAction {
             avQuery.include(TableContract.TableStatusComment._SEND_USER);
             avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
         }
-        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
+        avQuery.setCachePolicy(cachePolicy);
 
         //取10条
         avQuery.setLimit(10);

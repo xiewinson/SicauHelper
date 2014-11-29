@@ -75,6 +75,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:visibility="invisible"
                 android:textColor="@color/white_transparent"
                 android:gravity="center"
                 android:id="@+id/user_goods_tv"
@@ -99,6 +100,7 @@
 
 
             <TextView
+                android:visibility="invisible"
                 android:textColor="@color/white_transparent"
                 android:gravity="center"
                 android:id="@+id/user_status_tv"

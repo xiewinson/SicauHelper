@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class CommentActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
-                findNewCommentData(objectId, commentType);
+                findNewCommentData(AVQuery.CachePolicy.NETWORK_ONLY, objectId, commentType);
                 footerView.setVisibility(View.GONE);
             }
         });
@@ -97,7 +98,7 @@ public class CommentActivity extends BaseActivity {
         listView.setAdapter(commentAdapter);
 
         //获取新数据
-        findNewCommentData(objectId, commentType);
+        findNewCommentData(AVQuery.CachePolicy.CACHE_THEN_NETWORK, objectId, commentType);
 
         //滑到最下面后加载更多
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -154,11 +155,11 @@ public class CommentActivity extends BaseActivity {
     /**
      * 从网络取新的并清空缓存
      */
-    private void findNewCommentData(String objectId, int commentType) {
+    private void findNewCommentData(AVQuery.CachePolicy cachePolicy, String objectId, int commentType) {
         Log.d("winson", "请求类型：" + commentType);
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new CommentAction().findNewDataByType(commentType, objectId, new FindCallback<AVObject>() {
+        new CommentAction().findNewDataByType(cachePolicy, commentType, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -168,7 +169,12 @@ public class CommentActivity extends BaseActivity {
                     notifyDataSetChanged(list, true);
                     listView.setSelection(0);
                 } else {
-                    UIUtil.showShortToast(CommentActivity.this, "大王网络状况是否很差");
+                    if (!e.getMessage().contains("Cache")) {
+                        UIUtil.showShortToast(CommentActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
+                    }
+                    else {
+                        UIUtil.showShortToast(CommentActivity.this, "大王的网络好像有点问题");
+                    }
                     Log.d("winson", "出错：" + e.getMessage());
                 }
                 if (swipeRefreshLayout.isRefreshing()) {
@@ -233,7 +239,7 @@ public class CommentActivity extends BaseActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            findNewCommentData(objectId, commentType);
+            findNewCommentData(AVQuery.CachePolicy.NETWORK_ONLY, objectId, commentType);
             return true;
         }
 
