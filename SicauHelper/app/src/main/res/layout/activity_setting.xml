@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="?actionBarSize"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <Button
+        android:id="@+id/goods_status_count_btn"
+        style="@style/setting_item_style"
+        android:text="每次加载商品/帖子数量"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:background="#dddddd"/>
+    <Button
+        android:id="@+id/comment_count_btn"
+        style="@style/setting_item_style"
+        android:text="每次加载评论数量"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd"/>
+</LinearLayout>

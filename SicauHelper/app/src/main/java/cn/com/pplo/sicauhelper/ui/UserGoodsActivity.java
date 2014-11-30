@@ -102,7 +102,7 @@ public class UserGoodsActivity extends BaseActivity {
                     if (footerView.getVisibility() == View.GONE && data.size() >= 10) {
                         Log.d("winson", "加载更多");
                         footerView.setVisibility(View.VISIBLE);
-                        new GoodsAction().findDataByUserSinceId(objectId,
+                        new GoodsAction().findDataByUserSinceId(UserGoodsActivity.this, objectId,
                                 data.get(data.size() - 1).getLong(TableContract.TableGoods._GOODS_ID),
                                 new FindCallback<AVObject>() {
                                     @Override
@@ -137,7 +137,7 @@ public class UserGoodsActivity extends BaseActivity {
     private void findNewData(AVQuery.CachePolicy cachePolicy) {
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new GoodsAction().findNewDataByUser(cachePolicy,objectId, new FindCallback<AVObject>() {
+        new GoodsAction().findNewDataByUser(UserGoodsActivity.this, cachePolicy,objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -150,9 +150,6 @@ public class UserGoodsActivity extends BaseActivity {
                 } else {
                     if (!e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(UserGoodsActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
-                    }
-                    else {
-                        UIUtil.showShortToast(UserGoodsActivity.this, "大王的网络好像有点问题");
                     }
                     Log.d("winson", "出错：" + e.getMessage());
                 }

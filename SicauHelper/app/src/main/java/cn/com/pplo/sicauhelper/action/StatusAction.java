@@ -1,5 +1,6 @@
 package cn.com.pplo.sicauhelper.action;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.avos.avoscloud.AVException;
@@ -11,6 +12,7 @@ import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
 /**
  * Created by winson on 2014/11/12.
@@ -21,7 +23,7 @@ public class StatusAction {
      * 查询指定校区的最新goods列表
      * @param callback
      */
-    public void findNewData(AVQuery.CachePolicy cachePolicy, FindCallback callback) {
+    public void findNewData(Context context, AVQuery.CachePolicy cachePolicy, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
         avQuery.setCachePolicy(cachePolicy);
 
@@ -29,8 +31,8 @@ public class StatusAction {
         if(avQuery.hasCachedResult()) {
             avQuery.clearCachedResult();
         }
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableStatus._STATUS_ID);
         avQuery.include(TableContract.TableStatus._USER);
@@ -41,13 +43,13 @@ public class StatusAction {
      * 查询指定校区的从指定id开始的goods列表
      * @param callback
      */
-    public void findSinceId(long status_id, FindCallback callback) {
+    public void findSinceId(Context context, long status_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
         //小于指定id
         avQuery.whereLessThan(TableContract.TableStatus._STATUS_ID, status_id);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableStatus._STATUS_ID);
         avQuery.include(TableContract.TableStatus._USER);
@@ -72,11 +74,11 @@ public class StatusAction {
      * 查询指定校区的匹配字符串的最新goods列表
      * @param callback
      */
-    public void findDataByTitle(String str, FindCallback callback) {
+    public void findDataByTitle(Context context, String str, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
         avQuery.whereContains(TableContract.TableStatus._TITLE, str);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableStatus._STATUS_ID);
         avQuery.include(TableContract.TableStatus._USER);
@@ -87,14 +89,14 @@ public class StatusAction {
      * 查询指定校区的匹配字符串从指定id开始的goods列表
      * @param callback
      */
-    public void findDataByTitleSinceId(String str, long status_id, FindCallback callback) {
+    public void findDataByTitleSinceId(Context context, String str, long status_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
         avQuery.whereContains(TableContract.TableStatus._TITLE, str);
 
         //小于指定id
         avQuery.whereLessThan(TableContract.TableStatus._STATUS_ID, status_id);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableStatus._STATUS_ID);
         //选校区
@@ -107,14 +109,14 @@ public class StatusAction {
      * 查询指定人的最新goods列表
      * @param callback
      */
-    public void findNewDataByUser(AVQuery.CachePolicy cachePolicy, String objectId, FindCallback callback) {
+    public void findNewDataByUser(Context context, AVQuery.CachePolicy cachePolicy, String objectId, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
         avQuery.setCachePolicy(cachePolicy);
         //选人
         avQuery.whereEqualTo(TableContract.TableStatus._USER,  AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
 
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableStatus._STATUS_ID);
 
@@ -127,13 +129,13 @@ public class StatusAction {
      * @param objectId
      * @param callback
      */
-    public void findDataByUserSinceId(String objectId, long status_id, FindCallback callback) {
+    public void findDataByUserSinceId(Context context, String objectId, long status_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableStatus.TABLE_NAME);
 
         //小于指定id
         avQuery.whereLessThan(TableContract.TableStatus._STATUS_ID, status_id);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableStatus._STATUS_ID);
         //选人

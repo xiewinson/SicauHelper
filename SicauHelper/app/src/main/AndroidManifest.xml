@@ -101,7 +101,11 @@
         <activity
             android:name="cn.com.pplo.sicauhelper.ui.FeedbackActivity"
             android:label="@string/title_activity_feedback"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.SettingActivity"
+            android:label="@string/title_activity_setting" >
         </activity>
     </application>
 

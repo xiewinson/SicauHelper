@@ -442,7 +442,7 @@ public class GoodsActivity extends BaseActivity {
     private void findNewData(AVQuery.CachePolicy cachePolicy, final String objectId) {
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new CommentAction().findNewDataByObjectId(cachePolicy, CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
+        new CommentAction().findNewDataByObjectId(GoodsActivity.this, cachePolicy, CommentAction.COMMENT_GOODS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -465,7 +465,7 @@ public class GoodsActivity extends BaseActivity {
      * 加载更多
      */
     private void findCommentById(String objectId, long comment_id) {
-        new CommentAction().findSinceId(CommentAction.COMMENT_GOODS, objectId, comment_id, new FindCallback<AVObject>() {
+        new CommentAction().findSinceId(GoodsActivity.this, CommentAction.COMMENT_GOODS, objectId, comment_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {

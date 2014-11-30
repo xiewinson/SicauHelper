@@ -76,6 +76,7 @@ public class SearchStatusActivity extends BaseActivity {
                         Log.d("winson", "加载更多");
                         footerView.setVisibility(View.VISIBLE);
                         new StatusAction().findDataByTitleSinceId(
+                                SearchStatusActivity.this,
                                 queryStr,
                                 data.get(data.size() - 1).getLong("goods_id"),
                                 new FindCallback<AVObject>() {
@@ -135,7 +136,9 @@ public class SearchStatusActivity extends BaseActivity {
                 footerView.setVisibility(View.GONE);
 
                 queryStr = query;
-                new StatusAction().findDataByTitle(queryStr, new FindCallback<AVObject>() {
+                new StatusAction().findDataByTitle(
+                        SearchStatusActivity.this,
+                        queryStr, new FindCallback<AVObject>() {
                     @Override
                     public void done(List<AVObject> list, AVException e) {
                         if (e == null) {

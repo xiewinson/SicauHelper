@@ -77,7 +77,7 @@ public class SearchGoodsActivity extends BaseActivity {
                     if (footerView.getVisibility() == View.GONE && data.size() >= 10) {
                         Log.d("winson", "加载更多");
                         footerView.setVisibility(View.VISIBLE);
-                        new GoodsAction().findDataByTitleSinceId(schoolPosition,
+                        new GoodsAction().findDataByTitleSinceId(SearchGoodsActivity.this, schoolPosition,
                                 queryStr,
                                 data.get(data.size() - 1).getLong("goods_id"),
                                 new FindCallback<AVObject>() {
@@ -137,7 +137,7 @@ public class SearchGoodsActivity extends BaseActivity {
                 footerView.setVisibility(View.GONE);
                 
                 queryStr = query;
-                new GoodsAction().findDataByTitle(schoolPosition, queryStr, new FindCallback<AVObject>() {
+                new GoodsAction().findDataByTitle(SearchGoodsActivity.this, schoolPosition, queryStr, new FindCallback<AVObject>() {
                     @Override
                     public void done(List<AVObject> list, AVException e) {
                         if (e == null) {

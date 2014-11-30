@@ -1,5 +1,6 @@
 package cn.com.pplo.sicauhelper.action;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.avos.avoscloud.AVException;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
 /**
  * Created by winson on 2014/11/12.
@@ -26,7 +28,7 @@ public class GoodsAction {
      * @param school
      * @param callback
      */
-    public void findNewData(AVQuery.CachePolicy cachePolicy, int school, FindCallback callback) {
+    public void findNewData(Context context, AVQuery.CachePolicy cachePolicy, int school, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         avQuery.setCachePolicy(cachePolicy);
 
@@ -34,8 +36,8 @@ public class GoodsAction {
         if(avQuery.hasCachedResult()) {
             avQuery.clearCachedResult();
         }
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选校区
@@ -49,13 +51,13 @@ public class GoodsAction {
      * @param school
      * @param callback
      */
-    public void findSinceId(int school, long goods_id, FindCallback callback) {
+    public void findSinceId(Context context, int school, long goods_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
         //小于指定id
         avQuery.whereLessThan(TableContract.TableGoods._GOODS_ID, goods_id);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选校区
@@ -83,11 +85,11 @@ public class GoodsAction {
      * @param school
      * @param callback
      */
-    public void findDataByTitle(int school, String str, FindCallback callback) {
+    public void findDataByTitle(Context context, int school, String str, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         avQuery.whereContains(TableContract.TableGoods._TITLE, str);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选校区
@@ -101,14 +103,14 @@ public class GoodsAction {
      * @param school
      * @param callback
      */
-    public void findDataByTitleSinceId(int school, String str, long goods_id, FindCallback callback) {
+    public void findDataByTitleSinceId(Context context, int school, String str, long goods_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         avQuery.whereContains(TableContract.TableGoods._TITLE, str);
 
         //小于指定id
         avQuery.whereLessThan(TableContract.TableGoods._GOODS_ID, goods_id);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选校区
@@ -123,14 +125,14 @@ public class GoodsAction {
      * @param objectId
      * @param callback
      */
-    public void findNewDataByUser(AVQuery.CachePolicy cachePolicy, String objectId, FindCallback callback) {
+    public void findNewDataByUser(Context context, AVQuery.CachePolicy cachePolicy, String objectId, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
         avQuery.setCachePolicy(cachePolicy);
         //选人
         avQuery.whereEqualTo(TableContract.TableGoods._USER,  AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
 
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
 
@@ -143,13 +145,13 @@ public class GoodsAction {
      * @param objectId
      * @param callback
      */
-    public void findDataByUserSinceId(String objectId, long goods_id, FindCallback callback) {
+    public void findDataByUserSinceId(Context context, String objectId, long goods_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = new AVQuery<AVObject>(TableContract.TableGoods.TABLE_NAME);
 
         //小于指定id
         avQuery.whereLessThan(TableContract.TableGoods._GOODS_ID, goods_id);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10));
         //id降序
         avQuery.orderByDescending(TableContract.TableGoods._GOODS_ID);
         //选人

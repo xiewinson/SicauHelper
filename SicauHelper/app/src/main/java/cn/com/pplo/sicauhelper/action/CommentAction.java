@@ -1,5 +1,6 @@
 package cn.com.pplo.sicauhelper.action;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.avos.avoscloud.AVException;
@@ -11,6 +12,7 @@ import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
 /**
  * Created by winson on 2014/11/16.
@@ -34,7 +36,7 @@ public class CommentAction {
      *
      * @param callback
      */
-    public void findNewDataByObjectId(AVQuery.CachePolicy cachePolicy, int type, String objectId, FindCallback callback) {
+    public void findNewDataByObjectId(Context context, AVQuery.CachePolicy cachePolicy, int type, String objectId, FindCallback callback) {
         AVQuery<AVObject> avQuery = null;
         if(type == COMMENT_GOODS) {
             avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
@@ -57,8 +59,8 @@ public class CommentAction {
             avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
         }
         avQuery.setCachePolicy(cachePolicy);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10));
         avQuery.findInBackground(callback);
     }
 
@@ -68,7 +70,7 @@ public class CommentAction {
      *
      * @param callback
      */
-    public void findSinceId(int type, String objectId, long comment_id, FindCallback callback) {
+    public void findSinceId(Context context, int type, String objectId, long comment_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = null;
         if(type == COMMENT_GOODS) {
             avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
@@ -96,8 +98,8 @@ public class CommentAction {
         }
 
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10));
 
         avQuery.findInBackground(callback);
     }
@@ -107,7 +109,7 @@ public class CommentAction {
      *
      * @param callback
      */
-    public void findNewDataByType(AVQuery.CachePolicy cachePolicy, int type, String objectId, FindCallback callback) {
+    public void findNewDataByType(Context context, AVQuery.CachePolicy cachePolicy, int type, String objectId, FindCallback callback) {
         AVQuery<AVObject> avQuery = null;
         if(type == GOODS_SEND_COMMENT) {
             avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
@@ -155,8 +157,8 @@ public class CommentAction {
         }
         avQuery.setCachePolicy(cachePolicy);
 
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10));
         avQuery.findInBackground(callback);
     }
 
@@ -165,7 +167,7 @@ public class CommentAction {
      *
      * @param callback
      */
-    public void findSinceIdByType(int type, String objectId, long comment_id, FindCallback callback) {
+    public void findSinceIdByType(Context context, int type, String objectId, long comment_id, FindCallback callback) {
         AVQuery<AVObject> avQuery = null;
         if(type == GOODS_SEND_COMMENT) {
             avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
@@ -221,8 +223,8 @@ public class CommentAction {
         }
 
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
-        //取10条
-        avQuery.setLimit(10);
+        //取(Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10)条
+        avQuery.setLimit((Integer) SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10));
 
         avQuery.findInBackground(callback);
     }

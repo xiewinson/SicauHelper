@@ -102,7 +102,7 @@ public class UserStatusActivity extends BaseActivity {
                     if (footerView.getVisibility() == View.GONE && data.size() >= 10) {
                         Log.d("winson", "加载更多");
                         footerView.setVisibility(View.VISIBLE);
-                        new StatusAction().findDataByUserSinceId(objectId,
+                        new StatusAction().findDataByUserSinceId(UserStatusActivity.this, objectId,
                                 data.get(data.size() - 1).getLong(TableContract.TableStatus._STATUS_ID),
                                 new FindCallback<AVObject>() {
                                     @Override
@@ -137,7 +137,7 @@ public class UserStatusActivity extends BaseActivity {
     private void findNewData(AVQuery.CachePolicy cachePolicy) {
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new StatusAction().findNewDataByUser(cachePolicy, objectId, new FindCallback<AVObject>() {
+        new StatusAction().findNewDataByUser(UserStatusActivity.this, cachePolicy, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -150,9 +150,6 @@ public class UserStatusActivity extends BaseActivity {
                 } else {
                     if (!e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(UserStatusActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
-                    }
-                    else {
-                        UIUtil.showShortToast(UserStatusActivity.this, "大王的网络好像有点问题");
                     }
                 }
                 if (swipeRefreshLayout.isRefreshing()) {

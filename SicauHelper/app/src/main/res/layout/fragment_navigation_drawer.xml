@@ -1,48 +1,75 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-<ListView
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation_drawer_listView"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
-    android:dividerHeight="0dp"
-    android:background="#ffffff"
-    tools:context=".NavigationDrawerFragment" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ListView xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/navigation_drawer_listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#ffffff"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        tools:context=".NavigationDrawerFragment" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#dddddd"/>
+        android:background="#dddddd" />
+
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:clickable="true"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="48dp">
-        <ImageButton
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:background="@drawable/btn_white_lightgrey"
             android:id="@+id/navigation_setting"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_gear"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="18dp" />
-        <ImageButton
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_gear" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:background="@drawable/btn_white_lightgrey"
             android:id="@+id/navigation_help"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_help"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="18dp" />
-        <ImageButton
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_help" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:background="@drawable/btn_white_lightgrey"
             android:id="@+id/navigation_feedback"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_feedback"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="18dp" />
-        </LinearLayout>
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_feedback" />
+        </FrameLayout>
+
+    </LinearLayout>
 </LinearLayout>

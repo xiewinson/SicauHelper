@@ -38,6 +38,13 @@ public class DialogUtil {
     public static final int STATUS = 4;
 
     /**
+     * 输入数量类别
+     */
+    public static enum TYPE_COUNT_EDIT {
+        GOODS_STATUS, COMMENT
+    }
+
+    /**
      * 显示删除dialog
      * @param context
      * @param type
@@ -205,5 +212,50 @@ public class DialogUtil {
                 })
                 .setNegativeButton(R.string.cancel, null).create();
         alertDialog.show();
+    }
+
+    public static void showCountEditDialog(final Context context, final TYPE_COUNT_EDIT type) {
+        AlertDialog alertDialog = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = View.inflate(context, R.layout.dialog_count_edit, null);
+        final EditText et = (EditText) view.findViewById(R.id.count_et);
+        if(type == TYPE_COUNT_EDIT.GOODS_STATUS) {
+            et.setText(SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10) + "");
+        }
+        else {
+            et.setText(SharedPreferencesUtil.get(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10) + "");
+        }
+        builder.setView(view);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               String str = et.getText().toString();
+                if(TextUtils.isEmpty(str)) {
+                    if(type == TYPE_COUNT_EDIT.GOODS_STATUS) {
+                        SharedPreferencesUtil.put(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, 10);
+                    }
+                    else {
+                        SharedPreferencesUtil.put(context, SharedPreferencesUtil.PER_COMMENT_COUNT, 10);
+                    }
+                }
+                else {
+                    int count = Integer.parseInt(str);
+                    if(count <= 10 || count >= 100) {
+                        count = 10;
+                    }
+                    if(type == TYPE_COUNT_EDIT.GOODS_STATUS) {
+                        SharedPreferencesUtil.put(context, SharedPreferencesUtil.PER_GOODS_STATUS_COUNT, count);
+                    }
+                    else {
+                        SharedPreferencesUtil.put(context, SharedPreferencesUtil.PER_COMMENT_COUNT, count);
+                    }
+                }
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        }).create().show();
     }
 }

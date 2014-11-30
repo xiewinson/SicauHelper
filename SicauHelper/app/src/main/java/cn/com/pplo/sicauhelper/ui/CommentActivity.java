@@ -159,7 +159,7 @@ public class CommentActivity extends BaseActivity {
         Log.d("winson", "请求类型：" + commentType);
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new CommentAction().findNewDataByType(cachePolicy, commentType, objectId, new FindCallback<AVObject>() {
+        new CommentAction().findNewDataByType(CommentActivity.this, cachePolicy, commentType, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -171,9 +171,6 @@ public class CommentActivity extends BaseActivity {
                 } else {
                     if (!e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(CommentActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
-                    }
-                    else {
-                        UIUtil.showShortToast(CommentActivity.this, "大王的网络好像有点问题");
                     }
                     Log.d("winson", "出错：" + e.getMessage());
                 }
@@ -188,7 +185,7 @@ public class CommentActivity extends BaseActivity {
      * 加载更多
      */
     private void findCommentById(String objectId, long comment_id, int commentType) {
-        new CommentAction().findSinceIdByType(commentType, objectId, comment_id, new FindCallback<AVObject>() {
+        new CommentAction().findSinceIdByType(CommentActivity.this, commentType, objectId, comment_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {

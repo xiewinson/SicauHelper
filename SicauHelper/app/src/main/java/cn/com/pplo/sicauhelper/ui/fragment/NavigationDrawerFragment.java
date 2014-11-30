@@ -28,6 +28,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.FeedbackActivity;
+import cn.com.pplo.sicauhelper.ui.SettingActivity;
 import cn.com.pplo.sicauhelper.ui.UserActivity;
 import cn.com.pplo.sicauhelper.util.ColorUtil;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
@@ -187,6 +188,14 @@ public class NavigationDrawerFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 FeedbackActivity.startFeedbackActivity(getActivity());
+            }
+        });
+
+        //设置页面
+        settingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SettingActivity.startSettingActivity(getActivity());
             }
         });
     }

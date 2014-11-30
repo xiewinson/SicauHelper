@@ -22,6 +22,17 @@ public class SharedPreferencesUtil {
      * 当前反馈数量
      */
     public static final String CURRENT_FEEDBACK_SIZE = "current_feedback_size";
+
+    /**
+     * 当前每次商品/帖子加载数量
+     */
+    public static final String PER_GOODS_STATUS_COUNT = "per_goods_status_count";
+
+    /**
+     * 当前每次评论加载数量
+     */
+    public static final String PER_COMMENT_COUNT = "per_comment_count";
+
     /**
      * 以xml保存键值对
      * @param context

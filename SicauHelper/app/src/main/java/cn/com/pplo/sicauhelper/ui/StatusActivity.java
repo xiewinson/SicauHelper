@@ -442,7 +442,7 @@ public class StatusActivity extends BaseActivity {
      */
     private void findNewData(AVQuery.CachePolicy cachePolicy, final String objectId) {
         swipeRefreshLayout.setRefreshing(true);
-        new CommentAction().findNewDataByObjectId(cachePolicy, CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
+        new CommentAction().findNewDataByObjectId(StatusActivity.this, cachePolicy, CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -465,7 +465,7 @@ public class StatusActivity extends BaseActivity {
      * 加载更多
      */
     private void findCommentById(String objectId, long comment_id) {
-        new CommentAction().findSinceId(CommentAction.COMMENT_STATUS, objectId, comment_id, new FindCallback<AVObject>() {
+        new CommentAction().findSinceId(StatusActivity.this, CommentAction.COMMENT_STATUS, objectId, comment_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {

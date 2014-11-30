@@ -141,7 +141,7 @@ public class StatusFragment extends BaseFragment {
     private void findNewData(AVQuery.CachePolicy cachePolicy) {
         swipeRefreshLayout.setRefreshing(true);
         footerView.setVisibility(View.GONE);
-        new StatusAction().findNewData(cachePolicy, new FindCallback<AVObject>() {
+        new StatusAction().findNewData(getActivity(), cachePolicy, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
@@ -155,9 +155,7 @@ public class StatusFragment extends BaseFragment {
                     if (!e.getMessage().contains("Cache")) {
                         UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，下拉刷新试试吧");
                     }
-                    else {
-                        UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，重新试试吧");
-                    }
+
                     Log.d("winson", "出错：" + e.getMessage());
                 }
                 if (swipeRefreshLayout.isRefreshing()) {
@@ -171,7 +169,7 @@ public class StatusFragment extends BaseFragment {
      * 加载更多
      */
     private void findById(long status_id) {
-        new StatusAction().findSinceId(status_id, new FindCallback<AVObject>() {
+        new StatusAction().findSinceId(getActivity(), status_id, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (e == null) {
