@@ -75,4 +75,11 @@ public class SicauHelperApplication extends Application {
         }
         return student;
     }
+
+    /**
+     * 设置其为
+     */
+    public static void clearStudent() {
+        student = null;
+    }
 }

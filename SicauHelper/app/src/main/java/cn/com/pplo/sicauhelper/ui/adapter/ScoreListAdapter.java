@@ -4,22 +4,17 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.RotateAnimation;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
@@ -76,24 +71,24 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         int circleShape = 0;
         int color = 0;
         if (category.equals("必修")) {
-            circleShape = R.drawable.circle_blue;
-            color = context.getResources().getColor(R.color.blue_500);
+            circleShape = R.drawable.circle_amber;
+            color = context.getResources().getColor(R.color.amber_500);
         } else if (category.equals("公选")) {
-            circleShape = R.drawable.circle_red;
-            color = context.getResources().getColor(R.color.red_500);
+            circleShape = R.drawable.circle_teal;
+            color = context.getResources().getColor(R.color.teal_500);
         } else if (category.equals("任选")) {
-            circleShape = R.drawable.circle_green;
-            color = context.getResources().getColor(R.color.green_500);
+            circleShape = R.drawable.circle_cyan;
+            color = context.getResources().getColor(R.color.cyan_500);
         } else if (category.equals("推选")) {
-            circleShape = R.drawable.circle_orange;
-            color = context.getResources().getColor(R.color.orange_500);
+            circleShape = R.drawable.circle_indigo;
+            color = context.getResources().getColor(R.color.indigo_500);
         } else if (category.equals("实践")) {
-            circleShape = R.drawable.circle_purple;
-            color = context.getResources().getColor(R.color.purple_500);
-        }
-        else if (category.equals("方向")) {
             circleShape = R.drawable.circle_brown;
             color = context.getResources().getColor(R.color.brown_500);
+        }
+        else if (category.equals("方向")) {
+            circleShape = R.drawable.circle_purple;
+            color = context.getResources().getColor(R.color.purple_500);
         }
 
         holder.scoreView.setBackgroundResource(circleShape);
@@ -154,18 +149,19 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         }
 
         //设置header颜色
-        int color = 0;
-        switch (school){
-            case 0:
-                color = R.color.blue_500;
-                break;
-            case 1:
-                color = R.color.orange_500;
-                break;
-            case 2:
-                color = R.color.green_500;
-                break;
-        }
+        int color = R.color.light_blue_500;
+//        switch (school){
+//            case 0:
+//                color = R.color.blue_500;
+//                break;
+//            case 1:
+//                color = R.color.orange_500;
+//                break;
+//            case 2:
+//                color = R.color.green_500;
+//                break;
+//        }
+        convertView.setAlpha(0.8f);
         convertView.setBackgroundResource(color);
 
         //计算有几门课

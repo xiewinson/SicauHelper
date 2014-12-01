@@ -1,7 +1,6 @@
 package cn.com.pplo.sicauhelper.ui;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -218,7 +217,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         //若为新帖子则隐藏校区选项
         else if (type == TYPE_STATUS) {
             getSupportActionBar().setTitle("新帖子");
-            UIUtil.setActionBarColor(AddActivity.this, getSupportActionBar(), R.color.red_500);
+            UIUtil.setActionBarColor(AddActivity.this, getSupportActionBar(), R.color.light_blue_500);
             schoolSpinner.setVisibility(View.GONE);
             findViewById(R.id.add_school_layout).setVisibility(View.GONE);
             findViewById(R.id.add_price_layout).setVisibility(View.GONE);
@@ -269,11 +268,11 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
     private void setActionBarColor(int school) {
         int color = 0;
         if (school == 0) {
-            color = R.color.blue_500;
+            color = R.color.red_500;
         } else if (school == 1) {
             color = R.color.orange_500;
         } else {
-            color = R.color.green_500;
+            color = R.color.light_green_500;
         }
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(color));
     }

@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.feedback.Comment;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.avos.avoscloud.feedback.FeedbackThread;
@@ -57,7 +56,7 @@ public class FeedbackActivity extends BaseActivity {
     }
 
     private void setUp(Context context) {
-        UIUtil.setActionBarColorBySchool(this, SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL), getSupportActionBar());
+        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.light_blue_500);
         getSupportActionBar().setTitle("反馈");
         listView = (ListView) findViewById(R.id.feedback_listView);
         feedbackAdapter = new FeedbackAdapter(this, data);

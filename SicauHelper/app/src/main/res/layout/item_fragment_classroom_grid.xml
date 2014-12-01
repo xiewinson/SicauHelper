@@ -17,50 +17,44 @@
             android:id="@+id/classroom_grid_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/classroom_grid_time_iv"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@android:drawable/ic_popup_sync" />
+            android:padding="16dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/classroom_grid_time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="4dp"
                 android:text="呵呵"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:gravity="center"
                 android:textColor="#ffffff" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="68dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="8dp">
-
-            <TextView
-                android:id="@+id/classroom_grid_room_tv"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/classroom_grid_school_tv"
                 android:textSize="12sp"
+                android:paddingTop="4dp"
+                android:textColor="#ffffff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:singleLine="true"
+                android:marqueeRepeatLimit="2"
+                android:id="@+id/classroom_grid_room_tv"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

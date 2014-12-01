@@ -60,20 +60,20 @@ public class CourseAdapter extends BaseAdapter {
         int circleShape = 0;
         int color = 0;
         if (time.equals("1-2")) {
+            circleShape = R.drawable.circle_cyan;
+            color = context.getResources().getColor(R.color.cyan_500);
+        } else if (time.equals("3-4")) {
+            circleShape = R.drawable.circle_amber;
+            color = context.getResources().getColor(R.color.amber_500);
+        } else if (time.equals("5-6")) {
+            circleShape = R.drawable.circle_deep_orange;
+            color = context.getResources().getColor(R.color.deep_orange_500);
+        } else if (time.equals("7-8")) {
             circleShape = R.drawable.circle_blue;
             color = context.getResources().getColor(R.color.blue_500);
-        } else if (time.equals("3-4")) {
-            circleShape = R.drawable.circle_red;
-            color = context.getResources().getColor(R.color.red_500);
-        } else if (time.equals("5-6")) {
-            circleShape = R.drawable.circle_green;
-            color = context.getResources().getColor(R.color.green_500);
-        } else if (time.equals("7-8")) {
-            circleShape = R.drawable.circle_orange;
-            color = context.getResources().getColor(R.color.orange_500);
         } else if (time.equals("9-10")) {
-            circleShape = R.drawable.circle_purple;
-            color = context.getResources().getColor(R.color.purple_500);
+            circleShape = R.drawable.circle_indigo;
+            color = context.getResources().getColor(R.color.indigo_500);
         }
 
         //设置课程名

@@ -67,7 +67,7 @@ public class StatusFragment extends BaseFragment {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.red_500);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.light_blue_500);
         return inflater.inflate(R.layout.fragment_status, container, false);
     }
 
@@ -80,7 +80,7 @@ public class StatusFragment extends BaseFragment {
     private void setUp(final Context context, View view) {
         //下拉刷新
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.status_swipe_container);
-        swipeRefreshLayout.setColorSchemeResources(R.color.blue_500, R.color.orange_500, R.color.green_500);
+        swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.light_green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -100,7 +100,7 @@ public class StatusFragment extends BaseFragment {
 
         //添加fab
         fab = (FloatingActionButton) view.findViewById(R.id.status_add_fab);
-        UIUtil.initFab(getActivity(), fab, listView, R.color.red_500, R.color.red_900, R.color.red_400, new View.OnClickListener() {
+        UIUtil.initFab(getActivity(), fab, listView, R.color.light_blue_500, R.color.red_900, R.color.red_400, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddActivity.startAddActivity(context, AddActivity.TYPE_STATUS);

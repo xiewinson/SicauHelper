@@ -85,9 +85,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        UIUtil.setActionBarColorBySchool(getActivity(),
-                SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL),
-                getSupportActionBar(getActivity()));
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.light_blue_500);
         setUp(view, getActivity());
     }
 

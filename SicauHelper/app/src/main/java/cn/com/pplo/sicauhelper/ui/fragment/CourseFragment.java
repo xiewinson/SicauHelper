@@ -2,52 +2,34 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LayoutAnimationController;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Course;
-import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
-import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.CourseAdapter;
@@ -56,7 +38,6 @@ import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
-import cn.com.pplo.sicauhelper.widget.DepthPageTransformer;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 import cn.com.pplo.sicauhelper.widget.ZoomOutPageTransformer;
 
@@ -110,24 +91,25 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
 
         //设置actionBar颜色
-        int color = 0;
-        int tabColor = 0;
-        switch (SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL)){
-            case 0:
-                color = R.color.blue_500;
-                tabColor = R.color.blue_500;
-                break;
-            case 1:
-                color = R.color.orange_500;
-                tabColor = R.color.orange_500;
-                break;
-            case 2:
-                color = R.color.green_500;
-                tabColor = R.color.green_500;
-                break;
-        }
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), color);
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, tabColor);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.light_blue_500);
+//        int color = 0;
+//        int tabColor = 0;
+//        switch (SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL)){
+//            case 0:
+//                color = R.color.blue_500;
+//                tabColor = R.color.blue_500;
+//                break;
+//            case 1:
+//                color = R.color.orange_500;
+//                tabColor = R.color.orange_500;
+//                break;
+//            case 2:
+//                color = R.color.green_500;
+//                tabColor = R.color.green_500;
+//                break;
+//        }
+//        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), color);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.light_blue_500);
         getLoaderManager().initLoader(0, null, this);
     }
 

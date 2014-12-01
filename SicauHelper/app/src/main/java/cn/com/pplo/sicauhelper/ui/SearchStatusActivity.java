@@ -19,9 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
-import cn.com.pplo.sicauhelper.action.GoodsAction;
 import cn.com.pplo.sicauhelper.action.StatusAction;
-import cn.com.pplo.sicauhelper.ui.adapter.GoodsAdapter;
 import cn.com.pplo.sicauhelper.ui.adapter.StatusAdapter;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
@@ -50,7 +48,7 @@ public class SearchStatusActivity extends BaseActivity {
     }
 
     private void setUp(Context context) {
-        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.red_500);
+        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.light_blue_500);
 
         listView = (ListView) findViewById(R.id.search_status_listView);
         //加载更多进度条

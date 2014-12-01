@@ -1,10 +1,8 @@
 package cn.com.pplo.sicauhelper.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +11,7 @@ import android.widget.Button;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.util.DialogUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
+import cn.com.pplo.sicauhelper.util.UserUtil;
 
 public class SettingActivity extends BaseActivity {
 
@@ -23,6 +22,7 @@ public class SettingActivity extends BaseActivity {
 
     private Button goodsStatusCountBtn;
     private Button commentCountBtn;
+    private Button logoutBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +33,13 @@ public class SettingActivity extends BaseActivity {
 
     private void setUp(Context context) {
         getSupportActionBar().setTitle("设置");
-        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.red_500);
+        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.light_blue_500);
 
         goodsStatusCountBtn = (Button) findViewById(R.id.goods_status_count_btn);
         commentCountBtn = (Button) findViewById(R.id.comment_count_btn);
+        logoutBtn = (Button) findViewById(R.id.logout_btn);
 
+        //商品帖子每次加载数量
         goodsStatusCountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,13 +47,25 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
+        //评论每次加载数量
         commentCountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogUtil.showCountEditDialog(SettingActivity.this, DialogUtil.TYPE_COUNT_EDIT.COMMENT);
             }
         });
+
+        //注销
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserUtil.clearUserInfo(SettingActivity.this);
+                LoginActivity.startLoginActivity(SettingActivity.this);
+            }
+        });
     }
+
+
 
 
     @Override

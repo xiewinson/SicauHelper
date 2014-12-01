@@ -70,8 +70,8 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //不使用up
-        Log.d("winson", "手机型号：" + Build.MODEL + "\n系统版本：" + Build.VERSION.RELEASE + "\n手机品牌：" + Build.BRAND);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setElevation(0);
 
         if (AVUser.getCurrentUser() == null) {
             Intent intent = new Intent(this, LoginActivity.class);

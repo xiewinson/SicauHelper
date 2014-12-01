@@ -3,6 +3,10 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowContentOverlay">@android:color/transparent</item>
+        <item name="colorPrimary">@color/light_blue_500</item>
+        <!--<item name="colorPrimaryDark">@color/light_blue_700</item>-->
+        <item name="colorAccent">@color/light_blue_200</item>
+        
         <!--<item name="windowContentOverlay">@android:color/transparent</item>-->
         <item name="windowActionBarOverlay">true</item>
         <!-- Customize your theme here. -->
@@ -11,8 +15,11 @@
 
     <style name="setting_item_style">
         <item name="android:gravity">left</item>
-        <item name="android:padding">16dp</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:background">@drawable/btn_white_lightgrey</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

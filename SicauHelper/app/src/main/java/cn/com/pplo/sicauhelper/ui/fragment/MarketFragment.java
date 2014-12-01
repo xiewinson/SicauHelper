@@ -15,12 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.melnykov.fab.FloatingActionButton;
-
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
-import cn.com.pplo.sicauhelper.ui.AddActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.SearchGoodsActivity;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
@@ -76,8 +73,8 @@ public class MarketFragment extends BaseFragment {
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
-        getSupportActionBar(context).setBackgroundDrawable(getResources().getDrawable(R.color.blue_500));
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.blue_500);
+        getSupportActionBar(context).setBackgroundDrawable(getResources().getDrawable(R.color.red_500));
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.red_500);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
         pagerSlidingTabStrip.setViewPager(viewPager);
@@ -98,16 +95,16 @@ public class MarketFragment extends BaseFragment {
                 int tabColor = 0;
                 switch (position){
                     case 0:
-                        color = R.color.blue_500;
-                        tabColor = R.color.blue_500;
+                        color = R.color.red_500;
+                        tabColor = R.color.red_500;
                         break;
                     case 1:
                         color = R.color.orange_500;
                         tabColor = R.color.orange_500;
                         break;
                     case 2:
-                        color = R.color.green_500;
-                        tabColor = R.color.green_500;
+                        color = R.color.light_green_500;
+                        tabColor = R.color.light_green_500;
                         break;
                 }
                 actionBar.setBackgroundDrawable(getResources().getDrawable(color));

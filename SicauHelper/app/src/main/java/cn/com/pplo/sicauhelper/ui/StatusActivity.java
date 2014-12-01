@@ -113,11 +113,11 @@ public class StatusActivity extends BaseActivity {
         commentEt = (EditText) findViewById(R.id.comment_et);
         sendBtn = (Button) findViewById(R.id.comment_send_btn);
 
-        UIUtil.setActionBarColorBySchool(context, school, getSupportActionBar());
+        UIUtil.setActionBarColor(context,getSupportActionBar(), R.color.light_blue_500);
 
         //下拉刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.status_swipe_container);
-        swipeRefreshLayout.setColorSchemeResources(R.color.blue_500, R.color.orange_500, R.color.green_500);
+        swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.light_green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

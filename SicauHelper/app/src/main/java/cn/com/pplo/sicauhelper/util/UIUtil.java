@@ -1,18 +1,12 @@
 package cn.com.pplo.sicauhelper.util;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.hardware.input.InputManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
@@ -26,12 +20,8 @@ import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationA
 import com.nhaarman.listviewanimations.appearance.simple.SwingLeftInAnimationAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.SwingRightInAnimationAdapter;
 
-import org.w3c.dom.Text;
-
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
-import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener2;
-import cn.com.pplo.sicauhelper.ui.fragment.ProgressFragment;
 
 /**
  * Created by winson on 2014/9/14.
@@ -113,13 +103,13 @@ public class UIUtil {
 
         int color = 0;
         if (school == 0) {
-            color = R.color.blue_500;
+            color = R.color.red_500;
         } else if (school == 1) {
             color = R.color.orange_500;
         } else if (school == 2){
-            color = R.color.green_500;
+            color = R.color.light_green_500;
         } else {
-            color = R.color.red_500;
+            color = R.color.light_blue_500;
         }
 
         UIUtil.setActionBarColor(context, actionBarColor, color);

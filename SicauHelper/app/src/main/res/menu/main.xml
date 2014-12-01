@@ -6,7 +6,7 @@
         android:id="@+id/action_refresh"
         android:title="刷新"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_message"
         android:title="消息"
