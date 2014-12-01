@@ -196,7 +196,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
                             //内容
                             contentEt.setText(editObject.getString(TableContract.TableGoods._CONTENT));
                             //价格
-                            priceEt.setText(editObject.getDouble(TableContract.TableGoods._PRICE) + "");
+                            priceEt.setText((int)editObject.getDouble(TableContract.TableGoods._PRICE) + "");
 
                             avImageList = ImageUtil.getAVFileListByAVObject(editObject);
                             for (AVFile avFile : avImageList) {

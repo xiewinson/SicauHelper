@@ -67,5 +67,6 @@
     <string name="title_activity_user_goods">UserGoodsActivity</string>
     <string name="title_activity_user_status">UserStatusActivity</string>
     <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_help">HelpActivity</string>
 
 </resources>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -13,12 +14,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SignUpCallback;
+
+import org.jsoup.examples.HtmlToPlainText;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +41,7 @@ public class LoginActivity extends ActionBarActivity {
     private EditText sidEt;
     private EditText pswdEt;
     private Button loginBtn;
+    private TextView helpTv;
     private AlertDialog progressDialog;
 
     public static void startLoginActivity(Context context) {
@@ -50,6 +55,7 @@ public class LoginActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
 
         setUp();
@@ -59,6 +65,7 @@ public class LoginActivity extends ActionBarActivity {
         loginBtn = (Button) findViewById(R.id.login_ok_btn);
         sidEt = (EditText) findViewById(R.id.login_sid_et);
         pswdEt = (EditText) findViewById(R.id.login_pswd_et);
+        helpTv = (TextView) findViewById(R.id.login_help_tv);
         progressDialog = UIUtil.getProgressDialog(this, "吾已前往教务系统验证你的学号密码");
 
         //设置保存在xml的学号密码
@@ -99,6 +106,15 @@ public class LoginActivity extends ActionBarActivity {
                         UIUtil.dismissProgressDialog(progressDialog);
                     }
                 });
+            }
+        });
+
+        //点击help跳转到help页
+        helpTv.setText(Html.fromHtml("<u>我安全吗?</u>"));
+        helpTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

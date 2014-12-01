@@ -4,7 +4,7 @@
     android:layout_margin="8dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardPreventCornerOverlap="true"
+    app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="false"
     app:cardCornerRadius="2dp">
 
@@ -47,11 +47,10 @@
             android:padding="16dp">
 
             <TextView
-                android:singleLine="true"
-                android:marqueeRepeatLimit="2"
                 android:id="@+id/classroom_grid_room_tv"
                 android:textSize="14sp"
-                android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_width="56dp"
                 android:layout_height="wrap_content" />
 
 

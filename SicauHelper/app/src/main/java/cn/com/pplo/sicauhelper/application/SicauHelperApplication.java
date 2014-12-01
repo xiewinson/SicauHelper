@@ -31,7 +31,7 @@ public class SicauHelperApplication extends Application {
         //初始化ImageLoader配置
         ImageLoaderConfiguration cofig = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
         ImageLoader.getInstance().init(cofig);
-
+        student = AVUser.getCurrentUser();
     }
 
     public SicauHelperApplication() {

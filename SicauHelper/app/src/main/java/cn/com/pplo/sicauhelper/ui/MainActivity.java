@@ -30,6 +30,7 @@ import com.avos.avoscloud.feedback.FeedbackThread;
 
 import java.util.List;
 
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.ui.fragment.ClassroomFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.MarketFragment;
@@ -73,7 +74,7 @@ public class MainActivity extends ActionBarActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setElevation(0);
 
-        if (AVUser.getCurrentUser() == null) {
+        if (SicauHelperApplication.getStudent() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             this.finish();
@@ -110,7 +111,7 @@ public class MainActivity extends ActionBarActivity
             @Override
             public void onCommentsFetch(List<Comment> comments, AVException e) {
                 Log.d("winson", "当前消息数量： " + comments.size());
-                int currentSize = (Integer)SharedPreferencesUtil.get(MainActivity.this, SharedPreferencesUtil.CURRENT_FEEDBACK_SIZE, 0);
+                int currentSize = (Integer) SharedPreferencesUtil.get(MainActivity.this, SharedPreferencesUtil.CURRENT_FEEDBACK_SIZE, 0);
                 Log.d("winson", "存储的数量：" + currentSize);
                 if (feedbackThread.getCommentsList().size() > currentSize) {
                     Log.d("winson", "你有未查收的新消息");
@@ -277,9 +278,4 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
 }
