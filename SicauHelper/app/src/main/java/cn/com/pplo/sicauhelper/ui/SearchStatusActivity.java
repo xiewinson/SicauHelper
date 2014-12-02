@@ -124,7 +124,7 @@ public class SearchStatusActivity extends BaseActivity {
     //初始化搜索框
     private void initSearchView(Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setQueryHint("请输入商品标题");
+        searchView.setQueryHint("请输入帖子标题");
         searchView.onActionViewExpanded();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
