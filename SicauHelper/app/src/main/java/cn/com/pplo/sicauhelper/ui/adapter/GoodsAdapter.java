@@ -70,6 +70,7 @@ public class GoodsAdapter extends BaseAdapter {
             holder.commentBtn = (TextView) convertView.findViewById(R.id.goods_comment_btn);
             holder.deviceTv = (TextView) convertView.findViewById(R.id.goods_device_tv);
             holder.locationTv = (TextView) convertView.findViewById(R.id.goods_location_tv);
+            holder.allLayout = convertView.findViewById(R.id.all_layout);
             convertView.setTag(holder);
         }
         else {
@@ -124,7 +125,7 @@ public class GoodsAdapter extends BaseAdapter {
         });
 
         //打开详细页面
-        convertView.setOnClickListener(new View.OnClickListener() {
+        holder.allLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GoodsActivity.startGoodsActivity(context, avGoods.getObjectId(), avGoods.getInt(TableContract.TableGoods._SCHOOL));
@@ -144,5 +145,6 @@ public class GoodsAdapter extends BaseAdapter {
         TextView commentBtn;
         TextView deviceTv;
         TextView locationTv;
+        View allLayout;
     }
 }

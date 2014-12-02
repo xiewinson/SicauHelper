@@ -72,6 +72,7 @@ public class SicauHelperApplication extends Application {
     public static AVUser getStudent() {
         if(student == null) {
             student = AVUser.getCurrentUser();
+            student.fetchInBackground(null);
         }
         return student;
     }

@@ -3,13 +3,14 @@
     android:animateLayoutChanges="true"
     android:padding="16dp"
     android:layout_gravity="center"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:id="@+id/user_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
+        android:layout_marginTop="56dp"
         android:gravity="center"
         android:animateLayoutChanges="true"
         android:orientation="horizontal"
@@ -58,45 +59,17 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:animateLayoutChanges="true"
-        android:gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:animateLayoutChanges="true"
-            android:padding="16dp"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
             <TextView
+                android:layout_marginTop="32dp"
                 android:visibility="invisible"
                 android:textColor="@color/white_transparent"
                 android:gravity="center"
                 android:id="@+id/user_goods_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:text="商品\n0"
+                android:padding="8dp"
+                android:text="商品数量"
                 android:textSize="18sp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="16dp"
-            android:layout_height="0dp" />
-
-        <LinearLayout
-            android:animateLayoutChanges="true"
-            android:padding="16dp"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
 
             <TextView
@@ -106,11 +79,9 @@
                 android:id="@+id/user_status_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:text="圈子\n0"
+                android:padding="8dp"
+                android:text="圈子数量"
                 android:textSize="18sp" />
-        </LinearLayout>
 
-    </LinearLayout>
 
 </LinearLayout>

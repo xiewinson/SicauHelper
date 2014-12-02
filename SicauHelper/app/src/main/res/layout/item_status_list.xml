@@ -4,10 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardPreventCornerOverlap="true"
+    app:cardPreventCornerOverlap="false"
     app:cardCornerRadius="2dp">
 
     <LinearLayout
+        android:id="@+id/all_layout"
+        android:clickable="true"
+        android:background="@drawable/btn_white_lightgrey"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

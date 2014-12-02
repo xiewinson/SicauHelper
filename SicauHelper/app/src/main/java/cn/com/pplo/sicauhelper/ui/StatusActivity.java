@@ -99,7 +99,7 @@ public class StatusActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("帖子");
         setUp(this);
     }
 
@@ -148,6 +148,7 @@ public class StatusActivity extends BaseActivity {
         footerView.setVisibility(View.GONE);
         listView.addFooterView(footerView);
         listView.setFooterDividersEnabled(false);
+        listView.setHeaderDividersEnabled(true);
         listView.addFooterView(ViewPadding.getActionBarPadding(this, android.R.color.white));
 
         commentAdapter = new CommentAdapter(context, data);
@@ -156,7 +157,7 @@ public class StatusActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (data.size() > id) {
+                if (data.size() > 0 && data.size() > id) {
                     showOptionDialog(context, data.get((int) id));
                 }
             }

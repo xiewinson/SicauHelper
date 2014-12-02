@@ -1,5 +1,6 @@
 package cn.com.pplo.sicauhelper.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ public class FeedbackActivity extends BaseActivity {
     private ListView listView;
     private EditText commentEt;
     private Button commentBtn;
+    private AlertDialog progressDialog;
+
     private List<Comment> data = new ArrayList<Comment>();
     private FeedbackAdapter feedbackAdapter;
     public static void startFeedbackActivity(Context context) {
@@ -63,6 +66,8 @@ public class FeedbackActivity extends BaseActivity {
         listView.setAdapter(feedbackAdapter);
         commentEt = (EditText) findViewById(R.id.reply_et);
         commentBtn = (Button) findViewById(R.id.reply_btn);
+        progressDialog = UIUtil.getProgressDialog(context, "发送中...");
+
         FeedbackAgent agent = new FeedbackAgent(context);
         FeedbackThread feedbackThread = agent.getDefaultThread();
         sync(feedbackThread, false);
@@ -77,6 +82,7 @@ public class FeedbackActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 UIUtil.hideSoftKeyboard(context, commentBtn);
+                progressDialog.show();
                 String str = commentEt.getText().toString().trim();
                 if (TextUtils.isEmpty(str)) {
                     UIUtil.showShortToast(context, "反馈不可为空");
@@ -94,7 +100,7 @@ public class FeedbackActivity extends BaseActivity {
                     newComment.setContent("【建议】" + str);
                     feedbackThread.add(newComment);
                     sync(feedbackThread, true);
-                    commentEt.setText("");
+
                 }
             }
         });
@@ -111,6 +117,14 @@ public class FeedbackActivity extends BaseActivity {
             public void onCommentsSend(List<Comment> comments, AVException e) {
                 if (isSend) {
                     notifyFeedbackDataChanged(feedbackThread);
+                }
+
+                if(e == null) {
+                    commentEt.setText("");
+                    UIUtil.dismissProgressDialog(progressDialog);
+                }
+                else {
+                    UIUtil.showShortToast(FeedbackActivity.this, "发送反馈出了点问题，再试试");
                 }
             }
 

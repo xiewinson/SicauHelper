@@ -69,6 +69,7 @@ public class StatusAdapter extends BaseAdapter {
             holder.commentBtn = (TextView) convertView.findViewById(R.id.status_comment_btn);
             holder.deviceTv = (TextView) convertView.findViewById(R.id.status_device_tv);
             holder.locationTv = (TextView) convertView.findViewById(R.id.status_location_tv);
+            holder.allLayout = convertView.findViewById(R.id.all_layout);
             convertView.setTag(holder);
         }
         else {
@@ -122,7 +123,7 @@ public class StatusAdapter extends BaseAdapter {
         });
 
         //打开详细页面
-        convertView.setOnClickListener(new View.OnClickListener() {
+        holder.allLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 StatusActivity.startStatusActivity(context, avstatus.getObjectId(), avstatus.getAVObject(TableContract.TableStatus._USER).getInt(TableContract.TableUser._SCHOOL));
@@ -142,5 +143,6 @@ public class StatusAdapter extends BaseAdapter {
         TextView commentBtn;
         TextView deviceTv;
         TextView locationTv;
+        View allLayout;
     }
 }

@@ -74,6 +74,18 @@ public class LoginActivity extends ActionBarActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //隐藏键盘
+                UIUtil.hideSoftKeyboard(LoginActivity.this, loginBtn);
+                String sidStr = sidEt.getText().toString();
+                String pswdStr = pswdEt.getText().toString();
+                if(TextUtils.isEmpty(sidStr)) {
+                    UIUtil.showShortToast(LoginActivity.this, "学号为啥不写呢");
+                    return;
+                }
+                else if(TextUtils.isEmpty(pswdStr)) {
+                    UIUtil.showShortToast(LoginActivity.this, "密码不可以不填啊");
+                    return;
+                }
                 login();
             }
 

@@ -66,7 +66,7 @@ public class UserStatusActivity extends BaseActivity {
         schoolPosition = getIntent().getIntExtra(EXTRA_SCHOOL, 0);
         UIUtil.setActionBarColor(context,getSupportActionBar(), R.color.light_blue_500);
         getSupportActionBar().setTitle(nickname);
-        getSupportActionBar().setSubtitle("圈子列表");
+        getSupportActionBar().setSubtitle("帖子列表");
 
         //下拉刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.user_status_swipe_container);

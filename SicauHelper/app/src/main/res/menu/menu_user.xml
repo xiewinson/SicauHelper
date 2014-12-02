@@ -1,6 +1,18 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="cn.com.pplo.sicauhelper.ui.UserActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" android:showAsAction="never" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_refresh"
+        android:title="刷新"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/action_edit_nickname"
+        android:title="修改昵称"
+        android:orderInCategory="101"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/action_edit_profile"
+        android:title="修改头像"
+        android:orderInCategory="102"
+        android:showAsAction="never" />
+
 </menu>

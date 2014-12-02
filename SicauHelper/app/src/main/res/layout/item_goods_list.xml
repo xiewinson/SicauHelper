@@ -4,11 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardPreventCornerOverlap="true"
+    app:cardPreventCornerOverlap="false"
     app:cardCornerRadius="2dp">
 
     <LinearLayout
+        android:id="@+id/all_layout"
         android:orientation="vertical"
+        android:clickable="true"
+        android:background="@drawable/btn_white_lightgrey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <!--头像、人名、时间、类别-->
@@ -65,17 +68,18 @@
                     android:background="@drawable/shape_rect_light_grey"
                     android:id="@+id/goods_category_tv"
                     android:text="#其他"
-                    android:textSize="14dp"
+                    android:textSize="18sp"
                     android:gravity="center"
                     android:layout_gravity="top"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp"
-                     />
+                    android:layout_height="40dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    />
                 <View
                     android:background="@color/grey_500"
                     android:layout_width="2dp"
-                    android:layout_height="32dp" />
+                    android:layout_height="48dp" />
                 </LinearLayout>
         </LinearLayout>
         <!--标题-->

@@ -79,6 +79,7 @@ public class MainActivity extends ActionBarActivity
             startActivity(intent);
             this.finish();
         } else {
+            AVUser.getCurrentUser().fetchInBackground(null);
             initView();
         }
     }

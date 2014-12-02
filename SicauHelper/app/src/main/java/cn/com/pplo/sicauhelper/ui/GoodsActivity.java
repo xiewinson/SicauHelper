@@ -101,7 +101,7 @@ public class GoodsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("商品");
         setUp(this);
     }
 
@@ -150,6 +150,7 @@ public class GoodsActivity extends BaseActivity {
         footerView.setVisibility(View.GONE);
         listView.addFooterView(footerView);
         listView.setFooterDividersEnabled(false);
+        listView.setHeaderDividersEnabled(true);
         listView.addFooterView(ViewPadding.getActionBarPadding(this, android.R.color.white));
 
         commentAdapter = new CommentAdapter(context, data);

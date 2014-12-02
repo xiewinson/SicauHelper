@@ -13,6 +13,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.DeleteCallback;
+import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.feedback.Comment;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.avos.avoscloud.feedback.FeedbackThread;
@@ -214,6 +215,11 @@ public class DialogUtil {
         alertDialog.show();
     }
 
+    /**
+     * 编辑每次加载数量
+     * @param context
+     * @param type
+     */
     public static void showCountEditDialog(final Context context, final TYPE_COUNT_EDIT type) {
         AlertDialog alertDialog = null;
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -258,4 +264,33 @@ public class DialogUtil {
             }
         }).create().show();
     }
+
+    /**
+     * 显示修改昵称对话框
+     * @param context
+     * @param avUser
+     */
+    public static void showEditNicknameDialog(final Context context, final AVUser avUser, final SaveCallback saveCallback) {
+        AlertDialog alertDialog = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = View.inflate(context, R.layout.dialog_nickname_edit, null);
+        final EditText et = (EditText) view.findViewById(R.id.nickname_et);
+        et.setText(avUser.getString(TableContract.TableUser._NICKNAME));
+        builder.setView(view)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String nickname = et.getText().toString().trim();
+                        if (TextUtils.isEmpty(nickname)) {
+                            UIUtil.showShortToast(context, "昵称不可以为空");
+                            return;
+                        }
+                        avUser.put(TableContract.TableUser._NICKNAME, nickname);
+                        avUser.saveInBackground(saveCallback);
+                    }
+                }).setNegativeButton(R.string.cancel, null);
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
 }

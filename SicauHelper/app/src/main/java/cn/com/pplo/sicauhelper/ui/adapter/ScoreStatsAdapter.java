@@ -75,6 +75,5 @@ public class ScoreStatsAdapter extends BaseAdapter {
         TextView creditChoiceTv;
         TextView scoreMustTv;
         TextView scoreChoiceTv;
-
     }
 }

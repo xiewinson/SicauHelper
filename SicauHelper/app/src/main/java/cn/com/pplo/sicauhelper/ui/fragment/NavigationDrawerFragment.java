@@ -220,7 +220,7 @@ public class NavigationDrawerFragment extends BaseFragment {
 
         final AVUser avUser = SicauHelperApplication.getStudent();
         if (avUser != null) {
-            nameTv.setText(avUser.getString(TableContract.TableUser._NICKNAME));
+            nameTv.setText(avUser.getString(TableContract.TableUser._NAME));
             sidTv.setText(avUser.getString(TableContract.TableUser._SID));
             ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), profileIv, ImageUtil.getDisplayImageOption(getActivity()));
         }

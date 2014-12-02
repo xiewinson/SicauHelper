@@ -59,7 +59,12 @@ public class GalleryActivity extends ActionBarActivity implements GalleryFragmen
 
 		actionBar = getSupportActionBar();
 		actionBar.setBackgroundDrawable(getResources().getDrawable(android.R.color.transparent));
-		actionBar.setTitle((position + 1) + "/" + imageUrls.length);
+        if(imageUrls.length > 1) {
+            actionBar.setTitle((position + 1) + "/" + imageUrls.length);
+        }
+        else {
+            actionBar.setTitle("");
+        }
 
 		galleryViewPager = (GalleryPager) findViewById(R.id.gallery_pager);
 		final GalleryAdapter galleryAdapter = new GalleryAdapter(getSupportFragmentManager());
@@ -69,7 +74,9 @@ public class GalleryActivity extends ActionBarActivity implements GalleryFragmen
 			
 			@Override
 			public void onPageSelected(int position) {
-				actionBar.setTitle((position + 1) + "/" + imageUrls.length);
+                if(imageUrls.length > 1) {
+                    actionBar.setTitle((position + 1) + "/" + imageUrls.length);
+                }
 			}
 			
 			@Override

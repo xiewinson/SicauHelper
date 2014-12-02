@@ -17,7 +17,7 @@
         <TextView
             android:textSize="28sp"
             android:textColor="@color/light_blue_500"
-            android:text="川农助手"
+            android:text="川农校园通"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -58,7 +58,8 @@
         android:id="@+id/login_help_tv"
         android:clickable="true"
         android:layout_weight="8"
-        android:layout_marginTop="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:textSize="14sp"
         android:textColor="@color/lightblue_blue"
         android:text="川农助手"
