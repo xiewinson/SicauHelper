@@ -114,7 +114,7 @@ public class LoginActivity extends ActionBarActivity {
         helpTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                HelpActivity.startHelpActivity(LoginActivity.this);
             }
         });
 

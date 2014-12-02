@@ -1,18 +1,28 @@
 package cn.com.pplo.sicauhelper.ui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 
-public class HelpActivity extends Activity {
+public class HelpActivity extends BaseActivity {
+
+    public static void startHelpActivity(Context context) {
+        Intent intent = new Intent(context, HelpActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+        getSupportActionBar().setTitle("帮助");
+        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.light_blue_500);
     }
 
 

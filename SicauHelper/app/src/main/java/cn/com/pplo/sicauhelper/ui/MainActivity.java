@@ -120,9 +120,9 @@ public class MainActivity extends ActionBarActivity
                     Intent intent = new Intent(MainActivity.this, FeedbackActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     PendingIntent pi = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                    builder.setContentTitle("川农助手回复了您的反馈")
+                    builder.setContentTitle("川农校园通回复了您的反馈")
                             .setContentText("点击查看")
-                            .setTicker("川农助手回复了您的反馈")
+                            .setTicker("川农校园通回复了您的反馈")
                             .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
                             .setSmallIcon(R.drawable.ic_launcher)
                             .setContentIntent(pi)
@@ -171,7 +171,7 @@ public class MainActivity extends ActionBarActivity
                 if(!getSupportActionBar().isShowing()){
                     getSupportActionBar().show();
                 }
-                getSupportActionBar().setTitle("川农生活助手");
+                getSupportActionBar().setTitle("川农校园通");
             }
         };
 
@@ -278,4 +278,8 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

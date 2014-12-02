@@ -41,7 +41,7 @@ public class UIUtil {
     public static void showShortToast(Context context, String title) {
         if(toast == null) {
             synchronized (lockObj) {
-                if(toast == null) {
+                if(toast == null && context != null) {
                     toast = new Toast(context);
                 }
             }

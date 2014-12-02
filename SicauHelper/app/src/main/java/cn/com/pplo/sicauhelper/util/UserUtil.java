@@ -38,8 +38,8 @@ public class UserUtil {
         String DELETE_STR = "delete from ";
         db.execSQL(DELETE_STR + TableContract.TableScore.TABLE_NAME);
         db.execSQL(DELETE_STR + TableContract.TableCourse.TABLE_NAME);
-        db.execSQL(DELETE_STR + TableContract.TableNews.TABLE_NAME);
-        db.execSQL(DELETE_STR + TableContract.TableClassroom.TABLE_NAME);
+//        db.execSQL(DELETE_STR + TableContract.TableNews.TABLE_NAME);
+//        db.execSQL(DELETE_STR + TableContract.TableClassroom.TABLE_NAME);
         db.execSQL(DELETE_STR + TableContract.TableUser.TABLE_NAME);
     }
 }

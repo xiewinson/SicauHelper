@@ -64,7 +64,7 @@ public class UserStatusActivity extends BaseActivity {
         objectId = getIntent().getStringExtra(EXTRA_OBJECT_ID);
         nickname = getIntent().getStringExtra(EXTRA_NICKNAME);
         schoolPosition = getIntent().getIntExtra(EXTRA_SCHOOL, 0);
-        UIUtil.setActionBarColorBySchool(context, schoolPosition, getSupportActionBar());
+        UIUtil.setActionBarColor(context,getSupportActionBar(), R.color.light_blue_500);
         getSupportActionBar().setTitle(nickname);
         getSupportActionBar().setSubtitle("圈子列表");
 

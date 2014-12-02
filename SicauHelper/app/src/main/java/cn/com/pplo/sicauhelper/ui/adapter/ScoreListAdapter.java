@@ -161,7 +161,7 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
 //                color = R.color.green_500;
 //                break;
 //        }
-        convertView.setAlpha(0.8f);
+        convertView.setAlpha(0.5f);
         convertView.setBackgroundResource(color);
 
         //计算有几门课

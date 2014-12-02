@@ -121,7 +121,7 @@ public class UserActivity extends BaseActivity {
         new StatusAction().countStatusByUser(objectId, new CountCallback() {
             @Override
             public void done(int count, AVException e) {
-                if(e != null) {
+                if(e != null && !e.getMessage().contains("Cache")) {
                     UIUtil.showShortToast(UserActivity.this, "臣未算出此人所发帖子之数");
                 }
                 else {
@@ -136,7 +136,7 @@ public class UserActivity extends BaseActivity {
         new GoodsAction().countGoodsByUser(objectId, new CountCallback() {
             @Override
             public void done(int count, AVException e) {
-                if (e != null) {
+                if (e != null && !e.getMessage().contains("Cache")) {
                     UIUtil.showShortToast(UserActivity.this, "臣未算出此人所发商品之数");
                 } else {
                     goodsCountTv.setText("商品\n" + count);

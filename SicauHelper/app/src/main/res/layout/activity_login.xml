@@ -25,7 +25,7 @@
             android:textSize="14sp"
             android:textColor="@color/light_blue_500"
             android:layout_marginTop="8dp"
-            android:text="课表!成绩!新闻!市场!论坛!通通都有!"
+            android:text="课表!成绩!新闻!空教室!市场!论坛!通通都有!"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
