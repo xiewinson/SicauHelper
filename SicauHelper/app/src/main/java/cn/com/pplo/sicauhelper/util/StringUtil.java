@@ -293,9 +293,9 @@ public class StringUtil {
 //            }
 
             Elements numElements = document.select("td[width=50]");
-//            for (int i = 0; i < numElements.size(); i++) {
-//                Log.d("winson", "编号：" + i + "_____人数：" + numElements.get(i).text().trim());
-//            }
+            for (int i = 0; i < numElements.size(); i++) {
+                Log.d("winson", "编号：" + i + "_____人数：" + numElements.get(i).text().trim());
+            }
 
             Log.d("winson", "-------------------------------------------------------------------");
 
@@ -338,8 +338,8 @@ public class StringUtil {
                 //添加计划人数
                 course.setScheduleNum(Integer.parseInt(numElements.get(i * 4 + 4 + 2).text().toString().replaceAll("\\s", "")));
                 //添加实际人数
-                course.setScheduleNum(Integer.parseInt(numElements.get(i * 4 + 4 + 3).text().toString().replaceAll("\\s", "")));
-
+                course.setSelectedNum(Integer.parseInt(numElements.get(i * 4 + 4 + 3).text().toString().replaceAll("\\s", "")));
+                Log.d("winson", "课程：" + course);
                 list.add(course);
             }
             ;

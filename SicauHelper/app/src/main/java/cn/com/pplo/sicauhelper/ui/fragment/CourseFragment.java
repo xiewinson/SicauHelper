@@ -11,6 +11,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -244,12 +245,12 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
             } else if (position == 1) {
                 return "星期二";
             }
-            if (position == 2) {
+            else if (position == 2) {
                 return "星期三";
             } else if (position == 3) {
                 return "星期四";
             }
-            if (position == 4) {
+            else if (position == 4) {
                 return "星期五";
             } else if (position == 5) {
                 return "星期六";
@@ -300,7 +301,32 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
                 for (int i = 0; i < data.size(); i++) {
                     for(Course course : data.get(i)) {
                         if(selectedCourse.getName().equals(course.getName())) {
-                            sendData.add(course);
+                            String timeStr = "";
+                            if (i == 0) {
+                                timeStr = "星期一";
+                            } else if (i == 1) {
+                                timeStr = "星期二";
+                            } else if (i == 2) {
+                                timeStr = "星期三";
+                            } else if (i == 3) {
+                                timeStr = "星期四";
+                            } else if (i == 4) {
+                                timeStr = "星期五";
+                            } else if (i == 5) {
+                                timeStr = "星期六";
+                            } else if (i == 6){
+                                timeStr = "星期天";
+                            }
+                            try {
+                                if(!TextUtils.isEmpty(timeStr)) {
+                                    Course newCourse = course.clone();
+                                    newCourse.setTime(timeStr + " " + newCourse.getTime() + "节");
+                                    sendData.add(newCourse);
+                                }
+                            } catch (CloneNotSupportedException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
                 }
