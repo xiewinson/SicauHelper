@@ -111,6 +111,10 @@
             android:name="cn.com.pplo.sicauhelper.ui.HelpActivity"
             android:label="@string/title_activity_help" >
         </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.CourseActivity"
+            android:label="@string/title_activity_course" >
+        </activity>
     </application>
 
 </manifest>

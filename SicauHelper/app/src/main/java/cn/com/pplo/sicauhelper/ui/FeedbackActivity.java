@@ -118,10 +118,11 @@ public class FeedbackActivity extends BaseActivity {
                 if (isSend) {
                     notifyFeedbackDataChanged(feedbackThread);
                 }
+                UIUtil.dismissProgressDialog(progressDialog);
 
                 if(e == null) {
                     commentEt.setText("");
-                    UIUtil.dismissProgressDialog(progressDialog);
+
                 }
                 else {
                     UIUtil.showShortToast(FeedbackActivity.this, "发送反馈出了点问题，再试试");

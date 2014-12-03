@@ -85,6 +85,9 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void initView() {
+
+
+
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = new NavigationDrawerFragment();
         messageDrawerFragment = new MessageDrawerFragment();

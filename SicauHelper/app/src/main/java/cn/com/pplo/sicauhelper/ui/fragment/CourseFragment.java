@@ -17,11 +17,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
+import cn.com.pplo.sicauhelper.ui.CourseActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.CourseAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
@@ -257,7 +260,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ListView listView = getDateListView(context, data.get(position));
+            ListView listView = getDateListView(context, data.get(position), data);
             if(listView.getAdapter().getCount() < 1) {
                 TextView textView = (TextView) View.inflate(context, R.layout.course_empty_textview, null);
                 container.addView(textView);
@@ -283,11 +286,27 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
      * @param list
      * @return
      */
-    private ListView getDateListView(Context context, List<Course> list) {
+    private ListView getDateListView(final Context context, final List<Course> list, final List<List<Course>> data) {
         ListView listView = new ListView(context);
         listView.setDivider(getResources().getDrawable(android.R.color.transparent));
         listView.setDividerHeight(0);
         listView.setAdapter(new CourseAdapter(context, list));
+        //打开新页面显示课程详情
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Course selectedCourse = list.get(position);
+                List<Course> sendData = new ArrayList<Course>();
+                for (int i = 0; i < data.size(); i++) {
+                    for(Course course : data.get(i)) {
+                        if(selectedCourse.getName().equals(course.getName())) {
+                            sendData.add(course);
+                        }
+                    }
+                }
+                CourseActivity.startCourseActivity(context, sendData);
+            }
+        });
         return listView;
     }
 
