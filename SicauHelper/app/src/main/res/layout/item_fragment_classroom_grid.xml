@@ -43,16 +43,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/classroom_grid_room_tv"
                 android:textSize="14sp"
-                android:gravity="center_vertical"
-                android:layout_width="56dp"
-                android:layout_height="wrap_content" />
-
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="56dp" />
 
         </LinearLayout>
     </LinearLayout>

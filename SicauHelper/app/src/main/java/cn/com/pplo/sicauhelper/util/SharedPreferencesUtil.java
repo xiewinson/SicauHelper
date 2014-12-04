@@ -34,6 +34,11 @@ public class SharedPreferencesUtil {
     public static final String PER_COMMENT_COUNT = "per_comment_count";
 
     /**
+     * 最后一次同步教室时间
+     */
+    public static final String LAST_SYNC_CLASSROMM = "last_sync_classroom";
+
+    /**
      * 以xml保存键值对
      * @param context
      * @param key
@@ -48,6 +53,9 @@ public class SharedPreferencesUtil {
         else if(value instanceof Integer) {
             editor.putInt(key, (Integer) value);
         }
+        else if(value instanceof Long) {
+            editor.putLong(key, (Long) value);
+        }
         editor.apply();
         editor.commit();
     }
@@ -59,6 +67,9 @@ public class SharedPreferencesUtil {
         }
         else if(defaultValue instanceof Integer) {
             return sp.getInt(key, (Integer) defaultValue);
+        }
+        else if(defaultValue instanceof Long) {
+            return sp.getLong(key, (Long) defaultValue);
         }
         else {
             return null;

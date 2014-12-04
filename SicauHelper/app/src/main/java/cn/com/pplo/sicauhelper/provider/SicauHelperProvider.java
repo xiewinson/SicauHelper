@@ -1,13 +1,18 @@
 package cn.com.pplo.sicauhelper.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentValues;
+import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 public class SicauHelperProvider extends ContentProvider {
     public static final String AUTHORITY = "cn.com.pplo.sicauhelper.provider";
@@ -180,7 +185,8 @@ public class SicauHelperProvider extends ContentProvider {
                 return sqliteDatabase.delete(TableContract.TableClassroom.TABLE_NAME, selection, selectionArgs);
             case CODE_STUDENT_ALL:
                 return sqliteDatabase.delete(TableContract.TableUser.TABLE_NAME, selection, selectionArgs);
-
+            case CODE_NEWS_ALL:
+                return sqliteDatabase.delete(TableContract.TableNews.TABLE_NAME, selection, selectionArgs);
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -216,6 +222,18 @@ public class SicauHelperProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
+    }
 
+    @Override
+    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+        SQLiteDatabase db = sqliteOpenHelper.getWritableDatabase();
+        db.beginTransaction();
+        try{
+            ContentProviderResult[]results = super.applyBatch(operations);
+            db.setTransactionSuccessful();
+            return results;
+        }finally {
+            db.endTransaction();
+        }
     }
 }

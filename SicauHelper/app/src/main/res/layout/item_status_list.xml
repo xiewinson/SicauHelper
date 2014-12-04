@@ -10,6 +10,7 @@
     <LinearLayout
         android:id="@+id/all_layout"
         android:clickable="true"
+        android:paddingBottom="16dp"
         android:background="@drawable/btn_white_lightgrey"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -138,8 +139,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="#eeeeee"/>
@@ -151,17 +152,16 @@
             android:drawablePadding="4dp"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
+            android:layout_marginTop="8dp"
             android:id="@+id/status_location_tv"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:maxLines="1"
             android:ellipsize="end"
-            android:layout_marginBottom="16dp"
             android:drawableLeft="@drawable/ic_place_black_18dp"
             android:drawablePadding="4dp"
             android:textSize="12sp"

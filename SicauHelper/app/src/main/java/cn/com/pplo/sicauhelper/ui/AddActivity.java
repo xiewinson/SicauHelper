@@ -375,8 +375,11 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
             @Override
             public void done(AVException e) {
                 if (e == null) {
+                    UIUtil.showShortToast(AddActivity.this, "哇，成功了");
+                    AddActivity.this.finish();
                     Log.d("winson", "上传对象成功");
                 } else {
+                    UIUtil.showShortToast(AddActivity.this, "唉，失败了，再试试");
                     Log.d("winson", "上传对象失败：" + e.getMessage());
                 }
             }
@@ -432,8 +435,11 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
             @Override
             public void done(AVException e) {
                 if (e == null) {
+                    UIUtil.showShortToast(AddActivity.this, "哇，成功了");
+                    AddActivity.this.finish();
                     Log.d("winson", "上传对象成功");
                 } else {
+                    UIUtil.showShortToast(AddActivity.this, "唉，失败了，再试试");
                     Log.d("winson", "上传对象失败：" + e.getMessage());
                 }
             }

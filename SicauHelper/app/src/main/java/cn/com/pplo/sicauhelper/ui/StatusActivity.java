@@ -148,7 +148,7 @@ public class StatusActivity extends BaseActivity {
         footerView.setVisibility(View.GONE);
         listView.addFooterView(footerView);
         listView.setFooterDividersEnabled(false);
-        listView.setHeaderDividersEnabled(true);
+        listView.setHeaderDividersEnabled(false);
         listView.addFooterView(ViewPadding.getActionBarPadding(this, android.R.color.white));
 
         commentAdapter = new CommentAdapter(context, data);
@@ -501,6 +501,11 @@ public class StatusActivity extends BaseActivity {
         commentAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        initStatusData(this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

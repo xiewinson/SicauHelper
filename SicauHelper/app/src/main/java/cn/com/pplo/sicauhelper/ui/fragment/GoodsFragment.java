@@ -223,6 +223,7 @@ public class GoodsFragment extends BaseFragment {
         goodsAdapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();

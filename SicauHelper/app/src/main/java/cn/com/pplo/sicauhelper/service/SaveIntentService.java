@@ -1,12 +1,15 @@
 package cn.com.pplo.sicauhelper.service;
 
 import android.app.IntentService;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.Parcelable;
+import android.os.RemoteException;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -128,6 +132,7 @@ public class SaveIntentService extends IntentService {
         ContentResolver contentResolver = getApplicationContext().getContentResolver();
         contentResolver.delete(Uri.parse(SicauHelperProvider.URI_COURSE_ALL), "", null);
         if (tempList != null && tempList.size() > 0) {
+            ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
             for (int i = 0; i < tempList.size(); i++) {
                 Course course = tempList.get(i);
                 ContentValues values = new ContentValues();
@@ -140,7 +145,16 @@ public class SaveIntentService extends IntentService {
                 values.put(TableContract.TableCourse._TEACHER, course.getTeacher());
                 values.put(TableContract.TableCourse._SCHEDULENUM, course.getScheduleNum());
                 values.put(TableContract.TableCourse._SELECTNUM, course.getSelectedNum());
-                contentResolver.insert(Uri.parse(SicauHelperProvider.URI_COURSE_ALL), values);
+
+                operations.add(ContentProviderOperation.newInsert(Uri.parse(SicauHelperProvider.URI_COURSE_ALL)).withValues(values).build());
+
+                try {
+                    contentResolver.applyBatch(SicauHelperProvider.AUTHORITY, operations);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (OperationApplicationException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -173,6 +187,7 @@ public class SaveIntentService extends IntentService {
 
                     //若数据库不存在该条数据便插入
                     contentResolver.insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
+
                 }
 
 
@@ -189,6 +204,7 @@ public class SaveIntentService extends IntentService {
         if (tempList != null) {
             ContentResolver contentResolver = getApplicationContext().getContentResolver();
             contentResolver.delete(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), "", null);
+            ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
             for (int i = 0; i < tempList.size(); i++) {
                 Score score = tempList.get(i);
                 ContentValues values = new ContentValues();
@@ -198,6 +214,16 @@ public class SaveIntentService extends IntentService {
                 values.put(TableContract.TableScore._GRADE, score.getGrade());
                 values.put(TableContract.TableScore._MARK, score.getMark());
                 contentResolver.insert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), values);
+
+                operations.add(ContentProviderOperation.newInsert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL)).withValues(values).build());
+
+                try {
+                    contentResolver.applyBatch(SicauHelperProvider.AUTHORITY, operations);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (OperationApplicationException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -211,15 +237,23 @@ public class SaveIntentService extends IntentService {
         if (tempList != null) {
             ContentResolver contentResolver = getApplicationContext().getContentResolver();
             contentResolver.delete(Uri.parse(SicauHelperProvider.URI_CLASSROOM_ALL), "", null);
+            ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
             for (int i = 0; i < tempList.size(); i++) {
                 ContentValues values = new ContentValues();
                 Classroom classroom = tempList.get(i);
-                Log.d("winson", "存储时：" + classroom);
                 values.put(TableContract.TableClassroom._TIME, classroom.getTime());
                 values.put(TableContract.TableClassroom._NAME, classroom.getName());
                 values.put(TableContract.TableClassroom._SCHOOL, classroom.getSchool());
-                contentResolver.insert(Uri.parse(SicauHelperProvider.URI_CLASSROOM_ALL), values);
+                operations.add(ContentProviderOperation.newInsert(Uri.parse(SicauHelperProvider.URI_CLASSROOM_ALL)).withValues(values).build());
             }
+            try {
+                contentResolver.applyBatch(SicauHelperProvider.AUTHORITY, operations);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (OperationApplicationException e) {
+                e.printStackTrace();
+            }
+            SharedPreferencesUtil.put(getApplicationContext(), SharedPreferencesUtil.LAST_SYNC_CLASSROMM, System.currentTimeMillis());
         }
     }
 

@@ -27,7 +27,7 @@ public class TimeUtil {
 
         try {
             date = format.parse(time);
-            timeStr = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(date);
+            timeStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -62,5 +62,14 @@ public class TimeUtil {
      */
     public static String dateToChinaTime(Date date) {
         return new java.text.SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").format(date);
+    }
+
+    /**
+     * 时间戳转换为年-月-日
+     * @param time
+     * @return
+     */
+    public static String dateToYMD(long time) {
+        return new java.text.SimpleDateFormat("yyyy-MM-dd").format(new Date(time));
     }
 }

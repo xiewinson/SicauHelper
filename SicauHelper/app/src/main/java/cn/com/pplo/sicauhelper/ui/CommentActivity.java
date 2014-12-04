@@ -72,7 +72,7 @@ public class CommentActivity extends BaseActivity {
         getSupportActionBar().setTitle(title);
 
         listView = (ListView) findViewById(R.id.comment_listView);
-        UIUtil.setActionBarColorBySchool(context, SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL), getSupportActionBar());
+        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.light_blue_500);
 
         //下拉刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.status_swipe_container);

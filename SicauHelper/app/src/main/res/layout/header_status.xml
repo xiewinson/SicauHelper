@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/grey_50"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -126,8 +127,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         />
@@ -139,18 +140,24 @@
         android:drawablePadding="4dp"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
+        android:layout_marginTop="8dp"
         android:id="@+id/status_location_tv"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
         android:drawableLeft="@drawable/ic_place_black_18dp"
         android:drawablePadding="4dp"
         android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <View
+        android:layout_marginTop="16dp"
+        android:background="@color/grey_100"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        />
 </LinearLayout>

@@ -36,7 +36,9 @@ import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.ClassroomAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
+import cn.com.pplo.sicauhelper.util.TimeUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 /**
@@ -95,7 +97,14 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
         progressDialog = UIUtil.getProgressDialog(context, "我算算哪些教室是空的，这个过程是相当的漫长～");
 //        gridView.setAdapter(classroomAdapter);
         UIUtil.setListViewInitAnimation("bottom", gridView, classroomAdapter);
-        getLoaderManager().initLoader(0, null, this);
+
+        Long lastSyncTime = (Long) SharedPreferencesUtil.get(context, SharedPreferencesUtil.LAST_SYNC_CLASSROMM, System.currentTimeMillis() -  24 * 60 * 60 * 1000);
+        if(!TimeUtil.dateToYMD(lastSyncTime).equals(TimeUtil.dateToYMD(System.currentTimeMillis()))) {
+            requestClassroomList(context);
+        }
+        else {
+            getLoaderManager().initLoader(0, null, this);
+        }
     }
 
     /**
