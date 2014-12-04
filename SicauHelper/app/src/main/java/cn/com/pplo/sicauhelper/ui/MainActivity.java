@@ -85,9 +85,6 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void initView() {
-
-
-
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = new NavigationDrawerFragment();
         messageDrawerFragment = new MessageDrawerFragment();
@@ -264,14 +261,22 @@ public class MainActivity extends ActionBarActivity
 
         //点击导航键开启/关闭抽屉
         if(id == android.R.id.home){
+            if(mDrawerLayout.isDrawerOpen(GravityCompat.END)){
+                mDrawerLayout.closeDrawer(GravityCompat.END);
+            }
+
             if(!mDrawerLayout.isDrawerOpen(GravityCompat.START)){
                 mDrawerLayout.openDrawer(GravityCompat.START);
             }
             else {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             }
+
         }
         else if(id == R.id.action_message) {
+            if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
             if(!mDrawerLayout.isDrawerOpen(GravityCompat.END)){
                 mDrawerLayout.openDrawer(GravityCompat.END);
             }

@@ -86,7 +86,7 @@ public class GoodsFragment extends BaseFragment {
     private void setUp(final Context context, View view) {
         //下拉刷新
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.school_market_swipe_container);
-        swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.light_green_500);
+        swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -122,7 +122,7 @@ public class GoodsFragment extends BaseFragment {
                 rippleColor = R.color.orange_400;
                 break;
             case 2:
-                normalColor = R.color.light_green_500;
+                normalColor = R.color.green_500;
                 pressColor = R.color.green_900;
                 rippleColor = R.color.green_400;
                 break;

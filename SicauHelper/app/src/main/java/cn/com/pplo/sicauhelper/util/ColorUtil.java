@@ -21,7 +21,7 @@ public class ColorUtil {
         } else if (school == 1) {
             color = R.color.orange_500;
         } else {
-            color = R.color.light_green_500;
+            color = R.color.green_500;
         }
         return color;
     }

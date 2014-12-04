@@ -272,7 +272,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         } else if (school == 1) {
             color = R.color.orange_500;
         } else {
-            color = R.color.light_green_500;
+            color = R.color.green_500;
         }
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(color));
     }
