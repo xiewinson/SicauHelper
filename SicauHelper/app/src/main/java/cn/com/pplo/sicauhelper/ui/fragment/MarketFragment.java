@@ -103,8 +103,8 @@ public class MarketFragment extends BaseFragment {
                         tabColor = R.color.orange_500;
                         break;
                     case 2:
-                        color = R.color.light_green_500;
-                        tabColor = R.color.light_green_500;
+                        color = R.color.green_500;
+                        tabColor = R.color.green_500;
                         break;
                 }
                 actionBar.setBackgroundDrawable(getResources().getDrawable(color));

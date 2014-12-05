@@ -70,7 +70,7 @@ public class UserStatusActivity extends BaseActivity {
 
         //下拉刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.user_status_swipe_container);
-        swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.light_green_500);
+        swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
