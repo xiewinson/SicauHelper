@@ -84,7 +84,7 @@ public class GoodsFragment extends BaseFragment {
     }
 
     private void setUp(final Context context, View view) {
-        //下拉刷新
+        //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.school_market_swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -113,8 +113,8 @@ public class GoodsFragment extends BaseFragment {
         switch (schoolPosition) {
             case 0:
                 normalColor = R.color.red_500;
-                pressColor = R.color.blue_900;
-                rippleColor = R.color.blue_400;
+                pressColor = R.color.red_900;
+                rippleColor = R.color.red_400;
                 break;
             case 1:
                 normalColor = R.color.orange_500;
@@ -179,7 +179,7 @@ public class GoodsFragment extends BaseFragment {
 //                    listView.setSelection(0);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
-                        UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，下拉刷新试试吧");
+                        UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，刷新试试吧");
                     }
                     Log.d("winson", "出错：" + e.getMessage());
                 }

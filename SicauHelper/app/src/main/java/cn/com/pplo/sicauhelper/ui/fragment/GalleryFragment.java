@@ -2,17 +2,14 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
-import cn.com.pplo.sicauhelper.util.UIUtil;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher.OnMatrixChangedListener;
 import uk.co.senab.photoview.PhotoViewAttacher.OnPhotoTapListener;
 import android.app.Activity;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -82,7 +79,7 @@ public class GalleryFragment extends BaseFragment{
 			}
 		});
 
-        ImageLoader.getInstance().displayImage(url, imageView, ImageUtil.getDisplayImageOption(getActivity()));
+        ImageLoader.getInstance().displayImage(url, imageView, ImageUtil.getDisplayPhotoWhiteOption(getActivity()));
 		imageView.setOnPhotoTapListener(new OnPhotoTapListener() {
 			
 			@Override

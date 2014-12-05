@@ -186,10 +186,7 @@ public class SaveIntentService extends IntentService {
 
                     //若数据库不存在该条数据便插入
                     contentResolver.insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
-
                 }
-
-
             }
         }
     }
@@ -212,7 +209,6 @@ public class SaveIntentService extends IntentService {
                 values.put(TableContract.TableScore._CREDIT, score.getCredit());
                 values.put(TableContract.TableScore._GRADE, score.getGrade());
                 values.put(TableContract.TableScore._MARK, score.getMark());
-                contentResolver.insert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL), values);
                 operations.add(ContentProviderOperation.newInsert(Uri.parse(SicauHelperProvider.URI_SCORE_ALL)).withValues(values).build());
             }
             try {

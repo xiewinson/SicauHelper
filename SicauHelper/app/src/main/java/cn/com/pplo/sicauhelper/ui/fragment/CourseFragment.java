@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,51 +124,6 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         viewPager.setAdapter(viewPagerAdapter);
         pagerSlidingTabStrip.setViewPager(viewPager);
-        pagerSlidingTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-//                ActionBar actionBar = getSupportActionBar(getActivity());
-//                if(actionBar.isShowing() == false){
-//                    actionBar.show();
-//                }
-//                int color = 0;
-//                switch (position){
-//                    case 0:
-//                        color = R.color.green_500;
-//                        break;
-//                    case 1:
-//                        color = R.color.deep_purple_500;
-//                        break;
-//                    case 2:
-//                        color = R.color.red_500;
-//                        break;
-//                    case 3:
-//                        color = R.color.blue_500;
-//                        break;
-//                    case 4:
-//                        color = R.color.teal_500;
-//                        break;
-//                    case 5:
-//                        color = R.color.deep_orange_500;
-//                        break;
-//                    case 6:
-//                        color = R.color.brown_500;
-//                        break;
-//                }
-//                actionBar.setBackgroundDrawable(getResources().getDrawable(color));
-//                setPagerSlidingTabStyle(pagerSlidingTabStrip, color);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
 
         //根据星期几选定课程表
         Calendar calendar = Calendar.getInstance();
@@ -196,6 +152,26 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
                 break;
         }
         viewPager.setCurrentItem(date);
+        final int finalDate = date;
+        pagerSlidingTabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                calendar.add(Calendar.DATE, position - finalDate);
+                getSupportActionBar(getActivity()).setTitle((calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
     @Override

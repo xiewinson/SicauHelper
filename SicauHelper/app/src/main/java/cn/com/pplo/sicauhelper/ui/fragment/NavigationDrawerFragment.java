@@ -21,7 +21,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVUser;
-import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import cn.com.pplo.sicauhelper.R;
@@ -31,9 +30,7 @@ import cn.com.pplo.sicauhelper.ui.FeedbackActivity;
 import cn.com.pplo.sicauhelper.ui.HelpActivity;
 import cn.com.pplo.sicauhelper.ui.SettingActivity;
 import cn.com.pplo.sicauhelper.ui.UserActivity;
-import cn.com.pplo.sicauhelper.util.ColorUtil;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
-import cn.com.pplo.sicauhelper.util.UIUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -77,6 +74,14 @@ public class NavigationDrawerFragment extends BaseFragment {
     public NavigationDrawerFragment() {
     }
 
+    public static NavigationDrawerFragment newInstance(int position) {
+        NavigationDrawerFragment fragment = new NavigationDrawerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(STATE_SELECTED_POSITION, position);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,11 +91,8 @@ public class NavigationDrawerFragment extends BaseFragment {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
-        if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
-        }
-
+        //取得当前选择项
+        mCurrentSelectedPosition = getArguments().getInt(STATE_SELECTED_POSITION);
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
     }
@@ -222,7 +224,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         if (avUser != null) {
             nameTv.setText(avUser.getString(TableContract.TableUser._NAME));
             sidTv.setText(avUser.getString(TableContract.TableUser._SID));
-            ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), profileIv, ImageUtil.getDisplayImageOption(getActivity()));
+            ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), profileIv, ImageUtil.getDisplayProfileOption(getActivity()));
         }
 
         //设置人的背景颜色
@@ -265,12 +267,6 @@ public class NavigationDrawerFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
     @Override

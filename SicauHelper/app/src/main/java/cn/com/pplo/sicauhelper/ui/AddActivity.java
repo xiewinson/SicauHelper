@@ -611,7 +611,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         final View view = View.inflate(context, R.layout.item_goods_add_image, null);
         ImageView goodsIv = (ImageView) view.findViewById(R.id.goods_iv);
         int width = (int) UIUtil.parseDpToPx(context, 200);
-        ImageLoader.getInstance().displayImage(avFile.getThumbnailUrl(true, width, width), goodsIv, ImageUtil.getDisplayImageOption(context));
+        ImageLoader.getInstance().displayImage(avFile.getThumbnailUrl(true, width, width), goodsIv, ImageUtil.getDisplayProfileOption(context));
 
         Button deleteBtn = (Button) view.findViewById(R.id.goods_delete_btn);
         deleteBtn.setOnClickListener(new View.OnClickListener() {
