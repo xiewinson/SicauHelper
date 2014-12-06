@@ -78,5 +78,6 @@
     <string name="q_4">4、“川农圈子”什么话都可以说吗?</string>
     <string name="a_4">请不要说任何违反当地法律法规以及 不 掉节操的话...</string>
     <string name="title_activity_course">CourseActivity</string>
+    <string name="title_activity_map">地图</string>
 
 </resources>

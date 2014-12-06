@@ -115,7 +115,7 @@ public class StatusActivity extends BaseActivity {
 
         UIUtil.setActionBarColor(context,getSupportActionBar(), R.color.light_blue_500);
 
-        //下拉刷新
+        //下拉
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.status_swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -245,7 +245,7 @@ public class StatusActivity extends BaseActivity {
                     avStatus = avObjects.get(0);
                     final AVObject avStudent = avStatus.getAVObject(TableContract.TableStatus._USER);
                     //头像
-                    ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(context));
+                    ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayProfileOption(context));
                     //点击头像打开UserActivity
                     headIv.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -451,7 +451,7 @@ public class StatusActivity extends BaseActivity {
                     notifyDataSetChanged(list, true);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
-                        UIUtil.showShortToast(StatusActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
+                        UIUtil.showShortToast(StatusActivity.this, "你的网络好像有点问题，下拉试试吧");
                     }
                     Log.d("winson", "出错：" + e.getMessage());
                 }
@@ -536,7 +536,7 @@ public class StatusActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //刷新
+        //
         if (id == R.id.action_refresh) {
 
             initStatusData(this);

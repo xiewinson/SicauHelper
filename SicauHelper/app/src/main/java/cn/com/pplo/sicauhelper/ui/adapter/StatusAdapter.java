@@ -17,12 +17,10 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.provider.TableContract;
-import cn.com.pplo.sicauhelper.ui.GalleryActivity;
 import cn.com.pplo.sicauhelper.ui.StatusActivity;
 import cn.com.pplo.sicauhelper.ui.UserActivity;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.TimeUtil;
-import cn.com.pplo.sicauhelper.util.UIUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -79,7 +77,7 @@ public class StatusAdapter extends BaseAdapter {
         final AVObject avstatus = getItem(position);
         final AVObject avStudent = avstatus.getAVObject(TableContract.TableStatus._USER);
         //头像
-        ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayImageOption(context));
+        ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayProfileOption(context));
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
         //时间

@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
@@ -117,7 +118,7 @@ public class GoodsActivity extends BaseActivity {
 
         UIUtil.setActionBarColorBySchool(context, school, getSupportActionBar());
 
-        //下拉刷新
+        //下拉
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.goods_swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -247,7 +248,7 @@ public class GoodsActivity extends BaseActivity {
                     avGoods = avObjects.get(0);
                     final AVObject avStudent = avGoods.getAVObject(TableContract.TableGoods._USER);
                     //头像
-                    ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(context));
+                    ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayProfileOption(context));
                     //点击头像打开UserActivity
                     headIv.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -284,6 +285,14 @@ public class GoodsActivity extends BaseActivity {
                     if(TextUtils.isEmpty(address)) {
                         locationTv.setVisibility(View.GONE);
                     }
+                    //点击locationTv跳转到地图
+                    locationTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AVGeoPoint avGeoPoint = avGoods.getAVGeoPoint("location");
+                            MapActivity.startMapActivity(GoodsActivity.this, avGeoPoint.getLatitude(), avGeoPoint.getLongitude());
+                        }
+                    });
                     //显示图片
                     final List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avGoods);
                     //图片url列表
@@ -451,7 +460,7 @@ public class GoodsActivity extends BaseActivity {
                     notifyDataSetChanged(list, true);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
-                        UIUtil.showShortToast(GoodsActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
+                        UIUtil.showShortToast(GoodsActivity.this, "你的网络好像有点问题，下拉试试吧");
                     }
                     Log.d("winson", "出错：" + e.getMessage());
                 }
@@ -536,7 +545,7 @@ public class GoodsActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //刷新
+        //
         if (id == R.id.action_refresh) {
             initGoodsData(this);
             findNewData(AVQuery.CachePolicy.NETWORK_ONLY, objectId);

@@ -19,8 +19,10 @@
     <color name="blue_500">#5677fc</color>
     <color name="blue_400">#738ffe</color>
 
+    <color name="light_blue_900">#01579b</color>
     <color name="light_blue_700">#0288d1</color>
     <color name="light_blue_500">#03a9f4</color>
+    <color name="light_blue_400">#29b6f6</color>
     <color name="light_blue_200">#81d4fc</color>
     <color name="light_blue_100">#b3e5fc</color>
 

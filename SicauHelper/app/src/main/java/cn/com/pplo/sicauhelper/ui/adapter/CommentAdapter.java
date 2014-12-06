@@ -65,7 +65,7 @@ public class CommentAdapter extends BaseAdapter {
         final AVObject avComment = getItem(position);
         final AVObject avStudent = avComment.getAVObject(TableContract.TableGoodsComment._SEND_USER);
         //头像
-        ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayImageOption(context));
+        ImageLoader.getInstance().displayImage(avStudent.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), holder.headIv, ImageUtil.getDisplayProfileOption(context));
         //点击头像打开UserActivity
         holder.headIv.setOnClickListener(new View.OnClickListener() {
             @Override

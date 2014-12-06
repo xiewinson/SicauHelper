@@ -33,7 +33,6 @@ import cn.com.pplo.sicauhelper.action.StatusAction;
 import cn.com.pplo.sicauhelper.action.UserAction;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
-import cn.com.pplo.sicauhelper.util.ColorUtil;
 import cn.com.pplo.sicauhelper.util.DialogUtil;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -133,7 +132,7 @@ public class UserActivity extends BaseActivity {
         backgroundView.setBackgroundResource(primaryColor);
         schoolTv.setText(getResources().getStringArray(R.array.school)[school] + "校区");
         gradeTv.setText(avUser.getString(TableContract.TableUser._SID).substring(0, 4) + " 级");
-        ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayImageOption(this));
+        ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), headIv, ImageUtil.getDisplayProfileOption(this));
 
         //点击头像显示大图
         headIv.setOnClickListener(new View.OnClickListener() {

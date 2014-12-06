@@ -52,6 +52,17 @@ public class MainActivity extends ActionBarActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private MessageDrawerFragment messageDrawerFragment;
     private DrawerLayout mDrawerLayout;
+    /**
+     * 选择哪个fragment
+     */
+    private int drawerPosition = 0;
+    private int drawerPositionCopy = 0;
+
+    /**
+     * fragment应在哪个位置
+     */
+    public static final String SAVE_DRAWER_POSITION = "save_drawer_position";
+
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -79,14 +90,21 @@ public class MainActivity extends ActionBarActivity
             startActivity(intent);
             this.finish();
         } else {
+            //更新user
             AVUser.getCurrentUser().fetchInBackground(null);
+            if(savedInstanceState != null) {
+                int savedPosition = savedInstanceState.getInt(SAVE_DRAWER_POSITION, 0);
+                drawerPosition = savedPosition;
+                drawerPositionCopy = savedPosition;
+            }
             initView();
         }
     }
 
     private void initView() {
         setContentView(R.layout.activity_main);
-        mNavigationDrawerFragment = new NavigationDrawerFragment();
+        mNavigationDrawerFragment = NavigationDrawerFragment.newInstance(drawerPosition);
+
         messageDrawerFragment = new MessageDrawerFragment();
         mTitle = getTitle();
         // Set up the drawer.
@@ -164,6 +182,7 @@ public class MainActivity extends ActionBarActivity
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 getSupportActionBar().setTitle(mTitle);
+                selectFragment();
             }
 
             @Override
@@ -190,18 +209,15 @@ public class MainActivity extends ActionBarActivity
             }
         });
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        selectFragment();
     }
 
-    public void onSectionAttached(String title) {
-        mTitle = title;
-    }
-
-    //选择不同的导航抽屉item
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
+    /**
+     * 选择drawerPosition所在的fragment
+     */
+    private void selectFragment() {
         Fragment fragment = null;
-        switch (position) {
+        switch (drawerPosition) {
 
             //课程
             case 0:
@@ -227,14 +243,37 @@ public class MainActivity extends ActionBarActivity
             case 5:
                 fragment = StatusFragment.newInstance();
                 break;
+            case -1:
+                return;
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
+
+        drawerPosition = -1;
+    }
+
+    public void onSectionAttached(String title) {
+        mTitle = title;
+    }
+
+    //选择不同的导航抽屉item
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        // update the main content by replacing fragments
+        drawerPosition = position;
+        drawerPositionCopy = position;
+
         if(mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SAVE_DRAWER_POSITION, drawerPositionCopy);
+        super.onSaveInstanceState(outState);
     }
 
     //在每次重新创建菜单时重新调用一次，并在此时更新

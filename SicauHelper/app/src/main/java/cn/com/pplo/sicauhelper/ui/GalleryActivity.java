@@ -59,6 +59,7 @@ public class GalleryActivity extends ActionBarActivity implements GalleryFragmen
 
 		actionBar = getSupportActionBar();
 		actionBar.setBackgroundDrawable(getResources().getDrawable(android.R.color.transparent));
+        actionBar.setElevation(0);
         if(imageUrls.length > 1) {
             actionBar.setTitle((position + 1) + "/" + imageUrls.length);
         }

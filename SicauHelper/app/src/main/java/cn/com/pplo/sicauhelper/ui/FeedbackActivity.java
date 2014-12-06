@@ -231,7 +231,7 @@ public class FeedbackActivity extends BaseActivity {
             holder.wifimoreIv.setImageResource(R.drawable.ic_launcher);
             String url = SicauHelperApplication.getStudent().getAVFile(TableContract.TableUser._PROFILE_URL).getUrl();
             if(!TextUtils.isEmpty(url)) {
-                ImageLoader.getInstance().displayImage(url, holder.userIv, ImageUtil.getDisplayImageOption(context));
+                ImageLoader.getInstance().displayImage(url, holder.userIv, ImageUtil.getDisplayProfileOption(context));
             }
             return convertView;
         }
