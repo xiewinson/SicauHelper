@@ -46,7 +46,7 @@ public class MapActivity extends BaseActivity {
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 必须要写
         init();
-        CameraUpdateFactory.newCameraPosition(new CameraPosition())
+//        CameraUpdateFactory.newCameraPosition(new CameraPosition())
     }
 
     private void setUp() {

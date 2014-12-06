@@ -110,7 +110,7 @@ public class UserActivity extends BaseActivity {
                     initView(list);
                 } else {
                     if (e != null && !e.getMessage().contains("Cache")) {
-                        UIUtil.showShortToast(UserActivity.this, "你的网络好像有点问题，下拉刷新试试吧");
+                        UIUtil.showShortToast(UserActivity.this, "你的网络好像有点问题，刷新试试吧");
                     }
                 }
             }

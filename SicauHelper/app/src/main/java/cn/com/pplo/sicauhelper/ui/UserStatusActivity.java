@@ -68,7 +68,7 @@ public class UserStatusActivity extends BaseActivity {
         getSupportActionBar().setTitle(nickname);
         getSupportActionBar().setSubtitle("帖子列表");
 
-        //下拉
+        //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.user_status_swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -148,7 +148,7 @@ public class UserStatusActivity extends BaseActivity {
 //                    listView.setSelection(0);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
-                        UIUtil.showShortToast(UserStatusActivity.this, "你的网络好像有点问题，下拉试试吧");
+                        UIUtil.showShortToast(UserStatusActivity.this, "你的网络好像有点问题，刷新试试吧");
                     }
                 }
                 if (swipeRefreshLayout.isRefreshing()) {

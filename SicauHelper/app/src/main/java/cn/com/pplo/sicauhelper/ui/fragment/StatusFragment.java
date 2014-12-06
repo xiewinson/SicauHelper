@@ -78,7 +78,7 @@ public class StatusFragment extends BaseFragment {
     }
 
     private void setUp(final Context context, View view) {
-        //下拉
+        //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.status_swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -153,7 +153,7 @@ public class StatusFragment extends BaseFragment {
 //                    listView.setSelection(0);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
-                        UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，下拉试试吧");
+                        UIUtil.showShortToast(getActivity(), "你的网络好像有点问题，刷新试试吧");
                     }
 
                     Log.d("winson", "出错：" + e.getMessage());

@@ -39,6 +39,24 @@ public class TableContract {
     }
 
     /**
+     * 实验课表
+     */
+    public interface TableLabCourse extends BaseColumns{
+
+        String TABLE_NAME = "t_lab_course";
+
+        String _NAME = "_name";
+        String _CATEGORY = "_category";
+        String _CREDIT = "_credit";
+        String _TIME = "_time";
+        String _CLASSROOM = "_classroom";
+        String _WEEK = "_week";
+        String _TEACHER = "_teacher";
+        String _SCHEDULENUM = "_scheduleNum";
+        String _SELECTNUM = "_selectedNum";
+    }
+
+    /**
      * 新闻表
      */
     public interface TableNews extends BaseColumns {

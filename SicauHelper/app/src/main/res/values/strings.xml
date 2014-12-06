@@ -5,6 +5,7 @@
     <string name="title_home">首页</string>
     <string name="title_market">校内市场</string>
     <string name="title_cource">理论课表</string>
+    <string name="title_cource_lab">实验课表</string>
     <string name="title_score">我的成绩</string>
     <string name="title_news">教务新闻</string>
     <string name="title_classroom">空闲教室</string>

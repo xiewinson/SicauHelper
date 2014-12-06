@@ -41,23 +41,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center|left"
-            android:text="5508(1-10周)"
-            android:textColor="#aaaaaa" />
+            android:text="5508"
+             />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <RatingBar
-                android:id="@+id/credit_tv"
-                style="@android:style/Widget.Holo.RatingBar.Small"
+            <TextView
+                android:id="@+id/week_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/score_tv"
-                android:layout_toEndOf="@+id/score_tv"
-                android:layout_toRightOf="@+id/score_tv"
-                android:textSize="18sp" />
+                android:gravity="center|left"
+                android:text="1-10周"
+                 />
         </LinearLayout>
 
     </LinearLayout>

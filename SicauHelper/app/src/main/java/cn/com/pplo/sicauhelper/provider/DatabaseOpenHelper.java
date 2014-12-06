@@ -36,6 +36,20 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + TableContract.TableCourse._SELECTNUM + " integer"
             + ")";
 
+    //创建课程表
+    public static final String createLabCourseSql = "create table " + TableContract.TableLabCourse.TABLE_NAME + "("
+            + TableContract.TableLabCourse._ID + " integer primary key autoincrement, "
+            + TableContract.TableLabCourse._NAME + " text, "
+            + TableContract.TableLabCourse._CATEGORY + " text, "
+            + TableContract.TableLabCourse._CREDIT + " real, "
+            + TableContract.TableLabCourse._TIME + " text, "
+            + TableContract.TableLabCourse._CLASSROOM + " text,"
+            + TableContract.TableLabCourse._WEEK + " text,"
+            + TableContract.TableLabCourse._TEACHER + " text,"
+            + TableContract.TableLabCourse._SCHEDULENUM + " integer,"
+            + TableContract.TableLabCourse._SELECTNUM + " integer"
+            + ")";
+
     //创建新闻表
     public static final String createNewsSql = "create table " + TableContract.TableNews.TABLE_NAME + "("
             + TableContract.TableNews._ID + " integer primary key, "
@@ -80,6 +94,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(createScoreSql);
         db.execSQL(createCourseSql);
+        db.execSQL(createLabCourseSql);
         db.execSQL(createNewsSql);
         db.execSQL(createClassroomSql);
         db.execSQL(createStudentSql);
@@ -90,6 +105,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         String DROP_TABLE = "drop table if exists ";
         db.execSQL(DROP_TABLE + TableContract.TableScore.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableCourse.TABLE_NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableLabCourse.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableNews.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableClassroom.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableUser.TABLE_NAME);

@@ -18,12 +18,15 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Course;
+import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 public class CourseActivity extends BaseActivity {
     public static final String EXTRA_COURSE_LIST = "extra_course_list";
+    public static final String EXTRA_COURSE_TYPE = "extra_course_type";
     private List<Course> data;
     private Course course;
+    private int type;
 
     private TextView nameTv;
     private TextView categoryTv;
@@ -34,8 +37,9 @@ public class CourseActivity extends BaseActivity {
     private RatingBar creditRatingBar;
     private LinearLayout timeLayout;
 
-    public static void startCourseActivity(Context context, List<Course> data) {
+    public static void startCourseActivity(Context context, List<Course> data, int type) {
         Intent intent = new Intent(context, CourseActivity.class);
+        intent.putExtra(EXTRA_COURSE_TYPE, type);
         intent.putParcelableArrayListExtra(EXTRA_COURSE_LIST, (java.util.ArrayList<? extends android.os.Parcelable>) data);
         context.startActivity(intent);
     }
@@ -48,12 +52,12 @@ public class CourseActivity extends BaseActivity {
 
     private void setUp() {
         data = getIntent().getParcelableArrayListExtra(EXTRA_COURSE_LIST);
+        type = getIntent().getIntExtra(EXTRA_COURSE_TYPE, 111);
         if(data != null && data.size() > 0) {
             course = data.get(0);
         }
 
         UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.light_blue_500);
-        getSupportActionBar().setTitle(course.getName());
 
         nameTv = (TextView) findViewById(R.id.course_name_tv);
         categoryTv = (TextView) findViewById(R.id.course_category_tv);
@@ -63,6 +67,19 @@ public class CourseActivity extends BaseActivity {
         actualCountTv = (TextView) findViewById(R.id.course_actual_count_tv);
         creditRatingBar = (RatingBar) findViewById(R.id.credit_ratingbar);
         timeLayout = (LinearLayout) findViewById(R.id.time_layout);
+
+        //若是实验课
+        if(type == CourseFragment.TYPE_COURSE_LAB) {
+            getSupportActionBar().setTitle("实验课");
+            findViewById(R.id.course_category_title_tv).setVisibility(View.GONE);
+            findViewById(R.id.course_category_tv).setVisibility(View.GONE);
+            findViewById(R.id.credit_ratingbar_title).setVisibility(View.GONE);
+            findViewById(R.id.credit_ratingbar).setVisibility(View.GONE);
+            findViewById(R.id.course_count_cardView).setVisibility(View.GONE);
+        }
+        else {
+            getSupportActionBar().setTitle("理论课");
+        }
 
         nameTv.setText(course.getName());
         categoryTv.setText(course.getCategory());

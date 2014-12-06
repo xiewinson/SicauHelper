@@ -11,11 +11,9 @@ import org.jsoup.select.Elements;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +24,6 @@ import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.model.Student;
-import cn.com.pplo.sicauhelper.provider.TableContract;
 
 /**
  * Created by winson on 2014/9/14.
@@ -351,6 +348,11 @@ public class StringUtil {
         }
     }
 
+    /**
+     * 解析实验课表
+     * @param htmlStr
+     * @return
+     */
     public static List<List<Course>> parseLabCourseDateInfo(String htmlStr) {
         List<List<Course>> data = new ArrayList<List<Course>>();
         List<Course> list0 = new ArrayList<Course>();
@@ -380,14 +382,82 @@ public class StringUtil {
                 if(str.contains("-----------")) {
                     String[] courseArray = str.split("-----------");
                     for(int j = 0; j < courseArray.length; j++) {
-                        Course course = new Course();
-//                        course.setTim
+                        parseAndAddCourse(courseArray[j], i, list0, list1, list2, list3, list4, list5, list6);
                     }
+                }
+                else {
+                    parseAndAddCourse(str, i, list0, list1, list2, list3, list4, list5, list6);
                 }
             }
         }
-        Log.d("winson", "结果：" + courseList);
+        Collections.sort(list0);
+        Collections.sort(list1);
+        Collections.sort(list2);
+        Collections.sort(list3);
+        Collections.sort(list4);
+        Collections.sort(list5);
+        Collections.sort(list6);
+        data.add(list0);
+        data.add(list1);
+        data.add(list2);
+        data.add(list3);
+        data.add(list4);
+        data.add(list5);
+        data.add(list6);
         return data;
+    }
+
+    /**
+     * 解析单独实验课表和添加数据到相关list，自用不公开
+     * @param htmlStr
+     */
+    private static void parseAndAddCourse(String htmlStr, int i, List<Course> list0, List<Course> list1, List<Course> list2, List<Course> list3, List<Course> list4, List<Course> list5, List<Course> list6) {
+        Course course = new Course();
+        if(htmlStr.startsWith("<br/>")) {
+            htmlStr = htmlStr.substring(5);
+        }
+        String[] array = htmlStr.split("<br/>");
+        //课程名
+        course.setName(array[0].replaceAll("&nbsp;", "").replaceAll("[0-9]{5,10}", ""));
+        //教室
+        course.setClassroom(array[1].replace("都江堰校区:", "").replace("成都校区:", "").replace("雅安校区:", ""));
+        //周次
+        course.setWeek(array[2]);
+        //时间
+        course.setTime(array[3].replace("节", ""));
+        //老师
+        course.setTeacher(array[4].replace("教师:", ""));
+        Log.d("winson", "结果：" + i  + " "+ course);
+        switch ((i + 1)%7) {
+            case 1:
+                course.setCategory(0 + "");
+                list0.add(course);
+                break;
+            case 2:
+                course.setCategory(1 + "");
+                list1.add(course);
+                break;
+            case 3:
+                course.setCategory(2 + "");
+                list2.add(course);
+                break;
+            case 4:
+                course.setCategory(3 + "");
+                list3.add(course);
+                break;
+            case 5:
+                course.setCategory(4 + "");
+                list4.add(course);
+                break;
+            case 6:
+                course.setCategory(5 + "");
+                list5.add(course);
+                break;
+            case 0:
+                course.setCategory(6 + "");
+                list6.add(course);
+                break;
+        }
     }
 
     /**

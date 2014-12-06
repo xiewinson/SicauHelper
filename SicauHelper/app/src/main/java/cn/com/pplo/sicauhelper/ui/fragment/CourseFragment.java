@@ -49,13 +49,21 @@ import cn.com.pplo.sicauhelper.widget.ZoomOutPageTransformer;
 
 public class CourseFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final int TYPE_COURSE_THEORY = 111;
+    public static final int TYPE_COURSE_LAB = 222;
+    public static final String TYPE_COURSE = "courseType";
+    private int type = 0;
+
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private AlertDialog progressDialog;
 
-    public static CourseFragment newInstance() {
+    public static CourseFragment newInstance(int type) {
         CourseFragment fragment = new CourseFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(TYPE_COURSE, type);
+        fragment.setArguments(bundle);
         return fragment;
     }
 
@@ -65,23 +73,19 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
     @Override
     public void onAttach(Activity activity) {
-        ((MainActivity) activity).onSectionAttached("课程表");
         super.onAttach(activity);
+        type = getArguments().getInt(TYPE_COURSE);
+        if(type == TYPE_COURSE_THEORY) {
+            ((MainActivity) activity).onSectionAttached("理论课表");
+        }
+        else if(type == TYPE_COURSE_LAB) {
+            ((MainActivity) activity).onSectionAttached("实验课表");
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("user", SharedPreferencesUtil.get(getActivity(), SharedPreferencesUtil.LOGIN_SID, "").toString());
-        params.put("pwd", SharedPreferencesUtil.get(getActivity(), SharedPreferencesUtil.LOGIN_PSWD, "").toString());
-        params.put("lb", "S");
-        NetUtil.getLabCourseHtmlStr(getActivity(), params, new NetUtil.NetCallback(getActivity()) {
-            @Override
-            protected void onSuccess(String result) {
-                StringUtil.parseLabCourseDateInfo(result);
-            }
-        });
     }
 
     @Override
@@ -277,7 +281,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         ListView listView = new ListView(context);
         listView.setDivider(getResources().getDrawable(android.R.color.transparent));
         listView.setDividerHeight(0);
-        listView.setAdapter(new CourseAdapter(context, list));
+        listView.setAdapter(new CourseAdapter(context, list, type));
         //打开新页面显示课程详情
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -316,7 +320,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
                         }
                     }
                 }
-                CourseActivity.startCourseActivity(context, sendData);
+                CourseActivity.startCourseActivity(context, sendData, type);
             }
         });
         return listView;
@@ -324,14 +328,25 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_COURSE_ALL), null, null, null, null);
+        if(type == TYPE_COURSE_THEORY) {
+            return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_COURSE_ALL), null, null, null, null);
+        }
+        else {
+            return new CursorLoader(getActivity(), Uri.parse(SicauHelperProvider.URI_LAB_COURSE_ALL), null, null, null, null);
+        }
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 
         if (cursor != null && cursor.getCount() > 0) {
-            List<List<Course>> data = CursorUtil.parseCourseList(cursor);
+            List<List<Course>> data = null;
+            if(type == TYPE_COURSE_THEORY) {
+                data = CursorUtil.parseCourseList(cursor);
+            }
+            else {
+                data = CursorUtil.parseLabCourseList(cursor);
+            }
             initViewPager(getActivity(), data);
         } else {
             requestCourseList(getActivity());
@@ -346,21 +361,49 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         params.put("user", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString());
         params.put("pwd", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_PSWD, "").toString());
         params.put("lb", "S");
-        NetUtil.getCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
-            @Override
-            public void onSuccess(String result) {
-                final List<Course> tempList = StringUtil.parseCourseInfo(result);
-                initViewPager(context, StringUtil.parseCourseDateInfo(tempList));
-                UIUtil.dismissProgressDialog(progressDialog);
-                SaveIntentService.startActionCourseAll(context, tempList);
-            }
 
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                UIUtil.dismissProgressDialog(progressDialog);
-                super.onErrorResponse(volleyError);
-            }
-        });
+        if(type == TYPE_COURSE_THEORY) {
+            NetUtil.getCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
+                @Override
+                public void onSuccess(String result) {
+                    final List<Course> tempList = StringUtil.parseCourseInfo(result);
+                    initViewPager(context, StringUtil.parseCourseDateInfo(tempList));
+                    UIUtil.dismissProgressDialog(progressDialog);
+                    SaveIntentService.startActionCourseAll(context, tempList);
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    UIUtil.dismissProgressDialog(progressDialog);
+                    super.onErrorResponse(volleyError);
+                }
+            });
+        }
+        else if(type == TYPE_COURSE_LAB) {
+            NetUtil.getLabCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
+                @Override
+                public void onSuccess(String result) {
+                    final List<List<Course>> tempList = StringUtil.parseLabCourseDateInfo(result);
+                    initViewPager(context, tempList);
+                    UIUtil.dismissProgressDialog(progressDialog);
+                    //存储
+                    List<Course> saveList = new ArrayList<Course>();
+                    for(List<Course> date : tempList) {
+                        for (Course course : date) {
+                            saveList.add(course);
+                        }
+                    }
+                    SaveIntentService.startActionLabCourseAll(context, saveList);
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    UIUtil.dismissProgressDialog(progressDialog);
+                    super.onErrorResponse(volleyError);
+                }
+            });
+        }
+
     }
 
     @Override

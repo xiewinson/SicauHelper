@@ -62,6 +62,15 @@ public class SicauHelperProvider extends ContentProvider {
     private static final int CODE_STUDENT_ALL = 100;
     public static final String URI_STUDENT_ALL = "content://" + AUTHORITY + "/" + STUDENT_ALL + "";
 
+    //Course
+    private static final String LAB_COURSE_SINGLE = "lab_course/#";
+    private static final int CODE_LAB_COURSE_SINGLE = 110;
+    public static final String URI_LAB_COURSE_SINGLE = "content://" + AUTHORITY + "/" + LAB_COURSE_SINGLE;
+
+    private static final String LAB_COURSE_ALL = "lab_course";
+    private static final int CODE_LAB_COURSE_ALL = 120;
+    public static final String URI_LAB_COURSE_ALL = "content://" + AUTHORITY + "/" + LAB_COURSE_ALL + "";
+
 
     static {
         uriMatcher.addURI(AUTHORITY, SCORE_ALL, CODE_SCORE_ALL);
@@ -69,6 +78,9 @@ public class SicauHelperProvider extends ContentProvider {
 
         uriMatcher.addURI(AUTHORITY, COURSE_ALL, CODE_COURSE_ALL);
         uriMatcher.addURI(AUTHORITY, COURSE_SINGLE, CODE_COURSE_SINGLE);
+
+        uriMatcher.addURI(AUTHORITY, LAB_COURSE_ALL, CODE_LAB_COURSE_ALL);
+        uriMatcher.addURI(AUTHORITY, LAB_COURSE_SINGLE, CODE_LAB_COURSE_SINGLE);
 
         uriMatcher.addURI(AUTHORITY, NEWS_ALL, CODE_NEWS_ALL);
         uriMatcher.addURI(AUTHORITY, NEWS_SINGLE, CODE_NEWS_SINGLE);
@@ -110,6 +122,10 @@ public class SicauHelperProvider extends ContentProvider {
                 long courseAllId = sqliteDatabase.insert(TableContract.TableCourse.TABLE_NAME, null, values);
                 return Uri.withAppendedPath(uri, courseAllId + "");
 
+            case CODE_LAB_COURSE_ALL:
+                long labCourseAllId = sqliteDatabase.insert(TableContract.TableLabCourse.TABLE_NAME, null, values);
+                return Uri.withAppendedPath(uri, labCourseAllId + "");
+
             case CODE_NEWS_ALL:
                 long newsAllId = sqliteDatabase.insert(TableContract.TableNews.TABLE_NAME, null, values);
                 return Uri.withAppendedPath(uri, newsAllId + "");
@@ -143,6 +159,12 @@ public class SicauHelperProvider extends ContentProvider {
                 Cursor  courseAllCursor = sqliteDatabase.query(TableContract.TableCourse.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
                 return courseAllCursor;
             case CODE_COURSE_SINGLE:
+                return null;
+
+            case CODE_LAB_COURSE_ALL:
+                Cursor  labCourseAllCursor = sqliteDatabase.query(TableContract.TableLabCourse.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+                return labCourseAllCursor;
+            case CODE_LAB_COURSE_SINGLE:
                 return null;
 
             case CODE_NEWS_ALL:
@@ -181,6 +203,8 @@ public class SicauHelperProvider extends ContentProvider {
                 return 0;
             case CODE_COURSE_ALL:
                 return sqliteDatabase.delete(TableContract.TableCourse.TABLE_NAME, selection, selectionArgs);
+            case CODE_LAB_COURSE_ALL:
+                return sqliteDatabase.delete(TableContract.TableLabCourse.TABLE_NAME, selection, selectionArgs);
             case CODE_CLASSROOM_ALL:
                 return sqliteDatabase.delete(TableContract.TableClassroom.TABLE_NAME, selection, selectionArgs);
             case CODE_STUDENT_ALL:

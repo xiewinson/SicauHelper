@@ -74,7 +74,7 @@ public class CommentActivity extends BaseActivity {
         listView = (ListView) findViewById(R.id.comment_listView);
         UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.light_blue_500);
 
-        //下拉
+        //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.status_swipe_container);
         swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -169,7 +169,7 @@ public class CommentActivity extends BaseActivity {
 //                    listView.setSelection(0);
                 } else {
                     if (!e.getMessage().contains("Cache")) {
-                        UIUtil.showShortToast(CommentActivity.this, "你的网络好像有点问题，下拉试试吧");
+                        UIUtil.showShortToast(CommentActivity.this, "你的网络好像有点问题，刷新试试吧");
                     }
                     Log.d("winson", "出错：" + e.getMessage());
                 }

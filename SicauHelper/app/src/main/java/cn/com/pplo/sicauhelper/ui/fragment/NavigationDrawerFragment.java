@@ -129,6 +129,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         });
         final int[] icons = {
                 R.drawable.ic_event_grey600_24dp,
+                R.drawable.ic_desktop_windows_grey600_24dp,
                 R.drawable.ic_school_grey600_24dp,
                 R.drawable.ic_whatshot_grey600_24dp,
                 R.drawable.ic_location_city_grey600_24dp,
@@ -137,6 +138,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         };
         final String[] titles = {
                 getString(R.string.title_cource),
+                getString(R.string.title_cource_lab),
                 getString(R.string.title_score),
                 getString(R.string.title_news),
                 getString(R.string.title_classroom),
