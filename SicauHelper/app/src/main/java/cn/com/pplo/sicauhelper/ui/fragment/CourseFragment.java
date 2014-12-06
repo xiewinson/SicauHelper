@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,7 +71,16 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user", SharedPreferencesUtil.get(getActivity(), SharedPreferencesUtil.LOGIN_SID, "").toString());
+        params.put("pwd", SharedPreferencesUtil.get(getActivity(), SharedPreferencesUtil.LOGIN_PSWD, "").toString());
+        params.put("lb", "S");
+        NetUtil.getLabCourseHtmlStr(getActivity(), params, new NetUtil.NetCallback(getActivity()) {
+            @Override
+            protected void onSuccess(String result) {
+                StringUtil.parseLabCourseDateInfo(result);
+            }
+        });
     }
 
     @Override

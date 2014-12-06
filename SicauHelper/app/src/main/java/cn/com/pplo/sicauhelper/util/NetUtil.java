@@ -241,6 +241,36 @@ public class NetUtil {
     }
 
     /**
+     * 获取实验课表
+     * @param context
+     * @param params
+     * @param callback
+     */
+    public static void getLabCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback) {
+        login(context, params, new NetCallback(context) {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                callback.onErrorResponse(volleyError);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    Map<String, String> headerMap = new HashMap<String, String>();
+                    headerMap.put("Cookie", cookie);
+                    headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
+                    headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                    getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_LAB_COURSE, headerMap, null, callback);
+                } catch (Exception e) {
+                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
+                }
+            }
+        });
+        clearCookie();
+    }
+
+    /**
      * 获取课程表
      * @param context
      * @param params

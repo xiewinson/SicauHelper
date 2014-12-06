@@ -293,9 +293,9 @@ public class StringUtil {
 //            }
 
             Elements numElements = document.select("td[width=50]");
-            for (int i = 0; i < numElements.size(); i++) {
-                Log.d("winson", "编号：" + i + "_____人数：" + numElements.get(i).text().trim());
-            }
+//            for (int i = 0; i < numElements.size(); i++) {
+//                Log.d("winson", "编号：" + i + "_____人数：" + numElements.get(i).text().trim());
+//            }
 
             Log.d("winson", "-------------------------------------------------------------------");
 
@@ -339,7 +339,6 @@ public class StringUtil {
                 course.setScheduleNum(Integer.parseInt(numElements.get(i * 4 + 4 + 2).text().toString().replaceAll("\\s", "")));
                 //添加实际人数
                 course.setSelectedNum(Integer.parseInt(numElements.get(i * 4 + 4 + 3).text().toString().replaceAll("\\s", "")));
-                Log.d("winson", "课程：" + course);
                 list.add(course);
             }
             ;
@@ -352,6 +351,44 @@ public class StringUtil {
         }
     }
 
+    public static List<List<Course>> parseLabCourseDateInfo(String htmlStr) {
+        List<List<Course>> data = new ArrayList<List<Course>>();
+        List<Course> list0 = new ArrayList<Course>();
+        List<Course> list1 = new ArrayList<Course>();
+        List<Course> list2 = new ArrayList<Course>();
+        List<Course> list3 = new ArrayList<Course>();
+        List<Course> list4 = new ArrayList<Course>();
+        List<Course> list5 = new ArrayList<Course>();
+        List<Course> list6 = new ArrayList<Course>();
+
+        Document document = Jsoup.parse(htmlStr);
+        Elements rootElements = document.select("table[width=750]");
+        Elements courseElements = rootElements.select("td");
+        List<String> courseList = new ArrayList<String>();
+        for(Element element : courseElements) {
+            String str = element.html();
+            if(str.equals("时间") || str.equals("一") || str.equals("二") || str.equals("三") || str.equals("四") || str.equals("五") || str.equals("上午") ||
+                    str.equals("下午") || str.equals("晚上") || str.equals("星期一") || str.equals("星期二") || str.equals("星期三") ||
+            str.equals("星期四") ||  str.equals("星期五")  || str.equals("星期六")  || str.equals("星期日") ) {
+                continue;
+            }
+            courseList.add(str.replaceAll("\\s", ""));
+        }
+        for(int i = 0; i < courseList.size(); i++) {
+            String str = courseList.get(i);
+            if(!str.equals("&nbsp;")) {
+                if(str.contains("-----------")) {
+                    String[] courseArray = str.split("-----------");
+                    for(int j = 0; j < courseArray.length; j++) {
+                        Course course = new Course();
+//                        course.setTim
+                    }
+                }
+            }
+        }
+        Log.d("winson", "结果：" + courseList);
+        return data;
+    }
 
     /**
      * 解析得出每日的课程列表
