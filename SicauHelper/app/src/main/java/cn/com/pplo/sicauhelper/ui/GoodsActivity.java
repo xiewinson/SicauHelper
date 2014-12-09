@@ -290,7 +290,7 @@ public class GoodsActivity extends BaseActivity {
                         @Override
                         public void onClick(View v) {
                             AVGeoPoint avGeoPoint = avGoods.getAVGeoPoint("location");
-                            MapActivity.startMapActivity(GoodsActivity.this, avGeoPoint.getLatitude(), avGeoPoint.getLongitude());
+                            MapActivity.startMapActivity(GoodsActivity.this, avGeoPoint.getLatitude(), avGeoPoint.getLongitude(), avStudent.getString(TableContract.TableUser._NICKNAME));
                         }
                     });
                     //显示图片

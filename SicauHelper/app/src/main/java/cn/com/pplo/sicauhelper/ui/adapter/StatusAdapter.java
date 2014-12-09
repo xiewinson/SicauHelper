@@ -100,6 +100,10 @@ public class StatusAdapter extends BaseAdapter {
         if(TextUtils.isEmpty(address)) {
             holder.locationTv.setVisibility(View.GONE);
         }
+        else {
+            holder.locationTv.setVisibility(View.VISIBLE);
+        }
+        
         //显示图片
         List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avstatus);
         //图片url列表

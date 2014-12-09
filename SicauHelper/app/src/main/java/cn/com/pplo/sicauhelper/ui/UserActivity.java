@@ -151,7 +151,7 @@ public class UserActivity extends BaseActivity {
             @Override
             public void done(int count, AVException e) {
                 if (e != null && !e.getMessage().contains("Cache")) {
-                    UIUtil.showShortToast(UserActivity.this, "臣未算出此人所发帖子之数");
+//                    UIUtil.showShortToast(UserActivity.this, "臣未算出此人所发帖子之数");
                 } else {
                     statusCountTv.setText("圈子数量 " + count);
                     statusCountTv.setVisibility(View.VISIBLE);
@@ -165,7 +165,7 @@ public class UserActivity extends BaseActivity {
             @Override
             public void done(int count, AVException e) {
                 if (e != null && !e.getMessage().contains("Cache")) {
-                    UIUtil.showShortToast(UserActivity.this, "臣未算出此人所发商品之数");
+//                    UIUtil.showShortToast(UserActivity.this, "臣未算出此人所发商品之数");
                 } else {
                     goodsCountTv.setText("商品数量 " + count);
                     goodsCountTv.setVisibility(View.VISIBLE);

@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVGeoPoint;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
@@ -282,6 +283,14 @@ public class StatusActivity extends BaseActivity {
                     if(TextUtils.isEmpty(address)) {
                         locationTv.setVisibility(View.GONE);
                     }
+                    //点击locationTv跳转到地图
+                    locationTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AVGeoPoint avGeoPoint = avStatus.getAVGeoPoint("location");
+                            MapActivity.startMapActivity(StatusActivity.this, avGeoPoint.getLatitude(), avGeoPoint.getLongitude(), avStudent.getString(TableContract.TableUser._NICKNAME));
+                        }
+                    });
                     //显示图片
                     final List<AVFile> imageList = ImageUtil.getAVFileListByAVObject(avStatus);
                     //图片url列表

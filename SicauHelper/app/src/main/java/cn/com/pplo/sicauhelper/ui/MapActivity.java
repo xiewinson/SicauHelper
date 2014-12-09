@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +12,12 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptor;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -20,17 +26,20 @@ public class MapActivity extends BaseActivity {
 
     public static final String EXTRA_LATITUDE = "latitude";
     public static final String EXTRA_LONGITUDE = "longitude";
+    public static final String EXTRA_NAME = "name";
 
+    private String name;
     private double latitude = 0d;
     private double longitude = 0d;
 
     private MapView mapView;
     private AMap aMap;
 
-    public static void startMapActivity (Context context, double latitude, double longitude) {
+    public static void startMapActivity (Context context, double latitude, double longitude, String name) {
         Intent intent = new Intent(context, MapActivity.class);
         intent.putExtra(EXTRA_LATITUDE, latitude);
         intent.putExtra(EXTRA_LONGITUDE, longitude);
+        intent.putExtra(EXTRA_NAME, name);
         context.startActivity(intent);
     }
 
@@ -41,12 +50,23 @@ public class MapActivity extends BaseActivity {
 
         latitude = getIntent().getDoubleExtra(EXTRA_LATITUDE, 0d);
         longitude = getIntent().getDoubleExtra(EXTRA_LONGITUDE, 0d);
+        name = getIntent().getStringExtra(EXTRA_NAME);
 
         UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.light_blue_500);
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 必须要写
         init();
-//        CameraUpdateFactory.newCameraPosition(new CameraPosition())
+        //移到指定位置
+        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 17));
+        MarkerOptions markerOptions = new MarkerOptions();
+        //标记的位置
+        markerOptions.position(new LatLng(latitude, longitude));
+        //标记的标题
+        markerOptions.title(name + " 所在地");
+        Marker marker = aMap.addMarker(markerOptions);
+        //显示标记
+        marker.showInfoWindow();
+
     }
 
     private void setUp() {

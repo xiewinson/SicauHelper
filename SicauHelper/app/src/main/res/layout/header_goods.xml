@@ -149,6 +149,7 @@
         android:id="@+id/goods_location_tv"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:textColor="@color/blue_blue"
         android:drawableLeft="@drawable/ic_place_black_18dp"
         android:drawablePadding="4dp"
         android:textSize="12sp"

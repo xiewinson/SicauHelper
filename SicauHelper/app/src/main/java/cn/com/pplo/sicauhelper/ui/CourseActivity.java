@@ -76,15 +76,16 @@ public class CourseActivity extends BaseActivity {
             findViewById(R.id.credit_ratingbar_title).setVisibility(View.GONE);
             findViewById(R.id.credit_ratingbar).setVisibility(View.GONE);
             findViewById(R.id.course_count_cardView).setVisibility(View.GONE);
+            weekTv.setText(course.getWeek());
         }
         else {
             getSupportActionBar().setTitle("理论课");
+            weekTv.setText(course.getWeek() + "周");
         }
 
         nameTv.setText(course.getName());
         categoryTv.setText(course.getCategory());
         teacherTv.setText(course.getTeacher());
-        weekTv.setText(course.getWeek() + "周");
         schedualCountTv.setText(course.getScheduleNum() + " 人");
         actualCountTv.setText(course.getSelectedNum() + " 人");
 

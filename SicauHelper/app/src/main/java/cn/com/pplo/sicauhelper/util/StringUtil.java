@@ -143,18 +143,19 @@ public class StringUtil {
                 try {
                     Document document = Jsoup.parse(params[0]);
                     Elements courseElements = document.select("td[width=20%] > font");
-                    for (Element e : courseElements) {
-                        Log.d("winson", e.text());
-                    }
                     Elements elements = document.select("td[width=5%] > font");
                     for (int i = 0; i < courseElements.size(); i++) {
                         Score score = new Score();
                         score.setId(i + 1);
+                        //课程名
                         score.setCourse(courseElements.get(i).text());
+                        //分数
                         score.setMark(elements.get(i * 5 + 6 + 0).text());
+                        //学分
                         score.setCredit(Float.parseFloat(elements.get(i * 5 + 6 + 1).text()));
+                        //课程性质
                         score.setCategory(elements.get(i * 5 + 6 + 2).text());
-//                score.setYear(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()));
+                        //学期
                         score.setGrade(Float.parseFloat(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()) + "." + Integer.parseInt(elements.get(i * 5 + 6 + 4).text())));
                         scores.add(score);
                     }

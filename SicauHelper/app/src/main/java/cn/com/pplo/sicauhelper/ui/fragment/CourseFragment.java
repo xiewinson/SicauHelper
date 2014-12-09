@@ -175,10 +175,10 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
             @Override
             public void onPageSelected(int position) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(new Date());
-                calendar.add(Calendar.DATE, position - finalDate);
-                getSupportActionBar(getActivity()).setTitle((calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日");
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.setTime(new Date());
+//                calendar.add(Calendar.DATE, position - finalDate);
+//                getSupportActionBar(getActivity()).setTitle((calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日");
             }
 
             @Override
@@ -254,6 +254,12 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
             ListView listView = getDateListView(context, data.get(position), data);
             if(listView.getAdapter().getCount() < 1) {
                 TextView textView = (TextView) View.inflate(context, R.layout.course_empty_textview, null);
+                if(type == TYPE_COURSE_THEORY) {
+                    textView.setText("这天你没有理论课");
+                }
+                else {
+                    textView.setText("这天你没有实验课");
+                }
                 container.addView(textView);
                 return textView;
             }
