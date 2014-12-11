@@ -6,11 +6,11 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.avos.avoscloud.AVOSCloud;
-import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVUser;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import cn.com.pplo.sicauhelper.leancloud.AVStudent;
 import cn.com.pplo.sicauhelper.model.Student;
-import cn.com.pplo.sicauhelper.util.SQLiteUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
 /**
@@ -18,16 +18,20 @@ import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
  */
 public class SicauHelperApplication extends Application {
     private static RequestQueue requestQueue;
-    private static Student student;
+    private static AVUser student;
     private static SicauHelperApplication sicauHelperApplication;
     private static Object lockObj = new Object();
 
     @Override
     public void onCreate() {
         super.onCreate();
-        AVObject.registerSubclass(AVStudent.class);
+
         AVOSCloud.initialize(getApplicationContext(), "gu8z4el96hz1rkljtsiytkatoxtjesia6fl2aoliahdfczku", "1vbe06cd1u430vjzz0t8s6wfyk6t3kimesc85mtplln69p5z");
         sicauHelperApplication = getInstance();
+        //初始化ImageLoader配置
+        ImageLoaderConfiguration cofig = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+        ImageLoader.getInstance().init(cofig);
+        student = AVUser.getCurrentUser();
     }
 
     public SicauHelperApplication() {
@@ -61,14 +65,24 @@ public class SicauHelperApplication extends Application {
         return requestQueue;
     }
 
-    public static Student getStudent(Context context) {
+    /**
+     * 取得登录Student对象，若为null则重新取得
+     * @return
+     */
+    public static AVUser getStudent() {
         if(student == null) {
-            setStudent(SQLiteUtil.getLoginStudent(context, SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString()));
+            student = AVUser.getCurrentUser();
+        }
+        if(student != null) {
+            student.fetchInBackground(null);
         }
         return student;
     }
 
-    public static void setStudent(Student student) {
-        SicauHelperApplication.student = student;
+    /**
+     * 设置其为
+     */
+    public static void clearStudent() {
+        student = null;
     }
 }

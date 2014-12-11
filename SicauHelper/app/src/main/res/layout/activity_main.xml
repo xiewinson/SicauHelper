@@ -9,6 +9,7 @@
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
     <FrameLayout
+        android:animateLayoutChanges="true"
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -30,5 +31,14 @@
         android:orientation="vertical" />
         <!--android:name="cn.com.pplo.sicauhelper.ui.fragment.NavigationDrawerFragment"-->
         <!--tools:layout="@layout/fragment_navigation_drawer" />-->
+
+    <FrameLayout
+        android:background="#ffffff"
+        android:paddingTop="?actionBarSize"
+        android:id="@+id/message_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="vertical" />
 
 </android.support.v4.widget.DrawerLayout>

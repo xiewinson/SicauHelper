@@ -6,6 +6,7 @@ package cn.com.pplo.sicauhelper.model;
 public class Student {
     private long id;
     private String sid;
+    private String objectId;
     private String name;
     private String nickName;
     private String pswd;
@@ -13,6 +14,8 @@ public class Student {
     private int role;
     private String profileUrl;
     private String background;
+    private String createdAt;
+    private String updatedAt;
 
     public long getId() {
         return id;
@@ -28,6 +31,14 @@ public class Student {
 
     public void setSid(String sid) {
         this.sid = sid;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     public String getName() {
@@ -86,11 +97,28 @@ public class Student {
         this.background = background;
     }
 
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
                 "id=" + id +
-                ", sid=" + sid +
+                ", sid='" + sid + '\'' +
+                ", objectId='" + objectId + '\'' +
                 ", name='" + name + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", pswd='" + pswd + '\'' +
@@ -98,6 +126,8 @@ public class Student {
                 ", role=" + role +
                 ", profileUrl='" + profileUrl + '\'' +
                 ", background='" + background + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
                 '}';
     }
 }

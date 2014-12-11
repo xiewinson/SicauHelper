@@ -11,11 +11,9 @@ import org.jsoup.select.Elements;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +24,6 @@ import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.model.Student;
-import cn.com.pplo.sicauhelper.provider.TableContract;
 
 /**
  * Created by winson on 2014/9/14.
@@ -146,18 +143,19 @@ public class StringUtil {
                 try {
                     Document document = Jsoup.parse(params[0]);
                     Elements courseElements = document.select("td[width=20%] > font");
-                    for (Element e : courseElements) {
-                        Log.d("winson", e.text());
-                    }
                     Elements elements = document.select("td[width=5%] > font");
                     for (int i = 0; i < courseElements.size(); i++) {
                         Score score = new Score();
                         score.setId(i + 1);
+                        //课程名
                         score.setCourse(courseElements.get(i).text());
+                        //分数
                         score.setMark(elements.get(i * 5 + 6 + 0).text());
+                        //学分
                         score.setCredit(Float.parseFloat(elements.get(i * 5 + 6 + 1).text()));
+                        //课程性质
                         score.setCategory(elements.get(i * 5 + 6 + 2).text());
-//                score.setYear(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()));
+                        //学期
                         score.setGrade(Float.parseFloat(Integer.parseInt(elements.get(i * 5 + 6 + 3).text()) + "." + Integer.parseInt(elements.get(i * 5 + 6 + 4).text())));
                         scores.add(score);
                     }
@@ -338,8 +336,7 @@ public class StringUtil {
                 //添加计划人数
                 course.setScheduleNum(Integer.parseInt(numElements.get(i * 4 + 4 + 2).text().toString().replaceAll("\\s", "")));
                 //添加实际人数
-                course.setScheduleNum(Integer.parseInt(numElements.get(i * 4 + 4 + 3).text().toString().replaceAll("\\s", "")));
-
+                course.setSelectedNum(Integer.parseInt(numElements.get(i * 4 + 4 + 3).text().toString().replaceAll("\\s", "")));
                 list.add(course);
             }
             ;
@@ -352,6 +349,117 @@ public class StringUtil {
         }
     }
 
+    /**
+     * 解析实验课表
+     * @param htmlStr
+     * @return
+     */
+    public static List<List<Course>> parseLabCourseDateInfo(String htmlStr) {
+        List<List<Course>> data = new ArrayList<List<Course>>();
+        List<Course> list0 = new ArrayList<Course>();
+        List<Course> list1 = new ArrayList<Course>();
+        List<Course> list2 = new ArrayList<Course>();
+        List<Course> list3 = new ArrayList<Course>();
+        List<Course> list4 = new ArrayList<Course>();
+        List<Course> list5 = new ArrayList<Course>();
+        List<Course> list6 = new ArrayList<Course>();
+
+        Document document = Jsoup.parse(htmlStr);
+        Elements rootElements = document.select("table[width=750]");
+        Elements courseElements = rootElements.select("td");
+        List<String> courseList = new ArrayList<String>();
+        for(Element element : courseElements) {
+            String str = element.html();
+            if(str.equals("时间") || str.equals("一") || str.equals("二") || str.equals("三") || str.equals("四") || str.equals("五") || str.equals("上午") ||
+                    str.equals("下午") || str.equals("晚上") || str.equals("星期一") || str.equals("星期二") || str.equals("星期三") ||
+            str.equals("星期四") ||  str.equals("星期五")  || str.equals("星期六")  || str.equals("星期日") ) {
+                continue;
+            }
+            courseList.add(str.replaceAll("\\s", ""));
+        }
+        for(int i = 0; i < courseList.size(); i++) {
+            String str = courseList.get(i);
+            if(!str.equals("&nbsp;")) {
+                if(str.contains("-----------")) {
+                    String[] courseArray = str.split("-----------");
+                    for(int j = 0; j < courseArray.length; j++) {
+                        parseAndAddCourse(courseArray[j], i, list0, list1, list2, list3, list4, list5, list6);
+                    }
+                }
+                else {
+                    parseAndAddCourse(str, i, list0, list1, list2, list3, list4, list5, list6);
+                }
+            }
+        }
+        Collections.sort(list0);
+        Collections.sort(list1);
+        Collections.sort(list2);
+        Collections.sort(list3);
+        Collections.sort(list4);
+        Collections.sort(list5);
+        Collections.sort(list6);
+        data.add(list0);
+        data.add(list1);
+        data.add(list2);
+        data.add(list3);
+        data.add(list4);
+        data.add(list5);
+        data.add(list6);
+        return data;
+    }
+
+    /**
+     * 解析单独实验课表和添加数据到相关list，自用不公开
+     * @param htmlStr
+     */
+    private static void parseAndAddCourse(String htmlStr, int i, List<Course> list0, List<Course> list1, List<Course> list2, List<Course> list3, List<Course> list4, List<Course> list5, List<Course> list6) {
+        Course course = new Course();
+        if(htmlStr.startsWith("<br/>")) {
+            htmlStr = htmlStr.substring(5);
+        }
+        String[] array = htmlStr.split("<br/>");
+        //课程名
+        course.setName(array[0].replaceAll("&nbsp;", "").replaceAll("[0-9]{5,10}", ""));
+        //教室
+        course.setClassroom(array[1].replace("都江堰校区:", "").replace("成都校区:", "").replace("雅安校区:", ""));
+        //周次
+        course.setWeek(array[2]);
+        //时间
+        course.setTime(array[3].replace("节", ""));
+        //老师
+        course.setTeacher(array[4].replace("教师:", ""));
+        Log.d("winson", "结果：" + i  + " "+ course);
+        switch ((i + 1)%7) {
+            case 1:
+                course.setCategory(0 + "");
+                list0.add(course);
+                break;
+            case 2:
+                course.setCategory(1 + "");
+                list1.add(course);
+                break;
+            case 3:
+                course.setCategory(2 + "");
+                list2.add(course);
+                break;
+            case 4:
+                course.setCategory(3 + "");
+                list3.add(course);
+                break;
+            case 5:
+                course.setCategory(4 + "");
+                list4.add(course);
+                break;
+            case 6:
+                course.setCategory(5 + "");
+                list5.add(course);
+                break;
+            case 0:
+                course.setCategory(6 + "");
+                list6.add(course);
+                break;
+        }
+    }
 
     /**
      * 解析得出每日的课程列表
@@ -390,35 +498,39 @@ public class StringUtil {
                         String[] classroomArray = classroom.split("\\s+");
 
                         for (int i = 0; i < timeArray.length; i++) {
+                            Log.d("winson", timeArray[i]);
                             if (timeArray[i].contains(posStr + "-")) {
+                                Course newCourse = course.clone();
+                                newCourse.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-").replace("(单)", "").replace("(双)", ""));
+                                newCourse.setClassroom(classroomArray[i]);
 
-                                course.setTime(timeArray[i].replace(posStr + "-", "").replaceAll(",", "-").replace("(单)", "").replace("(双)", ""));
-                                course.setClassroom(classroomArray[i]);
+                                switch (position) {
+                                    case 0:
+                                        list0.add(newCourse);
+                                        break;
+                                    case 1:
+                                        list1.add(newCourse);
+                                        break;
+                                    case 2:
+                                        list2.add(newCourse);
+                                        break;
+                                    case 3:
+                                        list3.add(newCourse);
+                                        break;
+                                    case 4:
+                                        list4.add(newCourse);
+                                        break;
+                                    case 5:
+                                        list5.add(newCourse);
+                                        break;
+                                    case 6:
+                                        list6.add(newCourse);
+                                        break;
+                                }
                             }
+
                         }
-                        switch (position) {
-                            case 0:
-                                list0.add(course);
-                                break;
-                            case 1:
-                                list1.add(course);
-                                break;
-                            case 2:
-                                list2.add(course);
-                                break;
-                            case 3:
-                                list3.add(course);
-                                break;
-                            case 4:
-                                list4.add(course);
-                                break;
-                            case 5:
-                                list5.add(course);
-                                break;
-                            case 6:
-                                list6.add(course);
-                                break;
-                        }
+
                     }
                 }
                 Collections.sort(list0);

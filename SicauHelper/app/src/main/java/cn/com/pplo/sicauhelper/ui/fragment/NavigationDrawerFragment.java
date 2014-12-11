@@ -3,15 +3,11 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,25 +15,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.avos.avoscloud.AVUser;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
-import cn.com.pplo.sicauhelper.model.Student;
-import cn.com.pplo.sicauhelper.util.UIUtil;
+import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.ui.FeedbackActivity;
+import cn.com.pplo.sicauhelper.ui.HelpActivity;
+import cn.com.pplo.sicauhelper.ui.SettingActivity;
+import cn.com.pplo.sicauhelper.ui.UserActivity;
+import cn.com.pplo.sicauhelper.util.ImageUtil;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -68,13 +62,24 @@ public class NavigationDrawerFragment extends BaseFragment {
     private ListView mDrawerListView;
     private TextView nameTv;
     private TextView sidTv;
-    private ImageView profileIv;
+    private CircleImageView profileIv;
+    private View settingBtn;
+    private View helpBtn;
+    private View feedbackBtn;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
     public NavigationDrawerFragment() {
+    }
+
+    public static NavigationDrawerFragment newInstance(int position) {
+        NavigationDrawerFragment fragment = new NavigationDrawerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(STATE_SELECTED_POSITION, position);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -86,11 +91,8 @@ public class NavigationDrawerFragment extends BaseFragment {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
-        if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
-        }
-
+        //取得当前选择项
+        mCurrentSelectedPosition = getArguments().getInt(STATE_SELECTED_POSITION);
         // Select either the default item (0) or the last selected item.
         selectItem(mCurrentSelectedPosition);
     }
@@ -107,18 +109,18 @@ public class NavigationDrawerFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-        initListView(inflater, container);
-        return mDrawerListView;
+        View view = inflater.inflate( R.layout.fragment_navigation_drawer, container, false);
+        initListView(view);
+        return view;
     }
 
     /**
      * 初始化listView
-     * @param inflater
-     * @param container
+     *
      */
-    private void initListView(LayoutInflater inflater, ViewGroup container) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
+    private void initListView(View view) {
+
+        mDrawerListView = (ListView) view.findViewById(R.id.navigation_drawer_listView);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -127,17 +129,21 @@ public class NavigationDrawerFragment extends BaseFragment {
         });
         final int[] icons = {
                 R.drawable.ic_event_grey600_24dp,
+                R.drawable.ic_desktop_windows_grey600_24dp,
                 R.drawable.ic_school_grey600_24dp,
                 R.drawable.ic_whatshot_grey600_24dp,
                 R.drawable.ic_location_city_grey600_24dp,
-                R.drawable.ic_shopping_cart_grey600_24dp
+                R.drawable.ic_shopping_cart_grey600_24dp,
+                R.drawable.ic_group_grey600_24dp
         };
         final String[] titles = {
-        getString(R.string.title_cource),
+                getString(R.string.title_cource),
+                getString(R.string.title_cource_lab),
                 getString(R.string.title_score),
                 getString(R.string.title_news),
                 getString(R.string.title_classroom),
-                getString(R.string.title_market)
+                getString(R.string.title_market),
+                getString(R.string.title_status)
         };
 
         //增加header
@@ -145,7 +151,7 @@ public class NavigationDrawerFragment extends BaseFragment {
         mDrawerListView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
-                return 5;
+                return icons.length;
             }
 
             @Override
@@ -165,16 +171,46 @@ public class NavigationDrawerFragment extends BaseFragment {
                 ImageView iv = (ImageView) convertView.findViewById(R.id.navigation_item_iv);
                 tv.setText(titles[position]);
                 iv.setImageResource(icons[position]);
-                if(position == mCurrentSelectedPosition) {
+                if (position == mCurrentSelectedPosition) {
                     convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
-                }
-                else {
+                    tv.setTextColor(Color.parseColor("#212121"));
+                } else {
+                    tv.setTextColor(Color.parseColor("#757575"));
                     convertView.setBackgroundResource(R.drawable.btn_navigation_item);
                 }
                 return convertView;
             }
         });
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        //底部按钮
+        settingBtn = view.findViewById(R.id.navigation_setting);
+        helpBtn = view.findViewById(R.id.navigation_help);
+        feedbackBtn = view.findViewById(R.id.navigation_feedback);
+
+        //反馈页面
+        feedbackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedbackActivity.startFeedbackActivity(getActivity());
+            }
+        });
+
+        //设置页面
+        settingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SettingActivity.startSettingActivity(getActivity());
+            }
+        });
+
+        //帮助页面
+        helpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HelpActivity.startHelpActivity(getActivity());
+            }
+        });
     }
 
     /**
@@ -184,14 +220,25 @@ public class NavigationDrawerFragment extends BaseFragment {
         View headerView = getActivity().getLayoutInflater().inflate(R.layout.header_navigation, null, false);
         nameTv = (TextView) headerView.findViewById(R.id.navigation_name_tv);
         sidTv = (TextView) headerView.findViewById(R.id.navigation_sid_tv);
-        profileIv = (ImageView) headerView.findViewById(R.id.navigation_head_iv);
+        profileIv = (CircleImageView) headerView.findViewById(R.id.navigation_head_iv);
 
-        Student student = SicauHelperApplication.getStudent(getActivity());
-        if(student != null) {
-            nameTv.setText(student.getName());
-            sidTv.setText(student.getSid());
-            //TODO 显示用户头像，使用universal-image-loader
+        final AVUser avUser = SicauHelperApplication.getStudent();
+        if (avUser != null) {
+            nameTv.setText(avUser.getString(TableContract.TableUser._NAME));
+            sidTv.setText(avUser.getString(TableContract.TableUser._SID));
+            ImageLoader.getInstance().displayImage(avUser.getAVFile(TableContract.TableUser._PROFILE_URL).getUrl(), profileIv, ImageUtil.getDisplayProfileOption(getActivity()));
         }
+
+        //设置人的背景颜色
+//        headerView.findViewById(R.id.navigation_user).setBackgroundResource(ColorUtil.getColorBySchool(getActivity(), avUser.getInt(TableContract.TableUser._SCHOOL))
+//        );
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserActivity.startUserActivity(getActivity(), SicauHelperApplication.getStudent().getObjectId());
+            }
+        });
+
         mDrawerListView.addHeaderView(headerView, null, false);
     }
 
@@ -222,12 +269,6 @@ public class NavigationDrawerFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
     @Override

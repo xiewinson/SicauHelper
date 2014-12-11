@@ -14,14 +14,17 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Course;
+import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
 
 public class CourseAdapter extends BaseAdapter {
     private Context context;
     private List<Course> data;
+    private int type;
 
-    public CourseAdapter(Context context, List<Course> data) {
+    public CourseAdapter(Context context, List<Course> data, int type) {
         this.context = context;
         this.data = data;
+        this.type = type;
     }
 
     @Override
@@ -49,7 +52,7 @@ public class CourseAdapter extends BaseAdapter {
             holder.nameTv = (TextView) convertView.findViewById(R.id.name_tv);
             holder.categoryTv = (TextView) convertView.findViewById(R.id.category_tv);
             holder.classroomTv = (TextView) convertView.findViewById(R.id.classroom_tv);
-            holder.creditTv = (RatingBar) convertView.findViewById(R.id.credit_tv);
+            holder.weekTv = (TextView) convertView.findViewById(R.id.week_tv);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -60,20 +63,26 @@ public class CourseAdapter extends BaseAdapter {
         int circleShape = 0;
         int color = 0;
         if (time.equals("1-2")) {
+            circleShape = R.drawable.circle_cyan;
+            color = context.getResources().getColor(R.color.cyan_500);
+        } else if (time.equals("3-4")) {
+            circleShape = R.drawable.circle_amber;
+            color = context.getResources().getColor(R.color.amber_500);
+        } else if (time.equals("5-6")) {
+            circleShape = R.drawable.circle_deep_orange;
+            color = context.getResources().getColor(R.color.deep_orange_500);
+        } else if (time.equals("7-8")) {
             circleShape = R.drawable.circle_blue;
             color = context.getResources().getColor(R.color.blue_500);
-        } else if (time.equals("3-4")) {
-            circleShape = R.drawable.circle_red;
-            color = context.getResources().getColor(R.color.red_500);
-        } else if (time.equals("5-6")) {
-            circleShape = R.drawable.circle_green;
-            color = context.getResources().getColor(R.color.green_500);
-        } else if (time.equals("7-8")) {
-            circleShape = R.drawable.circle_orange;
-            color = context.getResources().getColor(R.color.orange_500);
         } else if (time.equals("9-10")) {
-            circleShape = R.drawable.circle_purple;
-            color = context.getResources().getColor(R.color.purple_500);
+            circleShape = R.drawable.circle_indigo;
+            color = context.getResources().getColor(R.color.indigo_500);
+        } else if (time.contains("1-") || time.contains("2-") || time.contains("3-") || time.contains("4-")) {
+            circleShape = R.drawable.circle_amber;
+            color = context.getResources().getColor(R.color.amber_500);
+        }else if (time.contains("5-") || time.contains("6-") || time.contains("7-") || time.contains("8-")) {
+            circleShape = R.drawable.circle_deep_orange;
+            color = context.getResources().getColor(R.color.deep_orange_500);
         }
 
         //设置课程名
@@ -83,29 +92,26 @@ public class CourseAdapter extends BaseAdapter {
         holder.timeTv.setBackgroundResource(circleShape);
 
         //设置课程类型
-        holder.categoryTv.setText("#" + course.getCategory() + "#");
+        holder.categoryTv.setText(course.getCategory() + "");
         //设置教室
-        holder.classroomTv.setText(course.getClassroom() + "(" + course.getWeek() + "周)");
-
-        //设置星星个
-        if ((getItem(position).getCredit() > 5)) {
-            holder.creditTv.setNumStars(10);
-        } else {
-            holder.creditTv.setNumStars(5);
+        holder.classroomTv.setText(course.getClassroom());
+        if(type == CourseFragment.TYPE_COURSE_THEORY) {
+            //设置周次
+            holder.weekTv.setText(course.getWeek() + "周");
         }
-        //设置星星颜色
-        LayerDrawable stars = (LayerDrawable) holder.creditTv.getProgressDrawable();
-        stars.getDrawable(0).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(1).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(2).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        holder.creditTv.setRating(getItem(position).getCredit());
+        else {
+            //设置周次
+            holder.weekTv.setText(course.getWeek());
+            holder.categoryTv.setVisibility(View.GONE);
+        }
+
         return convertView;
     }
     private static class ViewHolder {
         TextView timeTv;
         TextView nameTv;
         TextView classroomTv;
-        RatingBar creditTv;
+        TextView weekTv;
         TextView categoryTv;
     }
 }

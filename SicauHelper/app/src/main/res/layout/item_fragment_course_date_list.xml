@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#ffffff"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/time_tv"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_gravity="top"
-        android:layout_marginRight="8dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="16dp"
         android:background="@null"
-        android:clickable="true"
         android:gravity="center"
         android:text="9-10"
         android:textColor="#ffffff"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -44,23 +41,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center|left"
-            android:text="5508(1-10周)"
-            android:textColor="#aaaaaa" />
+            android:text="5508" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <RatingBar
-                android:id="@+id/credit_tv"
-                style="@android:style/Widget.Holo.RatingBar.Small"
+            <TextView
+                android:id="@+id/week_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/score_tv"
-                android:layout_toEndOf="@+id/score_tv"
-                android:layout_toRightOf="@+id/score_tv"
-                android:textSize="18sp" />
+                android:gravity="center|left"
+                android:text="1-10周"
+                android:textColor="#aaaaaa" />
         </LinearLayout>
 
     </LinearLayout>

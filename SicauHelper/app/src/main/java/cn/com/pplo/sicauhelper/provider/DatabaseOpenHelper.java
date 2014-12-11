@@ -5,14 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import cn.com.pplo.sicauhelper.leancloud.AVStudent;
-
 /**
  * Created by Administrator on 2014/9/19.
  */
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "SICAU_HELPER_DB";
-    public static final int DB_VERSION = 3;
+    public static final int DB_VERSION = 5;
 
     //创建成绩表
     public static final String createScoreSql = "create table " + TableContract.TableScore.TABLE_NAME + "("
@@ -38,6 +36,20 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + TableContract.TableCourse._SELECTNUM + " integer"
             + ")";
 
+    //创建课程表
+    public static final String createLabCourseSql = "create table " + TableContract.TableLabCourse.TABLE_NAME + "("
+            + TableContract.TableLabCourse._ID + " integer primary key autoincrement, "
+            + TableContract.TableLabCourse._NAME + " text, "
+            + TableContract.TableLabCourse._CATEGORY + " text, "
+            + TableContract.TableLabCourse._CREDIT + " real, "
+            + TableContract.TableLabCourse._TIME + " text, "
+            + TableContract.TableLabCourse._CLASSROOM + " text,"
+            + TableContract.TableLabCourse._WEEK + " text,"
+            + TableContract.TableLabCourse._TEACHER + " text,"
+            + TableContract.TableLabCourse._SCHEDULENUM + " integer,"
+            + TableContract.TableLabCourse._SELECTNUM + " integer"
+            + ")";
+
     //创建新闻表
     public static final String createNewsSql = "create table " + TableContract.TableNews.TABLE_NAME + "("
             + TableContract.TableNews._ID + " integer primary key, "
@@ -58,16 +70,19 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + ")";
 
     //创建学生表
-    public static final String createStudentSql = "create table " + AVStudent.TABLE_NAME + "("
-            + " id " + " integer primary key autoincrement, "
-            + AVStudent.BACKGROUND + " text, "
-            + AVStudent.NAME + " text, "
-            + AVStudent.NICKNAME + " text, "
-            + AVStudent.PROFILE_URL + " text, "
-            + AVStudent.PSWD + " text, "
-            + AVStudent.SID + " text, "
-            + AVStudent.ROLE + " integer, "
-            + AVStudent.SCHOOL + " integer "
+    public static final String createStudentSql = "create table " +  TableContract.TableUser.TABLE_NAME + "("
+            + TableContract.TableUser._ID +  " integer primary key, "
+            + TableContract.TableUser._BACKGROUND + " text, "
+            + TableContract.TableUser._NAME + " text, "
+            + TableContract.TableUser._NICKNAME + " text, "
+            + TableContract.TableUser._PROFILE_URL + " text, "
+            + TableContract.TableUser._PSWD + " text, "
+            + TableContract.TableUser._SID + " text, "
+            + TableContract.TableUser._OBJECTID + " text, "
+            + TableContract.TableUser._CREATED_AT + " text, "
+            + TableContract.TableUser._UPDATED_AT + " text, "
+            + TableContract.TableUser._ROLE + " integer, "
+            + TableContract.TableUser._SCHOOL + " integer "
             + ")";
 
 
@@ -79,6 +94,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(createScoreSql);
         db.execSQL(createCourseSql);
+        db.execSQL(createLabCourseSql);
         db.execSQL(createNewsSql);
         db.execSQL(createClassroomSql);
         db.execSQL(createStudentSql);
@@ -89,9 +105,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         String DROP_TABLE = "drop table if exists ";
         db.execSQL(DROP_TABLE + TableContract.TableScore.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableCourse.TABLE_NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableLabCourse.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableNews.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableClassroom.TABLE_NAME);
-        db.execSQL(DROP_TABLE + AVStudent.NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableUser.TABLE_NAME);
         onCreate(db);
     }
 }

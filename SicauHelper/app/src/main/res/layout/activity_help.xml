@@ -1,0 +1,60 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_marginTop="?actionBarSize"
+    android:background="#ffffff"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:scrollbarStyle="outsideOverlay"
+    android:scrollbarSize="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            style="@style/help_q_tv"
+            android:text="@string/q_1" />
+        <TextView
+            style="@style/help_a_tv"
+            android:text="@string/a_1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eeeeee"/>
+
+        <TextView
+            style="@style/help_q_tv"
+            android:text="@string/q_2" />
+        <TextView
+            style="@style/help_a_tv"
+            android:text="@string/a_2" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eeeeee"/>
+
+        <TextView
+            style="@style/help_q_tv"
+            android:text="@string/q_3" />
+        <TextView
+            style="@style/help_a_tv"
+            android:text="@string/a_3" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eeeeee"/>
+
+        <TextView
+            style="@style/help_q_tv"
+            android:text="@string/q_4" />
+        <TextView
+            style="@style/help_a_tv"
+            android:text="@string/a_4" />
+        </LinearLayout>
+
+
+</ScrollView>

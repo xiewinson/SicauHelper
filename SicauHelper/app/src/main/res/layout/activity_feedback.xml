@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="?actionBarSize"
+    tools:context="cn.wifimore.router.ui.FeedbackActivity">
+
+    <ListView
+        android:listSelector="@android:color/transparent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:transcriptMode="alwaysScroll"
+        android:id="@+id/feedback_listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></ListView>
+
+    <LinearLayout
+        android:layout_gravity="bottom"
+        android:background="#eeeeee"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#dddddd" />
+
+        <LinearLayout
+            android:background="#ffffff"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_width="match_parent">
+
+            <EditText
+                android:maxLines="4"
+                android:id="@+id/reply_et"
+                android:layout_gravity="center_vertical"
+                android:layout_width="0dp"
+                android:hint="你想反馈什么内容呢"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_marginLeft="16dp"
+                android:id="@+id/reply_btn"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/btn_send"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

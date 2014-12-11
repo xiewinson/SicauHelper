@@ -13,7 +13,6 @@ import java.util.List;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
 import cn.com.pplo.sicauhelper.model.Score;
-import cn.com.pplo.sicauhelper.model.ScoreStats;
 import cn.com.pplo.sicauhelper.ui.adapter.ScoreStatsAdapter;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -40,10 +39,10 @@ public class ScoreStatsActivity extends BaseActivity {
 
     private void setUp(Context context) {
         List<Score> data = getIntent().getParcelableArrayListExtra(EXTRA_DATA);
-        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.teal_500);
+        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.light_blue_500);
         listView = (ListView) findViewById(R.id.score_static_listView);
         listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar()));
-        listView.addHeaderView(ViewPadding.getActionBarPadding(context, R.color.eeeeee));
+        listView.addHeaderView(ViewPadding.getActionBarPadding(context, R.color.grey_200));
         statsAdapter = new ScoreStatsAdapter(context, StringUtil.parseScoreStatsList(data));
         UIUtil.setListViewInitAnimation("bottom", listView, statsAdapter);
         UIUtil.setListViewScrollHideOrShowActionBar(context, listView, getSupportActionBar());

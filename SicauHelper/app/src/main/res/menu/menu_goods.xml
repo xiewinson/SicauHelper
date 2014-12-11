@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="cn.com.pplo.sicauhelper.ui.GoodsActivity">
+    <item android:id="@+id/action_complain"
+        android:title="投诉"
+        android:orderInCategory="101"
+        app:showAsAction="never" />
+</menu>

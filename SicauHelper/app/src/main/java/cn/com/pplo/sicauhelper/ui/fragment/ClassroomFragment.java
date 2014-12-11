@@ -2,7 +2,6 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,12 +30,15 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Classroom;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.ClassroomAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
+import cn.com.pplo.sicauhelper.util.TimeUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 /**
@@ -85,6 +87,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.light_blue_500);
         setUp(view, getActivity());
     }
 
@@ -94,7 +97,14 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
         progressDialog = UIUtil.getProgressDialog(context, "我算算哪些教室是空的，这个过程是相当的漫长～");
 //        gridView.setAdapter(classroomAdapter);
         UIUtil.setListViewInitAnimation("bottom", gridView, classroomAdapter);
-        getLoaderManager().initLoader(0, null, this);
+
+        Long lastSyncTime = (Long) SharedPreferencesUtil.get(context, SharedPreferencesUtil.LAST_SYNC_CLASSROMM, System.currentTimeMillis() -  24 * 60 * 60 * 1000);
+        if(!TimeUtil.dateToYMD(lastSyncTime).equals(TimeUtil.dateToYMD(System.currentTimeMillis()))) {
+            requestClassroomList(context);
+        }
+        else {
+            getLoaderManager().initLoader(0, null, this);
+        }
     }
 
     /**
@@ -136,7 +146,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
     private void selectOnlyThisSchoolData(boolean isOnlyShowThisSchool) {
         if(isOnlyShowThisSchool) {
             data.clear();
-            String school = StringUtil.schoolCodeToSchool(SicauHelperApplication.getStudent(getActivity()).getSchool());
+            String school = StringUtil.schoolCodeToSchool(SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL));
 
             for(Classroom classroom : originalData) {
                 if(classroom.getSchool().contains(school)){

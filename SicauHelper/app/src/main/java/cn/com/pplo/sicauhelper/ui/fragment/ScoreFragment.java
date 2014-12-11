@@ -2,7 +2,6 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,7 +11,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 
@@ -31,34 +28,29 @@ import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
-import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
 import cn.com.pplo.sicauhelper.model.Score;
-import cn.com.pplo.sicauhelper.model.ScoreStats;
-import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
+import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.ScoreStatsActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.ScoreListAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
-import cn.com.pplo.sicauhelper.widget.ViewPadding;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 
 public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private ListView listView;
+    private StickyListHeadersListView listView;
     private AlertDialog progressDialog;
     private SearchView searchView;
 
     private ScoreListAdapter scoreListAdapter;
     private List<Score> scoreList = new ArrayList<Score>();
     private List<Score> originalList = new ArrayList<Score>();
-
-    private static final int MENU_ITEM_ID_DETAIL = 222;
-    private static final int MENU_ITEM_ID_SEARCH = 333;
-
 
     public static ScoreFragment newInstance() {
         ScoreFragment fragment = new ScoreFragment();
@@ -86,10 +78,13 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.indigo_500);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.light_blue_500);
         setHasOptionsMenu(true);
+
         return inflater.inflate(R.layout.fragment_score, container, false);
     }
+
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -98,19 +93,20 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     }
 
     private void setUp(View view) {
-        listView = (ListView) view.findViewById(R.id.score_listView);
+        listView = (StickyListHeadersListView) view.findViewById(R.id.score_listView);
 //        setListViewTopBottomPadding(listView);
-        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
-        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "找找找～正在教务系统上找你的成绩表");
+//        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
+//        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "正在教务系统上找你的成绩表");
         initScoreDetailAdapter();
         getLoaderManager().initLoader(0, null, this);
     }
 
     //详情列表
     private void initScoreDetailAdapter() {
-        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList);
-        UIUtil.setListViewInitAnimation("bottom", listView, scoreListAdapter);
+        scoreListAdapter = new ScoreListAdapter(getActivity(), scoreList, SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL));
+//        UIUtil.setListViewInitAnimation("bottom", listView, scoreListAdapter);
+        listView.setAdapter(scoreListAdapter);
     }
 
     @Override
@@ -124,7 +120,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Log.d("winson", "焦点：" + hasFocus);
                 if (hasFocus) {
                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                         @Override
@@ -134,7 +129,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 
                         @Override
                         public boolean onQueryTextChange(String s) {
-                            Log.d("winson", "开始匹配");
                             scoreListAdapter.setFilter(new ScoreFilter());
                             scoreListAdapter.getFilter().filter(s);
                             return false;
@@ -191,13 +185,12 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
      */
     private void notifyDataSetChanged(List<Score> list) {
         if (list != null) {
-            Log.d("winson", "初始化正常list:" + list);
             scoreList.clear();
             scoreList.addAll(list);
             scoreListAdapter.notifyDataSetChanged();
             //恢复到第一个
             listView.setSelection(0);
-            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
+//            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
         }
     }
 
@@ -212,10 +205,8 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         progressDialog.show();
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
-        Student student = SicauHelperApplication.getInstance().getStudent(context);
-        if (student != null) {
-            params.put("user", student.getSid() + "");
-            params.put("pwd", student.getPswd());
+        params.put("user", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString());
+        params.put("pwd", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_PSWD, "").toString());
             params.put("lb", "S");
 
             NetUtil.getScoreHtmlStr(getActivity(), params, new NetUtil.NetCallback(getActivity()) {
@@ -241,7 +232,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
                     super.onErrorResponse(volleyError);
                 }
             });
-        }
     }
 
     /**
@@ -288,7 +278,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //更新数据
             notifyDataSetChanged((List<Score>) results.values);
-
         }
     }
 

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/grey_50"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <!--头像、人名、时间、类别-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="72dp">
+        <!--头像-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/goods_head_iv"
+            android:src="@drawable/ic_wb_sunny_white_48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            app:border_width="1dp"
+            app:border_color="#ffffff"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
+
+        <!--昵称，时间-->
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/goods_name_tv"
+                android:text="谢文森"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_marginTop="2dp"
+                android:id="@+id/goods_time_tv"
+                android:textSize="12sp"
+                android:textColor="#aaaaaa"
+                android:text="一天前"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!--类别-->
+        <LinearLayout
+
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:background="@drawable/shape_rect_light_grey"
+                android:id="@+id/goods_category_tv"
+                android:text="#其他"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_gravity="top"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                />
+            <View
+                android:background="@color/grey_500"
+                android:layout_width="2dp"
+                android:layout_height="48dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <!--标题-->
+    <TextView
+        android:textSize="22sp"
+        android:id="@+id/goods_title_tv"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!--内容-->
+    <TextView
+        android:textSize="12sp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:id="@+id/goods_content_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--图片-->
+        <LinearLayout
+            android:id="@+id/goods_image_layout"
+            android:orientation="horizontal"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </LinearLayout>
+        <!--评论-->
+        <TextView
+            android:clickable="true"
+            android:gravity="center"
+            android:background="@drawable/btn_transparent_lightgrey"
+            android:layout_gravity="bottom"
+            android:id="@+id/goods_comment_btn"
+            android:text="0"
+            android:drawableLeft="@drawable/ic_insert_comment_black_18dp"
+            android:drawablePadding="4dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        />
+
+    <TextView
+        android:id="@+id/goods_device_tv"
+        android:textSize="12sp"
+        android:drawableLeft="@drawable/ic_phone_android_black_18dp"
+        android:drawablePadding="4dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:id="@+id/goods_location_tv"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/blue_blue"
+        android:drawableLeft="@drawable/ic_place_black_18dp"
+        android:drawablePadding="4dp"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_marginTop="16dp"
+        android:background="@color/grey_100"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        />
+</LinearLayout>

@@ -203,7 +203,7 @@ public class NetUtil {
                     headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
                     getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_SCORE_NICE, headerMap, null, callback);
                 } catch (Exception e) {
-                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
+                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                 }
             }
         });
@@ -233,7 +233,37 @@ public class NetUtil {
                     headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
                     getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_COURSE, headerMap, null, callback);
                 } catch (Exception e) {
-                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
+                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
+                }
+            }
+        });
+        clearCookie();
+    }
+
+    /**
+     * 获取实验课表
+     * @param context
+     * @param params
+     * @param callback
+     */
+    public static void getLabCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback) {
+        login(context, params, new NetCallback(context) {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                callback.onErrorResponse(volleyError);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    Map<String, String> headerMap = new HashMap<String, String>();
+                    headerMap.put("Cookie", cookie);
+                    headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
+                    headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                    getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_LAB_COURSE, headerMap, null, callback);
+                } catch (Exception e) {
+                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                 }
             }
         });
@@ -278,12 +308,12 @@ public class NetUtil {
                                 headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
                                 getOrPostRequest(context, Request.Method.GET, JiaowuConfig.JIAOWU_COURSE_TEMP, headerMap, null, callback);
                             } catch (Exception e) {
-                                UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
+                                UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                             }
                         }
                     });
                 } catch (Exception e) {
-                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误～");
+                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                 }
             }
         });
@@ -343,6 +373,7 @@ public class NetUtil {
      */
     public static void getNewsHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback){
         try {
+            Log.d("winson", "开始请求新闻");
             //请求教务首页的HTML页面
             getOrPostRequest(context,
                     Request.Method.GET,
@@ -434,10 +465,10 @@ public class NetUtil {
             try {
                 if (volleyError != null && volleyError.getMessage() != null && !volleyError.getMessage().equals("")) {
                     if (volleyError.getMessage().contains("java.net.UnknownHostException")) {
-                        UIUtil.showShortToast(context, "亲爱的，你的网络连接有问题，还用个毛啊～");
+                        UIUtil.showShortToast(context, "亲爱的，你的网络连接有问题，还用个毛啊");
                     }
                 } else {
-//                    UIUtil.showShortToast(context, "一定是教务网出了问题，一定是嗒～");
+                    UIUtil.showShortToast(context, "额，臣亦不知发生了甚");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -449,10 +480,10 @@ public class NetUtil {
         @Override
         public void onResponse(String result) {
             if (result.contains("密码不对")) {
-                UIUtil.showShortToast(context, "你连学号和密码都忘了吗～那么，拜拜～");
+                UIUtil.showShortToast(context, "你连学号和密码都忘了吗那么，拜拜");
                 onErrorResponse(null);
             } else if (result.contains("登录超时")) {
-                UIUtil.showShortToast(context, "亲爱的，教务系统出问题了～");
+                UIUtil.showShortToast(context, "亲爱的，教务系统出问题了");
                 onErrorResponse(null);
             }
             else if(result.contains("您的电脑上所安装的个人防火墙软件拦截了你的验证信息")){

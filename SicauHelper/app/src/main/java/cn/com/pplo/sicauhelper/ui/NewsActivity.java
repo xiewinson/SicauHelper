@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -41,7 +42,7 @@ public class NewsActivity extends BaseActivity {
     private final static String EXTRA_NEWS = "extra_news";
     private News data;
 
-    private ProgressFragment progressDialog;
+    private AlertDialog progressDialog;
     private TextView newsTv;
     private WebView newsWebView;
     private ScrollView scrollView;
@@ -65,9 +66,17 @@ public class NewsActivity extends BaseActivity {
         newsWebView = (WebView) findViewById(R.id.news_webView);
         scrollView = (ScrollView) findViewById(R.id.news_scrollView);
 
+        //设置webView可缩放
+        WebSettings webSettings = newsWebView.getSettings();
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setSupportZoom(true);
+        newsWebView.setInitialScale(10);
+
         //对话框
-        progressDialog = UIUtil.getProgressFragment(context, "正在寻找新闻内容...");
-        progressDialog.show(getSupportFragmentManager());
+        progressDialog = UIUtil.getProgressDialog(context, "正在寻找新闻内容...");
+        progressDialog.show();
         //获得news数据
         data = getIntent().getParcelableExtra(EXTRA_NEWS);
         if(data != null){
@@ -141,12 +150,8 @@ public class NewsActivity extends BaseActivity {
      */
     private void showData(News news) {
         newsTv.setText(news.getContent());
-        UIUtil.dismissProgressFragment(progressDialog);
+        UIUtil.dismissProgressDialog(progressDialog);
         loadWebView(newsWebView, news.getSrc());
-        Log.d("winson", scrollView.getMaxScrollAmount() + "可滑动量");
-        if(scrollView.getMaxScrollAmount() > 0){
-            scrollView.setOnTouchListener(new OnScrollHideOrShowActionBarListener2(this, getSupportActionBar()));
-        }
     }
 
     /**
@@ -155,7 +160,9 @@ public class NewsActivity extends BaseActivity {
      * @param id
      */
     private void requestNewsContent(Context context, int id){
-
+        if(!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
         Map<String, String> params = new HashMap<String, String>();
         params.put("bianhao", id + "");
         NetUtil.getNewsHtmlStr(context, params, new NetUtil.NetCallback(context) {
@@ -198,7 +205,7 @@ public class NewsActivity extends BaseActivity {
 
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                UIUtil.dismissProgressFragment(progressDialog);
+                UIUtil.dismissProgressDialog(progressDialog);
                 super.onErrorResponse(volleyError);
             }
         });

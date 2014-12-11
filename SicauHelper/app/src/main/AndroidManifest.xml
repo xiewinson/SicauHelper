@@ -7,15 +7,29 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
-        android:name=".application.SicauHelperApplication"
+        android:name="cn.com.pplo.sicauhelper.application.SicauHelperApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="7c94dbf4322e73b48ee49a4251006dcf" />
+
+        <meta-data android:value="5489169ffd98c52f6200082c" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="null" android:name="UMENG_CHANNEL"/>
+
         <activity
-            android:name=".ui.MainActivity"
+            android:name="cn.com.pplo.sicauhelper.ui.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,28 +38,98 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:name="cn.com.pplo.sicauhelper.ui.LoginActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
         <provider
-            android:name=".provider.SicauHelperProvider"
+            android:name="cn.com.pplo.sicauhelper.provider.SicauHelperProvider"
             android:authorities="cn.com.pplo.sicauhelper.provider"
             android:enabled="true"
             android:exported="true" >
         </provider>
 
         <service
-            android:name=".service.SaveIntentService"
+            android:name="cn.com.pplo.sicauhelper.service.SaveIntentService"
             android:exported="false" >
         </service>
 
         <activity
-            android:name=".ui.NewsActivity"
+            android:name="cn.com.pplo.sicauhelper.ui.NewsActivity"
             android:label="@string/title_activity_news" >
         </activity>
         <activity
-            android:name=".ui.ScoreStatsActivity"
+            android:name="cn.com.pplo.sicauhelper.ui.ScoreStatsActivity"
             android:label="@string/title_activity_score_stats" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.AddActivity"
+            android:label="@string/title_activity_new_goods"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.GoodsActivity"
+            android:label="@string/title_activity_goods" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.SearchGoodsActivity"
+            android:label="@string/title_activity_search_goods" >
+        </activity>
+        <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" >
+        </activity>
+        <activity android:name="cn.com.pplo.sicauhelper.ui.GalleryActivity" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.StatusActivity"
+            android:label="@string/title_activity_status" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.UserActivity"
+            android:label="@string/title_activity_user" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.CommentActivity"
+            android:label="@string/title_activity_comment" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.SearchStatusActivity"
+            android:label="@string/title_activity_search_status" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.UserGoodsActivity"
+            android:label="@string/title_activity_user_goods" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.UserStatusActivity"
+            android:label="@string/title_activity_user_status" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.FeedbackActivity"
+            android:label="@string/title_activity_feedback"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.SettingActivity"
+            android:label="@string/title_activity_setting" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.HelpActivity"
+            android:label="@string/title_activity_help" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.CourseActivity"
+            android:label="@string/title_activity_course" >
+        </activity>
+        <activity
+            android:name="cn.com.pplo.sicauhelper.ui.MapActivity"
+            android:label="@string/title_activity_map" >
+        </activity>
+        <service
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService" >
+        </service>
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
     </application>
 

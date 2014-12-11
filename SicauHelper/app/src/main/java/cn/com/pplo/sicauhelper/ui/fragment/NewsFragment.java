@@ -82,7 +82,10 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getSupportActionBar(getActivity()).setBackgroundDrawable(getResources().getDrawable(R.color.deep_purple_500));
+        //根据校区设置actionBar颜色
+        UIUtil.setActionBarColor(getActivity(),
+                getSupportActionBar(getActivity()),
+                R.color.light_blue_500);
         setUp(getActivity(), view);
     }
 
@@ -90,7 +93,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         listView = (ListView) view.findViewById(R.id.news_listView);
 //        listView.setTextFilterEnabled(true);
         //设置actionbar的间距
-        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
+        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.grey_200));
 
         progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的～");
         //listView上下补点间距
@@ -287,16 +290,16 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             int shapeRes = 0;
             if (category.equals("雅安")) {
                 category = "雅";
-                shapeRes = R.drawable.square_blue;
+                shapeRes = R.drawable.circle_blue;
             } else if (category.equals("成都")) {
                 category = "成";
-                shapeRes = R.drawable.square_orange;
+                shapeRes = R.drawable.circle_orange;
             } else if (category.equals("都江堰")) {
                 category = "堰";
-                shapeRes = R.drawable.square_green;
+                shapeRes = R.drawable.circle_green;
             } else {
                 category = "全";
-                shapeRes = R.drawable.square_red;
+                shapeRes = R.drawable.circle_red;
             }
             holder.categoryTv.setText(category);
             holder.categoryTv.setBackgroundResource(shapeRes);

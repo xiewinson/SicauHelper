@@ -55,7 +55,6 @@ public class ClassroomAdapter extends BaseAdapter implements Filterable {
             holder.backgroundLayout = convertView.findViewById(R.id.classroom_grid_background);
             holder.roomTv = (TextView) convertView.findViewById(R.id.classroom_grid_room_tv);
             holder.schoolTv = (TextView) convertView.findViewById(R.id.classroom_grid_school_tv);
-            holder.timeIv = (ImageView) convertView.findViewById(R.id.classroom_grid_time_iv);
             holder.timeTv = (TextView) convertView.findViewById(R.id.classroom_grid_time_tv);
             convertView.setTag(holder);
         } else {
@@ -67,21 +66,20 @@ public class ClassroomAdapter extends BaseAdapter implements Filterable {
         int color = 0;
         int imgSrc = 0;
         if(time.contains("上午")) {
-            color = R.color.cyan_500;
-            imgSrc = R.drawable.ic_brightness_1_white_48dp;
+            color = R.color.amber_500;
+            imgSrc = R.drawable.ic_brightness_5_white_48dp;
         }
         else if(time.contains("下午")) {
-            color = R.color.amber_500;
+            color = R.color.deep_orange_500;
             imgSrc = R.drawable.ic_wb_sunny_white_48dp;
         }
         else {
-            color = R.color.deep_purple_500;
+            color = R.color.indigo_500;
             imgSrc = R.drawable.ic_brightness_2_white_48dp;
         }
-        holder.timeIv.setImageResource(imgSrc);
         holder.backgroundLayout.setBackgroundResource(color);
 
-        holder.timeTv.setText( time.substring(0, 2) + "\n" + time.substring(2));
+        holder.timeTv.setText( time.substring(0, 2) + "" + time.substring(2));
         holder.schoolTv.setText(classroom.getSchool());
         holder.roomTv.setText(classroom.getName());
         return convertView;
@@ -101,7 +99,6 @@ public class ClassroomAdapter extends BaseAdapter implements Filterable {
     private static class ViewHolder {
         View backgroundLayout;
         TextView timeTv;
-        ImageView timeIv;
         TextView schoolTv;
         TextView roomTv;
     }
