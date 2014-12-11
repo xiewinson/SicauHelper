@@ -42,11 +42,16 @@ import cn.com.pplo.sicauhelper.ui.fragment.NewsFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.StatusFragment;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    /**
+     * 点击back时间
+     */
+    private long firstTime = 0;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -336,6 +341,15 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - firstTime > 2000) {
+        //如果两次按键时间间隔大于2秒，则不退出
+            UIUtil.showShortToast(this, "再按一次退出哦");
+            firstTime = secondTime;//更新firstTime
+
+        } else {
+        //两次按键小于2秒时，退出应用
+           finish();
+        }
     }
 }

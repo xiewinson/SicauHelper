@@ -8,6 +8,7 @@
     android:layout_gravity="center_vertical"
     android:layout_height="48dp">
     <ImageView
+        android:src="@drawable/ic_action_lab_blue"
         android:id="@+id/navigation_item_iv"
         android:layout_width="24dp"
         android:layout_height="24dp"

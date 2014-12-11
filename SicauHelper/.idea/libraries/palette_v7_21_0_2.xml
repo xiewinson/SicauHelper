@@ -6,7 +6,7 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://F:/Android/sdk/extras/android/m2repository/com/android/support/palette-v7/21.0.2/palette-v7-21.0.2-sources.jar!/" />
+      <root url="jar://D:/AndroidSdk/extras/android/m2repository/com/android/support/palette-v7/21.0.2/palette-v7-21.0.2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

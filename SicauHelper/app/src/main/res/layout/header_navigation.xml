@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
      <LinearLayout
-        android:background="@color/blue_grey_500"
+        android:background="@drawable/blue_blue"
         android:id="@+id/navigation_user"
         android:orientation="horizontal"
         android:gravity="center_vertical"

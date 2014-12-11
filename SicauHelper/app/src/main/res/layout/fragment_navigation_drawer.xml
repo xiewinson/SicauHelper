@@ -35,10 +35,10 @@
             android:layout_weight="1">
 
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_gear" />
+                android:src="@drawable/ic_action_gear" />
         </FrameLayout>
 
         <FrameLayout
@@ -50,10 +50,10 @@
             android:layout_weight="1">
 
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_help" />
+                android:src="@drawable/ic_action_help" />
         </FrameLayout>
 
         <FrameLayout
@@ -65,10 +65,10 @@
             android:layout_weight="1">
 
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_feedback" />
+                android:src="@drawable/ic_action_sms" />
         </FrameLayout>
 
     </LinearLayout>

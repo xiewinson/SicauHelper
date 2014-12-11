@@ -50,7 +50,7 @@
                 android:layout_height="25dp"
                 android:background="@drawable/umeng_common_gradient_orange"
                 android:singleLine="true"
-                android:text="@string/umeng_common_action_pause"
+                android:text="暂停"
                 android:textSize="12sp" />
 
             <Button
@@ -61,7 +61,7 @@
                 android:layout_marginRight="2dp"
                 android:background="@drawable/umeng_common_gradient_red"
                 android:singleLine="true"
-                android:text="@string/umeng_common_action_cancel"
+                android:text="取消"
                 android:textSize="12sp" />
         </LinearLayout>
 

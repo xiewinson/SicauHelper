@@ -128,13 +128,22 @@ public class NavigationDrawerFragment extends BaseFragment {
             }
         });
         final int[] icons = {
-                R.drawable.ic_event_grey600_24dp,
-                R.drawable.ic_desktop_windows_grey600_24dp,
-                R.drawable.ic_school_grey600_24dp,
-                R.drawable.ic_whatshot_grey600_24dp,
-                R.drawable.ic_location_city_grey600_24dp,
-                R.drawable.ic_shopping_cart_grey600_24dp,
-                R.drawable.ic_group_grey600_24dp
+                R.drawable.ic_action_calendar_day,
+                R.drawable.ic_action_lab,
+                R.drawable.ic_action_book,
+                R.drawable.ic_action_news,
+                R.drawable.ic_action_home,
+                R.drawable.ic_action_cart,
+                R.drawable.ic_action_circles
+        };
+        final int[] checkedIcons = {
+                R.drawable.ic_action_calendar_day_blue,
+                R.drawable.ic_action_lab_blue,
+                R.drawable.ic_action_book_blue,
+                R.drawable.ic_action_news_blue,
+                R.drawable.ic_action_home_blue,
+                R.drawable.ic_action_cart_blue,
+                R.drawable.ic_action_circles_blue
         };
         final String[] titles = {
                 getString(R.string.title_cource),
@@ -170,11 +179,12 @@ public class NavigationDrawerFragment extends BaseFragment {
                 TextView tv = (TextView) convertView.findViewById(R.id.navigation_item_tv);
                 ImageView iv = (ImageView) convertView.findViewById(R.id.navigation_item_iv);
                 tv.setText(titles[position]);
-                iv.setImageResource(icons[position]);
                 if (position == mCurrentSelectedPosition) {
+                    iv.setImageResource(checkedIcons[position]);
                     convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
                     tv.setTextColor(Color.parseColor("#212121"));
                 } else {
+                    iv.setImageResource(icons[position]);
                     tv.setTextColor(Color.parseColor("#757575"));
                     convertView.setBackgroundResource(R.drawable.btn_navigation_item);
                 }

@@ -69,6 +69,8 @@
     <string name="title_activity_user_status">UserStatusActivity</string>
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_help">HelpActivity</string>
+    <string name="q_0">0、关于作者?</string>
+    <string name="a_0">我是都江堰校区的学生，这个APP是我的毕业设计。若有任何问题，可以发反馈给我。若使用这个APP发生任何不好的事也可以直接打电话发短信给我，18202816207</string>
     <string name="q_1">1、为啥能用学号密码登陆，为啥能获取到课程表、成绩表?</string>
     <string name="a_1">你用过“课程格子”“超级课程表”吗?我的实现方法和他们相同，其实就是用你的学号和密码去访问教务网，然后我仅仅把有用的信息比如课程和成绩信息提取出来给你展示。
     你可以想象你是在用另一种方式的浏览器上教务网，而且下次不用再输入密码。但是！！！我仅仅把你的教务密码保存在你的手机里，服务器上没有记录你的密码，这样子你的密码仍然只有你知道，我是不知道的，反正“川农校园通”是很安全的你放心。</string>

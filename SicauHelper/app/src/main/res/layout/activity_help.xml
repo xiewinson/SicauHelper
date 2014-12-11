@@ -12,6 +12,20 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            style="@style/help_q_tv"
+            android:text="@string/q_0" />
+        <TextView
+            android:autoLink="phone"
+            style="@style/help_a_tv"
+            android:text="@string/a_0" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#eeeeee"/>
+
         <TextView
             style="@style/help_q_tv"
             android:text="@string/q_1" />
