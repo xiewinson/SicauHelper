@@ -30,6 +30,17 @@
         android:background="#eeeeee"/>
 
     <Button
+        android:id="@+id/update_btn"
+        style="@style/setting_item_style"
+        android:text="检查更新"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee"/>
+
+
+    <Button
         android:id="@+id/logout_btn"
         style="@style/setting_item_style"
         android:text="注销登录"/>

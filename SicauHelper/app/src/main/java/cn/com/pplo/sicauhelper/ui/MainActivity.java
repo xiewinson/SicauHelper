@@ -27,6 +27,7 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.feedback.Comment;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.avos.avoscloud.feedback.FeedbackThread;
+import com.umeng.update.UmengUpdateAgent;
 
 import java.util.List;
 
@@ -97,6 +98,9 @@ public class MainActivity extends ActionBarActivity
                 drawerPosition = savedPosition;
                 drawerPositionCopy = savedPosition;
             }
+            //启动更新
+            UmengUpdateAgent.setUpdateOnlyWifi(false);
+            UmengUpdateAgent.update(this);
             initView();
         }
     }

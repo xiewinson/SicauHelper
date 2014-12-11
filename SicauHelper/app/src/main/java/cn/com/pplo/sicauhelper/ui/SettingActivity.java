@@ -8,6 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
+
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.util.DialogUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -22,6 +27,7 @@ public class SettingActivity extends BaseActivity {
 
     private Button goodsStatusCountBtn;
     private Button commentCountBtn;
+    private Button updateBtn;
     private Button logoutBtn;
 
     @Override
@@ -37,6 +43,7 @@ public class SettingActivity extends BaseActivity {
 
         goodsStatusCountBtn = (Button) findViewById(R.id.goods_status_count_btn);
         commentCountBtn = (Button) findViewById(R.id.comment_count_btn);
+        updateBtn = (Button) findViewById(R.id.update_btn);
         logoutBtn = (Button) findViewById(R.id.logout_btn);
 
         //商品帖子每次加载数量
@@ -52,6 +59,22 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 DialogUtil.showCountEditDialog(SettingActivity.this, DialogUtil.TYPE_COUNT_EDIT.COMMENT);
+            }
+        });
+
+        //检查更新
+        updateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+                    @Override
+                    public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+                        if(i == UpdateStatus.No) {
+                            UIUtil.showShortToast(SettingActivity.this, "没有新的更新啊");
+                        }
+                    }
+                });
+                UmengUpdateAgent.forceUpdate(SettingActivity.this);
             }
         });
 

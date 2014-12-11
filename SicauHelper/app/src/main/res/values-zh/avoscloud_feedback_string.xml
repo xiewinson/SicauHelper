@@ -6,4 +6,86 @@
     <string name="avoscloud_feedback_input_hint">填写反馈</string>
     <string name="avoscloud_feedback_contact_hint">联系方式</string>
     <string name="avosclou_feedback_just_now">刚刚</string>
+
+    <string name="app_name">川农校园通</string>
+    <string name="title_home">首页</string>
+    <string name="title_market">校内市场</string>
+    <string name="title_cource">理论课表</string>
+    <string name="title_cource_lab">实验课表</string>
+    <string name="title_score">我的成绩</string>
+    <string name="title_news">教务新闻</string>
+    <string name="title_classroom">空闲教室</string>
+    <string name="title_status">川农圈子</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_news">NewsActivity</string>
+    <string name="title_activity_score_stats">成绩统计</string>
+    <string name="title_activity_new_goods">NewGoodsActivity</string>
+
+    <string-array name="school">
+        <item>雅安</item>
+        <item>成都</item>
+        <item>都江堰</item>
+    </string-array>
+    <string-array name="goods_category">
+        <item>衣物</item>
+        <item>书本</item>
+        <item>食物</item>
+        <item>学习</item>
+        <item>杂项</item>
+    </string-array>
+    <string-array name="image_select">
+        <item>立刻拍照</item>
+        <item>本地相册</item>
+    </string-array>
+    <string-array name="comment_option_0">
+        <item>回复</item>
+        <item>投诉</item>
+        <item>删除</item>
+    </string-array>
+    <string-array name="comment_option_1">
+        <item>回复</item>
+        <item>投诉</item>
+    </string-array>
+    <string-array name="message_type">
+        <item>发出的商品评论</item>
+        <item>收到的商品评论</item>
+        <item>发出的圈子评论</item>
+        <item>收到的圈子评论</item>
+    </string-array>
+
+    <string name="title_activity_goods">GoodsActivity</string>
+    <string name="title_activity_search_goods">SearchGoodsActivity</string>
+    <string name="is_delete_comment">是否要删除这条评论?不能恢复的哦</string>
+    <string name="is_delete_goods">是否要删除这个商品?不能恢复的哦</string>
+    <string name="is_delete_status">是否要删除这个帖子?不能恢复的哦</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="title_activity_status">StatusActivity</string>
+    <string name="title_activity_user">UserActivity</string>
+    <string name="title_activity_comment">CommentActivity</string>
+    <string name="title_activity_search_status">SearchStatusActivity</string>
+    <string name="title_activity_user_goods">UserGoodsActivity</string>
+    <string name="title_activity_user_status">UserStatusActivity</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="q_1">1、为啥能用学号密码登陆，为啥能获取到课程表、成绩表?</string>
+    <string name="a_1">你用过“课程格子”“超级课程表”吗?我的实现方法和他们相同，其实就是用你的学号和密码去访问教务网，然后我仅仅把有用的信息比如课程和成绩信息提取出来给你展示。
+    你可以想象你是在用另一种方式的浏览器上教务网，而且下次不用再输入密码。但是！！！我仅仅把你的教务密码保存在你的手机里，服务器上没有记录你的密码，这样子你的密码仍然只有你知道，我是不知道的，反正“川农校园通”是很安全的你放心。</string>
+    <string name="q_2">2、“空闲教室”为啥只有早上、下午、晚上三个类别?</string>
+    <string name="a_2">这个是我在教务系统上找到的就是这样的，我也不知道为啥没有具体到哪节课。(伦家基本上没上过自习课，根本就不知道教务系统上那个空教室查询是怎么确定的)</string>
+    <string name="q_3">3、“校内市场”真实、安全吗?</string>
+    <string name="a_3">这仅仅是一个发布平台，不涉及任何金钱交易、转移、移花接木，使用的同学擦亮眼。这个APP由于只能用学号登录，使用者都是川农的学生，同学再坏也坏不到哪里去，再坑也不坑川农人，对吧?</string>
+    <string name="q_4">4、“川农圈子”什么话都可以说吗?</string>
+    <string name="a_4">请不要说任何违反当地法律法规的话=_=...</string>
+    <string name="title_activity_course">CourseActivity</string>
+    <string name="title_activity_map">地图</string>
+
+
 </resources>
