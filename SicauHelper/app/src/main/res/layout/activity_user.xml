@@ -83,6 +83,32 @@
                 android:padding="8dp"
                 android:text="圈子数量"
                 android:textSize="18sp" />
-
+    <LinearLayout
+        android:animateLayoutChanges="true"
+        android:gravity="bottom"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:visibility="gone"
+            android:id="@+id/edit_head_btn"
+            android:background="@drawable/btn_white_lightgrey"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:text="修改头像"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="16dp"
+            android:layout_height="1dp"/>
+        <Button
+            android:visibility="gone"
+            android:id="@+id/edit_nickname_btn"
+            android:background="@drawable/btn_white_lightgrey"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:text="修改昵称"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
 
 </LinearLayout>

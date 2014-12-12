@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
@@ -20,6 +21,7 @@ import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -35,6 +37,7 @@ import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.DialogUtil;
 import cn.com.pplo.sicauhelper.util.ImageUtil;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -60,6 +63,9 @@ public class UserActivity extends BaseActivity {
 
     private TextView goodsCountTv;
     private TextView statusCountTv;
+
+    private Button editHeadBtn;
+    private Button editNicknameBtn;
 
 
     public static void startUserActivity(Context context, String objectId) {
@@ -92,6 +98,9 @@ public class UserActivity extends BaseActivity {
 
         goodsCountTv = (TextView) findViewById(R.id.user_goods_tv);
         statusCountTv = (TextView) findViewById(R.id.user_status_tv);
+
+        editHeadBtn = (Button) findViewById(R.id.edit_head_btn);
+        editNicknameBtn = (Button) findViewById(R.id.edit_nickname_btn);
 
         findUser(objectId, AVQuery.CachePolicy.CACHE_THEN_NETWORK);
     }
@@ -142,6 +151,47 @@ public class UserActivity extends BaseActivity {
             }
         });
 
+        //修改昵称和修改头像
+        if(SicauHelperApplication.getStudent().getObjectId().equals(objectId)) {
+            editHeadBtn.setVisibility(View.VISIBLE);
+            editNicknameBtn.setVisibility(View.VISIBLE);
+
+            editHeadBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (avUser == null) {
+                        UIUtil.showShortToast(UserActivity.this, "人都还没获取到，先别改头像");
+                    } else {
+                        getImageSelectDialog(UserActivity.this).show();
+                    }
+                }
+            });
+
+            editNicknameBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (avUser == null) {
+                        UIUtil.showShortToast(UserActivity.this, "人都还没获取到，先别改名字");
+                    } else {
+                        DialogUtil.showEditNicknameDialog(UserActivity.this, avUser, new SaveCallback() {
+                            @Override
+                            public void done(AVException e) {
+                                if(e == null) {
+                                    UIUtil.showShortToast(UserActivity.this, "修改昵称成功");
+                                    findUser(objectId, AVQuery.CachePolicy.NETWORK_ONLY);
+                                    SicauHelperApplication.clearStudent();
+                                }
+                                else {
+                                    Log.d("winson", "修改昵称失败：" + e.getMessage());
+                                    UIUtil.showShortToast(UserActivity.this, "修改昵称失败了");
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
         getGoodsCount();
         getStatusCount();
     }
@@ -178,12 +228,10 @@ public class UserActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (SicauHelperApplication.getStudent().getObjectId().equals(objectId)) {
-            getMenuInflater().inflate(R.menu.menu_user, menu);
-        } else {
+
             getMenuInflater().inflate(R.menu.global, menu);
 
-        }
+
         return true;
     }
 
@@ -201,33 +249,12 @@ public class UserActivity extends BaseActivity {
         }
         //修改昵称
         else if (id == R.id.action_edit_nickname) {
-            if (avUser == null) {
-                UIUtil.showShortToast(UserActivity.this, "人都还没获取到，先别改名字");
-            } else {
-                DialogUtil.showEditNicknameDialog(this, avUser, new SaveCallback() {
-                    @Override
-                    public void done(AVException e) {
-                        if(e == null) {
-                            UIUtil.showShortToast(UserActivity.this, "修改昵称成功");
-                            findUser(objectId, AVQuery.CachePolicy.NETWORK_ONLY);
-                            SicauHelperApplication.clearStudent();
-                        }
-                        else {
-                            Log.d("winson", "修改昵称失败：" + e.getMessage());
-                            UIUtil.showShortToast(UserActivity.this, "修改昵称失败了");
-                        }
-                    }
-                });
-            }
+
             return true;
         }
         //修改头像
         else if(id == R.id.action_edit_profile) {
-            if (avUser == null) {
-                UIUtil.showShortToast(UserActivity.this, "人都还没获取到，先别改头像");
-            } else {
-                getImageSelectDialog(this).show();
-            }
+
             return true;
         }
 
@@ -351,15 +378,29 @@ public class UserActivity extends BaseActivity {
                 UIUtil.dismissProgressDialog(uploadImgDialog);
                 if (e == null) {
                     UIUtil.showShortToast(context, "上传图片成功");
-                    avUser.put(TableContract.TableUser._PROFILE_URL, avFile);
-                    avUser.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(AVException e) {
-                            findUser(objectId, AVQuery.CachePolicy.NETWORK_ONLY);
-                            SicauHelperApplication.clearStudent();
-                        }
-                    });
-
+                    String sid = SharedPreferencesUtil.get(UserActivity.this, SharedPreferencesUtil.LOGIN_SID, "").toString();
+                    new UserAction().logIn(sid, sid,
+                            new LogInCallback() {
+                                @Override
+                                public void done(AVUser avUser, AVException e) {
+                                    if(e != null) {
+                                        Log.d("winson", "保存失败：" + e.getMessage());
+                                    }
+                                    else {
+                                        avUser.put(TableContract.TableUser._PROFILE_URL, avFile);
+                                        avUser.saveInBackground(new SaveCallback() {
+                                            @Override
+                                            public void done(AVException e) {
+                                                if(e != null) {
+                                                    Log.d("winson", "保存失败：" + e.getMessage());
+                                                }
+                                                findUser(objectId, AVQuery.CachePolicy.NETWORK_ONLY);
+                                                SicauHelperApplication.clearStudent();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
                 } else {
                     new AlertDialog.Builder(context)
                             .setMessage("上传头像失败，要重试吗?")

@@ -107,6 +107,7 @@ public class MainActivity extends ActionBarActivity
             UmengUpdateAgent.setUpdateOnlyWifi(false);
             UmengUpdateAgent.update(this);
             initView();
+
         }
     }
 

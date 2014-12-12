@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.DeleteCallback;
+import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.feedback.Comment;
 import com.avos.avoscloud.feedback.FeedbackAgent;
@@ -25,6 +27,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.CommentAction;
 import cn.com.pplo.sicauhelper.action.GoodsAction;
 import cn.com.pplo.sicauhelper.action.StatusAction;
+import cn.com.pplo.sicauhelper.action.UserAction;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 
@@ -280,13 +283,26 @@ public class DialogUtil {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String nickname = et.getText().toString().trim();
+                        final String nickname = et.getText().toString().trim();
                         if (TextUtils.isEmpty(nickname)) {
                             UIUtil.showShortToast(context, "昵称不可以为空");
                             return;
                         }
-                        avUser.put(TableContract.TableUser._NICKNAME, nickname);
-                        avUser.saveInBackground(saveCallback);
+                        String sid = SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString();
+                        new UserAction().logIn(sid, sid,
+                                new LogInCallback() {
+                                    @Override
+                                    public void done(AVUser avUser, AVException e) {
+                                        if(e != null) {
+                                            Log.d("winson", "保存失败：" + e.getMessage());
+                                        }
+                                        else {
+                                            avUser.put(TableContract.TableUser._NICKNAME, nickname);
+                                            avUser.saveInBackground(saveCallback);
+                                        }
+                                    }
+                                });
+
                     }
                 }).setNegativeButton(R.string.cancel, null);
         alertDialog = builder.create();
