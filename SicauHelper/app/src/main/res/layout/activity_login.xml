@@ -34,12 +34,14 @@
 
         <EditText
             android:hint="学号"
+            android:maxLength="15"
             android:inputType="number"
             android:id="@+id/login_sid_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <EditText
+            android:maxLength="30"
             android:hint="密码"
             android:id="@+id/login_pswd_et"
             android:inputType="textPassword"

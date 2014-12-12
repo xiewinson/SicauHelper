@@ -44,6 +44,7 @@
             android:paddingTop="4dp">
 
             <EditText
+                android:maxLength="800"
                 android:id="@+id/comment_et"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
