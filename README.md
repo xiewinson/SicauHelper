@@ -16,6 +16,11 @@
 * 校内市场
 * 川农圈子
 
+**V1.0.2版本更新**
+
+* 有同学反馈被自己头像吓到了，已将修改头像位置放得更明显了
+* 发现屏幕方向变化时停止运行的BUG，现在已经修复
+
 
   [1]: https://github.com/WinsonTse/SicauHelper/blob/master/sicauhelper.apk?raw=true
   [2]: http://pan.baidu.com/s/1i346zjv
