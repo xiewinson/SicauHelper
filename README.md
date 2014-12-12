@@ -3,8 +3,8 @@
 > 数据主要是从教务系 统上扒下来的。当然，也是很安全的。有兴趣的同学可以安装试试，
 > 需要 Android 4.0 及以上版本的手机。
 
-[直接下载][1]
-[百度网盘][2]
+[直接下载V1.0.2][1]
+[百度网盘V1.0.2][2]
 
 **主要功能**
 
@@ -23,4 +23,4 @@
 
 
   [1]: https://github.com/WinsonTse/SicauHelper/blob/master/sicauhelperV102.apk?raw=true
-  [2]: http://pan.baidu.com/s/1i346zjv
+  [2]: http://pan.baidu.com/s/1sjnvnPj
