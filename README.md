@@ -22,5 +22,5 @@
 * 发现屏幕方向变化时停止运行的BUG，现在已经修复
 
 
-  [1]: https://github.com/WinsonTse/SicauHelper/blob/master/sicauhelper.apk?raw=true
+  [1]: https://github.com/WinsonTse/SicauHelper/blob/master/sicauhelperV102.apk?raw=true
   [2]: http://pan.baidu.com/s/1i346zjv
