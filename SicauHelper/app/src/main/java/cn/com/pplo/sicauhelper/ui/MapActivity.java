@@ -1,20 +1,14 @@
 package cn.com.pplo.sicauhelper.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptor;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
@@ -52,7 +46,7 @@ public class MapActivity extends BaseActivity {
         longitude = getIntent().getDoubleExtra(EXTRA_LONGITUDE, 0d);
         name = getIntent().getStringExtra(EXTRA_NAME);
 
-        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.light_blue_500);
+        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.color_primary_500);
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 必须要写
         init();

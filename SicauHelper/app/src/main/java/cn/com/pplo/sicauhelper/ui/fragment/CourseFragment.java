@@ -12,7 +12,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +26,6 @@ import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,7 +108,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
 
         //设置actionBar颜色
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.light_blue_500);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary_500);
 //        int color = 0;
 //        int tabColor = 0;
 //        switch (SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL)){
@@ -128,7 +126,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 //                break;
 //        }
 //        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), color);
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.light_blue_500);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.color_primary_500);
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -251,8 +249,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ListView listView = getDateListView(context, data.get(position), data);
-            if(listView.getAdapter().getCount() < 1) {
+            if(data.size() < 7 ||  data.get(position).size() < 1) {
                 TextView textView = (TextView) View.inflate(context, R.layout.course_empty_textview, null);
                 if(type == TYPE_COURSE_THEORY) {
                     textView.setText("这天你没有理论课");
@@ -264,6 +261,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
                 return textView;
             }
             else {
+                ListView listView = getDateListView(context, data.get(position), data);
                 container.addView(listView);
                 return listView;
             }

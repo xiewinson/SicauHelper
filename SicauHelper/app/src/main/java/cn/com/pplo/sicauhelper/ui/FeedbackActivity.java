@@ -59,7 +59,7 @@ public class FeedbackActivity extends BaseActivity {
     }
 
     private void setUp(Context context) {
-        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.light_blue_500);
+        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.color_primary_500);
         getSupportActionBar().setTitle("反馈");
         listView = (ListView) findViewById(R.id.feedback_listView);
         feedbackAdapter = new FeedbackAdapter(this, data);

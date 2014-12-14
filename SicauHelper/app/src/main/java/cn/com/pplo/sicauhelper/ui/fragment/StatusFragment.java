@@ -67,7 +67,7 @@ public class StatusFragment extends BaseFragment {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.light_blue_500);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary_500);
         return inflater.inflate(R.layout.fragment_status, container, false);
     }
 
@@ -100,7 +100,7 @@ public class StatusFragment extends BaseFragment {
 
         //添加fab
         fab = (FloatingActionButton) view.findViewById(R.id.status_add_fab);
-        UIUtil.initFab(getActivity(), fab, listView, R.color.light_blue_500, R.color.light_blue_900, R.color.light_blue_400, new View.OnClickListener() {
+        UIUtil.initFab(getActivity(), fab, listView, R.color.color_primary_500, R.color.light_blue_900, R.color.light_blue_400, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddActivity.startAddActivity(context, AddActivity.TYPE_STATUS);

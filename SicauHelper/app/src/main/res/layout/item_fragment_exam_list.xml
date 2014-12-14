@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    card_view:cardCornerRadius="2dp"
+    card_view:cardPreventCornerOverlap="false"
+    card_view:cardBackgroundColor="#ffffff"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+    <LinearLayout
+        android:background="@drawable/btn_white_lightgrey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/exam_course_tv"
+            style="@style/course_title"
+            android:text="西方经济学" />
+        <!--考试时间-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/course_name"
+                android:text="时间" />
+
+            <TextView
+                android:id="@+id/exam_time_tv"
+                style="@style/course_content"
+                android:text="第11周-星期6-第3场(14:30-16:30) 请14:15到考场" />
+        </LinearLayout>
+        <!--教室-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/course_name"
+                android:text="教室" />
+
+            <TextView
+                android:id="@+id/exam_classroom_tv"
+                style="@style/course_content"
+                android:text="都江堰校区:1409" />
+        </LinearLayout>
+        <!--座位号-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/course_name"
+                android:text="座位" />
+
+            <TextView
+                android:id="@+id/exam_num_tv"
+                style="@style/course_content"
+                android:text="45" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

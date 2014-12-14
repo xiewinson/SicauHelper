@@ -57,7 +57,7 @@ public class CourseActivity extends BaseActivity {
             course = data.get(0);
         }
 
-        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.light_blue_500);
+        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.color_primary_500);
 
         nameTv = (TextView) findViewById(R.id.course_name_tv);
         categoryTv = (TextView) findViewById(R.id.course_category_tv);
@@ -99,7 +99,7 @@ public class CourseActivity extends BaseActivity {
         LayerDrawable stars = (LayerDrawable) creditRatingBar.getProgressDrawable();
         stars.getDrawable(0).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(1).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.light_blue_500), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.color_primary_500), PorterDuff.Mode.SRC_ATOP);
         Log.d("winson", "学分：" + course.getCredit());
         creditRatingBar.setRating(course.getCredit());
 

@@ -34,7 +34,7 @@
                 android:layout_centerInParent="true"
                 android:text="新版本发布了"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/light_blue_500" />
+                android:textColor="@color/color_primary_500" />
             
             <Button
                 android:id="@+id/umeng_update_id_close"

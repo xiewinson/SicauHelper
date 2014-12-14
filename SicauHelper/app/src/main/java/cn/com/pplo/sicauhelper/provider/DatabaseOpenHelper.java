@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "SICAU_HELPER_DB";
-    public static final int DB_VERSION = 5;
+    public static final int DB_VERSION = 7;
 
     //创建成绩表
     public static final String createScoreSql = "create table " + TableContract.TableScore.TABLE_NAME + "("
@@ -36,7 +36,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + TableContract.TableCourse._SELECTNUM + " integer"
             + ")";
 
-    //创建课程表
+    //创建实验课程表
     public static final String createLabCourseSql = "create table " + TableContract.TableLabCourse.TABLE_NAME + "("
             + TableContract.TableLabCourse._ID + " integer primary key autoincrement, "
             + TableContract.TableLabCourse._NAME + " text, "
@@ -69,6 +69,15 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
             + TableContract.TableClassroom._SCHOOL + " text"
             + ")";
 
+    //创建考试安排表
+    public static final String createExamSql = "create table " + TableContract.TableExam.TABLE_NAME + "("
+            + TableContract.TableExam._ID + " integer primary key autoincrement, "
+            + TableContract.TableExam._TIME + " text, "
+            + TableContract.TableExam._COURSE + " text, "
+            + TableContract.TableExam._NUM + " text,"
+            + TableContract.TableExam._CLASSROOM + " text"
+            + ")";
+
     //创建学生表
     public static final String createStudentSql = "create table " +  TableContract.TableUser.TABLE_NAME + "("
             + TableContract.TableUser._ID +  " integer primary key, "
@@ -98,6 +107,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(createNewsSql);
         db.execSQL(createClassroomSql);
         db.execSQL(createStudentSql);
+        db.execSQL(createExamSql);
         Log.d("winson", "创建数据库完成");
     }
     @Override
@@ -109,6 +119,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE + TableContract.TableNews.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableClassroom.TABLE_NAME);
         db.execSQL(DROP_TABLE + TableContract.TableUser.TABLE_NAME);
+        db.execSQL(DROP_TABLE + TableContract.TableExam.TABLE_NAME);
         onCreate(db);
     }
 }

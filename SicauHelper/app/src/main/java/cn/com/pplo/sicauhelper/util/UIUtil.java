@@ -109,7 +109,7 @@ public class UIUtil {
         } else if (school == 2){
             color = R.color.green_500;
         } else {
-            color = R.color.light_blue_500;
+            color = R.color.color_primary_500;
         }
 
         UIUtil.setActionBarColor(context, actionBarColor, color);

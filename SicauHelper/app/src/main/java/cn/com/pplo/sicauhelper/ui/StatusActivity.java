@@ -114,7 +114,7 @@ public class StatusActivity extends BaseActivity {
         commentEt = (EditText) findViewById(R.id.comment_et);
         sendBtn = (Button) findViewById(R.id.comment_send_btn);
 
-        UIUtil.setActionBarColor(context,getSupportActionBar(), R.color.light_blue_500);
+        UIUtil.setActionBarColor(context,getSupportActionBar(), R.color.color_primary_500);
 
         //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.status_swipe_container);

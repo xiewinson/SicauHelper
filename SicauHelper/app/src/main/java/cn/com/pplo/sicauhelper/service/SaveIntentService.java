@@ -17,6 +17,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.model.Classroom;
 import cn.com.pplo.sicauhelper.model.Course;
+import cn.com.pplo.sicauhelper.model.Exam;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
@@ -35,12 +36,14 @@ public class SaveIntentService extends IntentService {
     private static final String ACTION_COURSE_ALL = "cn.com.pplo.sicauhelper.service.action.course_all";
     private static final String ACTION_LAB_COURSE_ALL = "cn.com.pplo.sicauhelper.service.action.lab_course_all";
     private static final String ACTION_CLASSROOM_ALL = "cn.com.pplo.sicauhelper.service.action.classroom_all";
+    private static final String ACTION_EXAM_ALL = "cn.com.pplo.sicauhelper.service.action.exam_all";
 
     private static final String EXTRA_NEWS_LIST = "cn.com.pplo.sicauhelper.service.extra.newses";
     private static final String EXTRA_SCORE_LIST = "cn.com.pplo.sicauhelper.service.extra.scores";
     private static final String EXTRA_COURSE_LIST = "cn.com.pplo.sicauhelper.service.extra.courses";
     private static final String EXTRA_LAB_COURSE_LIST = "cn.com.pplo.sicauhelper.service.extra.lab_courses";
     private static final String EXTRA_CLASSROOM_LIST = "cn.com.pplo.sicauhelper.service.extra.classroomes";
+    private static final String EXTRA_EXAM_LIST = "cn.com.pplo.sicauhelper.service.extra.exam";
     /**
      * Starts this service to perform action Foo with the given parameters. If
      * the service is already performing a task this action will be queued.
@@ -113,6 +116,19 @@ public class SaveIntentService extends IntentService {
         context.startService(intent);
     }
 
+    /**
+     * 存储考试安排
+     *
+     * @param context
+     * @param examList
+     */
+    public static void startActionExamAll(Context context, List<Exam> examList) {
+        Intent intent = new Intent(context, SaveIntentService.class);
+        intent.setAction(ACTION_EXAM_ALL);
+        intent.putParcelableArrayListExtra(EXTRA_EXAM_LIST, (java.util.ArrayList<? extends android.os.Parcelable>) examList);
+        context.startService(intent);
+    }
+
 
     public SaveIntentService() {
         super("SaveIntentService");
@@ -137,6 +153,9 @@ public class SaveIntentService extends IntentService {
             } else if (ACTION_CLASSROOM_ALL.equals(action)) {
                 ArrayList<Classroom> classroomList = intent.getParcelableArrayListExtra(EXTRA_CLASSROOM_LIST);
                 handleActionClassroomList(classroomList);
+            } else if (ACTION_EXAM_ALL.equals(action)) {
+                ArrayList<Exam> examList = intent.getParcelableArrayListExtra(EXTRA_EXAM_LIST);
+                handleActionExamList(examList);
             }
         }
     }
@@ -297,6 +316,35 @@ public class SaveIntentService extends IntentService {
                 e.printStackTrace();
             }
             SharedPreferencesUtil.put(getApplicationContext(), SharedPreferencesUtil.LAST_SYNC_CLASSROMM, System.currentTimeMillis());
+        }
+    }
+
+    /**
+     * 存储考试安排列表
+     *
+     */
+    private void handleActionExamList(ArrayList<Exam> tempList) {
+        ContentResolver contentResolver = getApplicationContext().getContentResolver();
+        contentResolver.delete(Uri.parse(SicauHelperProvider.URI_EXAM_ALL), "", null);
+        if (tempList != null && tempList.size() > 0) {
+            ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
+            for (int i = 0; i < tempList.size(); i++) {
+                Exam exam = tempList.get(i);
+                ContentValues values = new ContentValues();
+                values.put(TableContract.TableExam._COURSE, exam.getCourse());
+                values.put(TableContract.TableExam._CLASSROOM, exam.getClassroom());
+                values.put(TableContract.TableExam._NUM, exam.getNum());
+                values.put(TableContract.TableExam._TIME, exam.getTime());
+
+                operations.add(ContentProviderOperation.newInsert(Uri.parse(SicauHelperProvider.URI_EXAM_ALL)).withValues(values).build());
+            }
+            try {
+                contentResolver.applyBatch(SicauHelperProvider.AUTHORITY, operations);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (OperationApplicationException e) {
+                e.printStackTrace();
+            }
         }
     }
 

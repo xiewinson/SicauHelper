@@ -149,7 +149,7 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         }
 
         //设置header颜色
-        int color = R.color.light_blue_500;
+        int color = R.color.color_primary_500;
 //        switch (school){
 //            case 0:
 //                color = R.color.blue_500;
@@ -161,7 +161,7 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
 //                color = R.color.green_500;
 //                break;
 //        }
-        convertView.setAlpha(0.5f);
+//        convertView.setAlpha(0.5f);
         convertView.setBackgroundResource(color);
 
         //计算有几门课

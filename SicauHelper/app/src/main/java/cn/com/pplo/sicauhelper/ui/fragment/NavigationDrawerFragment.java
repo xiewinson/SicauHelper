@@ -131,28 +131,32 @@ public class NavigationDrawerFragment extends BaseFragment {
                 R.drawable.ic_action_calendar_day,
                 R.drawable.ic_action_lab,
                 R.drawable.ic_action_book,
+                R.drawable.ic_action_dice3,
                 R.drawable.ic_action_news,
                 R.drawable.ic_action_home,
-                R.drawable.ic_action_cart,
-                R.drawable.ic_action_circles
+                R.drawable.ic_action_circles,
+                R.drawable.ic_action_cart
         };
         final int[] checkedIcons = {
                 R.drawable.ic_action_calendar_day_blue,
                 R.drawable.ic_action_lab_blue,
                 R.drawable.ic_action_book_blue,
+                R.drawable.ic_action_dice3_blue,
                 R.drawable.ic_action_news_blue,
                 R.drawable.ic_action_home_blue,
-                R.drawable.ic_action_cart_blue,
-                R.drawable.ic_action_circles_blue
+                R.drawable.ic_action_circles_blue,
+                R.drawable.ic_action_cart_blue
+
         };
         final String[] titles = {
                 getString(R.string.title_cource),
                 getString(R.string.title_cource_lab),
                 getString(R.string.title_score),
+                getString(R.string.title_exam),
                 getString(R.string.title_news),
                 getString(R.string.title_classroom),
-                getString(R.string.title_market),
-                getString(R.string.title_status)
+                getString(R.string.title_status),
+                getString(R.string.title_market)
         };
 
         //增加header

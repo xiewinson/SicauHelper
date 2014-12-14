@@ -71,6 +71,15 @@ public class SicauHelperProvider extends ContentProvider {
     private static final int CODE_LAB_COURSE_ALL = 120;
     public static final String URI_LAB_COURSE_ALL = "content://" + AUTHORITY + "/" + LAB_COURSE_ALL + "";
 
+    //Exam
+    private static final String EXAM_SINGLE = "exam/#";
+    private static final int CODE_EXAM_SINGLE = 130;
+    public static final String URI_EXAM_SINGLE = "content://" + AUTHORITY + "/" + EXAM_SINGLE;
+
+    private static final String EXAM_ALL = "exam";
+    private static final int CODE_EXAM_ALL = 140;
+    public static final String URI_EXAM_ALL = "content://" + AUTHORITY + "/" + EXAM_ALL + "";
+
 
     static {
         uriMatcher.addURI(AUTHORITY, SCORE_ALL, CODE_SCORE_ALL);
@@ -90,6 +99,9 @@ public class SicauHelperProvider extends ContentProvider {
 
         uriMatcher.addURI(AUTHORITY, STUDENT_ALL, CODE_STUDENT_ALL);
         uriMatcher.addURI(AUTHORITY, STUDENT_SINGLE, CODE_STUDENT_SINGLE);
+
+        uriMatcher.addURI(AUTHORITY, EXAM_ALL, CODE_EXAM_ALL);
+        uriMatcher.addURI(AUTHORITY, EXAM_SINGLE, CODE_EXAM_SINGLE);
     }
 
     private SQLiteOpenHelper sqliteOpenHelper;
@@ -137,6 +149,10 @@ public class SicauHelperProvider extends ContentProvider {
             case CODE_STUDENT_ALL:
                 long studentId = sqliteDatabase.insert(TableContract.TableUser.TABLE_NAME, null, values);
                 return Uri.withAppendedPath(uri, studentId + "");
+
+            case CODE_EXAM_ALL:
+                long examId = sqliteDatabase.insert(TableContract.TableExam.TABLE_NAME, null, values);
+                return Uri.withAppendedPath(uri, examId + "");
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -186,6 +202,12 @@ public class SicauHelperProvider extends ContentProvider {
             case CODE_STUDENT_SINGLE:
                 return null;
 
+            case CODE_EXAM_ALL:
+                Cursor  examAllCursor = sqliteDatabase.query(TableContract.TableExam.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+                return examAllCursor;
+            case CODE_EXAM_SINGLE:
+                return null;
+
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }
@@ -211,6 +233,8 @@ public class SicauHelperProvider extends ContentProvider {
                 return sqliteDatabase.delete(TableContract.TableUser.TABLE_NAME, selection, selectionArgs);
             case CODE_NEWS_ALL:
                 return sqliteDatabase.delete(TableContract.TableNews.TABLE_NAME, selection, selectionArgs);
+            case CODE_EXAM_ALL:
+                return sqliteDatabase.delete(TableContract.TableExam.TABLE_NAME, selection, selectionArgs);
             default:
                 throw new UnsupportedOperationException("Not yet implemented");
         }

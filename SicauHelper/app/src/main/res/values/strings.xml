@@ -10,6 +10,8 @@
     <string name="title_news">教务新闻</string>
     <string name="title_classroom">空闲教室</string>
     <string name="title_status">川农圈子</string>
+    <string name="title_exam">考试安排</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

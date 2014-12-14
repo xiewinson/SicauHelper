@@ -34,6 +34,7 @@ import java.util.List;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.ui.fragment.ClassroomFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
+import cn.com.pplo.sicauhelper.ui.fragment.ExamFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.MarketFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.MessageDrawerFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.NavigationDrawerFragment;
@@ -241,21 +242,26 @@ public class MainActivity extends ActionBarActivity
             case 2:
                 fragment = ScoreFragment.newInstance();
                 break;
-            //新闻
+            //考试安排
             case 3:
+                fragment = ExamFragment.newInstance();
+                break;
+            //新闻
+            case 4:
                 fragment = NewsFragment.newInstance();
                 break;
             //空教室
-            case 4:
+            case 5:
                 fragment = ClassroomFragment.newInstance();
                 break;
-            //市场模块
-            case 5:
-                fragment = MarketFragment.newInstance();
-                break;
+
             //圈子模块
             case 6:
                 fragment = StatusFragment.newInstance();
+                break;
+            //市场模块
+            case 7:
+                fragment = MarketFragment.newInstance();
                 break;
             case -1:
                 return;

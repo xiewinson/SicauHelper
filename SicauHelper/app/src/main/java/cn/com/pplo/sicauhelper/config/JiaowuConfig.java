@@ -22,4 +22,6 @@ public class JiaowuConfig {
     public static final String JIAOWU_CLASSROOM_LIST = "http://jiaowu.sicau.edu.cn/web/web/lanmu/jshi_wk_list.asp";
     //实验课
     public static final String JIAOWU_LAB_COURSE = "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xueshensykb.asp";
+    //考试安排
+    public static final String JIAOWU_EXAM = "http://jiaowu.sicau.edu.cn/xuesheng/kao/kao/xuesheng.asp";
 }

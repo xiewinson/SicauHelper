@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import cn.com.pplo.sicauhelper.model.Classroom;
 import cn.com.pplo.sicauhelper.model.Course;
+import cn.com.pplo.sicauhelper.model.Exam;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.model.ScoreStats;
@@ -790,6 +791,52 @@ public class StringUtil {
                 callback.handleParseResult(classrooms);
             }
         }.execute(htmlStr);
+    }
+
+    /**
+     * 解析考试安排
+     * @param htmlStr
+     * @return
+     */
+    public static List<Exam> parseExamListInfo(String htmlStr) {
+        List<Exam> result = new ArrayList<>();
+        try {
+            Document document = Jsoup.parse(htmlStr);
+            //课程名
+            Elements courseElements = document.select("td[width=200]");
+            for (Element e : courseElements) {
+                Log.d("winson", "课程名：" + e.text());
+            }
+            //时间
+            Elements timeElements = document.select("td[width=320]");
+            for (Element e : timeElements) {
+                Log.d("winson", "时间：" + e.text());
+            }
+            //教室
+            Elements classroomElements = document.select("td[width=130]");
+            for (Element e : classroomElements) {
+                Log.d("winson", "教室：" + e.text());
+            }
+            //编号
+            Elements numElements = document.select("td[width=50]");
+            for (Element e : numElements) {
+                Log.d("winson", "编号：" + e.text());
+            }
+            for (int i = 0; i < courseElements.size(); i++) {
+                Exam exam = new Exam();
+                exam.setCourse(courseElements.get(i).text().replaceAll("\\s", ""));
+                exam.setTime(timeElements.get(i + 1).html());
+                exam.setClassroom(classroomElements.get(i + 1).text().replaceAll("\\s", ""));
+                exam.setNum(numElements.get(2 + i * 2 + 1).text().replaceAll("\\s", ""));
+                result.add(exam);
+            }
+
+        } catch (Exception e) {
+            result.clear();
+            Log.d("winson", "解析错误： " + e);
+        } finally {
+            return result;
+        }
     }
 
     /**

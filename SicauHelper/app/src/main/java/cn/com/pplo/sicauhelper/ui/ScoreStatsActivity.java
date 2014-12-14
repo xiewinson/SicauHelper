@@ -39,7 +39,7 @@ public class ScoreStatsActivity extends BaseActivity {
 
     private void setUp(Context context) {
         List<Score> data = getIntent().getParcelableArrayListExtra(EXTRA_DATA);
-        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.light_blue_500);
+        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.color_primary_500);
         listView = (ListView) findViewById(R.id.score_static_listView);
         listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar()));
         listView.addHeaderView(ViewPadding.getActionBarPadding(context, R.color.grey_200));

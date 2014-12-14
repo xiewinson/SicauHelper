@@ -42,5 +42,6 @@ public class UserUtil {
 //        db.execSQL(DELETE_STR + TableContract.TableNews.TABLE_NAME);
 //        db.execSQL(DELETE_STR + TableContract.TableClassroom.TABLE_NAME);
         db.execSQL(DELETE_STR + TableContract.TableUser.TABLE_NAME);
+        db.execSQL(DELETE_STR + TableContract.TableExam.TABLE_NAME);
     }
 }

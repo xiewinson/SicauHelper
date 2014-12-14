@@ -1,6 +1,5 @@
 package cn.com.pplo.sicauhelper.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +21,7 @@ public class HelpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         getSupportActionBar().setTitle("帮助");
-        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.light_blue_500);
+        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.color_primary_500);
     }
 
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.model.Classroom;
 import cn.com.pplo.sicauhelper.model.Course;
+import cn.com.pplo.sicauhelper.model.Exam;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.provider.TableContract;
@@ -275,6 +276,29 @@ public class CursorUtil {
                 classroom.setName(cursor.getString(cursor.getColumnIndex(TableContract.TableClassroom._NAME)));
                 Log.d("winson", "取出时：" + classroom);
                 list.add(classroom);
+            }
+        } catch (Exception e) {
+            list.clear();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            return list;
+        }
+    }
+
+    public static List<Exam> parseExamList(Cursor cursor) {
+        List<Exam> list = new ArrayList<Exam>();
+        try {
+            while (cursor.moveToNext()) {
+                Exam exam = new Exam();
+                exam.setId(cursor.getInt(cursor.getColumnIndex(TableContract.TableExam._ID)));
+                exam.setTime(cursor.getString(cursor.getColumnIndex(TableContract.TableExam._TIME)));
+                exam.setClassroom(cursor.getString(cursor.getColumnIndex(TableContract.TableExam._CLASSROOM)));
+                exam.setCourse(cursor.getString(cursor.getColumnIndex(TableContract.TableExam._COURSE)));
+                exam.setNum(cursor.getString(cursor.getColumnIndex(TableContract.TableExam._NUM)));
+                Log.d("winson", "取出时：" + exam);
+                list.add(exam);
             }
         } catch (Exception e) {
             list.clear();

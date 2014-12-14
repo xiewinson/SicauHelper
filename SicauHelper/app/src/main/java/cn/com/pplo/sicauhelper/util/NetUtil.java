@@ -452,6 +452,35 @@ public class NetUtil {
         clearCookie();
     }
 
+    /**
+     * 获取考试安排
+     * @param context
+     * @param params
+     * @param callback
+     */
+    public static void getExamHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback) {
+        login(context, params, new NetCallback(context) {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                callback.onErrorResponse(volleyError);
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    Map<String, String> headerMap = new HashMap<String, String>();
+                    headerMap.put("Cookie", cookie);
+                    headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
+                    headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
+                    getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_EXAM, headerMap, null, callback);
+                } catch (Exception e) {
+                    UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
+                }
+            }
+        });
+        clearCookie();
+    }
 
     //回调接口
     public static abstract class NetCallback implements Response.Listener<String>, Response.ErrorListener {

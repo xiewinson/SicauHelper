@@ -84,6 +84,19 @@ public class TableContract {
     }
 
     /**
+     * 考试安排表
+     */
+    public interface TableExam extends BaseColumns {
+
+        String TABLE_NAME = "t_exam";
+
+        String _COURSE = "_course";
+        String _TIME = "_time";
+        String _CLASSROOM = "_classroom";
+        String _NUM = "_num";
+    }
+
+    /**
      * 学生表
      */
     public interface TableUser extends BaseColumns {

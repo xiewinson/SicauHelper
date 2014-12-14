@@ -168,7 +168,7 @@ public class LoginActivity extends ActionBarActivity {
                                 startMainActivity();
                             }
                             else {
-                                UIUtil.showShortToast(LoginActivity.this, "出现了一个未知的错误");
+                                UIUtil.showShortToast(LoginActivity.this, "啊啊啊, 去教务网的路途太遥远, 重新试试吧");
                                 Log.d("winson", e.getMessage());
                                 UIUtil.dismissProgressDialog(progressDialog);
                             }

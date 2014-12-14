@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--主色彩-->
+    <color name="color_primary_500">#e51c23</color>
+
     <color name="background_tab_pressed">#66CCCCCC</color>
     <color name="purple_500">#9c27b0</color>
 
