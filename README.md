@@ -4,7 +4,7 @@
 > 需要 Android 4.0 及以上版本的手机。
 
 [直接下载V1.0.2][1]
-[百度网盘V1.0.2][2]
+[百度网盘V1.0.4][2]
 
 **主要功能**
 
@@ -27,4 +27,4 @@
 * BUG修复，UI调整
 
   [1]: https://github.com/WinsonTse/SicauHelper/blob/master/sicauhelperV102.apk?raw=true
-  [2]: http://pan.baidu.com/s/1sjnvnPj
+  [2]: http://pan.baidu.com/s/1bnzteyV
