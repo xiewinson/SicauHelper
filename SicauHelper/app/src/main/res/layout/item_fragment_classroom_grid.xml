@@ -9,6 +9,7 @@
     app:cardCornerRadius="2dp">
 
     <LinearLayout
+        android:background="@drawable/btn_white_lightgrey"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">

@@ -2,6 +2,7 @@ package cn.com.pplo.sicauhelper.util;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -196,4 +197,12 @@ public class UIUtil {
         imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+
+    public static void startShareIntent(Context context, String title, String content) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+        intent.putExtra(Intent.EXTRA_TEXT, content);
+        context.startActivity(Intent.createChooser(intent, title));
+    }
 }

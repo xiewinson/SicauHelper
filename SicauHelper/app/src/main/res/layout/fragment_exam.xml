@@ -12,7 +12,7 @@
         android:dividerHeight="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:listSelector="@drawable/btn_white_lightgrey"
+        android:listSelector="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
