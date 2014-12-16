@@ -175,7 +175,7 @@ public class StatusFragment extends BaseFragment {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
                     if (list.size() == 0) {
-                        UIUtil.showShortToast(getActivity(), "已经没有更多商品啦");
+                        UIUtil.showShortToast(getActivity(), "已经没有更多帖子啦");
                         footerView.setVisibility(View.INVISIBLE);
                     } else {
                         notifyDataSetChanged(list, false);

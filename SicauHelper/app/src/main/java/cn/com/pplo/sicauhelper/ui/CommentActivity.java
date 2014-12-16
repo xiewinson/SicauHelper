@@ -1,5 +1,6 @@
 package cn.com.pplo.sicauhelper.ui;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.FindCallback;
 
 import java.util.ArrayList;
@@ -24,7 +26,9 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.CommentAction;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
+import cn.com.pplo.sicauhelper.service.MessageService;
 import cn.com.pplo.sicauhelper.ui.adapter.CommentAdapter;
+import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.ViewPadding;
 
@@ -146,6 +150,28 @@ public class CommentActivity extends BaseActivity {
                     }
 
                 }
+            }
+        });
+
+        //记录消息数量、清除通知
+        new CommentAction().countCommentByType(this, commentType, objectId, new CountCallback() {
+            @Override
+            public void done(int i, AVException e) {
+                if(e != null) {
+                    Log.d("wnson", "获取消息条数出错：" + e.getMessage());
+                }
+                else {
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    if(commentType == CommentAction.GOODS_RECEIVE_COMMENT) {
+                        SharedPreferencesUtil.put(CommentActivity.this, SharedPreferencesUtil.CURRENT_GOODS_COMMENT_COUNT, i);
+                        notificationManager.cancel(MessageService.TYPE_GOODS);
+                    }
+                    else if(commentType == CommentAction.STATUS_RECEIVE_COMMENT) {
+                        SharedPreferencesUtil.put(CommentActivity.this, SharedPreferencesUtil.CURRENT_STATUS_COMMENT_COUNT, i);
+                        notificationManager.cancel(MessageService.TYPE_STATUS);
+                    }
+                }
+
             }
         });
     }
