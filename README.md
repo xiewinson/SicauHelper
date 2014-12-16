@@ -4,7 +4,7 @@
 > 需要 Android 4.0 及以上版本的手机。
 
 [直接下载V1.0.2][1]
-[百度网盘V1.0.2][2]
+[百度网盘V1.0.4][2]
 
 **主要功能**
 
@@ -21,6 +21,10 @@
 * 有同学反馈被自己头像吓到了，已将修改头像位置放得更明显了
 * 发现屏幕方向变化时停止运行的BUG，现在已经修复
 
+**V1.0.4版本更新**
+
+* 增加查看考试安排模块
+* BUG修复，UI调整
 
   [1]: https://github.com/WinsonTse/SicauHelper/blob/master/sicauhelperV102.apk?raw=true
-  [2]: http://pan.baidu.com/s/1sjnvnPj
+  [2]: http://pan.baidu.com/s/1bnzteyV
