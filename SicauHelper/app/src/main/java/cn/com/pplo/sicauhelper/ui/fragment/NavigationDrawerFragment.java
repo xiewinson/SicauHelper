@@ -146,7 +146,6 @@ public class NavigationDrawerFragment extends BaseFragment {
                 R.drawable.ic_action_home_black,
                 R.drawable.ic_action_circles_black,
                 R.drawable.ic_action_cart_black
-
         };
         final String[] titles = {
                 getString(R.string.title_cource),

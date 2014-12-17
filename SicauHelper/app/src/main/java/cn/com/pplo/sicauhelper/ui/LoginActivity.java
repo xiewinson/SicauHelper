@@ -21,6 +21,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SignUpCallback;
+import com.umeng.update.UmengUpdateAgent;
 
 import org.jsoup.examples.HtmlToPlainText;
 
@@ -57,6 +58,10 @@ public class LoginActivity extends ActionBarActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
+
+        //启动更新
+        UmengUpdateAgent.setUpdateOnlyWifi(false);
+        UmengUpdateAgent.update(this);
 
         setUp();
     }
