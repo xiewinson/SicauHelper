@@ -78,7 +78,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary_500);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary);
         setHasOptionsMenu(true);
 
         return inflater.inflate(R.layout.fragment_score, container, false);

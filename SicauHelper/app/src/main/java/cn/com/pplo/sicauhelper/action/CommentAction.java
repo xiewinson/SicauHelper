@@ -11,6 +11,9 @@ import com.avos.avoscloud.CountCallback;
 import com.avos.avoscloud.DeleteCallback;
 import com.avos.avoscloud.FindCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
@@ -123,9 +126,25 @@ public class CommentAction {
             avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
         }
         else if(type == GOODS_RECEIVE_COMMENT) {
-            avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
-            avQuery.whereEqualTo(TableContract.TableGoodsComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
-            avQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
+
+            //别人@我的评论
+            AVQuery<AVObject> mentionAvQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            mentionAvQuery.whereEqualTo(TableContract.TableGoodsComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            mentionAvQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
+
+
+            //别人给我的商品发出的评论
+            AVQuery<AVObject> goodsCommentQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            AVQuery<AVObject> innerQuery = new AVQuery<>(TableContract.TableGoods.TABLE_NAME);
+            innerQuery.whereEqualTo(TableContract.TableGoods._USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            goodsCommentQuery.whereNotEqualTo(TableContract.TableGoodsComment._SEND_USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            goodsCommentQuery.whereMatchesQuery(TableContract.TableGoodsComment._GOODS, innerQuery);
+
+            List<AVQuery<AVObject>> queries = new ArrayList<AVQuery<AVObject>>();
+            queries.add(mentionAvQuery);
+            queries.add(goodsCommentQuery);
+
+            avQuery = AVQuery.or(queries);
             //id降序
             avQuery.orderByDescending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
             //取出关联的对象
@@ -133,7 +152,7 @@ public class CommentAction {
             avQuery.include(TableContract.TableGoodsComment._SEND_USER);
             avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
         }
-        if(type == STATUS_SEND_COMMENT) {
+        else if(type == STATUS_SEND_COMMENT) {
             avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
             avQuery.whereEqualTo(TableContract.TableStatusComment._SEND_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
             avQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
@@ -145,15 +164,30 @@ public class CommentAction {
             avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
         }
         else if(type == STATUS_RECEIVE_COMMENT) {
-            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
-            avQuery.whereEqualTo(TableContract.TableStatusComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
-            avQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
+
+            //别人@我的评论
+            AVQuery<AVObject> mentionAvQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            mentionAvQuery.whereEqualTo(TableContract.TableStatusComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            mentionAvQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
+
+            //别人给我的商品发出的评论
+            AVQuery<AVObject> statusCommentQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            AVQuery<AVObject> innerQuery = new AVQuery<>(TableContract.TableStatus.TABLE_NAME);
+            innerQuery.whereEqualTo(TableContract.TableStatus._USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            statusCommentQuery.whereNotEqualTo(TableContract.TableStatusComment._SEND_USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            statusCommentQuery.whereMatchesQuery(TableContract.TableStatusComment._STATUS, innerQuery);
+
+            List<AVQuery<AVObject>> queries = new ArrayList<AVQuery<AVObject>>();
+            queries.add(mentionAvQuery);
+            queries.add(statusCommentQuery);
+
+            avQuery = AVQuery.or(queries);
             //id降序
-            avQuery.orderByDescending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
+            avQuery.orderByDescending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
             //取出关联的对象
-            avQuery.include(TableContract.TableStatusComment._STATUS);
-            avQuery.include(TableContract.TableStatusComment._SEND_USER);
-            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
+            avQuery.include(TableContract.TableGoodsComment._GOODS);
+            avQuery.include(TableContract.TableGoodsComment._SEND_USER);
+            avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
         }
         avQuery.setCachePolicy(cachePolicy);
 
@@ -183,9 +217,25 @@ public class CommentAction {
             avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
         }
         else if(GOODS_RECEIVE_COMMENT == type) {
-            avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
-            avQuery.whereEqualTo(TableContract.TableGoodsComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
-            avQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
+
+            //别人@我的评论
+            AVQuery<AVObject> mentionAvQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            mentionAvQuery.whereEqualTo(TableContract.TableGoodsComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            mentionAvQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
+
+
+            //别人给我的商品发出的评论
+            AVQuery<AVObject> goodsCommentQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            AVQuery<AVObject> innerQuery = new AVQuery<>(TableContract.TableGoods.TABLE_NAME);
+            innerQuery.whereEqualTo(TableContract.TableGoods._USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            goodsCommentQuery.whereNotEqualTo(TableContract.TableGoodsComment._SEND_USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            goodsCommentQuery.whereMatchesQuery(TableContract.TableGoodsComment._GOODS, innerQuery);
+
+            List<AVQuery<AVObject>> queries = new ArrayList<AVQuery<AVObject>>();
+            queries.add(mentionAvQuery);
+            queries.add(goodsCommentQuery);
+
+            avQuery = AVQuery.or(queries);
             //小于指定id
             avQuery.whereLessThan(TableContract.TableGoodsComment._GOODS_COMMENT_ID, comment_id);
             //id降序
@@ -208,18 +258,33 @@ public class CommentAction {
             avQuery.include(TableContract.TableStatusComment._SEND_USER);
             avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
         }
-        else if(GOODS_RECEIVE_COMMENT == type) {
-            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
-            avQuery.whereEqualTo(TableContract.TableStatusComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
-            avQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
+        else if(STATUS_RECEIVE_COMMENT == type) {
+
+            //别人@我的评论
+            AVQuery<AVObject> mentionAvQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            mentionAvQuery.whereEqualTo(TableContract.TableStatusComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            mentionAvQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
+
+            //别人给我的商品发出的评论
+            AVQuery<AVObject> statusCommentQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            AVQuery<AVObject> innerQuery = new AVQuery<>(TableContract.TableStatus.TABLE_NAME);
+            innerQuery.whereEqualTo(TableContract.TableStatus._USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            statusCommentQuery.whereNotEqualTo(TableContract.TableStatusComment._SEND_USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            statusCommentQuery.whereMatchesQuery(TableContract.TableStatusComment._STATUS, innerQuery);
+
+            List<AVQuery<AVObject>> queries = new ArrayList<AVQuery<AVObject>>();
+            queries.add(mentionAvQuery);
+            queries.add(statusCommentQuery);
+
+            avQuery = AVQuery.or(queries);
             //小于指定id
             avQuery.whereLessThan(TableContract.TableStatusComment._STATUS_COMMENT_ID, comment_id);
             //id降序
-            avQuery.orderByDescending(TableContract.TableStatusComment._STATUS_COMMENT_ID);
+            avQuery.orderByDescending(TableContract.TableGoodsComment._GOODS_COMMENT_ID);
             //取出关联的对象
-            avQuery.include(TableContract.TableStatusComment._STATUS);
-            avQuery.include(TableContract.TableStatusComment._SEND_USER);
-            avQuery.include(TableContract.TableStatusComment._RECEIVE_USER);
+            avQuery.include(TableContract.TableGoodsComment._GOODS);
+            avQuery.include(TableContract.TableGoodsComment._SEND_USER);
+            avQuery.include(TableContract.TableGoodsComment._RECEIVE_USER);
         }
 
         avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
@@ -229,6 +294,71 @@ public class CommentAction {
         avQuery.findInBackground(callback);
     }
 
+    /**
+     * 根据类型统计评论数量
+     *
+     * @param callback
+     */
+    public void countCommentByType(Context context, int type, String objectId, CountCallback callback) {
+        AVQuery<AVObject> avQuery = null;
+        if(type == GOODS_SEND_COMMENT) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableGoodsComment._SEND_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
+
+        }
+        else if(type == GOODS_RECEIVE_COMMENT) {
+
+            //别人@我的评论
+            AVQuery<AVObject> mentionAvQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            mentionAvQuery.whereEqualTo(TableContract.TableGoodsComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            mentionAvQuery.whereNotEqualTo(TableContract.TableGoodsComment._GOODS, null);
+
+
+            //别人给我的商品发出的评论
+            AVQuery<AVObject> goodsCommentQuery = new AVQuery<AVObject>(TableContract.TableGoodsComment.TABLE_NAME);
+            AVQuery<AVObject> innerQuery = new AVQuery<>(TableContract.TableGoods.TABLE_NAME);
+            innerQuery.whereEqualTo(TableContract.TableGoods._USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            goodsCommentQuery.whereNotEqualTo(TableContract.TableGoodsComment._SEND_USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            goodsCommentQuery.whereMatchesQuery(TableContract.TableGoodsComment._GOODS, innerQuery);
+
+            List<AVQuery<AVObject>> queries = new ArrayList<AVQuery<AVObject>>();
+            queries.add(mentionAvQuery);
+            queries.add(goodsCommentQuery);
+
+            avQuery = AVQuery.or(queries);
+
+        }
+        else if(type == STATUS_SEND_COMMENT) {
+            avQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            avQuery.whereEqualTo(TableContract.TableStatusComment._SEND_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            avQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
+
+        }
+        else if(type == STATUS_RECEIVE_COMMENT) {
+
+            //别人@我的评论
+            AVQuery<AVObject> mentionAvQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            mentionAvQuery.whereEqualTo(TableContract.TableStatusComment._RECEIVE_USER, AVUser.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            mentionAvQuery.whereNotEqualTo(TableContract.TableStatusComment._STATUS, null);
+
+            //别人给我的商品发出的评论
+            AVQuery<AVObject> statusCommentQuery = new AVQuery<AVObject>(TableContract.TableStatusComment.TABLE_NAME);
+            AVQuery<AVObject> innerQuery = new AVQuery<>(TableContract.TableStatus.TABLE_NAME);
+            innerQuery.whereEqualTo(TableContract.TableStatus._USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            statusCommentQuery.whereNotEqualTo(TableContract.TableStatusComment._SEND_USER, AVObject.createWithoutData(TableContract.TableUser.TABLE_NAME, objectId));
+            statusCommentQuery.whereMatchesQuery(TableContract.TableStatusComment._STATUS, innerQuery);
+
+            List<AVQuery<AVObject>> queries = new ArrayList<AVQuery<AVObject>>();
+            queries.add(mentionAvQuery);
+            queries.add(statusCommentQuery);
+
+            avQuery = AVQuery.or(queries);
+
+        }
+        avQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ONLY);
+        avQuery.countInBackground(callback);
+    }
 
     /**
      * 统计评论数量

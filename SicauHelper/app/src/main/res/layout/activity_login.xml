@@ -16,19 +16,12 @@
         android:layout_height="wrap_content">
         <TextView
             android:textSize="28sp"
-            android:textColor="@color/color_primary_500"
+            android:textColor="@color/color_primary"
             android:text="川农校园通"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <TextView
-            android:textSize="14sp"
-            android:textColor="@color/color_primary_500"
-            android:layout_marginTop="8dp"
-            android:text="课表!成绩!新闻!空教室!市场!论坛!通通都有!"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+
         </LinearLayout>
 
 

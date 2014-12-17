@@ -131,6 +131,12 @@ public class GoodsAdapter extends BaseAdapter {
                 GoodsActivity.startGoodsActivity(context, avGoods.getObjectId(), avGoods.getInt(TableContract.TableGoods._SCHOOL));
             }
         });
+        holder.commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GoodsActivity.startGoodsActivity(context, avGoods.getObjectId(), avGoods.getInt(TableContract.TableGoods._SCHOOL));
+            }
+        });
         return convertView;
     }
 

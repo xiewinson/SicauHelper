@@ -9,7 +9,7 @@ import cn.com.pplo.sicauhelper.R;
  */
 public class ColorUtil {
     /**
-     * 根据校区取得颜色
+     * 目前全改成红色
      * @param context
      * @param school
      * @return
@@ -23,6 +23,6 @@ public class ColorUtil {
         } else {
             color = R.color.green_500;
         }
-        return color;
+        return R.color.color_primary;
     }
 }

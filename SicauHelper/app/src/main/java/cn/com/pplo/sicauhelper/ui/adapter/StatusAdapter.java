@@ -131,6 +131,12 @@ public class StatusAdapter extends BaseAdapter {
                 StatusActivity.startStatusActivity(context, avstatus.getObjectId(), avstatus.getAVObject(TableContract.TableStatus._USER).getInt(TableContract.TableUser._SCHOOL));
             }
         });
+        holder.commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StatusActivity.startStatusActivity(context, avstatus.getObjectId(), avstatus.getAVObject(TableContract.TableStatus._USER).getInt(TableContract.TableUser._SCHOOL));
+            }
+        });
         return convertView;
     }
 

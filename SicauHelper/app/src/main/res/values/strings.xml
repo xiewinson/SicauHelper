@@ -55,22 +55,22 @@
         <item>收到的圈子评论</item>
     </string-array>
 
-    <string name="title_activity_goods">GoodsActivity</string>
-    <string name="title_activity_search_goods">SearchGoodsActivity</string>
+    <string name="title_activity_goods">川农校园通</string>
+    <string name="title_activity_search_goods">川农校园通</string>
     <string name="is_delete_comment">是否要删除这条评论?不能恢复的哦</string>
     <string name="is_delete_goods">是否要删除这个商品?不能恢复的哦</string>
     <string name="is_delete_status">是否要删除这个帖子?不能恢复的哦</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-    <string name="title_activity_feedback">FeedbackActivity</string>
-    <string name="title_activity_status">StatusActivity</string>
-    <string name="title_activity_user">UserActivity</string>
-    <string name="title_activity_comment">CommentActivity</string>
-    <string name="title_activity_search_status">SearchStatusActivity</string>
-    <string name="title_activity_user_goods">UserGoodsActivity</string>
-    <string name="title_activity_user_status">UserStatusActivity</string>
-    <string name="title_activity_setting">SettingActivity</string>
-    <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_feedback">川农校园通</string>
+    <string name="title_activity_status">川农校园通</string>
+    <string name="title_activity_user">川农校园通</string>
+    <string name="title_activity_comment">川农校园通</string>
+    <string name="title_activity_search_status">川农校园通</string>
+    <string name="title_activity_user_goods">川农校园通</string>
+    <string name="title_activity_user_status">川农校园通</string>
+    <string name="title_activity_setting">川农校园通</string>
+    <string name="title_activity_help">川农校园通</string>
     <string name="q_0">0、关于作者?</string>
     <string name="a_0">我是都江堰校区的学生，这个APP是我的毕业设计。若有任何问题，可以发反馈给我。若使用这个APP发生任何不好的事也可以直接打电话发短信给我，18202816207</string>
     <string name="q_1">1、为啥能用学号密码登陆，为啥能获取到课程表、成绩表?</string>
@@ -82,7 +82,7 @@
     <string name="a_3">这仅仅是一个发布平台，不涉及任何金钱交易、转移、移花接木，使用的同学擦亮眼。这个APP由于只能用学号登录，使用者都是川农的学生，同学再坏也坏不到哪里去，再坑也不坑川农人，对吧?</string>
     <string name="q_4">4、“川农圈子”什么话都可以说吗?</string>
     <string name="a_4">请不要说任何违反当地法律法规的话=_=...</string>
-    <string name="title_activity_course">CourseActivity</string>
+    <string name="title_activity_course">川农校园通</string>
     <string name="title_activity_map">地图</string>
 
 </resources>

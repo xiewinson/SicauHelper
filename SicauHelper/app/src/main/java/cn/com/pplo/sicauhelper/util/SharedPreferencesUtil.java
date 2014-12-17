@@ -39,6 +39,16 @@ public class SharedPreferencesUtil {
     public static final String LAST_SYNC_CLASSROMM = "last_sync_classroom";
 
     /**
+     * 当前市场消息数量
+     */
+    public static final String CURRENT_GOODS_COMMENT_COUNT = "current_goods_comment_count";
+
+    /**
+     * 当前论坛消息数量
+     */
+    public static final String CURRENT_STATUS_COMMENT_COUNT = "current_status_comment_count";
+
+    /**
      * 以xml保存键值对
      * @param context
      * @param key

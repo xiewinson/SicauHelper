@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.CountCallback;
+
 import java.util.Arrays;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.CommentAction;
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.service.MessageService;
 import cn.com.pplo.sicauhelper.ui.CommentActivity;
 
 /**

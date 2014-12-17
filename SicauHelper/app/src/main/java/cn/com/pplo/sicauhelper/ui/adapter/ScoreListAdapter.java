@@ -17,6 +17,7 @@ import java.util.List;
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 /**
@@ -67,7 +68,8 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
             holder = (ViewHolder) convertView.getTag();
         }
 
-        String category = getItem(position).getCategory();
+        final Score score = getItem(position);
+        final String category = score.getCategory();
         int circleShape = 0;
         int color = 0;
         if (category.equals("必修")) {
@@ -95,13 +97,13 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         holder.scoreView.setTextColor(Color.WHITE);
 
 
-        holder.scoreView.setText(getItem(position).getMark() + "");
-        holder.courseTv.setText(getItem(position).getCourse() + "");
-        holder.creditTv.setText(getItem(position).getCredit() + "学分");
-        holder.categoryTv.setText(getItem(position).getCategory() + "");
+        holder.scoreView.setText(score.getMark() + "");
+        holder.courseTv.setText(score.getCourse() + "");
+        holder.creditTv.setText(score.getCredit() + "学分");
+        holder.categoryTv.setText(score.getCategory() + "");
 
         //设置星星个数
-        if ((getItem(position).getCredit() > 5)) {
+        if ((score.getCredit() > 5)) {
             holder.ratingBar.setNumStars(10);
         } else {
 //                ratingBar.setMax(5);
@@ -112,7 +114,16 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         stars.getDrawable(0).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(1).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(2).setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        holder.ratingBar.setRating(getItem(position).getCredit());
+        holder.ratingBar.setRating(score.getCredit());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtil.startShareIntent(context,
+                        "分享",
+                        "我的" + category + "课《" + score.getCourse() + "(" + score.getCredit() + "分)》取得了" + score.getMark() + "分");
+            }
+        });
         return convertView;
     }
 
@@ -149,7 +160,7 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         }
 
         //设置header颜色
-        int color = R.color.color_primary_500;
+        int color = R.color.color_primary;
 //        switch (school){
 //            case 0:
 //                color = R.color.blue_500;

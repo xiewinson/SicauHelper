@@ -2,6 +2,7 @@ package cn.com.pplo.sicauhelper.ui;
 
 import android.app.Activity;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -32,6 +33,7 @@ import com.umeng.update.UmengUpdateAgent;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
+import cn.com.pplo.sicauhelper.service.MessageService;
 import cn.com.pplo.sicauhelper.ui.fragment.ClassroomFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.ExamFragment;
@@ -97,6 +99,7 @@ public class MainActivity extends ActionBarActivity
             startActivity(intent);
             this.finish();
         } else {
+
             //更新user
             AVUser.getCurrentUser().fetchInBackground(null);
             if(savedInstanceState != null) {
@@ -108,7 +111,6 @@ public class MainActivity extends ActionBarActivity
             UmengUpdateAgent.setUpdateOnlyWifi(false);
             UmengUpdateAgent.update(this);
             initView();
-
         }
     }
 
@@ -124,6 +126,11 @@ public class MainActivity extends ActionBarActivity
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setUp(mDrawerLayout, this);
         receiveFeedback();
+
+
+        //获取市场、圈子消息
+        MessageService.startRepeatMessageService(this);
+//        MessageService.startMessageService(this, SicauHelperApplication.getStudent().getObjectId());
     }
 
     /**
@@ -153,9 +160,10 @@ public class MainActivity extends ActionBarActivity
                     builder.setContentTitle("川农校园通回复了您的反馈")
                             .setContentText("点击查看")
                             .setTicker("川农校园通回复了您的反馈")
-                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
-                            .setSmallIcon(R.drawable.ic_launcher)
+                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_face_unlock_grey600_48dp))
+                            .setSmallIcon(R.drawable.ic_stars_white_24dp)
                             .setContentIntent(pi)
+                            .setDefaults(NotificationCompat.DEFAULT_VIBRATE | NotificationCompat.DEFAULT_LIGHTS | NotificationCompat.DEFAULT_SOUND)
                             .setAutoCancel(true);
                     notificationManager.notify(0, builder.build());
                 } else {

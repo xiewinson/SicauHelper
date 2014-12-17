@@ -108,7 +108,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
 
         //设置actionBar颜色
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary_500);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary);
 //        int color = 0;
 //        int tabColor = 0;
 //        switch (SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL)){
@@ -126,7 +126,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 //                break;
 //        }
 //        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), color);
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.color_primary_500);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.color_primary);
         getLoaderManager().initLoader(0, null, this);
     }
 

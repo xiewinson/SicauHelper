@@ -6,7 +6,11 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
+<<<<<<< HEAD
       <root url="jar://$PROJECT_DIR$/../../sdk/extras/android/m2repository/com/android/support/cardview-v7/21.0.2/cardview-v7-21.0.2-sources.jar!/" />
+=======
+      <root url="jar://D:/AndroidSdk/extras/android/m2repository/com/android/support/cardview-v7/21.0.2/cardview-v7-21.0.2-sources.jar!/" />
+>>>>>>> 85ee600985fadba50e7712ed0623346da50f7540
     </SOURCES>
   </library>
 </component>

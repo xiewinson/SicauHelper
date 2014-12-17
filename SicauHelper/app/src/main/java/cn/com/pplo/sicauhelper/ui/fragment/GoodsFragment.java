@@ -111,20 +111,25 @@ public class GoodsFragment extends BaseFragment {
         int pressColor = 0;
         int rippleColor = 0;
         switch (schoolPosition) {
-            case 0:
-                normalColor = R.color.red_500;
-                pressColor = R.color.red_900;
+//            case 0:
+//                normalColor = R.color.red_500;
+//                pressColor = R.color.red_900;
+//                rippleColor = R.color.red_400;
+//                break;
+//            case 1:
+//                normalColor = R.color.orange_500;
+//                pressColor = R.color.orange_900;
+//                rippleColor = R.color.orange_400;
+//                break;
+//            case 2:
+//                normalColor = R.color.green_500;
+//                pressColor = R.color.green_900;
+//                rippleColor = R.color.green_400;
+//                break;
+            default:
+                normalColor = R.color.color_primary;
+                pressColor = R.color.color_primary_dark;
                 rippleColor = R.color.red_400;
-                break;
-            case 1:
-                normalColor = R.color.orange_500;
-                pressColor = R.color.orange_900;
-                rippleColor = R.color.orange_400;
-                break;
-            case 2:
-                normalColor = R.color.green_500;
-                pressColor = R.color.green_900;
-                rippleColor = R.color.green_400;
                 break;
         }
 

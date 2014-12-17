@@ -16,6 +16,7 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Classroom;
 import cn.com.pplo.sicauhelper.ui.fragment.ClassroomFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 
 /**
  * Created by winson on 2014/11/2.
@@ -61,7 +62,7 @@ public class ClassroomAdapter extends BaseAdapter implements Filterable {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Classroom classroom = getItem(position);
+        final Classroom classroom = getItem(position);
         String time = classroom.getTime();
         int color = 0;
         int imgSrc = 0;
@@ -79,9 +80,19 @@ public class ClassroomAdapter extends BaseAdapter implements Filterable {
         }
         holder.backgroundLayout.setBackgroundResource(color);
 
-        holder.timeTv.setText( time.substring(0, 2) + "" + time.substring(2));
+        final String timeStr = time.substring(0, 2) + "" + time.substring(2);
+        holder.timeTv.setText(timeStr);
         holder.schoolTv.setText(classroom.getSchool());
         holder.roomTv.setText(classroom.getName());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtil.startShareIntent(context,
+                        "分享",
+                        timeStr + "，我会去" + classroom.getSchool() + "校区" + classroom.getName() + "上自习，有一起的同学吗？");
+            }
+        });
         return convertView;
     }
 

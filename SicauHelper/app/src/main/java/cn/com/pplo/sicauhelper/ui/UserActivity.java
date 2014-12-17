@@ -129,7 +129,7 @@ public class UserActivity extends BaseActivity {
     private void initView(List<AVUser> list) {
         avUser = list.get(0);
 
-        primaryColor = R.color.color_primary_500;
+        primaryColor = R.color.color_primary;
 
         OnCountBtnClickListener onCountBtnClickListener = new OnCountBtnClickListener(this);
 

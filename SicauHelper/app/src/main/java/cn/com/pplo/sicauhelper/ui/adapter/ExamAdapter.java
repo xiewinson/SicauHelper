@@ -10,6 +10,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Exam;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 
 /**
  * 考试安排adapter
@@ -55,11 +56,24 @@ public class ExamAdapter extends BaseAdapter {
         else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Exam exam = getItem(position);
+        final Exam exam = getItem(position);
         holder.courseTv.setText((position + 1) + ". " + exam.getCourse());
         holder.timeTv.setText(exam.getTime());
         holder.numTv.setText(exam.getNum());
         holder.classroomTv.setText(exam.getClassroom());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtil.startShareIntent(context,
+                        "分享",
+                        "考试科目：" + exam.getCourse() + "\n" +
+                        "时间：" + exam.getTime() + "\n" +
+                        "地点：" + exam.getClassroom() + "\n" +
+                        "座位号：" + exam.getNum()
+                         );
+            }
+        });
         return convertView;
     }
 

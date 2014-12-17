@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
+    android:background="@drawable/btn_white_lightgrey"
     android:orientation="horizontal">
 
     <TextView
         android:layout_gravity="center"
         android:id="@+id/score_tv"
         android:text="合格"
-        android:textSize="14sp"
+        android:textSize="18sp"
         android:gravity="center"
         android:layout_width="56dp"
         android:layout_height="56dp" />
