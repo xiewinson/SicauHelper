@@ -34,6 +34,7 @@ public class MessageService extends Service {
     private boolean isGetGoodsMessage = false;
     private boolean isGetStatusMessage = false;
 
+    private String objectId;
     /**
      * 启动服务
      * @param context
@@ -70,8 +71,10 @@ public class MessageService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        final String objectId = AVUser.getCurrentUser().getObjectId();
+        Log.d("winson", "开始取新消息");
+        if(AVUser.getCurrentUser() != null) {
+            objectId = AVUser.getCurrentUser().getObjectId();
+        }
         if(!TextUtils.isEmpty(objectId)) {
             new CommentAction().countCommentByType(this, CommentAction.GOODS_RECEIVE_COMMENT, objectId, new CountCallback() {
                 @Override
@@ -100,7 +103,7 @@ public class MessageService extends Service {
      * 若两个数据都已获取到则停止服务
      */
     private void stopMessageService() {
-        if(isGetStatusMessage && isGetStatusMessage) {
+        if(isGetGoodsMessage && isGetStatusMessage) {
             stopSelf();
         }
     }
@@ -112,6 +115,7 @@ public class MessageService extends Service {
     private void showNotification(int type, String objectId, Context context, int count, AVException e) {
         int goodsCommentCount = (int) SharedPreferencesUtil.get(context, SharedPreferencesUtil.CURRENT_GOODS_COMMENT_COUNT, 0);
         int statusCommentCount = (int) SharedPreferencesUtil.get(context, SharedPreferencesUtil.CURRENT_STATUS_COMMENT_COUNT, 0);
+        int newMsg = 0;
         Log.d("winson", "商品评论：" + goodsCommentCount + "   圈子评论：" + statusCommentCount);
         if(e != null) {
             Log.d("winson", type + " 获取消息出错： " + e.getMessage());
@@ -123,32 +127,40 @@ public class MessageService extends Service {
             if(type == TYPE_GOODS) {
                 intent.putExtra( CommentActivity.EXTRA_COMMENT_TYPE, CommentAction.GOODS_RECEIVE_COMMENT);
                 intent.putExtra( CommentActivity.EXTRA_TITLE, "收到的商品评论");
-                title = "商品评论";
+                title = "收到了新的商品评论";
                 if(count <= goodsCommentCount) {
+                    SharedPreferencesUtil.put(context, SharedPreferencesUtil.CURRENT_GOODS_COMMENT_COUNT, count);
                     return;
                 }
                 else {
-                    count = count - goodsCommentCount;
+                    newMsg = count - goodsCommentCount;
                 }
+                SharedPreferencesUtil.put(context, SharedPreferencesUtil.CURRENT_GOODS_COMMENT_COUNT, count);
             }
             else if(type == TYPE_STATUS) {
                 intent.putExtra( CommentActivity.EXTRA_COMMENT_TYPE, CommentAction.STATUS_RECEIVE_COMMENT);
                 intent.putExtra( CommentActivity.EXTRA_TITLE, "收到的圈子评论");
-                title = "圈子评论";
+                title = "收到了新的圈子评论";
                 if(count <= statusCommentCount) {
+                    SharedPreferencesUtil.put(context, SharedPreferencesUtil.CURRENT_STATUS_COMMENT_COUNT, count);
                     return;
                 }
                 else {
-                    count = count - statusCommentCount;
+                    newMsg = count - statusCommentCount;
                 }
+                SharedPreferencesUtil.put(context, SharedPreferencesUtil.CURRENT_STATUS_COMMENT_COUNT, count);
             }
-            title = "收到了" + count + "条" + title;
+//            title = "收到了" + newMsg + "条" + title;
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            //主界面
+//            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            Intent mainIntent = new Intent(context, MainActivity.class);
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent[] intents = {mainIntent, intent};
+            PendingIntent pi = PendingIntent.getActivities(context, type
+                    , intents, PendingIntent.FLAG_CANCEL_CURRENT);
             builder.setContentTitle(title)
                     .setContentText("点击查看")
                     .setTicker(title)
@@ -157,6 +169,8 @@ public class MessageService extends Service {
                     .setContentIntent(pi)
                     .setDefaults(NotificationCompat.DEFAULT_VIBRATE | NotificationCompat.DEFAULT_LIGHTS | NotificationCompat.DEFAULT_SOUND)
                     .setAutoCancel(true);
+            builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+            builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
             notificationManager.notify(type, builder.build());
         }
     }

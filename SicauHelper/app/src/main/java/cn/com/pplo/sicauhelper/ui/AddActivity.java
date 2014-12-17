@@ -217,7 +217,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         //若为新帖子则隐藏校区选项
         else if (type == TYPE_STATUS) {
             getSupportActionBar().setTitle("新帖子");
-            UIUtil.setActionBarColor(AddActivity.this, getSupportActionBar(), R.color.color_primary_500);
+            UIUtil.setActionBarColor(AddActivity.this, getSupportActionBar(), R.color.color_primary);
             schoolSpinner.setVisibility(View.GONE);
             findViewById(R.id.add_school_layout).setVisibility(View.GONE);
             findViewById(R.id.add_price_layout).setVisibility(View.GONE);
@@ -266,14 +266,14 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
      * @param school
      */
     private void setActionBarColor(int school) {
-        int color = 0;
-        if (school == 0) {
-            color = R.color.red_500;
-        } else if (school == 1) {
-            color = R.color.orange_500;
-        } else {
-            color = R.color.green_500;
-        }
+        int color = R.color.color_primary;
+//        if (school == 0) {
+//            color = R.color.red_500;
+//        } else if (school == 1) {
+//            color = R.color.orange_500;
+//        } else {
+//            color = R.color.green_500;
+//        }
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(color));
     }
 

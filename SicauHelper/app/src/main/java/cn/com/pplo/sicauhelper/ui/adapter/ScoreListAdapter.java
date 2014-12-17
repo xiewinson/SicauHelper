@@ -160,7 +160,7 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         }
 
         //设置header颜色
-        int color = R.color.color_primary_500;
+        int color = R.color.color_primary;
 //        switch (school){
 //            case 0:
 //                color = R.color.blue_500;

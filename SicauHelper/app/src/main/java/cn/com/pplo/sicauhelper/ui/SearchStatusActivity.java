@@ -48,7 +48,7 @@ public class SearchStatusActivity extends BaseActivity {
     }
 
     private void setUp(Context context) {
-        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.color_primary_500);
+        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.color_primary);
 
         listView = (ListView) findViewById(R.id.search_status_listView);
         //加载更多进度条

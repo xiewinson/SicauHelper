@@ -110,10 +110,10 @@ public class UIUtil {
         } else if (school == 2){
             color = R.color.green_500;
         } else {
-            color = R.color.color_primary_500;
+            color = R.color.color_primary;
         }
 
-        UIUtil.setActionBarColor(context, actionBarColor, color);
+        UIUtil.setActionBarColor(context, actionBarColor, R.color.color_primary);
     }
 
     /**

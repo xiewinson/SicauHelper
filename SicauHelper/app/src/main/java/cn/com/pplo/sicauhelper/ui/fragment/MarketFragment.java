@@ -94,17 +94,21 @@ public class MarketFragment extends BaseFragment {
                 int color = 0;
                 int tabColor = 0;
                 switch (position){
-                    case 0:
-                        color = R.color.red_500;
-                        tabColor = R.color.red_500;
-                        break;
-                    case 1:
-                        color = R.color.orange_500;
-                        tabColor = R.color.orange_500;
-                        break;
-                    case 2:
-                        color = R.color.green_500;
-                        tabColor = R.color.green_500;
+//                    case 0:
+//                        color = R.color.red_500;
+//                        tabColor = R.color.red_500;
+//                        break;
+//                    case 1:
+//                        color = R.color.orange_500;
+//                        tabColor = R.color.orange_500;
+//                        break;
+//                    case 2:
+//                        color = R.color.green_500;
+//                        tabColor = R.color.green_500;
+//                        break;
+                    default:
+                        color = R.color.color_primary;
+                        tabColor = R.color.color_primary;
                         break;
                 }
                 actionBar.setBackgroundDrawable(getResources().getDrawable(color));

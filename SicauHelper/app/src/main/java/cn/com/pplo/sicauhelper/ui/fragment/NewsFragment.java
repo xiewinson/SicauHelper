@@ -85,7 +85,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         //根据校区设置actionBar颜色
         UIUtil.setActionBarColor(getActivity(),
                 getSupportActionBar(getActivity()),
-                R.color.color_primary_500);
+                R.color.color_primary);
         setUp(getActivity(), view);
     }
 
