@@ -138,14 +138,14 @@ public class NavigationDrawerFragment extends BaseFragment {
                 R.drawable.ic_action_cart
         };
         final int[] checkedIcons = {
-                R.drawable.ic_action_calendar_day_blue,
-                R.drawable.ic_action_lab_blue,
-                R.drawable.ic_action_book_blue,
-                R.drawable.ic_action_dice3_blue,
-                R.drawable.ic_action_news_blue,
-                R.drawable.ic_action_home_blue,
-                R.drawable.ic_action_circles_blue,
-                R.drawable.ic_action_cart_blue
+                R.drawable.ic_action_calendar_day_black,
+                R.drawable.ic_action_lab_black,
+                R.drawable.ic_action_book_black,
+                R.drawable.ic_action_dice3_black,
+                R.drawable.ic_action_news_black,
+                R.drawable.ic_action_home_black,
+                R.drawable.ic_action_circles_black,
+                R.drawable.ic_action_cart_black
 
         };
         final String[] titles = {

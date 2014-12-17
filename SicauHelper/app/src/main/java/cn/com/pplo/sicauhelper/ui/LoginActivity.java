@@ -152,7 +152,8 @@ public class LoginActivity extends ActionBarActivity {
                 }
                 //若姓名为空
                 else if(TextUtils.isEmpty(student.getName())) {
-                    UIUtil.showShortToast(LoginActivity.this, "你先去教务系统进行评教后再来使用吧");
+                    UIUtil.showShortToast(LoginActivity.this, "你先用电脑登录教务系统进行教师评教后再来使用吧");
+                    UIUtil.dismissProgressDialog(progressDialog);
                     return;
                 }
                 //若不存在，则创建用户
