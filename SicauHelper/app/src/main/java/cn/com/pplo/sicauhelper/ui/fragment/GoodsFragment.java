@@ -178,7 +178,7 @@ public class GoodsFragment extends BaseFragment {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
                     if(list.size() == 0) {
-                        UIUtil.showShortToast(getActivity(), "没有任何商品");
+//                        UIUtil.showShortToast(getActivity(), "没有任何商品");
                     }
                     notifyDataSetChanged(list, true);
 //                    listView.setSelection(0);

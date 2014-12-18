@@ -21,6 +21,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SignUpCallback;
+import com.umeng.update.UmengUpdateAgent;
 
 import org.jsoup.examples.HtmlToPlainText;
 
@@ -57,6 +58,10 @@ public class LoginActivity extends ActionBarActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
+
+        //启动更新
+        UmengUpdateAgent.setUpdateOnlyWifi(false);
+        UmengUpdateAgent.update(this);
 
         setUp();
     }
@@ -152,7 +157,8 @@ public class LoginActivity extends ActionBarActivity {
                 }
                 //若姓名为空
                 else if(TextUtils.isEmpty(student.getName())) {
-                    UIUtil.showShortToast(LoginActivity.this, "你先去教务系统进行评教后再来使用吧");
+                    UIUtil.showShortToast(LoginActivity.this, "你先用电脑登录教务系统进行教师评教后再来使用吧");
+                    UIUtil.dismissProgressDialog(progressDialog);
                     return;
                 }
                 //若不存在，则创建用户

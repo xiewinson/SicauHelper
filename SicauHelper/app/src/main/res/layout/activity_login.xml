@@ -3,19 +3,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#ffffff"
-    android:paddingBottom="@dimen/activity_vertical_margin">
+    android:background="#ffffff">
 
     <LinearLayout
         android:gravity="center"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:layout_weight="1"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:textSize="28sp"
+            android:padding="32dp"
             android:textColor="@color/color_primary"
             android:text="川农校园通"
             android:gravity="center"
@@ -52,13 +51,14 @@
     <TextView
         android:id="@+id/login_help_tv"
         android:clickable="true"
-        android:layout_weight="8"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:textSize="14sp"
-        android:textColor="@color/lightblue_blue"
+        android:textColor="@color/lightred_red"
         android:text="川农助手"
         android:gravity="right"
-        android:layout_width="match_parent"
+        android:layout_gravity="right"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
 </LinearLayout>
