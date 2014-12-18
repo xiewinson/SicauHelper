@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     private List<News> originalData = new ArrayList<News>();
     private SearchView searchView;
     private NewsAdapter newsAdapter;
+    private FloatingActionButton newsFab;
 
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
@@ -91,6 +93,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 
     private void setUp(final Context context, View view) {
         listView = (ListView) view.findViewById(R.id.news_listView);
+        newsFab = (FloatingActionButton) view.findViewById(R.id.news_fab);
 //        listView.setTextFilterEnabled(true);
         //设置actionbar的间距
         listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.grey_200));
@@ -100,6 +103,18 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 //        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
 //        listView.addHeaderView(paddingTv);
 //        listView.addFooterView(paddingTv);
+
+        //news FAB事件
+        newsFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listView.getCount() > 0) {
+                    listView.setSelection(0);
+                    UIUtil.showShortToast(getActivity(), "已回到第一条新闻");
+                }
+            }
+        });
+        newsFab.attachToListView(listView);
 
         newsAdapter = new NewsAdapter(getActivity(), newsList);
 //        UIUtil.setListViewInitAnimation("bottom", listView, newsAdapter);
@@ -234,7 +249,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
             newsAdapter.notifyDataSetChanged();
             //恢复到第一个
             listView.setSelection(0);
-            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
+//            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
         }
 
     }

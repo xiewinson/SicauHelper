@@ -88,7 +88,8 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
             circleShape = R.drawable.circle_brown;
             color = context.getResources().getColor(R.color.brown_500);
         }
-        else if (category.equals("方向")) {
+//        else if (category.equals("方向")) {
+        else {
             circleShape = R.drawable.circle_purple;
             color = context.getResources().getColor(R.color.purple_500);
         }

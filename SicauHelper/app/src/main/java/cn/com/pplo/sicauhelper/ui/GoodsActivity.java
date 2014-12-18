@@ -285,6 +285,9 @@ public class GoodsActivity extends BaseActivity {
                     if(TextUtils.isEmpty(address)) {
                         locationTv.setVisibility(View.GONE);
                     }
+                    else {
+                        locationTv.setVisibility(View.VISIBLE);
+                    }
                     //点击locationTv跳转到地图
                     locationTv.setOnClickListener(new View.OnClickListener() {
                         @Override

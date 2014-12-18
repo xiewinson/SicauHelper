@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -56,6 +58,9 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     private ViewPagerAdapter viewPagerAdapter;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private AlertDialog progressDialog;
+
+    private LinearLayout emptyLayout;
+    private Button importBtn;
 
     public static CourseFragment newInstance(int type) {
         CourseFragment fragment = new CourseFragment();
@@ -106,6 +111,14 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表");
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
+        emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
+        importBtn = (Button) view.findViewById(R.id.import_btn);
+        importBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestCourseList(getActivity());
+            }
+        });
 
         //设置actionBar颜色
         UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary);
@@ -131,6 +144,9 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     }
 
     private void initViewPager(Context context, List<List<Course>> data) {
+        pagerSlidingTabStrip.setVisibility(View.VISIBLE);
+        viewPager.setVisibility(View.VISIBLE);
+        emptyLayout.setVisibility(View.GONE);
         viewPagerAdapter = new ViewPagerAdapter(context, data);
         //page切换动画
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
@@ -353,7 +369,10 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
             }
             initViewPager(getActivity(), data);
         } else {
-            requestCourseList(getActivity());
+            //显示导入课表按钮
+            viewPager.setVisibility(View.GONE);
+            emptyLayout.setVisibility(View.VISIBLE);
+//            requestCourseList(getActivity());
         }
 
     }

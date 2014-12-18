@@ -16,4 +16,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/empty_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="match_parent">
+        <Button
+            android:padding="8dp"
+            android:id="@+id/import_btn"
+            android:text="从教务系统导入考试安排"
+            android:textColor="#ffffff"
+            android:background="@drawable/btn_lightred_red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:padding="16dp"
+            android:gravity="center"
+            android:text="若导入失败，请使用电脑登陆教务系统查看是否能正确查看考试安排"
+            android:textColor="#aaaaaa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

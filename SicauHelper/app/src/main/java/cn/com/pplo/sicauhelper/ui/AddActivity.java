@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,6 +64,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
     private EditText titleEt;
     private EditText contentEt;
     private EditText priceEt;
+    private CheckBox locationCb;
     private Spinner schoolSpinner;
     private Spinner categorySpinner;
     private LinearLayout imageLayout;
@@ -151,6 +153,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         schoolSpinner = (Spinner) findViewById(R.id.school_spinner);
         categorySpinner = (Spinner) findViewById(R.id.category_spinner);
         imageLayout = (LinearLayout) findViewById(R.id.image_layout);
+        locationCb = (CheckBox) findViewById(R.id.location_cb);
 
         schoolSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.school)));
         schoolSpinner.setSelection(SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL));
@@ -202,6 +205,14 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
                             for (AVFile avFile : avImageList) {
                                 showImageByAVFile(AddActivity.this, avFile);
                             }
+
+                            if(TextUtils.isEmpty(editObject.getString(TableContract.TableGoods._ADDRESS))) {
+                                locationCb.setChecked(false);
+                            }
+                            else {
+                                locationCb.setChecked(true);
+                            }
+
                         } else {
                             UIUtil.showShortToast(AddActivity.this, "获取商品信息失败");
                             AddActivity.this.finish();
@@ -245,6 +256,13 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
                             avImageList = ImageUtil.getAVFileListByAVObject(editObject);
                             for (AVFile avFile : avImageList) {
                                 showImageByAVFile(AddActivity.this, avFile);
+                            }
+
+                            if(TextUtils.isEmpty(editObject.getString(TableContract.TableGoods._ADDRESS))) {
+                                locationCb.setChecked(false);
+                            }
+                            else {
+                                locationCb.setChecked(true);
                             }
                         } else {
                             UIUtil.showShortToast(AddActivity.this, "获取商品信息失败");
@@ -323,6 +341,8 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
      */
 
     private void uploadGoods(Context context, final List<AVFile> avFiles) {
+        final AlertDialog uploadDialog = UIUtil.getProgressDialog(context, "上传中...");
+        uploadDialog.show();
         if (TextUtils.isEmpty(priceEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "价格不可为空");
             return;
@@ -358,8 +378,16 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         avObject.put(TableContract.TableGoods._VERSION, Build.VERSION.RELEASE);
         //经纬度
         avObject.put("location", new AVGeoPoint(latitude, longitude));
-        //详细地址
-        avObject.put(TableContract.TableGoods._ADDRESS, address);
+        if(locationCb.isChecked() == false) {
+            Log.d("winson", "不显示地址");
+            //详细地址
+            avObject.put(TableContract.TableGoods._ADDRESS, "");
+        }
+        else {
+            Log.d("winson", "显示地址");
+            avObject.put(TableContract.TableGoods._ADDRESS, address);
+        }
+
 
 
 //        上传图片
@@ -374,6 +402,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         avObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
+                UIUtil.dismissProgressDialog(uploadDialog);
                 if (e == null) {
                     UIUtil.showShortToast(AddActivity.this, "哇，成功了");
                     AddActivity.this.finish();
@@ -393,7 +422,8 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
      * @param avFiles
      */
     private void uploadStatus(Context context, List<AVFile> avFiles) {
-
+        final AlertDialog uploadDialog = UIUtil.getProgressDialog(context, "上传中...");
+        uploadDialog.show();
         if (TextUtils.isEmpty(titleEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "标题不可为空");
             return;
@@ -420,8 +450,16 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         avObject.put(TableContract.TableStatus._VERSION, Build.VERSION.RELEASE);
         //经纬度
         avObject.put("location", new AVGeoPoint(latitude, longitude));
-        //详细地址
-        avObject.put(TableContract.TableGoods._ADDRESS, address);
+        if(locationCb.isChecked() == false) {
+            Log.d("winson", "不显示地址");
+            //详细地址
+            avObject.put(TableContract.TableGoods._ADDRESS, "");
+        }
+        else {
+            Log.d("winson", "显示地址");
+            avObject.put(TableContract.TableGoods._ADDRESS, address);
+        }
+
 
 //        上传图片
         for(int i = 0; i < 4; i++) {
@@ -434,6 +472,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         avObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
+                UIUtil.dismissProgressDialog(uploadDialog);
                 if (e == null) {
                     UIUtil.showShortToast(AddActivity.this, "哇，成功了");
                     AddActivity.this.finish();

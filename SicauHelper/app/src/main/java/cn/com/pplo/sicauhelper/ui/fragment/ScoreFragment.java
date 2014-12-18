@@ -17,7 +17,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
+import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
 
@@ -47,6 +49,9 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     private StickyListHeadersListView listView;
     private AlertDialog progressDialog;
     private SearchView searchView;
+
+    private LinearLayout emptyLayout;
+    private Button importBtn;
 
     private ScoreListAdapter scoreListAdapter;
     private List<Score> scoreList = new ArrayList<Score>();
@@ -94,6 +99,15 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 
     private void setUp(View view) {
         listView = (StickyListHeadersListView) view.findViewById(R.id.score_listView);
+
+        emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
+        importBtn = (Button) view.findViewById(R.id.import_btn);
+        importBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestScoreList(getActivity());
+            }
+        });
 //        setListViewTopBottomPadding(listView);
 //        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
 //        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
@@ -174,7 +188,10 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
             keepOriginalData(tempList);
             notifyDataSetChanged(tempList);
         } else {
-            requestScoreList(getActivity());
+//            requestScoreList(getActivity());
+            //显示导入成绩按钮
+            listView.setVisibility(View.GONE);
+            emptyLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -187,6 +204,10 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         if (list != null) {
             scoreList.clear();
             scoreList.addAll(list);
+            if(scoreList.size() > 0) {
+                listView.setVisibility(View.VISIBLE);
+                emptyLayout.setVisibility(View.GONE);
+            }
             scoreListAdapter.notifyDataSetChanged();
             //恢复到第一个
             listView.setSelection(0);

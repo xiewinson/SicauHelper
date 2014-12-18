@@ -80,9 +80,12 @@ public class CourseAdapter extends BaseAdapter {
         } else if (time.contains("1-") || time.contains("2-") || time.contains("3-") || time.contains("4-")) {
             circleShape = R.drawable.circle_amber;
             color = context.getResources().getColor(R.color.amber_500);
-        }else if (time.contains("5-") || time.contains("6-") || time.contains("7-") || time.contains("8-") || time.contains("9-")) {
+        }else if (time.contains("5-") || time.contains("6-") || time.contains("7-") || time.contains("8-")) {
             circleShape = R.drawable.circle_deep_orange;
             color = context.getResources().getColor(R.color.deep_orange_500);
+        }else {
+            circleShape = R.drawable.circle_indigo;
+            color = context.getResources().getColor(R.color.indigo_500);
         }
 
         //设置课程名

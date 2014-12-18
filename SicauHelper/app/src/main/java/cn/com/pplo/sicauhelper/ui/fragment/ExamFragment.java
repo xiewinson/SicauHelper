@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
@@ -45,6 +47,8 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
     private AlertDialog progressDialog;
     private List<Exam> examList = new ArrayList<Exam>();
     private ExamAdapter examAdapter;
+    private LinearLayout emptyLayout;
+    private Button importBtn;
 
     public static ExamFragment newInstance() {
         ExamFragment fragment = new ExamFragment();
@@ -88,6 +92,15 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
     private void setUp(final Context context, View view) {
         listView = (ListView) view.findViewById(R.id.exam_listView);
         listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.grey_200));
+
+        emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
+        importBtn = (Button) view.findViewById(R.id.import_btn);
+        importBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestExamList(getActivity());
+            }
+        });
 
         progressDialog = UIUtil.getProgressDialog(getActivity(), "正在寻找你的考试安排...");
 
@@ -143,7 +156,10 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
         } else {
 //            Intent intent = new Intent(getActivity(), ExamService.class);
 //            getActivity().bindService(intent, serviceConn, Context.BIND_AUTO_CREATE);
-            requestExamList(getActivity());
+            //显示导入考试安排按钮
+            listView.setVisibility(View.GONE);
+            emptyLayout.setVisibility(View.VISIBLE);
+//            requestExamList(getActivity());
         }
     }
 
@@ -185,6 +201,10 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
         if (list != null) {
             examList.clear();
             examList.addAll(list);
+            if(examList.size() > 0) {
+                listView.setVisibility(View.VISIBLE);
+                emptyLayout.setVisibility(View.GONE);
+            }
             examAdapter.notifyDataSetChanged();
             //恢复到第一个
             listView.setSelection(0);

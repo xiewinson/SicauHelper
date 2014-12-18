@@ -84,6 +84,13 @@
 
         </LinearLayout>
 
+        <CheckBox
+            android:checked="true"
+            android:id="@+id/location_cb"
+            android:text="是否显示我的位置"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <EditText
             android:maxLength="50"
             android:id="@+id/title_et"

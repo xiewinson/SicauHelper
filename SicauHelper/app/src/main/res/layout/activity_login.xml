@@ -27,7 +27,6 @@
         <EditText
             android:hint="学号"
             android:maxLength="15"
-            android:inputType="number"
             android:id="@+id/login_sid_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -44,7 +43,7 @@
             android:text="登录"
             android:textColor="#ffffff"
             android:layout_marginTop="16dp"
-            android:background="@drawable/btn_lightblue_blue"
+            android:background="@drawable/btn_lightred_red"
             android:id="@+id/login_ok_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

@@ -494,14 +494,14 @@ public class NetUtil {
             try {
                 if (volleyError != null && volleyError.getMessage() != null && !volleyError.getMessage().equals("")) {
                     if (volleyError.getMessage().contains("java.net.UnknownHostException")) {
-                        UIUtil.showShortToast(context, "亲爱的，你的网络连接有问题，还用个毛啊");
+                        UIUtil.showShortToast(context, "亲爱的，你的网络连接有问题");
                     }
                 } else {
-                    UIUtil.showShortToast(context, "额，臣亦不知发生了甚");
+                    UIUtil.showShortToast(context, "可能是教务系统出问题了，请重试");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                UIUtil.showShortToast(context, "额，臣亦不知发生了甚");
+                UIUtil.showShortToast(context, "可能是教务系统出问题了，请重试");
             }
 
         }
