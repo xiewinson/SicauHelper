@@ -14,7 +14,7 @@ public class TimeUtil {
      * @param time
      * @return
      */
-    public static String timeToFriendlTime(String time){
+    public static String timeToFriendlyTime(String time){
 
         String result = "";
         String timeStr = "";
@@ -54,6 +54,35 @@ public class TimeUtil {
             result = timeStr;
         }
         return result;
+    }
+
+    /**
+     * 取得xxxx-11-11 xx:xx:xx
+     * @param time
+     * @return
+     */
+    public static String timeToCommentTime(String time){
+
+        String timeStr = "";
+        Date date = new Date();
+
+        long longTime = 0;
+        long nowLongTime = date.getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy", Locale.US);
+
+        try {
+            date = format.parse(time);
+            timeStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            timeStr = "";
+            System.out.println("时间错误");
+
+        } finally {
+            return timeStr;
+        }
     }
 
     /**

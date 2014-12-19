@@ -257,7 +257,7 @@ public class StatusActivity extends BaseActivity {
                     //名字
                     nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
                     //时间
-                    dateTv.setText(TimeUtil.timeToFriendlTime(avStatus.getCreatedAt().toString()));
+                    dateTv.setText(TimeUtil.timeToFriendlyTime(avStatus.getCreatedAt().toString()));
                     //类别(暂时不用)
 //                    categoryTv.setText("￥" + avStatus.getInt(TableContract.TableStatus._PRICE) + "");
                     //标题
@@ -411,6 +411,8 @@ public class StatusActivity extends BaseActivity {
                     commentEt.setHint("");
                     commentEt.setText("");
                     receiveStudent = null;
+                    //成功后首先清除评论吧...
+                    notifyDataSetChanged(new ArrayList<AVObject>(), true);
                     addCommentCount(true);
                 }
             }

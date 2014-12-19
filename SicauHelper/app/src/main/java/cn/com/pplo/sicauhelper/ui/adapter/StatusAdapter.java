@@ -81,7 +81,7 @@ public class StatusAdapter extends BaseAdapter {
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
         //时间
-        holder.dateTv.setText(TimeUtil.timeToFriendlTime(avstatus.getCreatedAt().toString()));
+        holder.dateTv.setText(TimeUtil.timeToFriendlyTime(avstatus.getCreatedAt().toString()));
         //类别(暂时不用)
 //        holder.categoryTv.setText("￥" + avstatus.getInt(TableContract.TableStatus._PRICE) + "");
         //标题

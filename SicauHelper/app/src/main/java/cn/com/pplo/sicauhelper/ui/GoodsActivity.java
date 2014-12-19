@@ -259,7 +259,7 @@ public class GoodsActivity extends BaseActivity {
                     //名字
                     nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
                     //时间
-                    dateTv.setText(TimeUtil.timeToFriendlTime(avGoods.getCreatedAt().toString()));
+                    dateTv.setText(TimeUtil.timeToFriendlyTime(avGoods.getCreatedAt().toString()));
                     //类别(暂时用来写价格)
                     categoryTv.setText("￥" + avGoods.getInt(TableContract.TableGoods._PRICE) + "");
                     //标题
@@ -410,6 +410,8 @@ public class GoodsActivity extends BaseActivity {
                     commentEt.setHint("");
                     commentEt.setText("");
                     receiveStudent = null;
+                    //成功后首先清除评论吧...
+                    notifyDataSetChanged(new ArrayList<AVObject>(), true);
                     addCommentCount(true);
                 }
             }
