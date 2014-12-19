@@ -455,6 +455,7 @@ public class StatusActivity extends BaseActivity {
      */
     private void findNewData(AVQuery.CachePolicy cachePolicy, final String objectId) {
         swipeRefreshLayout.setRefreshing(true);
+        footerView.setVisibility(View.GONE);
         new CommentAction().findNewDataByObjectId(StatusActivity.this, cachePolicy, CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
