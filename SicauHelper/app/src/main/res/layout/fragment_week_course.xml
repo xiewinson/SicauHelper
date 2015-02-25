@@ -1,6 +1,278 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:paddingTop="?actionBarSize">
 
+    <LinearLayout
+        style="@style/course_table_container_layout"
+        android:layout_gravity="center"
+        android:background="@color/color_primary"
+        android:minHeight="0dp">
+
+        <TextView
+            style="@style/course_table_week_title"
+            android:text="周一" />
+
+        <TextView
+            style="@style/course_table_week_title"
+            android:text="周二" />
+
+        <TextView
+            style="@style/course_table_week_title"
+            android:text="周三" />
+
+        <TextView
+            style="@style/course_table_week_title"
+            android:text="周四" />
+
+        <TextView
+            style="@style/course_table_week_title"
+            android:text="周五" />
+
+        <TextView
+            style="@style/course_table_week_title"
+            android:text="周六" />
+
+        <TextView
+            style="@style/course_table_week_title"
+            android:text="周日" />
+
+    </LinearLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    style="@style/course_table_container_layout"
+                    android:background="@color/cyan_50">
+
+                    <LinearLayout
+                        android:id="@+id/course_table_00"
+                        style="@style/course_table_layout">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/course_table_01"
+                        style="@style/course_table_layout">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/course_table_02"
+                        style="@style/course_table_layout">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/course_table_03"
+                        style="@style/course_table_layout">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/course_table_04"
+                        style="@style/course_table_layout">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/course_table_05"
+                        style="@style/course_table_layout">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/course_table_06"
+                        style="@style/course_table_layout">
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/course_table_container_layout"
+                    android:background="@color/amber_50">
+
+
+                    <LinearLayout
+                        android:id="@+id/course_table_10"
+                        style="@style/course_table_layout">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/course_table_11"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_12"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_13"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_14"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_15"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_16"
+                        style="@style/course_table_layout" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/course_table_container_layout"
+                    android:background="@color/deep_orange_50">
+
+
+                    <LinearLayout
+                        android:id="@+id/course_table_20"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_21"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_22"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_23"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_24"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_25"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_26"
+                        style="@style/course_table_layout" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/course_table_container_layout"
+                    android:background="@color/blue_50">
+
+
+                    <LinearLayout
+                        android:id="@+id/course_table_30"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_31"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_32"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_33"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_34"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_35"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_36"
+                        style="@style/course_table_layout" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/course_table_container_layout"
+                    android:layout_height="match_parent"
+                    android:background="@color/indigo_100">
+
+
+                    <LinearLayout
+                        android:id="@+id/course_table_40"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_41"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_42"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_43"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_44"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_45"
+                        style="@style/course_table_layout" />
+
+                    <LinearLayout
+                        android:id="@+id/course_table_46"
+                        style="@style/course_table_layout" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/empty_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/import_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/btn_lightred_red"
+                    android:padding="8dp"
+                    android:text="从教务系统导入课表"
+                    android:textColor="#ffffff" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="若多次导入课表失败，请使用电脑登陆教务系统查看是否能正确查看课表"
+                    android:textColor="#aaaaaa" />
+            </LinearLayout>
+        </FrameLayout>
+
+    </ScrollView>
 </LinearLayout>

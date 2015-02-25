@@ -158,7 +158,7 @@ public class StatusActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (data.size() > 0 && data.size() > id) {
+                if (data.size() > 0 && data.size() > id && id > -1) {
                     showOptionDialog(context, data.get((int) id));
                 }
             }

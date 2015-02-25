@@ -119,18 +119,7 @@ public class Course implements Parcelable, Comparable, Cloneable {
 
     @Override
     public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", category='" + category + '\'' +
-                ", credit=" + credit +
-                ", time='" + time + '\'' +
-                ", classroom='" + classroom + '\'' +
-                ", week='" + week + '\'' +
-                ", teacher='" + teacher + '\'' +
-                ", scheduleNum=" + scheduleNum +
-                ", selectedNum=" + selectedNum +
-                '}';
+        return "name=" + name;
     }
 
     @Override

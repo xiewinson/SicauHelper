@@ -241,12 +241,14 @@ public class MainActivity extends ActionBarActivity
 
             //课程
             case 0:
-                fragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_THEORY);
-//                fragment = WeekCourseFragment.newInstance(CourseFragment.TYPE_COURSE_THEORY);
+//                fragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_THEORY);
+                fragment = WeekCourseFragment.newInstance(CourseFragment.TYPE_COURSE_THEORY);
                 break;
             //实验课程
             case 1:
-                fragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_LAB);
+//                fragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_LAB);
+                fragment = WeekCourseFragment.newInstance(CourseFragment.TYPE_COURSE_LAB);
+
                 break;
             //成绩
             case 2:

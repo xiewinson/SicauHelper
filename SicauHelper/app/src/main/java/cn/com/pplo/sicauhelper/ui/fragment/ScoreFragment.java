@@ -203,6 +203,12 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     private void notifyDataSetChanged(List<Score> list) {
         if (list != null) {
             scoreList.clear();
+            //倒序
+            List<Score> tempList = new ArrayList<>();
+            for(Score score : list) {
+                tempList.add(0, score);
+            }
+            list = tempList;
             scoreList.addAll(list);
             if(scoreList.size() > 0) {
                 listView.setVisibility(View.VISIBLE);

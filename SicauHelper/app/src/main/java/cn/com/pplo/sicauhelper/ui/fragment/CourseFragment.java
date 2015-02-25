@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -303,6 +304,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
      * @return
      */
     private ListView getDateListView(final Context context, final List<Course> list, final List<List<Course>> data) {
+        Log.d("winson", "datasize:" + data.size());
         ListView listView = new ListView(context);
         listView.setDivider(getResources().getDrawable(android.R.color.transparent));
         listView.setDividerHeight(0);
