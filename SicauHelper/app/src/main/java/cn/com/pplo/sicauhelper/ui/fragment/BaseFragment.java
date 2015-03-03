@@ -14,6 +14,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.HttpClientStack;
+import com.android.volley.toolbox.Volley;
+
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 import cn.com.pplo.sicauhelper.widget.ViewPadding;
 
@@ -21,6 +27,7 @@ import cn.com.pplo.sicauhelper.widget.ViewPadding;
  * Created by winson on 2014/9/21.
  */
 public class BaseFragment extends Fragment {
+    protected RequestQueue requestQueue;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +68,12 @@ public class BaseFragment extends Fragment {
         return ((ActionBarActivity)context).getSupportActionBar();
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestQueue = Volley.newRequestQueue(getActivity(), new HttpClientStack(new DefaultHttpClient()));
+    }
+
     /**
      * listView上下补点间距
      * @param listView
@@ -69,5 +82,13 @@ public class BaseFragment extends Fragment {
         View paddingTv = ViewPadding.getListViewPadding(getActivity());
         listView.addHeaderView(paddingTv);
         listView.addFooterView(paddingTv);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(requestQueue != null) {
+            requestQueue.stop();
+        }
     }
 }

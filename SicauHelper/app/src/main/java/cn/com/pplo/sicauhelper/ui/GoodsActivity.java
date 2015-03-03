@@ -110,7 +110,7 @@ public class GoodsActivity extends BaseActivity {
         objectId = getIntent().getStringExtra(EXTRA_OBJECT_ID);
         school = getIntent().getIntExtra(EXTRA_SCHOOL, 0);
 
-        progressDialog = UIUtil.getProgressDialog(context, "正在发表评论...");
+        progressDialog = UIUtil.getProgressDialog(context, "正在发表评论...", false);
 
         listView = (ListView) findViewById(R.id.comment_listView);
         commentEt = (EditText) findViewById(R.id.comment_et);
@@ -160,7 +160,7 @@ public class GoodsActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (data.size() > 0 && data.size() > id) {
+                if (data.size() > 0 && data.size() > id && id > -1) {
                     showOptionDialog(context, data.get((int) id));
                 }
             }
@@ -259,7 +259,7 @@ public class GoodsActivity extends BaseActivity {
                     //名字
                     nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
                     //时间
-                    dateTv.setText(TimeUtil.timeToFriendlTime(avGoods.getCreatedAt().toString()));
+                    dateTv.setText(TimeUtil.timeToFriendlyTime(avGoods.getCreatedAt().toString()));
                     //类别(暂时用来写价格)
                     categoryTv.setText("￥" + avGoods.getInt(TableContract.TableGoods._PRICE) + "");
                     //标题
@@ -410,6 +410,8 @@ public class GoodsActivity extends BaseActivity {
                     commentEt.setHint("");
                     commentEt.setText("");
                     receiveStudent = null;
+                    //成功后首先清除评论吧...
+                    notifyDataSetChanged(new ArrayList<AVObject>(), true);
                     addCommentCount(true);
                 }
             }
@@ -484,7 +486,6 @@ public class GoodsActivity extends BaseActivity {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
                     if (list.size() == 0) {
-                        UIUtil.showShortToast(GoodsActivity.this, "已经没有更多评论啦！");
                         footerView.setVisibility(View.INVISIBLE);
                     } else {
                         notifyDataSetChanged(list, false);

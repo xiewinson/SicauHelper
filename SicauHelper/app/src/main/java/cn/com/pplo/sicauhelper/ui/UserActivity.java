@@ -370,7 +370,7 @@ public class UserActivity extends BaseActivity {
      * @param avFile
      */
     private void uploadImage(final Context context, final AVFile avFile, final AVUser avUser) {
-        final AlertDialog uploadImgDialog = UIUtil.getProgressDialog(context, "上传头像中...");
+        final AlertDialog uploadImgDialog = UIUtil.getProgressDialog(context, "上传头像中...", false);
         uploadImgDialog.show();
         avFile.saveInBackground(new SaveCallback() {
             @Override

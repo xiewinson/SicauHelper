@@ -81,7 +81,7 @@ public class GoodsAdapter extends BaseAdapter {
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
         //时间
-        holder.dateTv.setText(TimeUtil.timeToFriendlTime(avGoods.getCreatedAt().toString()));
+        holder.dateTv.setText(TimeUtil.timeToFriendlyTime(avGoods.getCreatedAt().toString()));
         //类别(暂时用来写价格)
         holder.categoryTv.setText("￥" + avGoods.getInt(TableContract.TableGoods._PRICE) + "");
         //标题

@@ -108,7 +108,7 @@ public class StatusActivity extends BaseActivity {
         objectId = getIntent().getStringExtra(EXTRA_OBJECT_ID);
         school = getIntent().getIntExtra(EXTRA_SCHOOL, 0);
 
-        progressDialog = UIUtil.getProgressDialog(context, "正在发表评论...");
+        progressDialog = UIUtil.getProgressDialog(context, "正在发表评论...", false);
 
         listView = (ListView) findViewById(R.id.comment_listView);
         commentEt = (EditText) findViewById(R.id.comment_et);
@@ -158,7 +158,7 @@ public class StatusActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (data.size() > 0 && data.size() > id) {
+                if (data.size() > 0 && data.size() > id && id > -1) {
                     showOptionDialog(context, data.get((int) id));
                 }
             }
@@ -257,7 +257,7 @@ public class StatusActivity extends BaseActivity {
                     //名字
                     nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
                     //时间
-                    dateTv.setText(TimeUtil.timeToFriendlTime(avStatus.getCreatedAt().toString()));
+                    dateTv.setText(TimeUtil.timeToFriendlyTime(avStatus.getCreatedAt().toString()));
                     //类别(暂时不用)
 //                    categoryTv.setText("￥" + avStatus.getInt(TableContract.TableStatus._PRICE) + "");
                     //标题
@@ -411,6 +411,8 @@ public class StatusActivity extends BaseActivity {
                     commentEt.setHint("");
                     commentEt.setText("");
                     receiveStudent = null;
+                    //成功后首先清除评论吧...
+                    notifyDataSetChanged(new ArrayList<AVObject>(), true);
                     addCommentCount(true);
                 }
             }
@@ -455,6 +457,7 @@ public class StatusActivity extends BaseActivity {
      */
     private void findNewData(AVQuery.CachePolicy cachePolicy, final String objectId) {
         swipeRefreshLayout.setRefreshing(true);
+        footerView.setVisibility(View.GONE);
         new CommentAction().findNewDataByObjectId(StatusActivity.this, cachePolicy, CommentAction.COMMENT_STATUS, objectId, new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
@@ -484,7 +487,6 @@ public class StatusActivity extends BaseActivity {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
                     if (list.size() == 0) {
-                        UIUtil.showShortToast(StatusActivity.this, "已经没有更多评论啦！");
                         footerView.setVisibility(View.INVISIBLE);
                     } else {
                         notifyDataSetChanged(list, false);

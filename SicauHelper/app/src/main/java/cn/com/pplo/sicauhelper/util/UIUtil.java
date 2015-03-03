@@ -66,7 +66,7 @@ public class UIUtil {
      * @param text
      * @return
      */
-    public static AlertDialog getProgressDialog(Context context, String text){
+    public static AlertDialog getProgressDialog(Context context, String text, boolean isCancelable){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = View.inflate(context, R.layout.progress_dialog, null);
         TextView tv = (TextView) view.findViewById(R.id.progress_dialog_tv);
@@ -75,7 +75,7 @@ public class UIUtil {
         }
         builder.setView(view);
         AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
+        dialog.setCancelable(isCancelable);
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }

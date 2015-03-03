@@ -94,7 +94,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
     private void setUp(View view, Context context) {
         classroomAdapter = new ClassroomAdapter(context, data);
         gridView = (GridView) view.findViewById(R.id.classroom_gridView);
-        progressDialog = UIUtil.getProgressDialog(context, "我算算哪些教室是空的，这个过程是相当的漫长～");
+        progressDialog = UIUtil.getProgressDialog(context, "我算算哪些教室是空的，这个过程是相当的漫长～", true);
 //        gridView.setAdapter(classroomAdapter);
         UIUtil.setListViewInitAnimation("bottom", gridView, classroomAdapter);
 
@@ -113,7 +113,7 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
      */
     private void requestClassroomList(final Context context) {
         progressDialog.show();
-        NetUtil.getClassroomListHtmlStr(context, new NetUtil.NetCallback(context) {
+        new NetUtil().getClassroomListHtmlStr(context, requestQueue, new NetUtil.NetCallback(context) {
             @Override
             protected void onSuccess(String result) {
                 StringUtil.parseClassroomListHtmlStr(result, new StringUtil.Callback() {
@@ -160,7 +160,6 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
             data.addAll(originalData);
             keepFilterData(data);
         }
-        Log.d("winson", data.size() + "的长度是。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。");
     }
 
     /**

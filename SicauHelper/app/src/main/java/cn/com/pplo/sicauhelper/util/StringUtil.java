@@ -534,21 +534,21 @@ public class StringUtil {
 
                     }
                 }
-                Collections.sort(list0);
-                Collections.sort(list1);
-                Collections.sort(list2);
-                Collections.sort(list3);
-                Collections.sort(list4);
-                Collections.sort(list5);
-                Collections.sort(list6);
-                data.add(list0);
-                data.add(list1);
-                data.add(list2);
-                data.add(list3);
-                data.add(list4);
-                data.add(list5);
-                data.add(list6);
             }
+            Collections.sort(list0);
+            Collections.sort(list1);
+            Collections.sort(list2);
+            Collections.sort(list3);
+            Collections.sort(list4);
+            Collections.sort(list5);
+            Collections.sort(list6);
+            data.add(list0);
+            data.add(list1);
+            data.add(list2);
+            data.add(list3);
+            data.add(list4);
+            data.add(list5);
+            data.add(list6);
         } catch (Exception e) {
             data.clear();
             Log.d("winson", "解析出错：" + e);

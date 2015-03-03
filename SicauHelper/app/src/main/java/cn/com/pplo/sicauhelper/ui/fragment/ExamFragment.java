@@ -102,7 +102,7 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
             }
         });
 
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "正在寻找你的考试安排...");
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "正在寻找你的考试安排...", true);
 
         examAdapter = new ExamAdapter(getActivity(), examList);
 //        UIUtil.setListViewInitAnimation("bottom", listView, examAdapter);
@@ -174,7 +174,7 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
         params.put("user", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString());
         params.put("pwd", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_PSWD, "").toString());
         params.put("lb", "S");
-        NetUtil.getExamHtmlStr(context, params, new NetUtil.NetCallback(context) {
+        new NetUtil().getExamHtmlStr(context, requestQueue, params, new NetUtil.NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 Log.d("winson", "发生了错误");
@@ -201,7 +201,7 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
         if (list != null) {
             examList.clear();
             examList.addAll(list);
-            if(examList.size() > 0) {
+            if (examList.size() > 0) {
                 listView.setVisibility(View.VISIBLE);
                 emptyLayout.setVisibility(View.GONE);
             }

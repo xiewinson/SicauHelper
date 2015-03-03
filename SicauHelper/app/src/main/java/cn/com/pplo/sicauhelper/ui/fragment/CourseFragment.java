@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +39,7 @@ import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.CourseActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
+import cn.com.pplo.sicauhelper.ui.SelectCourseActivity;
 import cn.com.pplo.sicauhelper.ui.adapter.CourseAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
@@ -108,7 +110,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     }
 
     private void setUp(View view) {
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表");
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表", true);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
@@ -211,6 +213,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_course, menu);
     }
 
     @Override
@@ -218,6 +221,9 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             requestCourseList(getActivity());
+        }
+        else if (id == R.id.action_select_course) {
+            SelectCourseActivity.startSelectCourseActivity(getActivity());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -298,6 +304,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
      * @return
      */
     private ListView getDateListView(final Context context, final List<Course> list, final List<List<Course>> data) {
+        Log.d("winson", "datasize:" + data.size());
         ListView listView = new ListView(context);
         listView.setDivider(getResources().getDrawable(android.R.color.transparent));
         listView.setDividerHeight(0);
@@ -386,7 +393,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         params.put("lb", "S");
 
         if(type == TYPE_COURSE_THEORY) {
-            NetUtil.getCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
+            new NetUtil().getCourseHtmlStr(context, requestQueue, params, new NetUtil.NetCallback(context) {
                 @Override
                 public void onSuccess(String result) {
                     final List<Course> tempList = StringUtil.parseCourseInfo(result);
@@ -403,7 +410,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
             });
         }
         else if(type == TYPE_COURSE_LAB) {
-            NetUtil.getLabCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
+            new NetUtil().getLabCourseHtmlStr(context,requestQueue, params, new NetUtil.NetCallback(context) {
                 @Override
                 public void onSuccess(String result) {
                     final List<List<Course>> tempList = StringUtil.parseLabCourseDateInfo(result);

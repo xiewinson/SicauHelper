@@ -234,28 +234,28 @@ public class SaveIntentService extends IntentService {
      * @param newsList
      */
     private void handleActionNewsList(ArrayList<News> newsList) {
+        ContentResolver contentResolver = getApplicationContext().getContentResolver();
+        contentResolver.delete(Uri.parse(SicauHelperProvider.URI_NEWS_ALL), "", null);
         if (newsList != null) {
+            ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
             for (int i = 0; i < newsList.size(); i++) {
-                ContentResolver contentResolver = getApplicationContext().getContentResolver();
-                if (contentResolver.query(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE),
-                        new String[]{TableContract.TableNews._ID}, TableContract.TableNews._ID + " = ?",
-                        new String[]{newsList.get(i).getId() + ""}
-                        , null)
-                        .getCount() == 0) {
-                    Log.d("winson", "不存在-->" + i);
-                    News news = newsList.get(i);
-                    ContentValues values = new ContentValues();
-                    values.put(TableContract.TableNews._ID, news.getId());
-                    values.put(TableContract.TableNews._TITLE, news.getTitle());
-                    values.put(TableContract.TableNews._DATE, news.getDate());
-                    values.put(TableContract.TableNews._URL, news.getUrl());
-                    values.put(TableContract.TableNews._CONTENT, news.getContent());
-                    values.put(TableContract.TableNews._SRC, news.getSrc());
-                    values.put(TableContract.TableNews._CATEGORY, news.getCategory());
-
-                    //若数据库不存在该条数据便插入
-                    contentResolver.insert(Uri.parse(SicauHelperProvider.URI_NEWS_SINGLE), values);
-                }
+                News news = newsList.get(i);
+                ContentValues values = new ContentValues();
+                values.put(TableContract.TableNews._ID, news.getId());
+                values.put(TableContract.TableNews._TITLE, news.getTitle());
+                values.put(TableContract.TableNews._DATE, news.getDate());
+                values.put(TableContract.TableNews._URL, news.getUrl());
+                values.put(TableContract.TableNews._CONTENT, news.getContent());
+                values.put(TableContract.TableNews._SRC, news.getSrc());
+                values.put(TableContract.TableNews._CATEGORY, news.getCategory());
+                 operations.add(ContentProviderOperation.newInsert(Uri.parse(SicauHelperProvider.URI_NEWS_ALL)).withValues(values).build());
+            }
+            try {
+                contentResolver.applyBatch(SicauHelperProvider.AUTHORITY, operations);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (OperationApplicationException e) {
+                e.printStackTrace();
             }
         }
     }

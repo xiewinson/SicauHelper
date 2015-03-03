@@ -90,7 +90,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     }
 
 
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -111,7 +110,7 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 //        setListViewTopBottomPadding(listView);
 //        listView.setOnScrollListener(new OnScrollHideOrShowActionBarListener(getSupportActionBar(getActivity())));
 //        listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.eeeeee));
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "正在教务系统上找你的成绩表");
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "正在教务系统上找你的成绩表", true);
         initScoreDetailAdapter();
         getLoaderManager().initLoader(0, null, this);
     }
@@ -203,8 +202,14 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
     private void notifyDataSetChanged(List<Score> list) {
         if (list != null) {
             scoreList.clear();
+            //倒序
+            List<Score> tempList = new ArrayList<>();
+            for (Score score : list) {
+                tempList.add(0, score);
+            }
+            list = tempList;
             scoreList.addAll(list);
-            if(scoreList.size() > 0) {
+            if (scoreList.size() > 0) {
                 listView.setVisibility(View.VISIBLE);
                 emptyLayout.setVisibility(View.GONE);
             }
@@ -214,7 +219,6 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
 //            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
         }
     }
-
 
 
     /**
@@ -230,29 +234,29 @@ public class ScoreFragment extends BaseFragment implements LoaderManager.LoaderC
         params.put("pwd", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_PSWD, "").toString());
         params.put("lb", "S");
 
-            NetUtil.getScoreHtmlStr(getActivity(), params, new NetUtil.NetCallback(getActivity()) {
-                @Override
-                public void onSuccess(String result) {
-                    StringUtil.parseScoreInfo(result, new StringUtil.Callback() {
-                        @Override
-                        public void handleParseResult(Object obj) {
-                            List<Score> tempList = (List<Score>) obj;
-                            keepOriginalData(tempList);
-                            notifyDataSetChanged(tempList);
+        new NetUtil().getScoreHtmlStr(getActivity(), requestQueue, params, new NetUtil.NetCallback(getActivity()) {
+            @Override
+            public void onSuccess(String result) {
+                StringUtil.parseScoreInfo(result, new StringUtil.Callback() {
+                    @Override
+                    public void handleParseResult(Object obj) {
+                        List<Score> tempList = (List<Score>) obj;
+                        keepOriginalData(tempList);
+                        notifyDataSetChanged(tempList);
 
 
-                            UIUtil.dismissProgressDialog(progressDialog);
-                            SaveIntentService.startActionScoreAll(context, tempList);
-                        }
-                    });
-                }
+                        UIUtil.dismissProgressDialog(progressDialog);
+                        SaveIntentService.startActionScoreAll(context, tempList);
+                    }
+                });
+            }
 
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    UIUtil.dismissProgressDialog(progressDialog);
-                    super.onErrorResponse(volleyError);
-                }
-            });
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                UIUtil.dismissProgressDialog(progressDialog);
+                super.onErrorResponse(volleyError);
+            }
+        });
     }
 
     /**

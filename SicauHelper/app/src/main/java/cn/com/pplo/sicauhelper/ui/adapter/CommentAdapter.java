@@ -76,7 +76,7 @@ public class CommentAdapter extends BaseAdapter {
         //名字
         holder.nameTv.setText(avStudent.getString(TableContract.TableUser._NICKNAME));
         //时间
-        holder.timeTv.setText(TimeUtil.timeToFriendlTime(avComment.getCreatedAt().toString()));
+        holder.timeTv.setText(TimeUtil.timeToFriendlyTime(avComment.getCreatedAt().toString()));
         //内容
         String content = avComment.getString(TableContract.TableGoodsComment._CONTENT);
         AVObject avReceive = avComment.getAVObject(TableContract.TableGoodsComment._RECEIVE_USER);

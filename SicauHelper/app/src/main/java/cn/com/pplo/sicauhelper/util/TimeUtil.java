@@ -14,7 +14,7 @@ public class TimeUtil {
      * @param time
      * @return
      */
-    public static String timeToFriendlTime(String time){
+    public static String timeToFriendlyTime(String time){
 
         String result = "";
         String timeStr = "";
@@ -22,8 +22,13 @@ public class TimeUtil {
 
         long longTime = 0;
         long nowLongTime = date.getTime();
-
-        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy", Locale.US);
+        SimpleDateFormat format = null;
+        if(time.contains("格林尼治标准时间")){
+            format = new SimpleDateFormat("EEE MMM dd HH:mm:ss 格林尼治标准时间+0800 yyyy", Locale.US);
+        }
+        else {
+            format = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy", Locale.US);
+        }
 
         try {
             date = format.parse(time);
@@ -55,6 +60,35 @@ public class TimeUtil {
         }
         return result;
     }
+
+    /**
+     * 取得xxxx-11-11 xx:xx:xx
+     * @param time
+     * @return
+     */
+//    public static String timeToCommentTime(String time){
+//
+//        String timeStr = "";
+//        Date date = new Date();
+//
+//        long longTime = 0;
+//        long nowLongTime = date.getTime();
+//
+//        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy", Locale.US);
+//
+//        try {
+//            date = format.parse(time);
+//            timeStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            timeStr = "";
+//            System.out.println("时间错误");
+//
+//        } finally {
+//            return timeStr;
+//        }
+//    }
 
     /**
      * 时间戳转换为年:月:日:小时:分钟时间

@@ -2,10 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="cn.com.pplo.sicauhelper.ui.CourseActivity">
-    <item android:id="@+id/action_share"
-        android:title="分享"
+    <item android:id="@+id/action_select_course"
+        android:title="选课"
         android:icon="@drawable/ic_share_white_24dp"
         android:orderInCategory="100"
-        android:actionProviderClass="android.widget.ShareActionProvider"
         app:showAsAction="always" />
 </menu>
