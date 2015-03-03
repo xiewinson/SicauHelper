@@ -108,7 +108,7 @@ public class StatusActivity extends BaseActivity {
         objectId = getIntent().getStringExtra(EXTRA_OBJECT_ID);
         school = getIntent().getIntExtra(EXTRA_SCHOOL, 0);
 
-        progressDialog = UIUtil.getProgressDialog(context, "正在发表评论...");
+        progressDialog = UIUtil.getProgressDialog(context, "正在发表评论...", false);
 
         listView = (ListView) findViewById(R.id.comment_listView);
         commentEt = (EditText) findViewById(R.id.comment_et);
@@ -487,7 +487,6 @@ public class StatusActivity extends BaseActivity {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
                     if (list.size() == 0) {
-                        UIUtil.showShortToast(StatusActivity.this, "已经没有更多评论啦！");
                         footerView.setVisibility(View.INVISIBLE);
                     } else {
                         notifyDataSetChanged(list, false);

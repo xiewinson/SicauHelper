@@ -47,7 +47,7 @@ public class NewsActivity extends BaseActivity {
     private WebView newsWebView;
     private ScrollView scrollView;
 
-    public static void startNewsActivity(Context context, News news){
+    public static void startNewsActivity(Context context, News news) {
         Intent intent = new Intent(context, NewsActivity.class);
         intent.putExtra(EXTRA_NEWS, news);
         context.startActivity(intent);
@@ -75,27 +75,24 @@ public class NewsActivity extends BaseActivity {
         newsWebView.setInitialScale(10);
 
         //对话框
-        progressDialog = UIUtil.getProgressDialog(context, "正在寻找新闻内容...");
+        progressDialog = UIUtil.getProgressDialog(context, "正在寻找新闻内容...", true);
         progressDialog.show();
         //获得news数据
         data = getIntent().getParcelableExtra(EXTRA_NEWS);
-        if(data != null){
+        if (data != null) {
 
             //设置actionBar的标题
             ActionBar actionBar = getSupportActionBar();
 
             String category = data.getCategory();
             int colorRes = 0;
-            if(category.equals("雅安")){
+            if (category.equals("雅安")) {
                 colorRes = R.drawable.square_blue;
-            }
-            else if(category.equals("成都")){
+            } else if (category.equals("成都")) {
                 colorRes = R.drawable.square_orange;
-            }
-            else if(category.equals("都江堰")){
+            } else if (category.equals("都江堰")) {
                 colorRes = R.drawable.square_green;
-            }
-            else {
+            } else {
                 colorRes = R.drawable.square_red;
             }
             actionBar.setTitle(category + "新闻");
@@ -104,7 +101,7 @@ public class NewsActivity extends BaseActivity {
 
 
             //从数据库中取得新闻
-            new AsyncTask<Integer, Integer, News>(){
+            new AsyncTask<Integer, Integer, News>() {
                 @Override
                 protected News doInBackground(Integer... params) {
                     News news = new News();
@@ -114,8 +111,8 @@ public class NewsActivity extends BaseActivity {
                             new String[]{params[0] + ""},
                             null);
                     try {
-                        if(cursor.getCount() > 0){
-                            while (cursor.moveToNext()){
+                        if (cursor.getCount() > 0) {
+                            while (cursor.moveToNext()) {
                                 news.setContent(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._CONTENT)));
                                 news.setSrc(cursor.getString(cursor.getColumnIndex(TableContract.TableNews._SRC)));
                             }
@@ -123,19 +120,18 @@ public class NewsActivity extends BaseActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                         news = null;
-                    }
-                    finally {
+                    } finally {
                         cursor.close();
                     }
                     return news;
                 }
+
                 @Override
                 protected void onPostExecute(News news) {
                     super.onPostExecute(news);
-                    if(news != null && news.getContent() != null && !news.getContent().equals("")){
+                    if (news != null && news.getContent() != null && !news.getContent().equals("")) {
                         showData(news);
-                    }
-                    else {
+                    } else {
                         requestNewsContent(context, data.getId());
                     }
                 }
@@ -146,6 +142,7 @@ public class NewsActivity extends BaseActivity {
 
     /**
      * 将数据显示出来
+     *
      * @param news
      */
     private void showData(News news) {
@@ -156,16 +153,17 @@ public class NewsActivity extends BaseActivity {
 
     /**
      * 请求新闻内容
+     *
      * @param context
      * @param id
      */
-    private void requestNewsContent(Context context, int id){
-        if(!progressDialog.isShowing()) {
+    private void requestNewsContent(Context context, int id) {
+        if (!progressDialog.isShowing()) {
             progressDialog.show();
         }
         Map<String, String> params = new HashMap<String, String>();
         params.put("bianhao", id + "");
-        NetUtil.getNewsHtmlStr(context, params, new NetUtil.NetCallback(context) {
+        new NetUtil().getNewsHtmlStr(context, requestQueue, params, new NetUtil.NetCallback(context) {
             @Override
             protected void onSuccess(final String result) {
                 data.setContent(StringUtil.parseNewsInfo(result));
@@ -176,7 +174,7 @@ public class NewsActivity extends BaseActivity {
                         data.setSrc(obj.toString());
                         //加载webView
                         loadWebView(newsWebView, obj.toString());
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 super.run();
@@ -211,8 +209,8 @@ public class NewsActivity extends BaseActivity {
         });
     }
 
-    private void loadWebView(final WebView newsWebView, String htmlStr){
-            newsWebView.loadData(htmlStr, "text/html; charset=utf-8", "utf-8");
+    private void loadWebView(final WebView newsWebView, String htmlStr) {
+        newsWebView.loadData(htmlStr, "text/html; charset=utf-8", "utf-8");
     }
 
 
@@ -220,10 +218,9 @@ public class NewsActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.news, menu);
-        if(newsTv.getVisibility() == View.VISIBLE){
+        if (newsTv.getVisibility() == View.VISIBLE) {
             menu.add(1, 1, 1, "网页视图");
-        }
-        else {
+        } else {
             menu.add(1, 1, 1, "内容视图");
         }
         return super.onCreateOptionsMenu(menu);
@@ -234,19 +231,17 @@ public class NewsActivity extends BaseActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if(item.getItemId() == 1){
-            if(newsTv.getVisibility() == View.VISIBLE){
+        if (item.getItemId() == 1) {
+            if (newsTv.getVisibility() == View.VISIBLE) {
                 newsTv.setVisibility(View.GONE);
                 newsWebView.setVisibility(View.VISIBLE);
                 invalidateOptionsMenu();
-            }
-            else {
+            } else {
                 newsTv.setVisibility(View.VISIBLE);
                 newsWebView.setVisibility(View.GONE);
                 invalidateOptionsMenu();
             }
-        }
-        else if(item.getItemId() == R.id.action_refresh){
+        } else if (item.getItemId() == R.id.action_refresh) {
             requestNewsContent(NewsActivity.this, data.getId());
         }
         return super.onOptionsItemSelected(item);

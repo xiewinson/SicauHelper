@@ -148,7 +148,7 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
     }
 
     private void setUp(View view) {
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表");
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表", true);
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
         importBtn = (Button) view.findViewById(R.id.import_btn);
         importBtn.setOnClickListener(new View.OnClickListener() {
@@ -287,30 +287,21 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
 
                 int color = 0;
 
-                if(timeStr.contains("1-") || timeStr.contains("2-")) {
+                if (timeStr.contains("1-") || timeStr.contains("2-")) {
                     container = containerList.get(7 * 0 + i);
                     color = context.getResources().getColor(R.color.cyan_500);
-                    Log.d("winson", "位置：" + (7 * 0 + i));
-                }
-                else if(timeStr.contains("3-") || timeStr.contains("4-")) {
+                } else if (timeStr.contains("3-") || timeStr.contains("4-")) {
                     container = containerList.get(7 * 1 + i);
                     color = context.getResources().getColor(R.color.amber_500);
-                    Log.d("winson", "位置：" + (7 * 1 + i));
-                }
-                else if(timeStr.contains("5-") || timeStr.contains("6-")) {
+                } else if (timeStr.contains("5-") || timeStr.contains("6-")) {
                     container = containerList.get(7 * 2 + i);
                     color = context.getResources().getColor(R.color.deep_orange_500);
-                    Log.d("winson", "位置：" + (7 * 2 + i));
-                }
-                else if(timeStr.contains("7-") || timeStr.contains("8-")) {
+                } else if (timeStr.contains("7-") || timeStr.contains("8-")) {
                     container = containerList.get(7 * 3 + i);
                     color = context.getResources().getColor(R.color.blue_500);
-                    Log.d("winson", "位置：" + (7 * 3 + i));
-                }
-                else {
+                } else {
                     container = containerList.get(7 * 4 + i);
                     color = context.getResources().getColor(R.color.indigo_500);
-                    Log.d("winson", "位置：" + (7 * 4 + i));
                 }
                 container.setBackgroundColor(color);
                 container.addView(initCourseView(context, data, data.get(i).get(j)));
@@ -436,7 +427,7 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
         params.put("lb", "S");
 
         if (type == TYPE_COURSE_THEORY) {
-            NetUtil.getCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
+            new NetUtil().getCourseHtmlStr(context, requestQueue, params, new NetUtil.NetCallback(context) {
                 @Override
                 public void onSuccess(String result) {
                     final List<Course> tempList = StringUtil.parseCourseInfo(result);
@@ -452,7 +443,7 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
                 }
             });
         } else if (type == TYPE_COURSE_LAB) {
-            NetUtil.getLabCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
+            new NetUtil().getLabCourseHtmlStr(context, requestQueue, params, new NetUtil.NetCallback(context) {
                 @Override
                 public void onSuccess(String result) {
                     final List<List<Course>> tempList = StringUtil.parseLabCourseDateInfo(result);
@@ -543,8 +534,8 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
                 Course selectedCourse = course;
                 List<Course> sendData = new ArrayList<Course>();
                 for (int i = 0; i < data.size(); i++) {
-                    for(Course course : data.get(i)) {
-                        if(selectedCourse.getName().equals(course.getName())) {
+                    for (Course course : data.get(i)) {
+                        if (selectedCourse.getName().equals(course.getName())) {
                             String timeStr = "";
                             if (i == 0) {
                                 timeStr = "星期一";
@@ -558,11 +549,11 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
                                 timeStr = "星期五";
                             } else if (i == 5) {
                                 timeStr = "星期六";
-                            } else if (i == 6){
+                            } else if (i == 6) {
                                 timeStr = "星期天";
                             }
                             try {
-                                if(!TextUtils.isEmpty(timeStr)) {
+                                if (!TextUtils.isEmpty(timeStr)) {
                                     Course newCourse = course.clone();
                                     newCourse.setTime(timeStr + " " + newCourse.getTime() + "节");
                                     sendData.add(newCourse);

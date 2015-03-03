@@ -16,13 +16,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpClientStack;
+import com.android.volley.toolbox.Volley;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SignUpCallback;
 import com.umeng.update.UmengUpdateAgent;
 
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.jsoup.examples.HtmlToPlainText;
 
 import java.util.HashMap;
@@ -44,6 +48,7 @@ public class LoginActivity extends ActionBarActivity {
     private Button loginBtn;
     private TextView helpTv;
     private AlertDialog progressDialog;
+    private RequestQueue requestQueue;
 
     public static void startLoginActivity(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -58,7 +63,7 @@ public class LoginActivity extends ActionBarActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
-
+        requestQueue =  Volley.newRequestQueue(LoginActivity.this, new HttpClientStack(new DefaultHttpClient()));
         //启动更新
         UmengUpdateAgent.setUpdateOnlyWifi(false);
         UmengUpdateAgent.update(this);
@@ -71,7 +76,7 @@ public class LoginActivity extends ActionBarActivity {
         sidEt = (EditText) findViewById(R.id.login_sid_et);
         pswdEt = (EditText) findViewById(R.id.login_pswd_et);
         helpTv = (TextView) findViewById(R.id.login_help_tv);
-        progressDialog = UIUtil.getProgressDialog(this, "吾已前往教务系统验证你的学号密码");
+        progressDialog = UIUtil.getProgressDialog(this, "吾已前往教务系统验证你的学号密码", false);
 
         //设置保存在xml的学号密码
         sidEt.setText(SharedPreferencesUtil.get(this, SharedPreferencesUtil.LOGIN_SID, "").toString());
@@ -103,7 +108,7 @@ public class LoginActivity extends ActionBarActivity {
                 map.put("user", sid);
                 map.put("pwd", pswd);
                 map.put("lb", "S");
-                NetUtil.login(getApplicationContext(), map, new NetUtil.NetCallback(LoginActivity.this) {
+                new NetUtil().login(getApplicationContext(), requestQueue, map, new NetUtil.NetCallback(LoginActivity.this) {
                     @Override
                     public void onSuccess(String result) {
                         try {
@@ -209,6 +214,14 @@ public class LoginActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(requestQueue != null) {
+            requestQueue.stop();
+        }
     }
 
     /**

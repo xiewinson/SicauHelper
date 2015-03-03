@@ -110,7 +110,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     }
 
     private void setUp(View view) {
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表");
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表", true);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
@@ -393,7 +393,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         params.put("lb", "S");
 
         if(type == TYPE_COURSE_THEORY) {
-            NetUtil.getCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
+            new NetUtil().getCourseHtmlStr(context, requestQueue, params, new NetUtil.NetCallback(context) {
                 @Override
                 public void onSuccess(String result) {
                     final List<Course> tempList = StringUtil.parseCourseInfo(result);
@@ -410,7 +410,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
             });
         }
         else if(type == TYPE_COURSE_LAB) {
-            NetUtil.getLabCourseHtmlStr(context, params, new NetUtil.NetCallback(context) {
+            new NetUtil().getLabCourseHtmlStr(context,requestQueue, params, new NetUtil.NetCallback(context) {
                 @Override
                 public void onSuccess(String result) {
                     final List<List<Course>> tempList = StringUtil.parseLabCourseDateInfo(result);

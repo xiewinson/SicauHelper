@@ -182,7 +182,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
              */
             if (!TextUtils.isEmpty(objectId)) {
                 getSupportActionBar().setTitle("修改商品");
-                progressDialog = UIUtil.getProgressDialog(this, "加载中...");
+                progressDialog = UIUtil.getProgressDialog(this, "加载中...", false);
                 progressDialog.show();
                 new GoodsAction().findByObjectId(AVQuery.CachePolicy.CACHE_ELSE_NETWORK, objectId, new FindCallback<AVObject>() {
                     @Override
@@ -239,7 +239,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
              */
             if (!TextUtils.isEmpty(objectId)) {
                 getSupportActionBar().setTitle("修改帖子");
-                progressDialog = UIUtil.getProgressDialog(this, "加载中...");
+                progressDialog = UIUtil.getProgressDialog(this, "加载中...", false);
                 progressDialog.show();
                 new StatusAction().findByObjectId(AVQuery.CachePolicy.CACHE_ELSE_NETWORK, objectId, new FindCallback<AVObject>() {
                     @Override
@@ -341,7 +341,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
      */
 
     private void uploadGoods(Context context, final List<AVFile> avFiles) {
-        final AlertDialog uploadDialog = UIUtil.getProgressDialog(context, "上传中...");
+        final AlertDialog uploadDialog = UIUtil.getProgressDialog(context, "上传中...", false);
         uploadDialog.show();
         if (TextUtils.isEmpty(priceEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "价格不可为空");
@@ -422,13 +422,15 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
      * @param avFiles
      */
     private void uploadStatus(Context context, List<AVFile> avFiles) {
-        final AlertDialog uploadDialog = UIUtil.getProgressDialog(context, "上传中...");
+        final AlertDialog uploadDialog = UIUtil.getProgressDialog(context, "上传中...", false);
         uploadDialog.show();
         if (TextUtils.isEmpty(titleEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "标题不可为空");
+            uploadDialog.show();
             return;
         } else if (TextUtils.isEmpty(contentEt.getText().toString().trim())) {
             UIUtil.showShortToast(context, "内容不可为空");
+            uploadDialog.show();
             return;
         }
 
@@ -573,7 +575,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
      * @param avFile
      */
     private void uploadImage(final Context context, final AVFile avFile) {
-        final AlertDialog uploadImgDialog = UIUtil.getProgressDialog(AddActivity.this, "上传图片中...");
+        final AlertDialog uploadImgDialog = UIUtil.getProgressDialog(AddActivity.this, "上传图片中...", false);
         uploadImgDialog.show();
         avFile.saveInBackground(new SaveCallback() {
             @Override

@@ -216,7 +216,6 @@ public class CommentActivity extends BaseActivity {
                 if (e == null) {
                     Log.d("winson", list.size() + "个");
                     if (list.size() == 0) {
-                        UIUtil.showShortToast(CommentActivity.this, "已经没有更多评论啦！");
                         footerView.setVisibility(View.INVISIBLE);
                     } else {
                         notifyDataSetChanged(list, false);

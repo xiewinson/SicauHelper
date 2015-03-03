@@ -107,14 +107,14 @@ public class DialogUtil {
      * @param avObject
      */
     public static void showComplainDialog(final Context context, final int type, final AVObject avObject) {
-        final AlertDialog progressDialog = UIUtil.getProgressDialog(context, "投诉中...");
+        final AlertDialog progressDialog = UIUtil.getProgressDialog(context, "投诉中...", false);
         AlertDialog alertDialog = null;
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = View.inflate(context, R.layout.dialog_complain, null);
         final TextView tv = (TextView) view.findViewById(R.id.dialog_complain_tv);
         final EditText et = (EditText) view.findViewById(R.id.dialog_complain_et);
         et.setHint("写下你的投诉理由");
-        //投诉评论
+        //投诉评论kk
         if(type == GOODS_COMMENT) {
             tv.setText("为何你要投诉这条评论?");
         }

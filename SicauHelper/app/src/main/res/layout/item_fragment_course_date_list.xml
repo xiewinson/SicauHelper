@@ -31,9 +31,12 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/score_tv"
         android:layout_gravity="center"
-        android:gravity="center"
         android:layout_toEndOf="@+id/score_tv"
         android:layout_toRightOf="@+id/score_tv"
+        android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
+
         android:text="西方经济学"
         android:textColor="#ffffff"
         android:textSize="12sp" />
@@ -46,6 +49,9 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="5508"
+        android:maxLines="2"
+        android:textSize="10sp"
+        android:ellipsize="end"
         android:textColor="#ffffff" />
 
 
@@ -57,7 +63,7 @@
         android:gravity="center"
         android:text="1-10周"
         android:textColor="#ffffff"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/category_tv"

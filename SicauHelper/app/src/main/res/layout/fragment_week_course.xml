@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    android:paddingTop="?actionBarSize">
+    android:paddingTop="?actionBarSize"
+    android:animateLayoutChanges="true">
 
     <LinearLayout
         style="@style/course_table_container_layout"
@@ -57,9 +58,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    style="@style/course_table_container_layout"
-                    android:background="@color/cyan_50">
+                <LinearLayout style="@style/course_table_container_layout">
 
                     <LinearLayout
                         android:id="@+id/course_table_00"
@@ -104,9 +103,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    style="@style/course_table_container_layout"
-                    android:background="@color/amber_50">
+                <LinearLayout style="@style/course_table_container_layout">
 
 
                     <LinearLayout
@@ -141,9 +138,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    style="@style/course_table_container_layout"
-                    android:background="@color/deep_orange_50">
+                <LinearLayout style="@style/course_table_container_layout">
 
 
                     <LinearLayout
@@ -176,9 +171,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    style="@style/course_table_container_layout"
-                    android:background="@color/blue_50">
+                <LinearLayout style="@style/course_table_container_layout">
 
 
                     <LinearLayout
@@ -212,8 +205,7 @@
 
                 <LinearLayout
                     style="@style/course_table_container_layout"
-                    android:layout_height="match_parent"
-                    android:background="@color/indigo_100">
+                    android:layout_height="match_parent">
 
 
                     <LinearLayout

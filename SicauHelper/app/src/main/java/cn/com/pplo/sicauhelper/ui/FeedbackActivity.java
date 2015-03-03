@@ -66,7 +66,7 @@ public class FeedbackActivity extends BaseActivity {
         listView.setAdapter(feedbackAdapter);
         commentEt = (EditText) findViewById(R.id.reply_et);
         commentBtn = (Button) findViewById(R.id.reply_btn);
-        progressDialog = UIUtil.getProgressDialog(context, "发送中...");
+        progressDialog = UIUtil.getProgressDialog(context, "发送中...", false);
 
         FeedbackAgent agent = new FeedbackAgent(context);
         FeedbackThread feedbackThread = agent.getDefaultThread();

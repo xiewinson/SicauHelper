@@ -98,7 +98,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         //设置actionbar的间距
         listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.grey_200));
 
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的～");
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的", true);
         //listView上下补点间距
 //        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
 //        listView.addHeaderView(paddingTv);
@@ -217,7 +217,7 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     public void requestNewsList(final Context context) {
         progressDialog.show();
 
-        NetUtil.getNewsListHtmlStr(context, new NetUtil.NetCallback(context) {
+        new NetUtil().getNewsListHtmlStr(context, requestQueue, new NetUtil.NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 Log.d("winson", "发生了错误");

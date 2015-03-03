@@ -46,83 +46,83 @@ public class NetUtil {
      * @param params
      * @param netCallbcak
      */
-    public static void getOrPostRequest(Context context,
-                                        final int method,
-                                        String url,
-                                        final Map<String, String> headers,
-                                        final Map<String, String> params,
-                                        NetCallback netCallbcak) {
-        RequestQueue requestQueue = SicauHelperApplication.getInstance().getRequestQueue(context);
-
-        //若为get请求则将参数加入到url之中
-        if (method == Request.Method.GET && params != null) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(url);
-            sb.append("?");
-            Set<Map.Entry<String, String>> set = params.entrySet();
-            Iterator<Map.Entry<String, String>> iterator = set.iterator();
-            boolean isAddAnd = false;
-            do {
-                if (isAddAnd == true) {
-                    sb.append("&");
-                }
-                Map.Entry<String, String> next = iterator.next();
-                sb.append(next.getKey() + "=" + next.getValue());
-                isAddAnd = true;
-            }
-            while (iterator.hasNext());
-            url = sb.toString();
-        }
-        StringRequest stringRequest = new StringRequest(method, url, netCallbcak, netCallbcak) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                if (headers != null) {
-                    return headers;
-                } else {
-                    return super.getHeaders();
-                }
-            }
-
-            //若为post请求则在此添加参数
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                if (params != null && method == Method.POST) {
-                    return params;
-                } else {
-                    return super.getParams();
-                }
-            }
-
-            @Override
-            public String getUrl() {
-                return super.getUrl();
-            }
-
-            @Override
-            protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                //取得cookie
-                if (isFirst == true) {
-                    cookie = response.headers.get("Set-Cookie");
-                    isFirst = false;
-                }
-                Log.d("winson", "cookie:" + cookie);
-                String result = "";
-                try {
-                    result = new String(response.data, "GB2312");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
-            }
-        };
-        //设置20秒的超时
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(stringRequest);
-        requestQueue.start();
-    }
+//    public static void getOrPostRequest(Context context,
+//                                        final int method,
+//                                        String url,
+//                                        final Map<String, String> headers,
+//                                        final Map<String, String> params,
+//                                        NetCallback netCallbcak) {
+//        RequestQueue requestQueue = SicauHelperApplication.getInstance().getRequestQueue(context);
+//
+//        //若为get请求则将参数加入到url之中
+//        if (method == Request.Method.GET && params != null) {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(url);
+//            sb.append("?");
+//            Set<Map.Entry<String, String>> set = params.entrySet();
+//            Iterator<Map.Entry<String, String>> iterator = set.iterator();
+//            boolean isAddAnd = false;
+//            do {
+//                if (isAddAnd == true) {
+//                    sb.append("&");
+//                }
+//                Map.Entry<String, String> next = iterator.next();
+//                sb.append(next.getKey() + "=" + next.getValue());
+//                isAddAnd = true;
+//            }
+//            while (iterator.hasNext());
+//            url = sb.toString();
+//        }
+//        StringRequest stringRequest = new StringRequest(method, url, netCallbcak, netCallbcak) {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                if (headers != null) {
+//                    return headers;
+//                } else {
+//                    return super.getHeaders();
+//                }
+//            }
+//
+//            //若为post请求则在此添加参数
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                if (params != null && method == Method.POST) {
+//                    return params;
+//                } else {
+//                    return super.getParams();
+//                }
+//            }
+//
+//            @Override
+//            public String getUrl() {
+//                return super.getUrl();
+//            }
+//
+//            @Override
+//            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+//                //取得cookie
+//                if (isFirst == true) {
+//                    cookie = response.headers.get("Set-Cookie");
+//                    isFirst = false;
+//                }
+//                Log.d("winson", "cookie:" + cookie);
+//                String result = "";
+//                try {
+//                    result = new String(response.data, "GB2312");
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+//                return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
+//            }
+//        };
+//        //设置20秒的超时
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+//                20000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        requestQueue.add(stringRequest);
+//        requestQueue.start();
+//    }
 
     /**
      * 发送get或者post请求，非静态的
@@ -135,12 +135,12 @@ public class NetUtil {
      * @param netCallbcak
      */
     public void getRequest(Context context,
-                                        RequestQueue requestQueue,
-                                        final int method,
-                                        String url,
-                                        final Map<String, String> headers,
-                                        final Map<String, String> params,
-                                        NetCallback netCallbcak) {
+                           RequestQueue requestQueue,
+                           final int method,
+                           String url,
+                           final Map<String, String> headers,
+                           final Map<String, String> params,
+                           NetCallback netCallbcak) {
         //若为get请求则将参数加入到url之中
         if (method == Request.Method.GET && params != null) {
             StringBuilder sb = new StringBuilder();
@@ -209,6 +209,7 @@ public class NetUtil {
         requestQueue.add(stringRequest);
         requestQueue.start();
     }
+
     /**
      * 登录模块，在params中传入user和pwd
      *
@@ -216,12 +217,12 @@ public class NetUtil {
      * @param params
      * @param callback
      */
-    public static void login(final Context context,
-                             final Map<String, String> params,
-                             final NetCallback callback) {
+    public void login(final Context context, final RequestQueue requestQueue,
+                      final Map<String, String> params,
+                      final NetCallback callback) {
         try {
             //请求教务首页的HTML页面
-            getOrPostRequest(context,
+            getRequest(context, requestQueue,
                     Request.Method.GET,
                     JiaowuConfig.JIAOWU_INDEX,
                     null,
@@ -248,7 +249,8 @@ public class NetUtil {
                             newHeader.put("Cookie", cookie);
                             //                            newHeader.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36");
                             //验证密码
-                            getOrPostRequest(context,
+                            getRequest(context,
+                                    requestQueue,
                                     Request.Method.POST,
                                     JiaowuConfig.JIAOWU_CHECK,
                                     newHeader,
@@ -275,8 +277,8 @@ public class NetUtil {
      * @param params
      * @param callback
      */
-    public static void getScoreHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback) {
-        login(context, params, new NetCallback(context) {
+    public void getScoreHtmlStr(final Context context, final RequestQueue requestQueue, final Map<String, String> params, final NetCallback callback) {
+        login(context, requestQueue, params, new NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 callback.onErrorResponse(volleyError);
@@ -290,7 +292,7 @@ public class NetUtil {
                     headerMap.put("Cookie", cookie);
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
                     headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                    getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_SCORE_NICE, headerMap, null, callback);
+                    getRequest(context, requestQueue, Request.Method.POST, JiaowuConfig.JIAOWU_SCORE_NICE, headerMap, null, callback);
                 } catch (Exception e) {
                     UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                 }
@@ -301,12 +303,14 @@ public class NetUtil {
 
     /**
      * 获取课程表
+     *
      * @param context
      * @param params
      * @param callback
      */
-    public static void getCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback) {
-        login(context, params, new NetCallback(context) {
+    public void getCourseHtmlStr(final Context context, final RequestQueue requestQueue, final Map<String, String> params, final NetCallback callback) {
+
+        login(context, requestQueue, params, new NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -320,7 +324,7 @@ public class NetUtil {
                     headerMap.put("Cookie", cookie);
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
                     headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                    getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_COURSE, headerMap, null, callback);
+                    getRequest(context, requestQueue, Request.Method.POST, JiaowuConfig.JIAOWU_COURSE, headerMap, null, callback);
                 } catch (Exception e) {
                     UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                 }
@@ -331,12 +335,14 @@ public class NetUtil {
 
     /**
      * 获取实验课表
+     *
      * @param context
      * @param params
      * @param callback
      */
-    public static void getLabCourseHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback) {
-        login(context, params, new NetCallback(context) {
+    public void getLabCourseHtmlStr(final Context context, final RequestQueue requestQueue, final Map<String, String> params, final NetCallback callback) {
+
+        login(context, requestQueue, params, new NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -350,7 +356,7 @@ public class NetUtil {
                     headerMap.put("Cookie", cookie);
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
                     headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                    getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_LAB_COURSE, headerMap, null, callback);
+                    getRequest(context, requestQueue, Request.Method.POST, JiaowuConfig.JIAOWU_LAB_COURSE, headerMap, null, callback);
                 } catch (Exception e) {
                     UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                 }
@@ -361,12 +367,15 @@ public class NetUtil {
 
     /**
      * 获取课程表
+     *
      * @param context
      * @param params
      * @param callback
      */
-    public static void getCourse2HtmlStr(final Context context, final Map<String, String> params, final NetCallback callback) {
-        login(context, params, new NetCallback(context) {
+    public void getCourse2HtmlStr(final Context context, final RequestQueue requestQueue, final Map<String, String> params, final NetCallback callback) {
+
+
+        login(context, requestQueue, params, new NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 callback.onErrorResponse(volleyError);
@@ -380,7 +389,7 @@ public class NetUtil {
                     headerMap.put("Cookie", cookie);
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
                     headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                    getOrPostRequest(context, Request.Method.POST, "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xszhinan.asp?xueqi=2013-2014-1", headerMap, null, new NetCallback(context){
+                    getRequest(context, requestQueue, Request.Method.POST, "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xszhinan.asp?xueqi=2013-2014-1", headerMap, null, new NetCallback(context) {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
                             callback.onErrorResponse(volleyError);
@@ -395,7 +404,7 @@ public class NetUtil {
                                 headerMap.put("Cookie", cookie);
                                 headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xszhinan.asp?xueqi=2013-2014-1");
                                 headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                                getOrPostRequest(context, Request.Method.GET, JiaowuConfig.JIAOWU_COURSE_TEMP, headerMap, null, callback);
+                                getRequest(context, requestQueue, Request.Method.GET, JiaowuConfig.JIAOWU_COURSE_TEMP, headerMap, null, callback);
                             } catch (Exception e) {
                                 UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                             }
@@ -411,13 +420,15 @@ public class NetUtil {
 
     /**
      * 获取新闻列表
+     *
      * @param context
      * @param callback
      */
-    public static void getNewsListHtmlStr(final Context context, final NetCallback callback){
+    public void getNewsListHtmlStr(final Context context, final RequestQueue requestQueue, final NetCallback callback) {
         try {
             //请求教务首页的HTML页面
-            getOrPostRequest(context,
+            getRequest(context,
+                    requestQueue,
                     Request.Method.GET,
                     JiaowuConfig.JIAOWU_INDEX,
                     null,
@@ -439,7 +450,8 @@ public class NetUtil {
                             //必须设置cookie
                             newHeader.put("Cookie", cookie);
                             //                            newHeader.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36");
-                            getOrPostRequest(context,
+                            getRequest(context,
+                                    requestQueue,
                                     Request.Method.POST,
                                     JiaowuConfig.JIAOWU_NEWS_LIST,
                                     newHeader,
@@ -456,15 +468,18 @@ public class NetUtil {
 
     /**
      * 获取具体新闻内容
+     *
      * @param context
      * @param params
      * @param callback
      */
-    public static void getNewsHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback){
+    public void getNewsHtmlStr(final Context context, final RequestQueue requestQueue, final Map<String, String> params, final NetCallback callback) {
+
         try {
             Log.d("winson", "开始请求新闻");
             //请求教务首页的HTML页面
-            getOrPostRequest(context,
+            getRequest(context,
+                    requestQueue,
                     Request.Method.GET,
                     JiaowuConfig.JIAOWU_INDEX,
                     null,
@@ -475,6 +490,7 @@ public class NetUtil {
                             super.onErrorResponse(volleyError);
                             callback.onErrorResponse(volleyError);
                         }
+
                         @Override
                         public void onSuccess(String result) {
 
@@ -484,7 +500,8 @@ public class NetUtil {
                             newHeader.put("Referer", "http://jiaowu.sicau.edu.cn/web/web/web/index.asp");
                             //必须设置cookie
                             newHeader.put("Cookie", cookie);
-                            getOrPostRequest(context,
+                            getRequest(context,
+                                    requestQueue,
                                     Request.Method.POST,
                                     JiaowuConfig.JIAOWU_NEWS_CONTENT,
                                     newHeader,
@@ -500,13 +517,15 @@ public class NetUtil {
 
     /**
      * 获取空教室列表
+     *
      * @param context
      * @param callback
      */
-    public static void getClassroomListHtmlStr(final Context context, final NetCallback callback){
+    public void getClassroomListHtmlStr(final Context context, final RequestQueue requestQueue, final NetCallback callback) {
         try {
             //请求教务首页的HTML页面
-            getOrPostRequest(context,
+            getRequest(context,
+                    requestQueue,
                     Request.Method.GET,
                     JiaowuConfig.JIAOWU_INDEX,
                     null,
@@ -527,7 +546,8 @@ public class NetUtil {
                             newHeader.put("Referer", "http://jiaowu.sicau.edu.cn/web/web/web/index.asp");
                             //必须设置cookie
                             newHeader.put("Cookie", cookie);
-                            getOrPostRequest(context,
+                            getRequest(context,
+                                    requestQueue,
                                     Request.Method.GET,
                                     JiaowuConfig.JIAOWU_CLASSROOM_LIST,
                                     newHeader,
@@ -543,12 +563,14 @@ public class NetUtil {
 
     /**
      * 获取考试安排
+     *
      * @param context
      * @param params
      * @param callback
      */
-    public static void getExamHtmlStr(final Context context, final Map<String, String> params, final NetCallback callback) {
-        login(context, params, new NetCallback(context) {
+    public void getExamHtmlStr(final Context context, final RequestQueue requestQueue, final Map<String, String> params, final NetCallback callback) {
+
+        login(context, requestQueue, params, new NetCallback(context) {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -562,7 +584,7 @@ public class NetUtil {
                     headerMap.put("Cookie", cookie);
                     headerMap.put("Referer", "http://jiaowu.sicau.edu.cn/xuesheng/bangong/main/index1.asp");
                     headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; rv:11.0) like Gecko");
-                    getOrPostRequest(context, Request.Method.POST, JiaowuConfig.JIAOWU_EXAM, headerMap, null, callback);
+                    getRequest(context, requestQueue, Request.Method.POST, JiaowuConfig.JIAOWU_EXAM, headerMap, null, callback);
                 } catch (Exception e) {
                     UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
                 }
@@ -573,6 +595,7 @@ public class NetUtil {
 
     /**
      * 获取选课结果HTML
+     *
      * @param context
      * @param params
      * @param callback
@@ -647,6 +670,7 @@ public class NetUtil {
     //回调接口
     public static abstract class NetCallback implements Response.Listener<String>, Response.ErrorListener {
         private Context context;
+
         public NetCallback(Context context) {
             this.context = context;
         }
@@ -676,18 +700,17 @@ public class NetUtil {
             } else if (result.contains("登录超时")) {
                 UIUtil.showShortToast(context, "亲爱的，教务系统出问题了");
                 onErrorResponse(null);
-            }
-            else if(result.contains("您的电脑上所安装的个人防火墙软件拦截了你的验证信息")){
+            } else if (result.contains("您的电脑上所安装的个人防火墙软件拦截了你的验证信息")) {
                 UIUtil.showShortToast(context, "您的电脑上所安装的个人防火墙软件拦截了你的验证信息");
                 onErrorResponse(null);
-            }
-            else {
+            } else {
                 onSuccess(result);
             }
         }
 
         /**
          * 覆写此方法处理正确结果
+         *
          * @param result
          */
         protected abstract void onSuccess(String result);
