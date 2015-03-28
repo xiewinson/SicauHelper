@@ -39,7 +39,6 @@ public class SettingActivity extends BaseActivity {
 
     private void setUp(Context context) {
         getSupportActionBar().setTitle("设置");
-        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.color_primary);
 
         goodsStatusCountBtn = (Button) findViewById(R.id.goods_status_count_btn);
         commentCountBtn = (Button) findViewById(R.id.comment_count_btn);

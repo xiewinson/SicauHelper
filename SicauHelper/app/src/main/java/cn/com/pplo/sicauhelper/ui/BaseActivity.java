@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 
 /**
  * Created by Administrator on 2014/9/25.
@@ -26,6 +27,8 @@ public class BaseActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
+        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.color_primary);
+
 //        getActionBar().setDisplayShowHomeEnabled(false);
         requestQueue = Volley.newRequestQueue(this, new HttpClientStack(new DefaultHttpClient()));
     }

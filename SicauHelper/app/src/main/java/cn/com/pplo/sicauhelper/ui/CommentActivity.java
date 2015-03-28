@@ -76,7 +76,6 @@ public class CommentActivity extends BaseActivity {
         getSupportActionBar().setTitle(title);
 
         listView = (ListView) findViewById(R.id.comment_listView);
-        UIUtil.setActionBarColor(context, getSupportActionBar(), R.color.color_primary);
 
         //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.status_swipe_container);

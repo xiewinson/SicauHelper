@@ -46,7 +46,6 @@ public class MapActivity extends BaseActivity {
         longitude = getIntent().getDoubleExtra(EXTRA_LONGITUDE, 0d);
         name = getIntent().getStringExtra(EXTRA_NAME);
 
-        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.color_primary);
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 必须要写
         init();

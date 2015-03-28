@@ -208,7 +208,7 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
             examAdapter.notifyDataSetChanged();
             //恢复到第一个
             listView.setSelection(0);
-            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
+//            UIUtil.setListViewScrollHideOrShowActionBar(getActivity(), listView, getSupportActionBar(getActivity()));
         }
     }
 

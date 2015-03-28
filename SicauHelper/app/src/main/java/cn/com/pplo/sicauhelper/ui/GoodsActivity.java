@@ -116,7 +116,6 @@ public class GoodsActivity extends BaseActivity {
         commentEt = (EditText) findViewById(R.id.comment_et);
         sendBtn = (Button) findViewById(R.id.comment_send_btn);
 
-        UIUtil.setActionBarColorBySchool(context, school, getSupportActionBar());
 
         //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.goods_swipe_container);

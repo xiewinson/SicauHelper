@@ -40,7 +40,7 @@ import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.CourseActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.SelectCourseActivity;
-import cn.com.pplo.sicauhelper.ui.adapter.CourseAdapter;
+import cn.com.pplo.sicauhelper.ui.adapter.WeekCourseAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
@@ -308,7 +308,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         ListView listView = new ListView(context);
         listView.setDivider(getResources().getDrawable(android.R.color.transparent));
         listView.setDividerHeight(0);
-        listView.setAdapter(new CourseAdapter(context, list, type));
+        listView.setAdapter(new WeekCourseAdapter(context, list, type));
         //打开新页面显示课程详情
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

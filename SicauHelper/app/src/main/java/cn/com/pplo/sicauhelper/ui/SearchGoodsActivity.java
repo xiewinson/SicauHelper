@@ -52,7 +52,6 @@ public class SearchGoodsActivity extends BaseActivity {
 
     private void setUp(Context context) {
         schoolPosition = getIntent().getIntExtra(EXTRA_SCHOOL, 0);
-        UIUtil.setActionBarColorBySchool(context, schoolPosition, getSupportActionBar());
 
         listView = (ListView) findViewById(R.id.search_goods_listView);
         //加载更多进度条

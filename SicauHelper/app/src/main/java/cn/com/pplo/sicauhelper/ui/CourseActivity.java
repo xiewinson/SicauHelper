@@ -57,8 +57,6 @@ public class CourseActivity extends BaseActivity {
             course = data.get(0);
         }
 
-        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.color_primary);
-
         nameTv = (TextView) findViewById(R.id.course_name_tv);
         categoryTv = (TextView) findViewById(R.id.course_category_tv);
         teacherTv = (TextView) findViewById(R.id.course_teacher_tv);

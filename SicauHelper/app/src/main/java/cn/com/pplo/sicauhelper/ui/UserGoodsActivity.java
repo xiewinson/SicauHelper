@@ -64,7 +64,6 @@ public class UserGoodsActivity extends BaseActivity {
         objectId = getIntent().getStringExtra(EXTRA_OBJECT_ID);
         nickname = getIntent().getStringExtra(EXTRA_NICKNAME);
         schoolPosition = getIntent().getIntExtra(EXTRA_SCHOOL, 0);
-        UIUtil.setActionBarColorBySchool(context, schoolPosition, getSupportActionBar());
         getSupportActionBar().setTitle(nickname);
         getSupportActionBar().setSubtitle("商品列表");
 

@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,9 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,13 +36,12 @@ import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.CourseActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
-import cn.com.pplo.sicauhelper.ui.adapter.CourseAdapter;
+import cn.com.pplo.sicauhelper.ui.adapter.WeekCourseAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
-import cn.com.pplo.sicauhelper.widget.ZoomOutPageTransformer;
 
 public class WeekCourseFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -341,7 +335,7 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
         ListView listView = new ListView(context);
         listView.setDivider(getResources().getDrawable(android.R.color.transparent));
         listView.setDividerHeight(0);
-        listView.setAdapter(new CourseAdapter(context, list, type));
+        listView.setAdapter(new WeekCourseAdapter(context, list, type));
         //打开新页面显示课程详情
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -483,7 +477,7 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
      */
     private View initCourseView(final Context context, final List<List<Course>> data, final Course course) {
 
-        View convertView = View.inflate(context, R.layout.item_fragment_course_date_list, null);
+        View convertView = View.inflate(context, R.layout.item_fragment_week_course_date_list, null);
         TextView timeTv = (TextView) convertView.findViewById(R.id.time_tv);
         TextView nameTv = (TextView) convertView.findViewById(R.id.name_tv);
         TextView categoryTv = (TextView) convertView.findViewById(R.id.category_tv);

@@ -21,7 +21,6 @@ public class HelpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         getSupportActionBar().setTitle("帮助");
-        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.color_primary);
     }
 
 

@@ -1,13 +1,9 @@
 package cn.com.pplo.sicauhelper.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,12 +12,12 @@ import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.ui.fragment.CourseFragment;
 
-public class CourseAdapter extends BaseAdapter {
+public class WeekCourseAdapter extends BaseAdapter {
     private Context context;
     private List<Course> data;
     private int type;
 
-    public CourseAdapter(Context context, List<Course> data, int type) {
+    public WeekCourseAdapter(Context context, List<Course> data, int type) {
         this.context = context;
         this.data = data;
         this.type = type;
@@ -47,7 +43,7 @@ public class CourseAdapter extends BaseAdapter {
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = View.inflate(context, R.layout.item_fragment_course_date_list, null);
+            convertView = View.inflate(context, R.layout.item_fragment_week_course_date_list, null);
             holder.timeTv = (TextView) convertView.findViewById(R.id.time_tv);
             holder.nameTv = (TextView) convertView.findViewById(R.id.name_tv);
             holder.categoryTv = (TextView) convertView.findViewById(R.id.category_tv);
