@@ -2,13 +2,11 @@ package cn.com.pplo.sicauhelper.ui;
 
 import android.app.Activity;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -50,7 +48,7 @@ import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, CourseFragment.CourseFragmentCallback, WeekCourseFragment.WeekCourseFragmentCallback {
 
     /**
      * 点击back时间
@@ -67,7 +65,7 @@ public class MainActivity extends ActionBarActivity
      */
     private int drawerPosition = 0;
     private int drawerPositionCopy = 0;
-
+    private Fragment currentFragment = null;
     /**
      * fragment应在哪个位置
      */
@@ -81,6 +79,7 @@ public class MainActivity extends ActionBarActivity
 
     /**
      * 启动主页面
+     *
      * @param context
      */
     public static void startMainActivity(Context context) {
@@ -103,7 +102,7 @@ public class MainActivity extends ActionBarActivity
 
             //更新user
             AVUser.getCurrentUser().fetchInBackground(null);
-            if(savedInstanceState != null) {
+            if (savedInstanceState != null) {
                 int savedPosition = savedInstanceState.getInt(SAVE_DRAWER_POSITION, 0);
                 drawerPosition = savedPosition;
                 drawerPositionCopy = savedPosition;
@@ -175,10 +174,7 @@ public class MainActivity extends ActionBarActivity
         });
     }
 
-    /**
-     * Users of this fragment must call this method to set up the navigation drawer interactions.
-     *
-     */
+
     public void setUp(DrawerLayout mDrawerLayout, final Activity activity) {
 //        mFragmentContainerView = getActivity().findViewById(fragmentId);
 
@@ -208,7 +204,7 @@ public class MainActivity extends ActionBarActivity
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                if(!getSupportActionBar().isShowing()){
+                if (!getSupportActionBar().isShowing()) {
                     getSupportActionBar().show();
                 }
                 getSupportActionBar().setTitle("川农校园通");
@@ -236,51 +232,49 @@ public class MainActivity extends ActionBarActivity
      * 选择drawerPosition所在的fragment
      */
     private void selectFragment() {
-        Fragment fragment = null;
+
         switch (drawerPosition) {
 
             //课程
             case 0:
-                fragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_THEORY);
-//                fragment = WeekCourseFragment.newInstance(CourseFragment.TYPE_COURSE_THEORY);
+                currentFragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_THEORY);
                 break;
             //实验课程
             case 1:
-                fragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_LAB);
-//                fragment = WeekCourseFragment.newInstance(CourseFragment.TYPE_COURSE_LAB);
+                currentFragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_LAB);
 
                 break;
             //成绩
             case 2:
-                fragment = ScoreFragment.newInstance();
+                currentFragment = ScoreFragment.newInstance();
                 break;
             //考试安排
             case 3:
-                fragment = ExamFragment.newInstance();
+                currentFragment = ExamFragment.newInstance();
                 break;
             //新闻
             case 4:
-                fragment = NewsFragment.newInstance();
+                currentFragment = NewsFragment.newInstance();
                 break;
             //空教室
             case 5:
-                fragment = ClassroomFragment.newInstance();
+                currentFragment = ClassroomFragment.newInstance();
                 break;
 
             //圈子模块
             case 6:
-                fragment = StatusFragment.newInstance();
+                currentFragment = StatusFragment.newInstance();
                 break;
             //市场模块
             case 7:
-                fragment = MarketFragment.newInstance();
+                currentFragment = MarketFragment.newInstance();
                 break;
             case -1:
                 return;
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.container, currentFragment)
                 .commit();
 
         drawerPosition = -1;
@@ -297,7 +291,7 @@ public class MainActivity extends ActionBarActivity
         drawerPosition = position;
         drawerPositionCopy = position;
 
-        if(mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
@@ -331,27 +325,24 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
 
         //点击导航键开启/关闭抽屉
-        if(id == android.R.id.home){
-            if(mDrawerLayout.isDrawerOpen(GravityCompat.END)){
+        if (id == android.R.id.home) {
+            if (mDrawerLayout.isDrawerOpen(GravityCompat.END)) {
                 mDrawerLayout.closeDrawer(GravityCompat.END);
             }
 
-            if(!mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            if (!mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                 mDrawerLayout.openDrawer(GravityCompat.START);
-            }
-            else {
+            } else {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             }
 
-        }
-        else if(id == R.id.action_message) {
-            if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+        } else if (id == R.id.action_message) {
+            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             }
-            if(!mDrawerLayout.isDrawerOpen(GravityCompat.END)){
+            if (!mDrawerLayout.isDrawerOpen(GravityCompat.END)) {
                 mDrawerLayout.openDrawer(GravityCompat.END);
-            }
-            else {
+            } else {
                 mDrawerLayout.closeDrawer(GravityCompat.END);
             }
         }
@@ -362,13 +353,54 @@ public class MainActivity extends ActionBarActivity
     public void onBackPressed() {
         long secondTime = System.currentTimeMillis();
         if (secondTime - firstTime > 2000) {
-        //如果两次按键时间间隔大于2秒，则不退出
+            //如果两次按键时间间隔大于2秒，则不退出
             UIUtil.showShortToast(this, "再按一次退出哦");
             firstTime = secondTime;//更新firstTime
 
         } else {
-        //两次按键小于2秒时，退出应用
-           finish();
+            //两次按键小于2秒时，退出应用
+            finish();
+        }
+    }
+
+    @Override
+    public void onClickWeekBtn(int type) {
+        if (type == CourseFragment.TYPE_COURSE_LAB) {
+            currentFragment = WeekCourseFragment.newInstance(CourseFragment.TYPE_COURSE_LAB);
+        } else {
+            currentFragment = WeekCourseFragment.newInstance(CourseFragment.TYPE_COURSE_THEORY);
+
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, currentFragment)
+                .commit();
+
+    }
+
+    @Override
+    public void onClickDayBtn(int type) {
+
+        if (type == CourseFragment.TYPE_COURSE_LAB) {
+            currentFragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_LAB);
+        } else {
+            currentFragment = CourseFragment.newInstance(CourseFragment.TYPE_COURSE_THEORY);
+
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, currentFragment)
+                .commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            if(currentFragment instanceof CourseFragment) {
+                ((CourseFragment) currentFragment).reloadData();
+            }
+            else if(currentFragment instanceof WeekCourseFragment) {
+                ((WeekCourseFragment) currentFragment).reloadData();
+            }
         }
     }
 }

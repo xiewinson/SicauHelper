@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -76,6 +77,12 @@ public class NewsActivity extends BaseActivity {
 
         //对话框
         progressDialog = UIUtil.getProgressDialog(context, "正在寻找新闻内容...", true);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                requestQueue.stop();
+            }
+        });
         progressDialog.show();
         //获得news数据
         data = getIntent().getParcelableExtra(EXTRA_NEWS);
@@ -85,19 +92,9 @@ public class NewsActivity extends BaseActivity {
             ActionBar actionBar = getSupportActionBar();
 
             String category = data.getCategory();
-            int colorRes = 0;
-            if (category.equals("雅安")) {
-                colorRes = R.drawable.square_blue;
-            } else if (category.equals("成都")) {
-                colorRes = R.drawable.square_orange;
-            } else if (category.equals("都江堰")) {
-                colorRes = R.drawable.square_green;
-            } else {
-                colorRes = R.drawable.square_red;
-            }
+           
             actionBar.setTitle(category + "新闻");
             actionBar.setSubtitle(data.getDate());
-            actionBar.setBackgroundDrawable(getResources().getDrawable(colorRes));
 
 
             //从数据库中取得新闻

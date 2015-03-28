@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.Filter;
 import android.widget.GridView;
 
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,14 +89,12 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary);
         setUp(view, getActivity());
     }
 
     private void setUp(View view, Context context) {
         classroomAdapter = new ClassroomAdapter(context, data);
         gridView = (GridView) view.findViewById(R.id.classroom_gridView);
-        progressDialog = UIUtil.getProgressDialog(context, "我算算哪些教室是空的，这个过程是相当的漫长～", true);
 //        gridView.setAdapter(classroomAdapter);
         UIUtil.setListViewInitAnimation("bottom", gridView, classroomAdapter);
 
@@ -112,6 +112,14 @@ public class ClassroomFragment extends BaseFragment implements LoaderManager.Loa
      * @param context
      */
     private void requestClassroomList(final Context context) {
+        progressDialog = UIUtil.getProgressDialog(context, "我算算哪些教室是空的，这个过程是相当的漫长～", true);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                requestQueue.stop();
+
+            }
+        });
         progressDialog.show();
         new NetUtil().getClassroomListHtmlStr(context, requestQueue, new NetUtil.NetCallback(context) {
             @Override

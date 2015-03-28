@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="cn.com.pplo.sicauhelper.ui.CourseActivity">
-    <item android:id="@+id/action_week_course"
-        android:title="周视图"
-        android:icon="@drawable/ic_filter_7_white_24dp"
+    <item android:id="@+id/action_delete"
+        android:title="删除"
+        android:icon="@drawable/ic_delete_white_24dp"
         android:orderInCategory="100"
         app:showAsAction="always" />
 </menu>

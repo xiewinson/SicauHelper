@@ -3,7 +3,10 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -45,6 +48,7 @@ import cn.com.pplo.sicauhelper.util.UIUtil;
 
 public class WeekCourseFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private WeekCourseFragmentCallback callback;
     public static final int TYPE_COURSE_THEORY = 111;
     public static final int TYPE_COURSE_LAB = 222;
     public static final String TYPE_COURSE = "courseType";
@@ -118,6 +122,9 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
         } else if (type == TYPE_COURSE_LAB) {
             ((MainActivity) activity).onSectionAttached("实验课表");
         }
+        if (activity != null) {
+            callback = (WeekCourseFragmentCallback) activity;
+        }
     }
 
     @Override
@@ -142,7 +149,6 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
     }
 
     private void setUp(View view) {
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表", true);
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
         importBtn = (Button) view.findViewById(R.id.import_btn);
         importBtn.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +240,9 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
     }
 
     private void initCourseTable(Context context, List<List<Course>> data) {
+        for (View tableView : containerList) {
+            tableView.setBackgroundColor(Color.WHITE);
+        }
         Log.d("winson", "data的长度：" + data.size());
         emptyLayout.setVisibility(View.GONE);
 
@@ -311,6 +320,7 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_week_course, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -320,6 +330,10 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             requestCourseList(getActivity());
+        } else if (id == R.id.action_day_course) {
+            if (callback != null) {
+                callback.onClickDayBtn(type);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -392,7 +406,7 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 
-        if (cursor != null && cursor.getCount() > 0) {
+        if (cursor != null) {
             List<List<Course>> data = null;
             if (type == TYPE_COURSE_THEORY) {
                 data = CursorUtil.parseCourseList(cursor);
@@ -413,6 +427,13 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
     }
 
     private void requestCourseList(final Context context) {
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表", true);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                requestQueue.stop();
+            }
+        });
         progressDialog.show();
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
@@ -559,10 +580,19 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
                         }
                     }
                 }
-                CourseActivity.startCourseActivity(context, sendData, type);
+                CourseActivity.startCourseActivity(getActivity(), sendData, type);
             }
         });
         convertView.setBackgroundColor(color);
         return convertView;
+    }
+
+    public void reloadData() {
+
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    public interface WeekCourseFragmentCallback {
+        public void onClickDayBtn(int type);
     }
 }

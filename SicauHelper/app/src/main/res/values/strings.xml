@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">川农校园通</string>
+    <string name="app_name">川农助手</string>
     <string name="title_home">首页</string>
     <string name="title_market">校内市场</string>
     <string name="title_cource">理论课表</string>

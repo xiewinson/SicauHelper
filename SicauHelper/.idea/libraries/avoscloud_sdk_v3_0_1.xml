@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="umeng-update-v2.4.2">
+  <library name="avoscloud-sdk-v3.0.1">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/umeng-update-v2.4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/libs/avoscloud-sdk-v3.0.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

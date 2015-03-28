@@ -20,6 +20,8 @@ import com.android.volley.toolbox.Volley;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 import cn.com.pplo.sicauhelper.widget.ViewPadding;
 
@@ -31,6 +33,7 @@ public class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary);
         if(!getSupportActionBar(getActivity()).isShowing()){
             getSupportActionBar(getActivity()).show();
         }

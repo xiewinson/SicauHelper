@@ -73,7 +73,6 @@ public class MarketFragment extends BaseFragment {
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
-        getSupportActionBar(context).setBackgroundDrawable(getResources().getDrawable(R.color.red_500));
         setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.red_500);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(3);

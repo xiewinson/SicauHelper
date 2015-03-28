@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +13,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +40,7 @@ import cn.com.pplo.sicauhelper.service.SaveIntentService;
 import cn.com.pplo.sicauhelper.ui.CourseActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.SelectCourseActivity;
-import cn.com.pplo.sicauhelper.ui.adapter.WeekCourseAdapter;
+import cn.com.pplo.sicauhelper.ui.adapter.CourseAdapter;
 import cn.com.pplo.sicauhelper.util.CursorUtil;
 import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
@@ -51,6 +51,7 @@ import cn.com.pplo.sicauhelper.widget.ZoomOutPageTransformer;
 
 public class CourseFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private CourseFragmentCallback callback;
     public static final int TYPE_COURSE_THEORY = 111;
     public static final int TYPE_COURSE_LAB = 222;
     public static final String TYPE_COURSE = "courseType";
@@ -86,6 +87,9 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         else if(type == TYPE_COURSE_LAB) {
             ((MainActivity) activity).onSectionAttached("实验课表");
         }
+        if(activity != null) {
+            callback = (CourseFragmentCallback) activity;
+        }
     }
 
     @Override
@@ -110,7 +114,6 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     }
 
     private void setUp(View view) {
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表", true);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
@@ -123,7 +126,6 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         });
 
         //设置actionBar颜色
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary);
 //        int color = 0;
 //        int tabColor = 0;
 //        switch (SicauHelperApplication.getStudent().getInt(TableContract.TableUser._SCHOOL)){
@@ -222,8 +224,10 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
         if (id == R.id.action_refresh) {
             requestCourseList(getActivity());
         }
-        else if (id == R.id.action_select_course) {
-            SelectCourseActivity.startSelectCourseActivity(getActivity());
+        else if (id == R.id.action_week_course) {
+            if(callback != null) {
+                callback.onClickWeekBtn(type);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -304,11 +308,10 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
      * @return
      */
     private ListView getDateListView(final Context context, final List<Course> list, final List<List<Course>> data) {
-        Log.d("winson", "datasize:" + data.size());
         ListView listView = new ListView(context);
         listView.setDivider(getResources().getDrawable(android.R.color.transparent));
         listView.setDividerHeight(0);
-        listView.setAdapter(new WeekCourseAdapter(context, list, type));
+        listView.setAdapter(new CourseAdapter(context, list, type));
         //打开新页面显示课程详情
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -347,7 +350,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
                         }
                     }
                 }
-                CourseActivity.startCourseActivity(context, sendData, type);
+                CourseActivity.startCourseActivity(getActivity(), sendData, type);
             }
         });
         return listView;
@@ -385,7 +388,15 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
     }
 
     private void requestCourseList(final Context context) {
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "我正在从教务系统帮你找课表", true);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                requestQueue.stop();
+            }
+        });
         progressDialog.show();
+
         //此处需要修改
         Map<String, String> params = new HashMap<String, String>();
         params.put("user", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString());
@@ -410,7 +421,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
             });
         }
         else if(type == TYPE_COURSE_LAB) {
-            new NetUtil().getLabCourseHtmlStr(context,requestQueue, params, new NetUtil.NetCallback(context) {
+            new NetUtil().getLabCourseHtmlStr(context, requestQueue, params, new NetUtil.NetCallback(context) {
                 @Override
                 public void onSuccess(String result) {
                     final List<List<Course>> tempList = StringUtil.parseLabCourseDateInfo(result);
@@ -418,7 +429,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
                     UIUtil.dismissProgressDialog(progressDialog);
                     //存储
                     List<Course> saveList = new ArrayList<Course>();
-                    for(List<Course> date : tempList) {
+                    for (List<Course> date : tempList) {
                         for (Course course : date) {
                             saveList.add(course);
                         }
@@ -433,11 +444,18 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
                 }
             });
         }
-
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
+    }
+
+    public void reloadData(){
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    public interface CourseFragmentCallback {
+        public void onClickWeekBtn(int type);
     }
 }

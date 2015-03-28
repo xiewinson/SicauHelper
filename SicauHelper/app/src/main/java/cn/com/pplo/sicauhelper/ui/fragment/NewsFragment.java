@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -85,9 +86,6 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //根据校区设置actionBar颜色
-        UIUtil.setActionBarColor(getActivity(),
-                getSupportActionBar(getActivity()),
-                R.color.color_primary);
         setUp(getActivity(), view);
     }
 
@@ -98,7 +96,6 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
         //设置actionbar的间距
         listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.grey_200));
 
-        progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的", true);
         //listView上下补点间距
 //        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
 //        listView.addHeaderView(paddingTv);
@@ -215,6 +212,13 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
      * @param context
      */
     public void requestNewsList(final Context context) {
+        progressDialog = UIUtil.getProgressDialog(getActivity(), "新闻呢，是我从教务系统搬过来的", true);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                requestQueue.stop();
+            }
+        });
         progressDialog.show();
 
         new NetUtil().getNewsListHtmlStr(context, requestQueue, new NetUtil.NetCallback(context) {

@@ -67,7 +67,6 @@ public class StatusFragment extends BaseFragment {
         // Inflate the layout for this fragment
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary);
         return inflater.inflate(R.layout.fragment_status, container, false);
     }
 

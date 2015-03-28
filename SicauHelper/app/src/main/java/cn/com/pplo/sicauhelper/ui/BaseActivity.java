@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.HttpClientStack;
 import com.android.volley.toolbox.Volley;
+import com.umeng.analytics.MobclickAgent;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -45,5 +46,14 @@ public class BaseActivity extends ActionBarActivity {
             this.finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

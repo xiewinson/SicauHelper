@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -83,9 +84,7 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //根据校区设置actionBar颜色
-        UIUtil.setActionBarColor(getActivity(),
-                getSupportActionBar(getActivity()),
-                R.color.color_primary);
+
         setUp(getActivity(), view);
     }
 
@@ -170,6 +169,7 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
      */
     public void requestExamList(final Context context) {
         progressDialog.show();
+
         Map<String, String> params = new HashMap<String, String>();
         params.put("user", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_SID, "").toString());
         params.put("pwd", SharedPreferencesUtil.get(context, SharedPreferencesUtil.LOGIN_PSWD, "").toString());
