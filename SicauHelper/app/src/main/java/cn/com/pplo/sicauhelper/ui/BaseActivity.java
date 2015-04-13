@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.HttpClientStack;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.Volley;
 import com.umeng.analytics.MobclickAgent;
 
@@ -36,7 +37,8 @@ public class BaseActivity extends ActionBarActivity {
         UIUtil.setActionBarColor(this, getSupportActionBar(), SicauHelperApplication.getPrimaryColor(this, false));
 
 //        getActionBar().setDisplayShowHomeEnabled(false);
-        requestQueue = Volley.newRequestQueue(this);
+        requestQueue = Volley.newRequestQueue(this, new HttpClientStack(new DefaultHttpClient()));
+
     }
 
     @Override
