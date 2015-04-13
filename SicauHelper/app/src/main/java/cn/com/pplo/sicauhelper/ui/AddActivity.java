@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -163,12 +164,12 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         if (type == TYPE_GOODS) {
             getSupportActionBar().setTitle("新商品");
             int school = schoolSpinner.getSelectedItemPosition();
-            setActionBarColor(school);
+//            setActionBarColor(school);
             schoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (type == TYPE_GOODS) {
-                        setActionBarColor(position);
+//                        setActionBarColor(position);
                     }
                 }
 
@@ -228,7 +229,7 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
         //若为新帖子则隐藏校区选项
         else if (type == TYPE_STATUS) {
             getSupportActionBar().setTitle("新帖子");
-            UIUtil.setActionBarColor(AddActivity.this, getSupportActionBar(), R.color.color_primary);
+            UIUtil.setActionBarColor(AddActivity.this, getSupportActionBar(), SicauHelperApplication.getPrimaryColor(this, false));
             schoolSpinner.setVisibility(View.GONE);
             findViewById(R.id.add_school_layout).setVisibility(View.GONE);
             findViewById(R.id.add_price_layout).setVisibility(View.GONE);
@@ -281,19 +282,21 @@ public class AddActivity extends BaseActivity implements AMapLocationListener {
     /**
      * 设置颜色
      *
-     * @param school
+     * @param
      */
-    private void setActionBarColor(int school) {
-        int color = R.color.color_primary;
-//        if (school == 0) {
-//            color = R.color.red_500;
-//        } else if (school == 1) {
-//            color = R.color.orange_500;
-//        } else {
-//            color = R.color.green_500;
-//        }
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(color));
-    }
+//    private void setActionBarColor(int school) {
+//        int color = SicauHelperApplication.getPrimaryColor(this, false);
+//        int darkColor = SicauHelperApplication.getPrimaryDarkColor(this, false);
+////        if (school == 0) {
+////            color = R.color.red_500;
+////        } else if (school == 1) {
+////            color = R.color.orange_500;
+////        } else {
+////            color = R.color.green_500;
+////        }
+//        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(color));
+//
+//    }
 
 
     @Override

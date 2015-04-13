@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
@@ -58,6 +59,8 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
 
     private LinearLayout emptyLayout;
     private Button importBtn;
+
+    private LinearLayout weekLayout;
 
     private LinearLayout table00;
     private LinearLayout table01;
@@ -158,6 +161,9 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
             }
         });
 
+        weekLayout = (LinearLayout) view.findViewById(R.id.week_layout);
+        weekLayout.setBackgroundResource(SicauHelperApplication.getPrimaryColor(getActivity(), false));
+
         table00 = (LinearLayout) view.findViewById(R.id.course_table_00);
         containerList.add(table00);
         table01 = (LinearLayout) view.findViewById(R.id.course_table_01);
@@ -234,7 +240,7 @@ public class WeekCourseFragment extends BaseFragment implements LoaderManager.Lo
         containerList.add(table46);
 
         //设置actionBar颜色
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), SicauHelperApplication.getPrimaryColor(getActivity(), false));
 
         getLoaderManager().initLoader(0, null, this);
     }

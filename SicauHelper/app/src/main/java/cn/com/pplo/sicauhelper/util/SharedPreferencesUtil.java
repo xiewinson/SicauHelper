@@ -49,6 +49,15 @@ public class SharedPreferencesUtil {
     public static final String CURRENT_STATUS_COMMENT_COUNT = "current_status_comment_count";
 
     /**
+     * 主色调500
+     */
+    public static final String PRIMARY_COLOR = "primary_color";
+    /**
+     * 主色调暗700
+     */
+    public static final String PRIMARY_DARK_COLOR = "primary_dark_color";
+
+    /**
      * 以xml保存键值对
      * @param context
      * @param key

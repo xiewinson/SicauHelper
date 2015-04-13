@@ -23,6 +23,15 @@
         android:id="@+id/comment_count_btn"
         style="@style/setting_item_style"
         android:text="每次加载评论数量"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee"/>
+
+    <Button
+        android:id="@+id/change_theme_btn"
+        style="@style/setting_item_style"
+        android:text="更改颜色"/>
 
     <View
         android:layout_width="match_parent"

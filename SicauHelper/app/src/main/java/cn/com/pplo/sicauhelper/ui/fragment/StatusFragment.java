@@ -25,6 +25,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.StatusAction;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.ui.AddActivity;
 import cn.com.pplo.sicauhelper.ui.MainActivity;
 import cn.com.pplo.sicauhelper.ui.SearchStatusActivity;
@@ -79,7 +80,7 @@ public class StatusFragment extends BaseFragment {
     private void setUp(final Context context, View view) {
         //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.status_swipe_container);
-        swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
+        swipeRefreshLayout.setColorSchemeResources(SicauHelperApplication.getPrimaryColor(getActivity(), false));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -99,7 +100,10 @@ public class StatusFragment extends BaseFragment {
 
         //添加fab
         fab = (FloatingActionButton) view.findViewById(R.id.status_add_fab);
-        UIUtil.initFab(getActivity(), fab, listView, R.color.color_primary, R.color.color_primary_dark, R.color.red_400, new View.OnClickListener() {
+        int normalColor = SicauHelperApplication.getPrimaryColor(getActivity(), false);
+        int pressColor = SicauHelperApplication.getPrimaryDarkColor(getActivity(), false);
+        int rippleColor = SicauHelperApplication.getPrimaryColor(getActivity(), false);
+        UIUtil.initFab(getActivity(), fab, listView, normalColor, pressColor, rippleColor, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddActivity.startAddActivity(context, AddActivity.TYPE_STATUS);

@@ -22,6 +22,7 @@ import com.nhaarman.listviewanimations.appearance.simple.SwingLeftInAnimationAda
 import com.nhaarman.listviewanimations.appearance.simple.SwingRightInAnimationAdapter;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.listener.OnScrollHideOrShowActionBarListener;
 
 /**
@@ -93,7 +94,7 @@ public class UIUtil {
      * @param resId
      */
     public static void setActionBarColor(Context context, ActionBar actionBarColor, int resId){
-        actionBarColor.setBackgroundDrawable(context.getResources().getDrawable(resId));
+        actionBarColor.setBackgroundDrawable(context.getResources().getDrawable(SicauHelperApplication.getPrimaryColor(context, false)));
     }
         /**
      * 设置actionbar颜色根据校区

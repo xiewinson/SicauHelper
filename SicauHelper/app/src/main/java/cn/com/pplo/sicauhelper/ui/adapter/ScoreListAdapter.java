@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Score;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -161,7 +162,7 @@ public class ScoreListAdapter extends BaseAdapter implements Filterable, StickyL
         }
 
         //设置header颜色
-        int color = R.color.color_primary;
+        int color = SicauHelperApplication.getPrimaryColor(context, false);
 //        switch (school){
 //            case 0:
 //                color = R.color.blue_500;

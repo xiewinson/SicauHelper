@@ -602,7 +602,7 @@ public class NetUtil {
      */
     public void getSelectCourseResutlHtmlStr(final Context context, final String bianhao, final Map<String, String> params, final NetCallback callback) {
         try {
-            final RequestQueue requestQueue = Volley.newRequestQueue(context, new HttpClientStack(new DefaultHttpClient()));
+            final RequestQueue requestQueue = Volley.newRequestQueue(context);
             //请求教务首页的HTML页面
             getRequest(context,
                     requestQueue,
@@ -683,6 +683,7 @@ public class NetUtil {
                         UIUtil.showShortToast(context, "亲爱的，你的网络连接有问题");
                     }
                 } else {
+                    Log.d("winson", volleyError.getMessage());
                     UIUtil.showShortToast(context, "可能是教务系统出问题了，请重试");
                 }
             } catch (Exception e) {
@@ -694,6 +695,7 @@ public class NetUtil {
 
         @Override
         public void onResponse(String result) {
+            Log.d("winson", "result==>" + result);
             if (result.contains("密码不对")) {
                 UIUtil.showShortToast(context, "你连学号和密码都忘了吗那么，拜拜");
                 onErrorResponse(null);

@@ -73,7 +73,7 @@ public class MarketFragment extends BaseFragment {
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         viewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
         pagerSlidingTabStrip = (PagerSlidingTabStrip) view.findViewById(R.id.tab_indicator);
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.red_500);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, SicauHelperApplication.getPrimaryColor(getActivity(), false));
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
         pagerSlidingTabStrip.setViewPager(viewPager);
@@ -106,8 +106,8 @@ public class MarketFragment extends BaseFragment {
 //                        tabColor = R.color.green_500;
 //                        break;
                     default:
-                        color = R.color.color_primary;
-                        tabColor = R.color.color_primary;
+                        color = SicauHelperApplication.getPrimaryColor(getActivity(), false);
+                        tabColor = color;
                         break;
                 }
                 actionBar.setBackgroundDrawable(getResources().getDrawable(color));

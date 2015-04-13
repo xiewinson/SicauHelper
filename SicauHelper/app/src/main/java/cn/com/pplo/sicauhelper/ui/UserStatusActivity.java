@@ -22,6 +22,7 @@ import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.action.StatusAction;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.provider.TableContract;
 import cn.com.pplo.sicauhelper.ui.adapter.StatusAdapter;
 import cn.com.pplo.sicauhelper.util.UIUtil;
@@ -69,7 +70,7 @@ public class UserStatusActivity extends BaseActivity {
 
         //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.user_status_swipe_container);
-        swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
+        swipeRefreshLayout.setColorSchemeResources(SicauHelperApplication.getPrimaryColor(context, false));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

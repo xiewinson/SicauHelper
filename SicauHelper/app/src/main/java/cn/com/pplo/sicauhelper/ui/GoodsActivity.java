@@ -119,7 +119,7 @@ public class GoodsActivity extends BaseActivity {
 
         //刷新
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.goods_swipe_container);
-        swipeRefreshLayout.setColorSchemeResources(R.color.red_500, R.color.orange_500, R.color.green_500);
+        swipeRefreshLayout.setColorSchemeResources(SicauHelperApplication.getPrimaryColor(context, false));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

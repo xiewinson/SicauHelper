@@ -2,6 +2,7 @@ package cn.com.pplo.sicauhelper.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -10,6 +11,7 @@ import com.avos.avoscloud.AVUser;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import cn.com.pplo.sicauhelper.R;
 import cn.com.pplo.sicauhelper.model.Student;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 
@@ -21,6 +23,48 @@ public class SicauHelperApplication extends Application {
     private static AVUser student;
     private static SicauHelperApplication sicauHelperApplication;
     private static Object lockObj = new Object();
+    private static int primaryColor = -1;
+    private static int primaryDarkColor = -1;
+
+    /**
+     * 取得主色调
+     * @return
+     */
+    public static int getPrimaryColor(Context ctx, boolean reGet) {
+        if(primaryColor == -1 || reGet) {
+            primaryColor = (int) SharedPreferencesUtil.get(ctx, SharedPreferencesUtil.PRIMARY_COLOR, R.color.red_500);
+            if(primaryColor == 0) {
+                primaryColor = R.color.red_500;
+            }
+            try {
+                ctx.getResources().getColor(primaryColor);
+            }catch (Exception e) {
+                primaryColor = R.color.red_500;
+            }
+        }
+
+        return primaryColor;
+    }
+
+    /**
+     * 取得主色调
+     * @return
+     */
+    public static int getPrimaryDarkColor(Context ctx, boolean reGet) {
+        if(primaryDarkColor == -1 || reGet) {
+            primaryDarkColor = (int) SharedPreferencesUtil.get(ctx, SharedPreferencesUtil.PRIMARY_DARK_COLOR, R.color.red_700);
+            if(primaryDarkColor == 0) {
+                primaryDarkColor = R.color.red_700;
+            }
+            try {
+                ctx.getResources().getColor(primaryDarkColor);
+            }catch (Exception e) {
+                primaryDarkColor = R.color.red_700;
+            }
+        }
+
+        return primaryDarkColor;
+    }
 
     @Override
     public void onCreate() {

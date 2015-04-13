@@ -53,6 +53,23 @@
         <item>发出的圈子评论</item>
         <item>收到的圈子评论</item>
     </string-array>
+    <string-array name="theme_color">
+        <item>Red</item>
+        <item>Pink</item>
+        <item>Purple</item>
+        <item>Deep Purple</item>
+        <item>Indigo</item>
+        <item>Blue</item>
+        <item>Light Blue</item>
+        <item>Cyan</item>
+        <item>Teal</item>
+        <item>Green</item>
+        <item>Light Green</item>
+        <item>Deep Orange</item>
+        <item>Brown</item>
+        <item>Blue Grey</item>
+        <item>测试</item>
+    </string-array>
 
     <string name="title_activity_goods">川农校园通</string>
     <string name="title_activity_search_goods">川农校园通</string>
@@ -84,5 +101,8 @@
     <string name="title_activity_course">川农校园通</string>
     <string name="title_activity_map">地图</string>
     <string name="title_activity_select_course">SelectCourseActivity</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

@@ -3,6 +3,7 @@ package cn.com.pplo.sicauhelper.ui.fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -21,6 +22,7 @@ import com.android.volley.toolbox.Volley;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 import cn.com.pplo.sicauhelper.widget.PagerSlidingTabStrip;
 import cn.com.pplo.sicauhelper.widget.ViewPadding;
@@ -33,7 +35,7 @@ public class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), R.color.color_primary);
+        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), SicauHelperApplication.getPrimaryColor(getActivity(), false));
         if(!getSupportActionBar(getActivity()).isShowing()){
             getSupportActionBar(getActivity()).show();
         }
@@ -74,7 +76,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestQueue = Volley.newRequestQueue(getActivity(), new HttpClientStack(new DefaultHttpClient()));
+        requestQueue = Volley.newRequestQueue(getActivity());
     }
 
     /**

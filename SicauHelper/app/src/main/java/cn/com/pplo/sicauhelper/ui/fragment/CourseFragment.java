@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
@@ -143,7 +144,7 @@ public class CourseFragment extends BaseFragment implements LoaderManager.Loader
 //                break;
 //        }
 //        UIUtil.setActionBarColor(getActivity(), getSupportActionBar(getActivity()), color);
-        setPagerSlidingTabStyle(pagerSlidingTabStrip, R.color.color_primary);
+        setPagerSlidingTabStyle(pagerSlidingTabStrip, SicauHelperApplication.getPrimaryColor(getActivity(), false));
         getLoaderManager().initLoader(0, null, this);
     }
 

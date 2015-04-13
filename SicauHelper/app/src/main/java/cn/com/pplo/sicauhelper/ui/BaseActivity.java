@@ -1,6 +1,7 @@
 package cn.com.pplo.sicauhelper.ui;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +16,7 @@ import com.umeng.analytics.MobclickAgent;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 /**
@@ -26,12 +28,15 @@ public class BaseActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(getResources().getColor(SicauHelperApplication.getPrimaryDarkColor(this, false)));
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
-        UIUtil.setActionBarColor(this, getSupportActionBar(), R.color.color_primary);
+        UIUtil.setActionBarColor(this, getSupportActionBar(), SicauHelperApplication.getPrimaryColor(this, false));
 
 //        getActionBar().setDisplayShowHomeEnabled(false);
-        requestQueue = Volley.newRequestQueue(this, new HttpClientStack(new DefaultHttpClient()));
+        requestQueue = Volley.newRequestQueue(this);
     }
 
     @Override

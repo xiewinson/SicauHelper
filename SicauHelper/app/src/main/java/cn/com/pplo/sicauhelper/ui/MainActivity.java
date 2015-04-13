@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -90,6 +91,10 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(Build.VERSION.SDK_INT >= 21) {
+            Log.d("winson", "结果是：" + SicauHelperApplication.getPrimaryDarkColor(this, false));
+            getWindow().setStatusBarColor(getResources().getColor(SicauHelperApplication.getPrimaryDarkColor(this, false)));
+        }
         //不使用up
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setElevation(0);
@@ -402,5 +407,14 @@ public class MainActivity extends ActionBarActivity
                 ((WeekCourseFragment) currentFragment).reloadData();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(getResources().getColor(SicauHelperApplication.getPrimaryDarkColor(this, false)));
+        }
+        UIUtil.setActionBarColor(this, getSupportActionBar(), SicauHelperApplication.getPrimaryColor(this, false));
     }
 }

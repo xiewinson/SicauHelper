@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.Course;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.provider.TableContract;
@@ -104,7 +105,7 @@ public class CourseActivity extends BaseActivity {
         LayerDrawable stars = (LayerDrawable) creditRatingBar.getProgressDrawable();
         stars.getDrawable(0).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(1).setColorFilter(Color.parseColor("#cccccc"), PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(2).setColorFilter(getResources().getColor(R.color.color_primary), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2).setColorFilter(getResources().getColor(SicauHelperApplication.getPrimaryColor(this, false)), PorterDuff.Mode.SRC_ATOP);
         Log.d("winson", "学分：" + course.getCredit());
         creditRatingBar.setRating(course.getCredit());
 

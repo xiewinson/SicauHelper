@@ -3,8 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowContentOverlay">@android:color/transparent</item>
-        <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorPrimary">@color/grey_500</item>
+        <item name="colorPrimaryDark">@color/grey_500</item>
         <item name="colorAccent">@color/grey_500</item>
         <!--<item name="windowContentOverlay">@android:color/transparent</item>-->
         <item name="windowActionBarOverlay">true</item>

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.pplo.sicauhelper.R;
+import cn.com.pplo.sicauhelper.application.SicauHelperApplication;
 import cn.com.pplo.sicauhelper.model.News;
 import cn.com.pplo.sicauhelper.provider.SicauHelperProvider;
 import cn.com.pplo.sicauhelper.service.SaveIntentService;
@@ -100,12 +101,18 @@ public class NewsFragment extends BaseFragment implements LoaderManager.LoaderCa
 //        TextView paddingTv = ListViewPadding.getListViewPadding(getActivity());
 //        listView.addHeaderView(paddingTv);
 //        listView.addFooterView(paddingTv);
+        int normalColor = SicauHelperApplication.getPrimaryColor(getActivity(), false);
+        int pressColor = SicauHelperApplication.getPrimaryDarkColor(getActivity(), false);
+        int rippleColor = SicauHelperApplication.getPrimaryColor(getActivity(), false);
 
+        newsFab.setColorNormalResId(normalColor);
+        newsFab.setColorPressedResId(pressColor);
+        newsFab.setColorRippleResId(rippleColor);
         //news FAB事件
         newsFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(listView.getCount() > 0) {
+                if (listView.getCount() > 0) {
                     listView.setSelection(0);
                     UIUtil.showShortToast(getActivity(), "已回到第一条新闻");
                 }

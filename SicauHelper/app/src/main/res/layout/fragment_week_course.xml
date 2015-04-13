@@ -9,6 +9,7 @@
 
     <LinearLayout
         style="@style/course_table_container_layout"
+        android:id="@+id/week_layout"
         android:layout_gravity="center"
         android:background="@color/color_primary"
         android:minHeight="0dp">
