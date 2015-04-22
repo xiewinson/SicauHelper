@@ -17,6 +17,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -194,7 +198,8 @@ public class NetUtil {
                 }
                 String result = "";
                 try {
-                    result = new String(response.data, "GB2312");
+//                    result = new String(response.data, "GB2312");
+                    result = new String(response.data, "utf-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -602,7 +607,7 @@ public class NetUtil {
      */
     public void getSelectCourseResutlHtmlStr(final Context context, final String bianhao, final Map<String, String> params, final NetCallback callback) {
         try {
-            final RequestQueue requestQueue = Volley.newRequestQueue(context);
+            final RequestQueue requestQueue = Volley.newRequestQueue(context, new HttpClientStack(new DefaultHttpClient()));
             //请求教务首页的HTML页面
             getRequest(context,
                     requestQueue,
@@ -667,6 +672,50 @@ public class NetUtil {
         }
     }
 
+    /**
+     * 获取书籍列表
+     *
+     * @param context
+     * @param callback
+     */
+    public void getBooksByName(final Context context, final RequestQueue requestQueue, final NetCallback callback) {
+        try {
+            //请求教务首页的HTML页面
+            getRequest(context,
+                    requestQueue,
+                    Request.Method.GET,
+                    "http://202.115.182.3/gdweb/default.aspx",
+                    null,
+                    null,
+                    new NetCallback(context) {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            super.onErrorResponse(volleyError);
+                            callback.onErrorResponse(volleyError);
+                        }
+
+                        @Override
+                        public void onSuccess(String result) {
+                            Map<String, String> params = new HashMap<String, String>();
+                            Document document = Jsoup.parse(result);
+                            Element e = document.getElementsByAttributeValue("name", "__EVENTVALIDATION").first();
+                            Log.d("winson", "values:" + e.html());
+                            getRequest(context,
+                                    requestQueue,
+                                    Request.Method.GET,
+                                    "http://202.115.182.3/gdweb/default.aspx",
+                                    null,
+                                    null,
+                                    callback);
+                        }
+                    });
+        } catch (Exception e) {
+            UIUtil.showShortToast(context, "呵呵，出了点我也不知道的什么错误");
+        }
+        clearCookie();
+    }
+
+
     //回调接口
     public static abstract class NetCallback implements Response.Listener<String>, Response.ErrorListener {
         private Context context;
@@ -683,7 +732,6 @@ public class NetUtil {
                         UIUtil.showShortToast(context, "亲爱的，你的网络连接有问题");
                     }
                 } else {
-                    Log.d("winson", volleyError.getMessage());
                     UIUtil.showShortToast(context, "可能是教务系统出问题了，请重试");
                 }
             } catch (Exception e) {
@@ -695,7 +743,6 @@ public class NetUtil {
 
         @Override
         public void onResponse(String result) {
-            Log.d("winson", "result==>" + result);
             if (result.contains("密码不对")) {
                 UIUtil.showShortToast(context, "你连学号和密码都忘了吗那么，拜拜");
                 onErrorResponse(null);

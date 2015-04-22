@@ -1,10 +1,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:padding="@dimen/widget_margin" android:background="#09C">
-
+    <TextView
+        android:background="#444444"
+        android:id="@+id/empty_view"
+        android:text="今天没有课"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
   <ListView
+      android:background="#444444"
       android:id="@+id/course_listView"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"></ListView>
 
 </FrameLayout>

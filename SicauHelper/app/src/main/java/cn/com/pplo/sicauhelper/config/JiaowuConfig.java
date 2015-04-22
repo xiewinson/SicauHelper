@@ -12,7 +12,8 @@ public class JiaowuConfig {
     public static final String JIAOWU_SCORE = "http://jiaowu.sicau.edu.cn/xuesheng/chengji/chengji/search_all.asp";
     public static final String JIAOWU_SCORE_NICE = "http://jiaowu.sicau.edu.cn/xuesheng/chengji/chengji/bchengjike.asp";
     //课程表
-    public static final String JIAOWU_COURSE = "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/kbbanji.asp";
+    public static final String JIAOWU_COURSE = "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xuankeshow.asp";
+//    public static final String JIAOWU_COURSE = "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/kbbanji.asp";
     public static final String JIAOWU_COURSE_TEMP = "http://jiaowu.sicau.edu.cn/xuesheng/gongxuan/gongxuan/xuankeshow.asp?xkbh=2058069";
     //新闻
     public static final String JIAOWU_NEWS_LIST = "http://jiaowu.sicau.edu.cn/web/web/web/gwmore.asp";

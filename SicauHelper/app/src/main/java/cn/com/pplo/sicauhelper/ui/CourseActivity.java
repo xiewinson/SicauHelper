@@ -52,6 +52,14 @@ public class CourseActivity extends BaseActivity {
         context.startActivityForResult(intent, 0);
     }
 
+    public static void startCourseActivity(Context context, List<Course> data, int type) {
+        Intent intent = new Intent(context, CourseActivity.class);
+        intent.putExtra(EXTRA_COURSE_TYPE, type);
+        intent.putParcelableArrayListExtra(EXTRA_COURSE_LIST, (java.util.ArrayList<? extends android.os.Parcelable>) data);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

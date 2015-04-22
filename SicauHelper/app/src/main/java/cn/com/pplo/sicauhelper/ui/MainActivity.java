@@ -44,6 +44,7 @@ import cn.com.pplo.sicauhelper.ui.fragment.NewsFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.ScoreFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.StatusFragment;
 import cn.com.pplo.sicauhelper.ui.fragment.WeekCourseFragment;
+import cn.com.pplo.sicauhelper.util.NetUtil;
 import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
@@ -131,7 +132,6 @@ public class MainActivity extends ActionBarActivity
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         setUp(mDrawerLayout, this);
         receiveFeedback();
-
 
         //获取市场、圈子消息
         MessageService.startRepeatMessageService(this);

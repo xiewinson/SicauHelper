@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/item_id"
+    android:background="#ffffff"
+    android:padding="16dp">
+
+    <FrameLayout
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="16dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/course_iv"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/circle_blue" />
+
+        <TextView
+            android:clickable="true"
+            android:id="@+id/time_tv"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@null"
+            android:gravity="center"
+            android:text="9-10"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="西方经济学"
+            android:textColor="#111111"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:textColor="#111111"
+            android:id="@+id/classroom_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="5508" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
