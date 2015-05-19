@@ -14,8 +14,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,7 +50,7 @@ import cn.com.pplo.sicauhelper.util.SharedPreferencesUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, CourseFragment.CourseFragmentCallback, WeekCourseFragment.WeekCourseFragmentCallback {
 
     /**
@@ -95,6 +96,7 @@ public class MainActivity extends ActionBarActivity
         if(Build.VERSION.SDK_INT >= 21) {
             Log.d("winson", "结果是：" + SicauHelperApplication.getPrimaryDarkColor(this, false));
             getWindow().setStatusBarColor(getResources().getColor(SicauHelperApplication.getPrimaryDarkColor(this, false)));
+            getWindow().setNavigationBarColor(getResources().getColor(SicauHelperApplication.getPrimaryDarkColor(this, false)));
         }
         //不使用up
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);

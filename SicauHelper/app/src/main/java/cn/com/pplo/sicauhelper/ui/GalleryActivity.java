@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +20,7 @@ import cn.com.pplo.sicauhelper.ui.fragment.GalleryFragment;
 import cn.com.pplo.sicauhelper.widget.GalleryPager;
 
 
-public class GalleryActivity extends ActionBarActivity implements GalleryFragment.OnRectfChangeListener {
+public class GalleryActivity extends AppCompatActivity implements GalleryFragment.OnRectfChangeListener {
 
 	private ActionBar actionBar;
 	private GalleryPager galleryViewPager;

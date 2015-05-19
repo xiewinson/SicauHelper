@@ -2,7 +2,6 @@ package cn.com.pplo.sicauhelper.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;

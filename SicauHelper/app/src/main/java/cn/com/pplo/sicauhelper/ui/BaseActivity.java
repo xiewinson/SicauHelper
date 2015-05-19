@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -23,7 +23,7 @@ import cn.com.pplo.sicauhelper.util.UIUtil;
 /**
  * Created by Administrator on 2014/9/25.
  */
-public class BaseActivity extends ActionBarActivity {
+public class BaseActivity extends AppCompatActivity {
     protected RequestQueue requestQueue;
 
     @Override
@@ -31,6 +31,8 @@ public class BaseActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         if(Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(getResources().getColor(SicauHelperApplication.getPrimaryDarkColor(this, false)));
+            getWindow().setNavigationBarColor(getResources().getColor(SicauHelperApplication.getPrimaryDarkColor(this, false)));
+
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);

@@ -91,12 +91,12 @@ public class ExamFragment extends BaseFragment implements LoaderManager.LoaderCa
     private void setUp(final Context context, View view) {
         listView = (ListView) view.findViewById(R.id.exam_listView);
         listView.addHeaderView(ViewPadding.getActionBarPadding(getActivity(), R.color.grey_200));
-        new NetUtil().getBooksByName(getActivity(), requestQueue, new NetUtil.NetCallback(getActivity()) {
-            @Override
-            protected void onSuccess(String result) {
-                Log.d("winson", "取得的是:" + result);
-            }
-        });
+//        new NetUtil().getBooksByName(getActivity(), requestQueue, new NetUtil.NetCallback(getActivity()) {
+//            @Override
+//            protected void onSuccess(String result) {
+//                Log.d("winson", "取得的是:" + result);
+//            }
+//        });
 
 
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);

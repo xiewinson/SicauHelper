@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,7 +41,7 @@ import cn.com.pplo.sicauhelper.util.StringUtil;
 import cn.com.pplo.sicauhelper.util.UIUtil;
 
 
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private EditText sidEt;
     private EditText pswdEt;

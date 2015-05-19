@@ -198,8 +198,8 @@ public class NetUtil {
                 }
                 String result = "";
                 try {
-//                    result = new String(response.data, "GB2312");
-                    result = new String(response.data, "utf-8");
+                    result = new String(response.data, "GB2312");
+//                    result = new String(response.data, "utf-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

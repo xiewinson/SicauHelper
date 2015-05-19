@@ -224,6 +224,7 @@ public class SettingActivity extends BaseActivity {
 
                         if(Build.VERSION.SDK_INT >= 21) {
                             getWindow().setStatusBarColor(getResources().getColor(color1));
+                            getWindow().setNavigationBarColor(getResources().getColor(color1));
                         }
                         UIUtil.setActionBarColor(SettingActivity.this, getSupportActionBar(), color);
 
