@@ -50,23 +50,31 @@
 * 有同学反馈被自己头像吓到了，已将修改头像位置放得更明显了
 * 发现屏幕方向变化时停止运行的BUG，现在已经修复
 
-**截图**
+**应用截图**
 
 * 图0
+
  ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img0.png)
 * 图1
+
  ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img1.png)
 * 图2
+
  ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img2.png)
 * 图3
+
  ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img3.png)
 * 图4
+
  ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img4.png)
 * 图5
+
  ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img5.png)
 * 图6
+
  ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img6.png)
 * 图7
+
  ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img7.png)
  
   [1]: http://zhushou.360.cn/detail/index/soft_id/2395455?recrefer=SE_D_%E5%B7%9D%E5%86%9C
