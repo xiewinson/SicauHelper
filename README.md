@@ -3,8 +3,8 @@
 > 数据主要是从教务系 统上扒下来的。当然，也是很安全的。有兴趣的同学可以安装试试，
 > 需要 Android 4.0 及以上版本的手机。
 
-[直接下载V1.0.2][1]
-[百度网盘V1.0.5][2]
+[360应用市场地址][1]
+
 
 **主要功能**
 
@@ -28,7 +28,7 @@
 * 课程表背景改为白色，近期还将大改
 * 修复上传空商品/帖子时一直显示上传中的bug
 * 获取成绩、课表、空教室、新闻等信息时显示的对话框可点击“返回”键取消
-*
+
 **V1.0.7版本更新**
 
 * 课程表改为周视图，暂时先这样吧，寒假时间把校历做出来
@@ -50,6 +50,24 @@
 * 有同学反馈被自己头像吓到了，已将修改头像位置放得更明显了
 * 发现屏幕方向变化时停止运行的BUG，现在已经修复
 
+**截图**
 
-  [1]: https://github.com/WinsonTse/SicauHelper/blob/master/sicauhelperV102.apk?raw=true
-  [2]: http://pan.baidu.com/s/1dDjGbuT
+* 图0
+ ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img0.png)
+* 图1
+ ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img1.png)
+* 图2
+ ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img2.png)
+* 图3
+ ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img3.png)
+* 图4
+ ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img4.png)
+* 图5
+ ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img5.png)
+* 图6
+ ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img6.png)
+* 图7
+ ![image](https://github.com/WinsonTse/SicauHelper/raw/master/Screenshots/img7.png)
+ 
+  [1]: http://zhushou.360.cn/detail/index/soft_id/2395455?recrefer=SE_D_%E5%B7%9D%E5%86%9C
+  
